@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "?????",
+  "title": "sync",
+  "description": "a sync event, from the perspective of the device represented by the feed who published this message",
+  "type": "object",
+  "properties": {
+    "deviceId": {
+      "type": "string",
+      "description": "ID of the device on the other side of the sync"
+    },
+    "timestamp": {
+      "type": "string",
+      "description": "ISO timestamp of the time the sync occurred",
+      "TODO": "specify which ISO format is used"
+    }
+  },
+  "required": ["name"]
+}

@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "?????",
+  "title": "observation",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "lat": {
+      "description": "latitude of the observation",
+      "TODO": "how to encode 'can be null or undefined'?",
+      "type": "number"
+    },
+    "lon": {
+      "description": "longitude of the observation",
+      "TODO": "how to encode 'can be null or undefined'?",
+      "type": "number"
+    },
+    "metadata": {
+      "description": "???",
+      "type": "object"
+    },
+    "refs": {
+      "type": "array",
+      "description": "references to observation IDs that are observed by this observation",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "attachments": {
+      "type": "array",
+      "description": "media or other data that are attached to this observation",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "unique ID that identifies the attachment"
+          },
+          "type": {
+            "type": "string",
+            "description": "string that describes the type of the attachment"
+          }
+        }
+      }
+    },
+    "tags": {
+      "type": "object",
+      "description": "user-defined key-value pairs relevant to this observation"
+    }
+  },
+  "required": []
+}
