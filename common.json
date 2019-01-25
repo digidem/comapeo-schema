@@ -14,11 +14,11 @@
       "type": "string"
     },
     "createdAt": {
-      "description": "the ISO-formatted timestamp of when the first version of the element was created",
+      "description": "the ISO 8601-formatted timestamp of when the first version of the element was created",
       "type": "string"
     },
     "modifiedAt": {
-      "description": "the ISO-formatted timestamp of when this version of the element was created",
+      "description": "the ISO 8601-formatted timestamp of when this version of the element was created",
       "type": "string"
     },
     "userId": {

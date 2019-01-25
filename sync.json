@@ -11,8 +11,7 @@
     },
     "timestamp": {
       "type": "string",
-      "description": "ISO timestamp of the time the sync occurred",
-      "TODO": "specify which ISO format is used"
+      "description": "ISO 8601 timestamp of the time the sync occurred"
     }
   },
   "required": ["name"]
