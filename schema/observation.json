@@ -13,12 +13,12 @@
       "description": "Unique value that identifies this particular version of this element",
       "type": "string"
     },
-    "createdAt": {
+    "created_at": {
       "description": "RFC3339-formatted datetime of when the first version of the element was created",
       "type": "string",
       "format": "date-time"
     },
-    "modifiedAt": {
+    "timestamp": {
       "description": "RFC3339-formatted datetime of when this version of the element was created",
       "type": "string",
       "format": "date-time"
