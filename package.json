@@ -6,7 +6,8 @@
   "scripts": {
     "build": "node ./scripts/build.js",
     "prepublish": "npm run build",
-    "test": "npm run build && tape 'test/**.js' && flow check test/valid_flow"
+    "test": "npm run build && tape 'test/**.js' && flow check test/valid_flow",
+    "version": "standard-version"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "ajv-pack": "^0.3.1",
     "flow-bin": "^0.97.0",
     "mkdirp": "^0.5.1",
+    "standard-version": "^5.0.2",
     "tape": "^4.10.1"
   }
 }
