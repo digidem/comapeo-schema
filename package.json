@@ -1,0 +1,35 @@
+{
+  "name": "mapeo-schema",
+  "version": "1.0.0",
+  "description": "JSON schema and flow types for Mapeo",
+  "main": "index.js",
+  "scripts": {
+    "build": "node ./scripts/build.js",
+    "prepublish": "npm run build",
+    "test": "npm run build && tape 'test/**.js' && npm run test:flow",
+    "test:flow": "node ./scripts/create_flow_tests.js && flow check test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/digidem/mapeo-schema.git"
+  },
+  "keywords": [
+    "mapeo",
+    "schema"
+  ],
+  "author": "Digital Democracy",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/digidem/mapeo-schema/issues"
+  },
+  "homepage": "https://github.com/digidem/mapeo-schema#readme",
+  "dependencies": {
+    "ajv": "^6.10.0"
+  },
+  "devDependencies": {
+    "@marudor/json-schema-to-flow-type": "^2.0.0",
+    "ajv-pack": "^0.3.1",
+    "flow-bin": "^0.97.0",
+    "tape": "^4.10.1"
+  }
+}
