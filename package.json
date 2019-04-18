@@ -6,8 +6,7 @@
   "scripts": {
     "build": "node ./scripts/build.js",
     "prepublish": "npm run build",
-    "test": "npm run build && tape 'test/**.js' && npm run test:flow",
-    "test:flow": "node ./scripts/create_flow_tests.js && flow check test"
+    "test": "npm run build && tape 'test/**.js' && flow check test/valid_flow"
   },
   "repository": {
     "type": "git",
@@ -30,6 +29,7 @@
     "@marudor/json-schema-to-flow-type": "^2.0.0",
     "ajv-pack": "^0.3.1",
     "flow-bin": "^0.97.0",
+    "mkdirp": "^0.5.1",
     "tape": "^4.10.1"
   }
 }

@@ -99,5 +99,5 @@
       "properties": {}
     }
   },
-  "required": ["id", "version", "createdAt", "type", "schemaVersion"]
+  "required": ["id", "version", "created_at", "type", "schemaVersion"]
 }
