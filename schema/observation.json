@@ -61,7 +61,8 @@
     "metadata": {
       "description": "Additional metadata associated with the observation (e.g. location precision, altitude, heading)",
       "type": "object",
-      "properties": {}
+      "properties": {},
+      "additionalProperties": true
     },
     "refs": {
       "type": "array",
@@ -98,7 +99,8 @@
     "tags": {
       "type": "object",
       "description": "User-defined key-value pairs relevant to this observation",
-      "properties": {}
+      "properties": {},
+      "additionalProperties": true
     }
   },
   "required": ["id", "version", "created_at", "type", "schemaVersion"]
