@@ -30,7 +30,7 @@
     "type": {
       "description": "Must be `observation`",
       "type": "string",
-      "const": "observation"
+      "enum": ["observation"]
     },
     "links": {
       "description": "Version ids of the previous document versions this one is replacing",
