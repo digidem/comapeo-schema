@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [1.1.0](https://github.com/digidem/mapeo-schema/compare/v1.0.4...v1.1.0) (2019-06-25)
+
+
+### Features
+
+* Add types for known metadata values ([8dfeb1d](https://github.com/digidem/mapeo-schema/commit/8dfeb1d))
+
+
+
 ## [1.0.4](https://github.com/digidem/mapeo-schema/compare/v1.0.3...v1.0.4) (2019-04-25)
 
 
