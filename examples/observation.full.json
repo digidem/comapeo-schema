@@ -15,7 +15,8 @@
     "location": {
       "precision": 10.234124,
       "altitude": 123
-    }
+    },
+    "manualLocation": true
   },
   "refs": [
     {
