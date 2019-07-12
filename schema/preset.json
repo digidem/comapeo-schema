@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://mapeo.world/schemas/preset.json",
+  "title": "preset",
+  "description": "Presets are matched to observations, nodes, ways and relations and defined how the entity should be displayed and what field should be visible to the user. The best matching preset is used if multiple presets match an entity.",
+  "type": "object",
+  "patternProperties": {
+    "^name:": {
+      "description": "Translated name with property key `label:<language>` where <language> is a valid IETF BCP 47 language code",
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "description": "Version of schema. Should increment for breaking changes to the schema",
+      "type": "number",
+      "minimum": 1,
+      "enum": [1]
+    },
+    "name": {
+      "description": "Name for the feature in default language when no translations are available",
+      "type": "string"
+    },
+    "geometry": {
+      "description": "Valid geometry types for the feature",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": ["point", "vertex", "line", "area", "relation"]
+      }
+    },
+    "tags": {
+      "description": "Tags that must be present for the preset to match",
+      "type": "object",
+      "properties": {},
+      "additionalProperties": true
+    },
+    "addTags": {
+      "description": "Tags that are added when changing to the preset (default is the same value as 'tags')",
+      "type": "object",
+      "properties": {},
+      "additionalProperties": true
+    },
+    "removeTags": {
+      "description": "Tags that are removed when changing to another preset (default is the same value as 'addTags' which in turn defaults to 'tags')",
+      "type": "object",
+      "properties": {},
+      "additionalProperties": true
+    },
+    "fields": {
+      "description": "Ids of fields to displayed to the user when the preset is shown",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "icon": {
+      "description": "Id of preset icon which represents this preset",
+      "type": "string"
+    },
+    "terms": {
+      "description": "Synonyms or related terms (used for search)",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sort": {
+      "description": "When presets are displayed as a list, defines the order it should be sorted",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "name",
+    "geometry",
+    "tags"
+  ]
+}

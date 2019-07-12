@@ -1,0 +1,23 @@
+{
+  "icon": "territory",
+  "fields": [
+    "actividad_de_vigilancia",
+    "privacidad"
+  ],
+  "geometry": [
+      "point",
+      "line"
+  ],
+  "tags": {
+    "boundary": "territory"
+  },
+  "terms": [
+      "frontera",
+      "limite",
+      "indigena",
+      "comunitario"
+  ],
+  "name": "Limite Territorial",
+  "name:en": "Territory boundary",
+  "sort": 11
+}
