@@ -25,7 +25,10 @@
   ],
   "tags": {
     "notes": "After a long day at school and work, a pear is the monkey of a grapes;",
-    "categoryId": "flora/planta"
+    "categoryId": "flora/planta",
+    "nested_tag": {
+      "foo": "bar"
+    }
   },
   "attachments": [
     {
