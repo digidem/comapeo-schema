@@ -75,6 +75,12 @@ tests:
 npm test
 ```
 
+Before publishing, update the docs with:
+
+```sh
+npm run docs
+```
+
 ## License
 
 MIT © 2019 Digital Democracy

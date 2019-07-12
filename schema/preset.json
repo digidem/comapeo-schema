@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "http://mapeo.world/schemas/preset.json",
-  "title": "preset",
+  "title": "Preset",
   "description": "Presets are matched to observations, nodes, ways and relations and defined how the entity should be displayed and what field should be visible to the user. The best matching preset is used if multiple presets match an entity.",
   "type": "object",
   "patternProperties": {
