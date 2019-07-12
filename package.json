@@ -8,7 +8,7 @@
     "docs": "rimraf docs && mkdirp docs && jsonschema2md -o docs -d schema -e json && rimraf docs/*.json",
     "prepublish": "npm run build",
     "test": "npm run build && tape 'test/**.js' && flow check test/valid_flow",
-    "version": "standard-version"
+    "release": "standard-version"
   },
   "repository": {
     "type": "git",
