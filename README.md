@@ -55,7 +55,25 @@ const myObs: Observation = {...}
 
 ## Contributing
 
-PRs accepted.
+**It looks like there is no code in this repo**. All the code is generated from
+the [JSON Schema definitions](schema/). To build the validator functions and
+flow definitions:
+
+```sh
+npm run build
+```
+
+Tests are also generated dynamically. Place an example minimal and valid JSON
+for a particular schema in the [examples](examples/) folder, with a filename
+that matches the schema filename, e.g. if you add a schema called
+`mySchema.json` then add an example `mySchema.minimal.json` and
+`mySchema.full.json`. "Minimal" means with only the required properties, where
+"full" means with all the defined properties in the schema document. To run
+tests:
+
+```sh
+npm test
+```
 
 ## License
 
