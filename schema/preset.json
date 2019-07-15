@@ -18,6 +18,10 @@
       "minimum": 1,
       "enum": [1]
     },
+    "id": {
+      "description": "Unique value that identifies this element",
+      "type": "string"
+    },
     "name": {
       "description": "Name for the feature in default language.",
       "type": "string"
