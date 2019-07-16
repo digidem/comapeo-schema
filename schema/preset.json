@@ -6,7 +6,7 @@
   "type": "object",
   "patternProperties": {
     "^name:": {
-      "description": "Translated name with property key `label:<language>` where <language> is a valid IETF BCP 47 language code. E.g. if the default language of the presets is English, but you want to add Spanish names, add a property `name:es`",
+      "description": "Translated name with property key `name:<language>` where <language> is a valid IETF BCP 47 language code. E.g. if the default language of the presets is English, but you want to add Spanish names, add a property `name:es`",
       "type": "string"
     }
   },
@@ -16,6 +16,9 @@
       "description": "Version of schema. Should increment for breaking changes to the schema",
       "type": "number",
       "minimum": 1,
+      "meta:enum": {
+        "1": "Current schema version is `1`"
+      },
       "enum": [1]
     },
     "id": {
@@ -27,7 +30,7 @@
       "type": "string"
     },
     "geometry": {
-      "description": "Valid geometry types for the feature - this preset will only match features of this geometry type",
+      "description": "Valid geometry types for the feature - this preset will only match features of this geometry type `\"point\", \"vertex\", \"line\", \"area\", \"relation\"`",
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
@@ -73,11 +76,12 @@
       }
     },
     "sort": {
-      "description": "When presets are displayed as a list, defines the order it should be sorted",
+      "description": "When presets are displayed as a list, defines the order it should be sorted. Presets with lowest sort numbers are displayed first",
       "type": "integer"
     }
   },
   "required": [
+    "id",
     "name",
     "geometry",
     "tags"

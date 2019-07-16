@@ -1,7 +1,9 @@
 # Preset
 
-Presets are matched to observations, nodes, ways and relations and defined how the entity should be displayed and what
-field should be visible to the user. The best matching preset is used if multiple presets match an entity.
+Presets define how map entities are displayed to the user. They define the icon used on the map, and the fields /
+questions shown to the user when they create or edit the entity on the map. The `tags` property of a preset is used to
+match the preset with observations, nodes, ways and relations. If multiple presets match, the one that matches the most
+tags is used.
 
 # Properties
 
@@ -11,6 +13,7 @@ field should be visible to the user. The best matching preset is used if multipl
 | [fields](#fields)               | `string[]` | Optional     | No       | Preset (this schema) |
 | [geometry](#geometry)           | `enum[]`   | **Required** | No       | Preset (this schema) |
 | [icon](#icon)                   | `string`   | Optional     | No       | Preset (this schema) |
+| [id](#id)                       | `string`   | **Required** | No       | Preset (this schema) |
 | [name](#name)                   | `string`   | **Required** | No       | Preset (this schema) |
 | [removeTags](#removetags)       | `object`   | Optional     | No       | Preset (this schema) |
 | [schemaVersion](#schemaversion) | `enum`     | Optional     | No       | Preset (this schema) |
@@ -34,7 +37,7 @@ Tags that are added when changing to the preset (default is the same value as 't
 
 ## `fields`
 
-Ids of fields to displayed to the user when the preset is shown
+IDs of fields to displayed to the user when the preset is created or edited
 
 - is optional
 - type: `string[]`
@@ -44,7 +47,8 @@ Ids of fields to displayed to the user when the preset is shown
 
 ## `geometry`
 
-Valid geometry types for the feature
+Valid geometry types for the feature - this preset will only match features of this geometry type
+`"point", "vertex", "line", "area", "relation"`
 
 - is **required**
 - type: `enum[]`
@@ -55,14 +59,21 @@ Valid geometry types for the feature
 
 ## `icon`
 
-Id of preset icon which represents this preset
+ID of preset icon which represents this preset
 
 - is optional
 - type: `string`
 
+## `id`
+
+Unique value that identifies this element
+
+- is **required**
+- type: `string`
+
 ## `name`
 
-Name for the feature in default language when no translations are available
+Name for the feature in default language.
 
 - is **required**
 - type: `string`
@@ -89,9 +100,9 @@ Version of schema. Should increment for breaking changes to the schema
 - type: `enum` The value of this property **must** be equal to one of the
   [known values below](#schemaversion-known-values).
 
-  | Value | Description |
-  | ----- | ----------- |
-  | `1`   |             |
+  | Value | Description      |
+  | ----- | ---------------- |
+  | `1`   | Schema version 1 |
 
 ## `sort`
 
@@ -102,7 +113,9 @@ When presets are displayed as a list, defines the order it should be sorted
 
 ## `tags`
 
-Tags that must be present for the preset to match
+The tags are used to match the preset to existing map entities. You can match based on multiple tags E.g. if you have
+existing points with the tags `nature:tree` and `species:oak` then you can add both these tags here in order to match
+only oak trees.
 
 - is **required**
 - type: `object`
@@ -127,7 +140,8 @@ Synonyms or related terms (used for search)
 
 Applies to all properties that match the regular expression `^name:`
 
-Translated name with property key `label:<language>` where <language> is a valid IETF BCP 47 language code
+Translated name with property key `label:<language>` where <language> is a valid IETF BCP 47 language code. E.g. if the
+default language of the presets is English, but you want to add Spanish names, add a property `name:es`
 
 `^name:`
 
