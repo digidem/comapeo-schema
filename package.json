@@ -28,7 +28,7 @@
     "ajv": "^6.10.0"
   },
   "devDependencies": {
-    "@digidem/jsonschema2md": "^3.0.0",
+    "@digidem/jsonschema2md": "^3.1.0",
     "@marudor/json-schema-to-flow-type": "^2.0.0",
     "ajv-pack": "^0.3.1",
     "flow-bin": "^0.97.0",
