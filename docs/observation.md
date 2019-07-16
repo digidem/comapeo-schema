@@ -170,8 +170,6 @@ Additional metadata associated with the observation (e.g. location precision, al
   - type: `boolean`
   - default: `false`
 
-  `boolean`
-
 ## `refs`
 
 References to any nodes or ways that this observation is related to.
