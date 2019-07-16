@@ -100,13 +100,14 @@ Version of schema. Should increment for breaking changes to the schema
 - type: `enum` The value of this property **must** be equal to one of the
   [known values below](#schemaversion-known-values).
 
-  | Value | Description      |
-  | ----- | ---------------- |
-  | `1`   | Schema version 1 |
+  | Value | Description                   |
+  | ----- | ----------------------------- |
+  | `1`   | Current schema version is `1` |
 
 ## `sort`
 
-When presets are displayed as a list, defines the order it should be sorted
+When presets are displayed as a list, defines the order it should be sorted. Presets with lowest sort numbers are
+displayed first
 
 - is optional
 - type: `integer`
@@ -140,7 +141,7 @@ Synonyms or related terms (used for search)
 
 Applies to all properties that match the regular expression `^name:`
 
-Translated name with property key `label:<language>` where <language> is a valid IETF BCP 47 language code. E.g. if the
+Translated name with property key `name:<language>` where <language> is a valid IETF BCP 47 language code. E.g. if the
 default language of the presets is English, but you want to add Spanish names, add a property `name:es`
 
 `^name:`
