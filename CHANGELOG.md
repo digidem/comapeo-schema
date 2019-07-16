@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [1.3.0](https://github.com/digidem/mapeo-schema/compare/v1.2.0...v1.3.0) (2019-07-16)
+
+
+### Bug Fixes
+
+* Fix preset examples to include required id ([fc1c79e](https://github.com/digidem/mapeo-schema/commit/fc1c79e))
+* Update observation docs ([b3076e1](https://github.com/digidem/mapeo-schema/commit/b3076e1))
+
+
+### Features
+
+* Add field schema ([5f372bc](https://github.com/digidem/mapeo-schema/commit/5f372bc))
+* Add ID to presets ([fc512f0](https://github.com/digidem/mapeo-schema/commit/fc512f0))
+
+
+
 # [1.2.0](https://github.com/digidem/mapeo-schema/compare/v1.1.0...v1.2.0) (2019-07-12)
 
 
