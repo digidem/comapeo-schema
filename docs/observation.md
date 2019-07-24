@@ -3,6 +3,69 @@
 An observation is something that has been observed at a particular time and place. It is a subjective statement of 'I
 saw/heard this, here'
 
+# Observation Definitions
+
+| Property          | Type      | Group                                                               |
+| ----------------- | --------- | ------------------------------------------------------------------- |
+| [coords](#coords) | `object`  | `http://mapeo.world/schemas/observation.json#/definitions/position` |
+| [mocked](#mocked) | `boolean` | `http://mapeo.world/schemas/observation.json#/definitions/position` |
+
+## `coords`
+
+Position details, should be self explanatory. Units in meters
+
+- is optional
+- type: `object`
+
+  `object` with following properties:
+
+  | Property    | Type   | Required |
+  | ----------- | ------ | -------- |
+  | `accuracy`  | number | Optional |
+  | `altitude`  | number | Optional |
+  | `heading`   | number | Optional |
+  | `latitude`  | number | Optional |
+  | `longitude` | number | Optional |
+  | `speed`     | number | Optional |
+
+  #### `accuracy`
+
+  - is optional
+  - type: `number`
+
+  #### `altitude`
+
+  - is optional
+  - type: `number`
+
+  #### `heading`
+
+  - is optional
+  - type: `number`
+
+  #### `latitude`
+
+  - is optional
+  - type: `number`
+
+  #### `longitude`
+
+  - is optional
+  - type: `number`
+
+  #### `speed`
+
+  - is optional
+  - type: `number`
+
+## `mocked`
+
+`true` if the position was mocked
+
+- is optional
+- default: `false`
+- type: `boolean`
+
 # Properties
 
 | Property                        | Type       | Required     | Nullable |
@@ -109,10 +172,22 @@ Additional metadata associated with the observation (e.g. location precision, al
 
   `object` with following properties:
 
-  | Property         | Type    | Required | Default |
-  | ---------------- | ------- | -------- | ------- |
-  | `location`       | object  | Optional |         |
-  | `manualLocation` | boolean | Optional | `false` |
+  | Property            | Type    | Required | Default |
+  | ------------------- | ------- | -------- | ------- |
+  | `lastSavedPosition` |         | Optional |         |
+  | `location`          | object  | Optional |         |
+  | `manualLocation`    | boolean | Optional | `false` |
+  | `position`          |         | Optional |         |
+  | `positionProvider`  | object  | Optional |         |
+
+  #### `lastSavedPosition`
+
+  Details of the last saved position when the observation was recorded - useful if position is not recorded
+
+  - is optional
+  - type: reference
+
+  * []() – `#/definitions/position`
 
   #### `location`
 
@@ -169,6 +244,60 @@ Additional metadata associated with the observation (e.g. location precision, al
   - is optional
   - type: `boolean`
   - default: `false`
+
+  #### `position`
+
+  Details of the position recorded for the observation
+
+  - is optional
+  - type: reference
+
+  * []() – `#/definitions/position`
+
+  #### `positionProvider`
+
+  Details of the location providers that were available on the device when the observation was recorded
+
+  - is optional
+  - type: `object`
+
+  `object` with following properties:
+
+  | Property                  | Type    | Required |
+  | ------------------------- | ------- | -------- |
+  | `gpsAvailable`            | boolean | Optional |
+  | `locationServicesEnabled` | boolean | Optional |
+  | `networkAvailable`        | boolean | Optional |
+  | `passiveAvailable`        | boolean | Optional |
+
+  #### `gpsAvailable`
+
+  Whether the user has enabled GPS for device location (this is not the same as whether location is turned on or off,
+  this is a device setting whether to use just wifi and bluetooth or use GPS for location)
+
+  - is optional
+  - type: `boolean`
+
+  #### `locationServicesEnabled`
+
+  Has the user enabled location services on the device (this is often turned off when the device is in airplane mode)
+
+  - is optional
+  - type: `boolean`
+
+  #### `networkAvailable`
+
+  Whether the device can lookup location based on cell phone towers
+
+  - is optional
+  - type: `boolean`
+
+  #### `passiveAvailable`
+
+  Whether the device is configured to lookup location based on wifi and bluetooth networks
+
+  - is optional
+  - type: `boolean`
 
 ## `refs`
 

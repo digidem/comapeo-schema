@@ -3,6 +3,48 @@
   "$id": "http://mapeo.world/schemas/observation.json",
   "title": "Observation",
   "description": "An observation is something that has been observed at a particular time and place. It is a subjective statement of 'I saw/heard this, here'",
+  "definitions": {
+    "position": {
+      "description": "Position details",
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "description": "Timestamp of when the current position was obtained",
+          "type": "number"
+        },
+        "mocked": {
+          "description": "`true` if the position was mocked",
+          "type": "boolean",
+          "default": false
+        },
+        "coords": {
+          "description": "Position details, should be self explanatory. Units in meters",
+          "type": "object",
+          "properties": {
+            "altitude": {
+              "type": "number"
+            },
+            "heading": {
+              "type": "number"
+            },
+            "longitude": {
+              "type": "number"
+            },
+            "speed": {
+              "type": "number"
+            },
+            "latitude": {
+              "type": "number"
+            },
+            "accuracy": {
+              "type": "number"
+            }
+          }
+        }
+
+      }
+    }
+  },
   "type": "object",
   "properties": {
     "id": {
@@ -83,6 +125,36 @@
             },
             "accuracy": {
               "type": "number"
+            }
+          }
+        },
+        "position": {
+          "$ref": "#/definitions/position",
+          "description": "Details of the position recorded for the observation"
+        },
+        "lastSavedPosition": {
+          "$ref": "#/definitions/position",
+          "description": "Details of the last saved position when the observation was recorded - useful if position is not recorded"
+        },
+        "positionProvider": {
+          "description": "Details of the location providers that were available on the device when the observation was recorded",
+          "type": "object",
+          "properties": {
+            "gpsAvailable": {
+              "description": "Whether the user has enabled GPS for device location (this is not the same as whether location is turned on or off, this is a device setting whether to use just wifi and bluetooth or use GPS for location)",
+              "type": "boolean"
+            },
+            "passiveAvailable": {
+              "description": "Whether the device is configured to lookup location based on wifi and bluetooth networks",
+              "type": "boolean"
+            },
+            "locationServicesEnabled": {
+              "description": "Has the user enabled location services on the device (this is often turned off when the device is in airplane mode)",
+              "type": "boolean"
+            },
+            "networkAvailable": {
+              "description": "Whether the device can lookup location based on cell phone towers",
+              "type": "boolean"
             }
           }
         },
