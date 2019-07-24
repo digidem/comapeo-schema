@@ -175,7 +175,6 @@ Additional metadata associated with the observation (e.g. location precision, al
   | Property            | Type    | Required | Default |
   | ------------------- | ------- | -------- | ------- |
   | `lastSavedPosition` |         | Optional |         |
-  | `location`          | object  | Optional |         |
   | `manualLocation`    | boolean | Optional | `false` |
   | `position`          |         | Optional |         |
   | `positionProvider`  | object  | Optional |         |
@@ -188,54 +187,6 @@ Additional metadata associated with the observation (e.g. location precision, al
   - type: reference
 
   * []() – `#/definitions/position`
-
-  #### `location`
-
-  Additional location information
-
-  - is optional
-  - type: `object`
-
-  `object` with following properties:
-
-  | Property    | Type   | Required |
-  | ----------- | ------ | -------- |
-  | `accuracy`  | number | Optional |
-  | `altitude`  | number | Optional |
-  | `heading`   | number | Optional |
-  | `latitude`  | number | Optional |
-  | `longitude` | number | Optional |
-  | `speed`     | number | Optional |
-
-  #### `accuracy`
-
-  - is optional
-  - type: `number`
-
-  #### `altitude`
-
-  - is optional
-  - type: `number`
-
-  #### `heading`
-
-  - is optional
-  - type: `number`
-
-  #### `latitude`
-
-  - is optional
-  - type: `number`
-
-  #### `longitude`
-
-  - is optional
-  - type: `number`
-
-  #### `speed`
-
-  - is optional
-  - type: `number`
 
   #### `manualLocation`
 

@@ -104,30 +104,6 @@
       "description": "Additional metadata associated with the observation (e.g. location precision, altitude, heading)",
       "type": "object",
       "properties": {
-        "location": {
-          "description": "Additional location information",
-          "type": "object",
-          "properties": {
-            "altitude": {
-              "type": "number"
-            },
-            "heading": {
-              "type": "number"
-            },
-            "longitude": {
-              "type": "number"
-            },
-            "speed": {
-              "type": "number"
-            },
-            "latitude": {
-              "type": "number"
-            },
-            "accuracy": {
-              "type": "number"
-            }
-          }
-        },
         "position": {
           "$ref": "#/definitions/position",
           "description": "Details of the position recorded for the observation"
