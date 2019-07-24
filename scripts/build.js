@@ -82,7 +82,9 @@ function uniqueReducer (acc, curr) {
 
 function generateFlowDef (schema, name) {
   const flowDef = parseSchema(schema)
-  return flowDef.replace(/^declare type/, 'export type ' + name)
+  return flowDef
+    .replace(/^declare type =/gm, 'export type ' + name + ' =')
+    .replace(/^declare type/gm, 'export type')
 }
 
 function generateValidateCode (schema) {
