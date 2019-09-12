@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [1.6.0](https://github.com/digidem/mapeo-schema/compare/v1.5.0...v1.6.0) (2019-09-12)
+
+
+### Features
+
+* Add filter type ([0fc8f5a](https://github.com/digidem/mapeo-schema/commit/0fc8f5a))
+
+
+
 # [1.5.0](https://github.com/digidem/mapeo-schema/compare/v1.4.0...v1.5.0) (2019-07-24)
 
 
