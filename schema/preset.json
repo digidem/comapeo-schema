@@ -64,6 +64,13 @@
         "type": "string"
       }
     },
+    "additionalFields": {
+      "description": "Additional fields to display (used internally by Mapeo Desktop, no need to define this in preset)",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
     "icon": {
       "description": "ID of preset icon which represents this preset",
       "type": "string"

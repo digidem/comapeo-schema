@@ -7,20 +7,21 @@ tags is used.
 
 # Properties
 
-| Property                        | Type       | Required     | Nullable |
-| ------------------------------- | ---------- | ------------ | -------- |
-| [addTags](#addtags)             | `object`   | Optional     | No       | Preset (this schema) |
-| [fields](#fields)               | `string[]` | Optional     | No       | Preset (this schema) |
-| [geometry](#geometry)           | `enum[]`   | **Required** | No       | Preset (this schema) |
-| [icon](#icon)                   | `string`   | Optional     | No       | Preset (this schema) |
-| [id](#id)                       | `string`   | **Required** | No       | Preset (this schema) |
-| [name](#name)                   | `string`   | **Required** | No       | Preset (this schema) |
-| [removeTags](#removetags)       | `object`   | Optional     | No       | Preset (this schema) |
-| [schemaVersion](#schemaversion) | `enum`     | Optional     | No       | Preset (this schema) |
-| [sort](#sort)                   | `integer`  | Optional     | No       | Preset (this schema) |
-| [tags](#tags)                   | `object`   | **Required** | No       | Preset (this schema) |
-| [terms](#terms)                 | `string[]` | Optional     | No       | Preset (this schema) |
-| [`^name:`](#pattern-name)       | `string`   | Pattern      | No       |
+| Property                              | Type       | Required     | Nullable |
+| ------------------------------------- | ---------- | ------------ | -------- |
+| [addTags](#addtags)                   | `object`   | Optional     | No       | Preset (this schema) |
+| [additionalFields](#additionalfields) | `string[]` | Optional     | No       | Preset (this schema) |
+| [fields](#fields)                     | `string[]` | Optional     | No       | Preset (this schema) |
+| [geometry](#geometry)                 | `enum[]`   | **Required** | No       | Preset (this schema) |
+| [icon](#icon)                         | `string`   | Optional     | No       | Preset (this schema) |
+| [id](#id)                             | `string`   | **Required** | No       | Preset (this schema) |
+| [name](#name)                         | `string`   | **Required** | No       | Preset (this schema) |
+| [removeTags](#removetags)             | `object`   | Optional     | No       | Preset (this schema) |
+| [schemaVersion](#schemaversion)       | `enum`     | Optional     | No       | Preset (this schema) |
+| [sort](#sort)                         | `integer`  | Optional     | No       | Preset (this schema) |
+| [tags](#tags)                         | `object`   | **Required** | No       | Preset (this schema) |
+| [terms](#terms)                       | `string[]` | Optional     | No       | Preset (this schema) |
+| [`^name:`](#pattern-name)             | `string`   | Pattern      | No       |
 
 ## `addTags`
 
@@ -34,6 +35,16 @@ Tags that are added when changing to the preset (default is the same value as 't
   | Property | Type | Required |
   | -------- | ---- | -------- |
 
+
+## `additionalFields`
+
+Additional fields to display (used internally by Mapeo Desktop, no need to define this in preset)
+
+- is optional
+- type: `string[]`
+
+  - Array type
+  - All items must be of the type: `string`
 
 ## `fields`
 
