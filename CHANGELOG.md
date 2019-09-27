@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [1.7.0](https://github.com/digidem/mapeo-schema/compare/v1.6.0...v1.7.0) (2019-09-27)
+
+
+### Features
+
+* Add additionalFields property to presets (used by Mapeo Desktop) ([4a5edaa](https://github.com/digidem/mapeo-schema/commit/4a5edaa))
+
+
+
 # [1.6.0](https://github.com/digidem/mapeo-schema/compare/v1.5.0...v1.6.0) (2019-09-12)
 
 
