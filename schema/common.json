@@ -27,6 +27,10 @@
       "description": "ID of the user who made this edit",
       "type": "string"
     },
+    "deviceId": {
+      "description": "ID of the device that made this edit",
+      "type": "string"
+    },
     "type": {
       "description": "enum that defines the type of document in the database (defines which schema should be used)",
       "type": "string"
