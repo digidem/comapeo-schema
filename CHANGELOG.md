@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [1.8.0](https://github.com/digidem/mapeo-schema/compare/v1.7.0...v1.8.0) (2019-11-12)
+
+
+### Features
+
+* Add 'deviceId' property to all elements ([#1](https://github.com/digidem/mapeo-schema/issues/1)) ([604aef6](https://github.com/digidem/mapeo-schema/commit/604aef631edbf0f5993f10f86ff32529b933089f))
+
+
+
 # [1.7.0](https://github.com/digidem/mapeo-schema/compare/v1.6.0...v1.7.0) (2019-09-27)
 
 
