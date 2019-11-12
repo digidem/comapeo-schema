@@ -69,6 +69,10 @@
       "description": "ID of the user who made this edit",
       "type": "string"
     },
+    "deviceId": {
+      "description": "ID of the device that made this edit",
+      "type": "string"
+    },
     "type": {
       "description": "Must be `observation`",
       "type": "string",

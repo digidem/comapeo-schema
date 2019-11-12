@@ -7,6 +7,7 @@ These properties are shared by all objects in the Mapeo database.
 | Property                        | Type       | Required     | Nullable |
 | ------------------------------- | ---------- | ------------ | -------- |
 | [created_at](#created_at)       | `string`   | **Required** | No       | common (this schema) |
+| [deviceId](#deviceid)           | `string`   | Optional     | No       | common (this schema) |
 | [id](#id)                       | `string`   | **Required** | No       | common (this schema) |
 | [links](#links)                 | `string[]` | Optional     | No       | common (this schema) |
 | [schemaVersion](#schemaversion) | `number`   | Optional     | No       | common (this schema) |
@@ -24,6 +25,13 @@ RFC3339-formatted datetime of when the first version of the element was created
 - type: `string`
 
   - format: `date-time` – date and time (according to [RFC 3339, section 5.6](http://tools.ietf.org/html/rfc3339))
+
+## `deviceId`
+
+ID of the device that made this edit
+
+- is optional
+- type: `string`
 
 ## `id`
 

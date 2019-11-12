@@ -72,6 +72,7 @@ Position details, should be self explanatory. Units in meters
 | ------------------------------- | ---------- | ------------ | -------- |
 | [attachments](#attachments)     | `object[]` | Optional     | No       | Observation (this schema) |
 | [created_at](#created_at)       | `string`   | **Required** | No       | Observation (this schema) |
+| [deviceId](#deviceid)           | `string`   | Optional     | No       | Observation (this schema) |
 | [id](#id)                       | `string`   | **Required** | No       | Observation (this schema) |
 | [lat](#lat)                     | `number`   | Optional     | Yes      | Observation (this schema) |
 | [links](#links)                 | `string[]` | Optional     | No       | Observation (this schema) |
@@ -123,6 +124,13 @@ RFC3339-formatted datetime of when the first version of the element was created
 - type: `string`
 
   - format: `date-time` – date and time (according to [RFC 3339, section 5.6](http://tools.ietf.org/html/rfc3339))
+
+## `deviceId`
+
+ID of the device that made this edit
+
+- is optional
+- type: `string`
 
 ## `id`
 

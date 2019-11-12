@@ -8,6 +8,7 @@ observations between two dates, or only observations with the tag `public=true`
 | Property                        | Type       | Required     | Nullable |
 | ------------------------------- | ---------- | ------------ | -------- |
 | [created_at](#created_at)       | `string`   | **Required** | No       | Filter (this schema) |
+| [deviceId](#deviceid)           | `string`   | Optional     | No       | Filter (this schema) |
 | [filter](#filter)               | `array`    | **Required** | No       | Filter (this schema) |
 | [id](#id)                       | `string`   | **Required** | No       | Filter (this schema) |
 | [links](#links)                 | `string[]` | Optional     | No       | Filter (this schema) |
@@ -27,6 +28,13 @@ RFC3339-formatted datetime of when the first version of the element was created
 - type: `string`
 
   - format: `date-time` – date and time (according to [RFC 3339, section 5.6](http://tools.ietf.org/html/rfc3339))
+
+## `deviceId`
+
+ID of the device that made this edit
+
+- is optional
+- type: `string`
 
 ## `filter`
 
