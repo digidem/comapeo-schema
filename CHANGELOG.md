@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [1.9.0](https://github.com/digidem/mapeo-schema/compare/v1.8.0...v1.9.0) (2020-04-17)
+
+
+### Features
+
+* add `helperText` property to field definitions ([61d9757](https://github.com/digidem/mapeo-schema/commit/61d97572096e3cad7536214f6d00ef51c56b2638))
+
+
+
 # [1.8.0](https://github.com/digidem/mapeo-schema/compare/v1.7.0...v1.8.0) (2019-11-12)
 
 
