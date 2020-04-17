@@ -9,6 +9,7 @@ a text box, multiple choice, single-select, etc. It defines what tag-value is se
 | Property                                | Type      | Required     | Nullable | Default       |
 | --------------------------------------- | --------- | ------------ | -------- | ------------- |
 | [appearance](#appearance)               | `enum`    | Optional     | No       | `"multiline"` | Field (this schema) |
+| [helperText](#helpertext)               | `string`  | Optional     | No       |               | Field (this schema) |
 | [id](#id)                               | `string`  | **Required** | No       |               | Field (this schema) |
 | [key](#key)                             | complex   | **Required** | No       |               | Field (this schema) |
 | [label](#label)                         | `string`  | Optional     | No       |               | Field (this schema) |
@@ -36,6 +37,13 @@ For text fields, display as a single-line or multi-line field
   | ------------ | -------------------------------------------------- |
   | `singleline` | Text will be cut-off if more than one line         |
   | `multiline`  | Text will wrap to multiple lines within text field |
+
+## `helperText`
+
+Additional context about the field, e.g. hints about how to answer the question.
+
+- is optional
+- type: `string`
 
 ## `id`
 
@@ -157,7 +165,8 @@ List of options the user can select for single- or multi-select fields
 
 ## `placeholder`
 
-Displayed as a placeholder or hint for the field: use for additional context or example responses for the user
+Displayed as a placeholder in an empty text or number field before the user begins typing. Use 'helperText' for
+important information, because the placeholder is not visible after the user has entered data.
 
 - is optional
 - type: `string`

@@ -122,7 +122,11 @@
       "default": false
     },
     "placeholder": {
-      "description": "Displayed as a placeholder or hint for the field: use for additional context or example responses for the user",
+      "description": "Displayed as a placeholder in an empty text or number field before the user begins typing. Use 'helperText' for important information, because the placeholder is not visible after the user has entered data.",
+      "type": "string"
+    },
+    "helperText": {
+      "description": "Additional context about the field, e.g. hints about how to answer the question.",
       "type": "string"
     },
     "min_value": {
