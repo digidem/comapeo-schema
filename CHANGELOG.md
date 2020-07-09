@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [1.10.0](https://github.com/digidem/mapeo-schema/compare/v1.9.0...v1.10.0) (2020-07-09)
+
+
+### Features
+
+* Add localized field ([2d66acd](https://github.com/digidem/mapeo-schema/commit/2d66acd2f9442619ed4504370ad9f6bb7703d74f))
+
+
+
 # [1.9.0](https://github.com/digidem/mapeo-schema/compare/v1.8.0...v1.9.0) (2020-04-17)
 
 
