@@ -35,6 +35,7 @@
       "type": "string",
       "meta:enum": {
         "text": "Freeform text field",
+        "localized": "Text field with localization abilities (e.g. name=*, name:es=*, etc.). Currently only supported in Mapeo Desktop territory view.",
         "number": "Allows only numbers",
         "select_one": "Select one item from a list of pre-defined options",
         "select_multiple": "Select any number of items from a list of pre-defined options",

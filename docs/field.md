@@ -194,14 +194,15 @@ Type of field - defines how the field is displayed to the user.
 - is **required**
 - type: `enum` The value of this property **must** be equal to one of the [known values below](#type-known-values).
 
-  | Value             | Description                                                   |
-  | ----------------- | ------------------------------------------------------------- |
-  | `text`            | Freeform text field                                           |
-  | `number`          | Allows only numbers                                           |
-  | `select_one`      | Select one item from a list of pre-defined options            |
-  | `select_multiple` | Select any number of items from a list of pre-defined options |
-  | `date`            | Select a date                                                 |
-  | `datetime`        | Select a date and time                                        |
+  | Value             | Description                                                                                                                      |
+  | ----------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+  | `text`            | Freeform text field                                                                                                              |
+  | `localized`       | Text field with localization abilities (e.g. name=_, name:es=_, etc.). Currently only supported in Mapeo Desktop territory view. |
+  | `number`          | Allows only numbers                                                                                                              |
+  | `select_one`      | Select one item from a list of pre-defined options                                                                               |
+  | `select_multiple` | Select any number of items from a list of pre-defined options                                                                    |
+  | `date`            | Select a date                                                                                                                    |
+  | `datetime`        | Select a date and time                                                                                                           |
 
 ## `universal`
 
