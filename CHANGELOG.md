@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.1](https://github.com/digidem/mapeo-schema/compare/v1.10.0...v1.10.1) (2020-07-09)
+
+
+### Bug Fixes
+
+* Fix schema update ([dd85a3e](https://github.com/digidem/mapeo-schema/commit/dd85a3e2bd44d691b93a82eff3314115994fbe91))
+
+
+
 # [1.10.0](https://github.com/digidem/mapeo-schema/compare/v1.9.0...v1.10.0) (2020-07-09)
 
 
