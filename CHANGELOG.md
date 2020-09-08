@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.1](https://github.com/digidem/mapeo-schema/compare/v2.0.0...v2.0.1) (2020-09-08)
+
+
+### Bug Fixes
+
+* should not support number keys ([95647e4](https://github.com/digidem/mapeo-schema/commit/95647e42bb2f2324c45e31bac84961f337654ac2))
+
+
+
 # [2.0.0](https://github.com/digidem/mapeo-schema/compare/v1.10.1...v2.0.0) (2020-09-08)
 
 
