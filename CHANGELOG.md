@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [2.0.0](https://github.com/digidem/mapeo-schema/compare/v1.10.1...v2.0.0) (2020-09-08)
+
+
+### Features
+
+* export stricter types (moved from Mapeo Desktop code) ([a6c97f1](https://github.com/digidem/mapeo-schema/commit/a6c97f1729ac3514813d98f1005a650859c93e53))
+
+
+* fix!: Remove label:LANG_CODE style properties ([1e80410](https://github.com/digidem/mapeo-schema/commit/1e804106eb8a6a6acef851e46e22583c970e2959))
+
+
+### BREAKING CHANGES
+
+* The schema has always defined the label, name and
+placeholder properties as also supporting a prefix of `:LANG_CODE` where
+LANG_CODE is the two-letter ISO language code.
+This has never been used in any of the Mapeo apps, and the current
+approach to translation is to load translations at runtime and keep
+them separate to the preset definitions themselves.
+This is a breaking change because it removes properties from the schema,
+but for Mapeo Mobile and Desktop this should not break anything because
+these properties were not used anyway.
+
+
+
 ## [1.10.1](https://github.com/digidem/mapeo-schema/compare/v1.10.0...v1.10.1) (2020-07-09)
 
 
