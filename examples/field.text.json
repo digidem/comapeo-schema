@@ -3,6 +3,5 @@
   "key": "foo",
   "type": "text",
   "appearance": "singleline",
-  "label": "What is foo?",
-  "label:es": "¿Qué es foo?"
+  "label": "What is foo?"
 }

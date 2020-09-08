@@ -4,16 +4,6 @@
   "title": "Field",
   "description": "A field defines a form field that will be shown to the user when creating or editing a map entity. Presets define which fields are shown to the user for a particular map entity. The field definition defines whether the field should show as a text box, multiple choice, single-select, etc. It defines what tag-value is set when the field is entered.",
   "type": "object",
-  "patternProperties": {
-    "^label:": {
-      "description": "Translated field label with property key `label:<language>` where <language> is a valid IETF BCP 47 language code. E.g. if the default language of the fields is English, but you want to add Spanish labels, add a property `label:es`",
-      "type": "string"
-    },
-    "^placeholder:": {
-      "description": "Translated field placeholder with property key `placeholder:<language>` where <language> is a valid IETF BCP 47 language code. E.g. if the default language of the fields is English, but you want to add Spanish placeholders, add a property `placeholder:es`",
-      "type": "string"
-    }
-  },
   "properties": {
     "id": {
       "description": "Unique value that identifies this element",
@@ -90,12 +80,6 @@
           "type": "null"
         }, {
           "type": "object",
-          "patternProperties": {
-            "^label:": {
-              "description": "Translated option label with property key `label:<language>` where <language> is a valid IETF BCP 47 language code. E.g. if the default language of the fields is English, but you want to add Spanish labels for options, add a property `label:es`",
-              "type": "string"
-            }
-          },
           "properties": {
             "label": {
               "description": "Label in default language to display to the user for this option",

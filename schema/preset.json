@@ -4,12 +4,6 @@
   "title": "Preset",
   "description": "Presets define how map entities are displayed to the user. They define the icon used on the map, and the fields / questions shown to the user when they create or edit the entity on the map. The `tags` property of a preset is used to match the preset with observations, nodes, ways and relations. If multiple presets match, the one that matches the most tags is used.",
   "type": "object",
-  "patternProperties": {
-    "^name:": {
-      "description": "Translated name with property key `name:<language>` where <language> is a valid IETF BCP 47 language code. E.g. if the default language of the presets is English, but you want to add Spanish names, add a property `name:es`",
-      "type": "string"
-    }
-  },
   "additionalProperties": false,
   "properties": {
     "schemaVersion": {
