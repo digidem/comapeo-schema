@@ -36,7 +36,8 @@ const indexFile = 'module.exports = {\n' +
   ).join(',\n') + '\n}\n'
 
 // Generate a flow file that exports all of the generated types
-const flowFile = '// @flow\n\n' + flowDefs.join('\n\n') + '\n'
+const flowFile = '// @flow\n\n' + flowDefs.join('\n\n') + '\n' +
+  fs.readFileSync(path.join(__dirname, '../types.js.flow')) + '\n'
 
 fs.writeFileSync(path.join(outputFolder, 'index.js'), indexFile)
 fs.writeFileSync(path.join(outputFolder, 'index.js.flow'), flowFile)
@@ -51,18 +52,22 @@ const typeNames = exampleFilenames.map(getTypeName).reduce(uniqueReducer, [])
 
 // Header imports flow types used in examples
 const header = `// @flow
-import type { ${typeNames.join(',')} } from '../'
+import type { ${typeNames.join(',')} } from '../../'
 `
 // Generate code that declares a variable for each example json and declares the
 // corresponding type, so that flow can statically check it.
 const contents = exampleFilenames.map((filename, index) => {
-  return `const var${index}: ${getTypeName(filename)} = ` +
-    fs.readFileSync(path.join(examplesFolder, filename), 'utf-8')
+  const varName = path.basename(filename, '.json').replace(/[-\.]/g, '_')
+  return '\n// Export un-typed for checking against strict types\n' +
+    `export const ${varName} = ` +
+    fs.readFileSync(path.join(examplesFolder, filename), 'utf-8') +
+    '\n// This is the type check' +
+    `\n;({...${varName}}: ${getTypeName(filename)})\n`
 }).join('\n')
 
 const validFlowDir = path.join(__dirname, '../test/valid_flow')
 mkdirp(validFlowDir)
-fs.writeFileSync(path.join(validFlowDir, 'test.js.flow'), header + contents)
+fs.writeFileSync(path.join(validFlowDir, 'generated.js.flow'), header + contents)
 
 /**
  * Helper functions

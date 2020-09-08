@@ -61,4 +61,5 @@ typings/
 .next
 
 /*.js
-*.flow
+/index.js.flow
+/test/valid_flow/generated.js.flow
