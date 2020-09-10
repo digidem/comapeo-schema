@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.0.2](https://github.com/digidem/mapeo-schema/compare/v2.0.1...v2.0.2) (2020-09-10)
+
+
+### Bug Fixes
+
+* Add missing helperText prop to manual flow types ([7721840](https://github.com/digidem/mapeo-schema/commit/7721840f7af8e41c30d6f2c9b5a9eb9fdfdd0119))
+
+
+
 ## [2.0.1](https://github.com/digidem/mapeo-schema/compare/v2.0.0...v2.0.1) (2020-09-08)
 
 

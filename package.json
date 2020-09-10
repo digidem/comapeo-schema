@@ -1,6 +1,6 @@
 {
   "name": "mapeo-schema",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "JSON schema and flow types for Mapeo",
   "main": "index.js",
   "scripts": {
