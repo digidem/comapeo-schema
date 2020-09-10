@@ -17,6 +17,9 @@ type BaseField = {|
   // Displayed as a placeholder or hint for the field: use for additional
   // context or example responses for the user
   placeholder?: string,
+  // Additional context about the field, e.g. hints about how to answer the
+  // question.
+  helperText?: string,
   // If a field definition contains the property "universal": true, this field
   // will appear in the "Add Field" list for all presets
   universal?: boolean,
