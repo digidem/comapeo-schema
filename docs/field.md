@@ -6,23 +6,21 @@ a text box, multiple choice, single-select, etc. It defines what tag-value is se
 
 # Properties
 
-| Property                                | Type      | Required     | Nullable | Default       |
-| --------------------------------------- | --------- | ------------ | -------- | ------------- |
-| [appearance](#appearance)               | `enum`    | Optional     | No       | `"multiline"` | Field (this schema) |
-| [helperText](#helpertext)               | `string`  | Optional     | No       |               | Field (this schema) |
-| [id](#id)                               | `string`  | **Required** | No       |               | Field (this schema) |
-| [key](#key)                             | complex   | **Required** | No       |               | Field (this schema) |
-| [label](#label)                         | `string`  | Optional     | No       |               | Field (this schema) |
-| [max_value](#max_value)                 | `integer` | Optional     | No       |               | Field (this schema) |
-| [min_value](#min_value)                 | `integer` | Optional     | No       |               | Field (this schema) |
-| [options](#options)                     | `array`   | Optional     | No       |               | Field (this schema) |
-| [placeholder](#placeholder)             | `string`  | Optional     | No       |               | Field (this schema) |
-| [readonly](#readonly)                   | `boolean` | Optional     | No       | `false`       | Field (this schema) |
-| [snake_case](#snake_case)               | `boolean` | Optional     | No       | `false`       | Field (this schema) |
-| [type](#type)                           | `enum`    | **Required** | No       |               | Field (this schema) |
-| [universal](#universal)                 | `boolean` | Optional     | No       | `false`       | Field (this schema) |
-| [`^label:`](#pattern-label)             | `string`  | Pattern      | No       |               |
-| [`^placeholder:`](#pattern-placeholder) | `string`  | Pattern      | No       |               |
+| Property                    | Type      | Required     | Nullable | Default       |
+| --------------------------- | --------- | ------------ | -------- | ------------- |
+| [appearance](#appearance)   | `enum`    | Optional     | No       | `"multiline"` | Field (this schema) |
+| [helperText](#helpertext)   | `string`  | Optional     | No       |               | Field (this schema) |
+| [id](#id)                   | `string`  | **Required** | No       |               | Field (this schema) |
+| [key](#key)                 | complex   | **Required** | No       |               | Field (this schema) |
+| [label](#label)             | `string`  | Optional     | No       |               | Field (this schema) |
+| [max_value](#max_value)     | `integer` | Optional     | No       |               | Field (this schema) |
+| [min_value](#min_value)     | `integer` | Optional     | No       |               | Field (this schema) |
+| [options](#options)         | `array`   | Optional     | No       |               | Field (this schema) |
+| [placeholder](#placeholder) | `string`  | Optional     | No       |               | Field (this schema) |
+| [readonly](#readonly)       | `boolean` | Optional     | No       | `false`       | Field (this schema) |
+| [snake_case](#snake_case)   | `boolean` | Optional     | No       | `false`       | Field (this schema) |
+| [type](#type)               | `enum`    | **Required** | No       |               | Field (this schema) |
+| [universal](#universal)     | `boolean` | Optional     | No       | `false`       | Field (this schema) |
 
 ## `appearance`
 
@@ -211,30 +209,3 @@ If true, this field will appear in the Add Field list for all presets
 - is optional
 - default: `false`
 - type: `boolean`
-
-## Pattern: `^label:`
-
-Applies to all properties that match the regular expression `^label:`
-
-Translated field label with property key `label:<language>` where <language> is a valid IETF BCP 47 language code. E.g.
-if the default language of the fields is English, but you want to add Spanish labels, add a property `label:es`
-
-`^label:`
-
-- is a property pattern
-- type: `string`
-- defined in this schema
-
-## Pattern: `^placeholder:`
-
-Applies to all properties that match the regular expression `^placeholder:`
-
-Translated field placeholder with property key `placeholder:<language>` where <language> is a valid IETF BCP 47
-language code. E.g. if the default language of the fields is English, but you want to add Spanish placeholders, add a
-property `placeholder:es`
-
-`^placeholder:`
-
-- is a property pattern
-- type: `string`
-- defined in this schema

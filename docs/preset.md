@@ -21,7 +21,6 @@ tags is used.
 | [sort](#sort)                         | `integer`  | Optional     | No       | Preset (this schema) |
 | [tags](#tags)                         | `object`   | **Required** | No       | Preset (this schema) |
 | [terms](#terms)                       | `string[]` | Optional     | No       | Preset (this schema) |
-| [`^name:`](#pattern-name)             | `string`   | Pattern      | No       |
 
 ## `addTags`
 
@@ -147,16 +146,3 @@ Synonyms or related terms (used for search)
 
   - Array type
   - All items must be of the type: `string`
-
-## Pattern: `^name:`
-
-Applies to all properties that match the regular expression `^name:`
-
-Translated name with property key `name:<language>` where <language> is a valid IETF BCP 47 language code. E.g. if the
-default language of the presets is English, but you want to add Spanish names, add a property `name:es`
-
-`^name:`
-
-- is a property pattern
-- type: `string`
-- defined in this schema
