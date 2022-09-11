@@ -3,6 +3,7 @@
   "version": "2.0.2",
   "description": "JSON schema and flow types for Mapeo",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "node ./scripts/build.js",
     "docs": "rimraf docs && mkdirp docs && jsonschema2md -o docs -d schema -e json && rimraf docs/*.json",
@@ -29,11 +30,9 @@
   },
   "devDependencies": {
     "@digidem/jsonschema2md": "^3.1.0",
-    "@marudor/json-schema-to-flow-type": "^2.0.0",
     "ajv-pack": "^0.3.1",
-    "flow-bin": "^0.97.0",
-    "mkdirp": "^0.5.1",
-    "rimraf": "^2.6.3",
+    "desm": "^1.3.0",
+    "json-schema-to-typescript": "^11.0.2",
     "standard-version": "^5.0.2",
     "tape": "^4.10.1"
   }
