@@ -4,11 +4,19 @@
   "description": "JSON schema and flow types for Mapeo",
   "main": "index.js",
   "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./validateCommon": "./lib/validateCommon.js",
+    "./validateField": "./lib/validateField.js",
+    "./validateFilter": "./lib/validateFilter.js",
+    "./validateObservation": "./lib/validateObservation.js",
+    "./validatePreset": "./lib/validatePreset.js"
+  },
   "scripts": {
     "build": "node ./scripts/build.js",
     "docs": "rimraf docs && mkdirp docs && jsonschema2md -o docs -d schema -e json && rimraf docs/*.json",
-    "prepublish": "npm run build",
-    "test": "npm run build && tape 'test/**.js' && flow check test/valid_flow",
+    "prepublishOnly": "npm run build",
+    "test": "npm run build && tape 'test/**.js'",
     "release": "standard-version"
   },
   "repository": {
@@ -25,15 +33,14 @@
     "url": "https://github.com/digidem/mapeo-schema/issues"
   },
   "homepage": "https://github.com/digidem/mapeo-schema#readme",
-  "dependencies": {
-    "ajv": "^6.10.0"
-  },
   "devDependencies": {
     "@digidem/jsonschema2md": "^3.1.0",
-    "ajv-pack": "^0.3.1",
+    "ajv": "^8.11.0",
+    "ajv-formats": "^2.1.1",
     "desm": "^1.3.0",
     "json-schema-to-typescript": "^11.0.2",
     "standard-version": "^5.0.2",
-    "tape": "^4.10.1"
+    "tape": "^4.10.1",
+    "typescript": "^4.8.3"
   }
 }

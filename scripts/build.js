@@ -5,11 +5,13 @@ import * as path from 'path'
 
 import * as dirname from 'desm'
 import Ajv from 'ajv'
-import pack from 'ajv-pack'
+import addFormats from "ajv-formats"
 import { compile } from 'json-schema-to-typescript'
+import standalone from 'ajv/dist/standalone/index.js'
 
 const moduleFilenames = []
 const rootDirectory = dirname.join(import.meta.url, '..')
+const libDirectory = path.join(rootDirectory, 'lib')
 const schemaDirectory = path.join(rootDirectory, 'schema')
 const typesDirectory = path.join(rootDirectory, 'types')
 
@@ -21,16 +23,16 @@ for (const filename of schemaFiles) {
   const fileContents = await fs.readFile(filepath)
   const schema = JSON.parse(fileContents)
   const name = capitalizeFirst(stripExt(filename))
-  
+
   const moduleCode = generateValidateCode(schema, name)
   const moduleFilename = `validate${name}.js`
-  const moduleFilepath = path.join(rootDirectory, moduleFilename)
+  const moduleFilepath = path.join(libDirectory, moduleFilename)
   await fs.writeFile(moduleFilepath, moduleCode)
 
   moduleFilenames.push(moduleFilename)
 
   const ts = await compile(schema, name, { additionalProperties: false })
-  const typeFilename = `${name}.ts`
+  const typeFilename = `${name}.d.ts`
   const typeFilepath = path.join(typesDirectory, typeFilename)
   await fs.writeFile(typeFilepath, ts)
 }
@@ -38,17 +40,17 @@ for (const filename of schemaFiles) {
 // Generate an index file that exports each of the generated validation functions
 const indexFilepath = path.join(rootDirectory, 'index.js')
 
-const indexFile = moduleFilenames.map((filename) => {
-  return `export ${filename} from './${filename}.js'`
-}) + '\n'
+let moduleImports = ''
+let moduleExports = ''
+
+moduleFilenames.forEach((filename) => {
+  moduleImports += `import { ${stripExt(filename)} } from './lib/${filename}';\n`
+  moduleExports += `export { ${stripExt(filename)} };\n`
+})
+
+const indexFile = moduleImports + '\n' + moduleExports
 
 await fs.writeFile(indexFilepath, indexFile)
-
-
-// Generate a flow file that exports all of the generated types
-// const flowFile = '// @flow\n\n' + flowDefs.join('\n\n') + '\n' +
-//   fs.readFileSync(path.join(__dirname, '../types.js.flow')) + '\n'
-// fs.writeFileSync(path.join(outputFolder, 'index.js.flow'), flowFile)
 
 const examplesFolder = path.join(rootDirectory, 'examples')
 const exampleFilenames = await fs.readdir(examplesFolder)
@@ -95,9 +97,29 @@ function uniqueReducer (acc, curr) {
 }
 
 function generateValidateCode (schema) {
-  const ajv = new Ajv({ sourceCode: true })
+  const ajv = new Ajv({
+    strict: false, // TODO: consider making formats for meta:* properties to avoid this
+    code: {
+      lines: true,
+      source: true,
+      esm: true
+    }
+  })
+  addFormats(ajv)
   const validate = ajv.compile(schema)
-  return pack(ajv, validate)
+  const functionName = 'validate' + capitalizeFirst(schema.title)
+  const functionNameOptions = {}
+  functionNameOptions[functionName] = schema.$id
+  const code = standalone(ajv, functionNameOptions, validate)
+  const jsdoc = `/**
+  * @param {import('../types/${schema.title}').${schema.title}} data
+  * @param {Object} options
+  * @param {string} [options.instancePath]
+  * @param {Object} [options.parentData]
+  * @param {string} [options.parentDataProperty]
+  * @param {Object} [options.rootData]
+  */`
+  return code.replace('function validate', `${jsdoc}\nfunction validate`)
 }
 
 function stripExt (filename) {

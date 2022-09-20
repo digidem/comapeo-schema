@@ -63,3 +63,5 @@ typings/
 /*.js
 /index.js.flow
 /test/valid_flow/generated.js.flow
+tmp
+lib/*.js
