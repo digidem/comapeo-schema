@@ -41,7 +41,6 @@
             }
           }
         }
-
       }
     }
   },
@@ -94,13 +93,16 @@
     },
     "lat": {
       "description": "latitude of the observation",
-      "type": ["number", "null"],
+      "type": "number",
+      "nullable": true,
+      "meta:type": "integer",
       "minimum": -90,
       "maximum": 90
     },
     "lon": {
       "description": "longitude of the observation",
-      "type": ["number", "null"],
+      "type": "number",
+      "nullable": true,
       "minimum": -180,
       "maximum": 180
     },

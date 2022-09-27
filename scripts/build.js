@@ -5,7 +5,7 @@ import * as path from 'path'
 
 import * as dirname from 'desm'
 import Ajv from 'ajv'
-import addFormats from "ajv-formats"
+import addFormats from "@sethvincent/ajv-formats"
 import { compile } from 'json-schema-to-typescript'
 import standalone from 'ajv/dist/standalone/index.js'
 
@@ -42,15 +42,28 @@ const indexFilepath = path.join(rootDirectory, 'index.js')
 
 let moduleImports = ''
 let moduleExports = ''
+let schemaReads = ''
+let schemaExports = ''
 
 moduleFilenames.forEach((filename) => {
   moduleImports += `import { ${stripExt(filename)} } from './lib/${filename}';\n`
   moduleExports += `export { ${stripExt(filename)} };\n`
 })
 
-const indexFile = moduleImports + '\n' + moduleExports
+schemaFiles.forEach((filename) => {
+  schemaReads += `const ${capitalizeFirst(stripExt(filename))} = JSON.parse(await readFile(new URL('./schema/${filename}', import.meta.url), 'utf-8'));\n`
+  schemaExports += `export { ${capitalizeFirst(stripExt(filename))} };\n`
+})
 
-await fs.writeFile(indexFilepath, indexFile)
+const indexFileContents = `import { readFile } from 'fs/promises';
+
+${moduleImports}
+${moduleExports}
+${schemaReads}
+${schemaExports}
+`
+
+await fs.writeFile(indexFilepath, indexFileContents)
 
 const examplesFolder = path.join(rootDirectory, 'examples')
 const exampleFilenames = await fs.readdir(examplesFolder)

@@ -48,11 +48,11 @@ export interface Observation {
   /**
    * latitude of the observation
    */
-  lat?: number | null;
+  lat?: number;
   /**
    * longitude of the observation
    */
-  lon?: number | null;
+  lon?: number;
   /**
    * Additional metadata associated with the observation (e.g. location precision, altitude, heading)
    */
