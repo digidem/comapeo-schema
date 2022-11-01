@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+message Value {
+  // The kind of value.
+  oneof kind {
+    // Represents a null value.
+    NullValue null_value = 1;
+    // Represents a double value.
+    double number_value = 2;
+    // Represents a string value.
+    string string_value = 3;
+    // Represents a boolean value.
+    bool bool_value = 4;
+    // Represents a structured value.
+    Struct struct_value = 5;
+    // Represents a repeated `Value`.
+    ListValue list_value = 6;
+  }
+}
+
+message Struct {
+  // Unordered map of dynamically typed values
+  map<string,Value> fields = 1;
+}
+
+message Observation {
+  string id = 1;
+  string version = 2;
+  string created_at = 3;
+  optional string timestamp = 4;
+  optional string userId = 5;
+  optional string deviceId = 6;
+  string type = 7;
+  string links = 8;
+  int32 schema_version = 9;
+  optional float lat = 10;
+  optional float lon = 11;
+  repeated Struct refs = 12;
+  repeated Struct attachments = 13;
+  optional Struct tags = 14;
+
+  message metadata {
+    message location {
+      optional float precision = 1;
+      optional int32 altitude = 2;
+    }
+    optional bool manual_location = 3;
+  }
+}

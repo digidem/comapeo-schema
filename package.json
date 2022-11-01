@@ -4,10 +4,10 @@
   "description": "JSON schema and flow types for Mapeo",
   "main": "index.js",
   "scripts": {
-    "build": "node ./scripts/build.js",
-    "docs": "rimraf docs && mkdirp docs && jsonschema2md -o docs -d schema -e json && rimraf docs/*.json",
+    "start": "ts-node src/index.ts",
+    "build": "",
+    "generate": "buf generate ./proto",
     "prepublish": "npm run build",
-    "test": "npm run build && tape 'test/**.js' && flow check test/valid_flow",
     "release": "standard-version"
   },
   "repository": {
@@ -24,17 +24,10 @@
     "url": "https://github.com/digidem/mapeo-schema/issues"
   },
   "homepage": "https://github.com/digidem/mapeo-schema#readme",
-  "dependencies": {
-    "ajv": "^6.10.0"
-  },
   "devDependencies": {
-    "@digidem/jsonschema2md": "^3.1.0",
-    "@marudor/json-schema-to-flow-type": "^2.0.0",
-    "ajv-pack": "^0.3.1",
-    "flow-bin": "^0.97.0",
-    "mkdirp": "^0.5.1",
-    "rimraf": "^2.6.3",
-    "standard-version": "^5.0.2",
-    "tape": "^4.10.1"
+    "@bufbuild/protoc-gen-es": "^0.2.1"
+  },
+  "dependencies": {
+    "@bufbuild/protobuf": "^0.2.1"
   }
 }
