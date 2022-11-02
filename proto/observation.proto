@@ -1,9 +1,14 @@
 syntax = "proto3";
+
+package observation;
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
 message Value {
   // The kind of value.
   oneof kind {
     // Represents a null value.
-    /* NullValue null_value = 1; */
+    google.protobuf.NullValue null_value = 1;
     // Represents a double value.
     double number_value = 2;
     // Represents a string value.
@@ -13,7 +18,7 @@ message Value {
     // Represents a structured value.
     Struct struct_value = 5;
     // Represents a repeated `Value`.
-    /* ListValue list_value = 6; */
+    google.protobuf.ListValue list_value = 6;
   }
 }
 
@@ -23,20 +28,31 @@ message Struct {
 }
 
 message Observation {
-  string id = 1;
-  string version = 2;
-  string created_at = 3;
-  optional string timestamp = 4;
-  optional string user_id = 5;
-  optional string device_id = 6;
-  string type = 7; // maybe this could be an enum?
-  string links = 8;
-  int32 schema_version = 9;
-  optional float lat = 10;
-  optional float lon = 11;
-  repeated Struct refs = 12;
-  repeated Struct attachments = 13;
-  optional Struct tags = 14;
+  // 32-byte random generated number
+  bytes id = 1;
+
+  // this is basically the core seq number
+  /* string version = 2; */
+
+  google.protobuf.Timestamp created_at = 2;
+  optional string user_id = 3;
+
+  // derived from coreKey and identityKey
+  /* optional string device_id = 6; */
+
+  // move to magic bytes
+  /* string type = 7; */
+
+  string links = 4;
+
+  // move to magic bytes
+  /* int32 schema_version = 9; */
+
+  optional float lat = 5;
+  optional float lon = 6;
+  repeated Struct refs = 7;
+  repeated Struct attachments = 8;
+  optional Struct tags = 9;
 
   message Metadata {
     message Location {

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "example": "node examples/schema_test.js",
-    "build": "buf generate ./proto && tsc src/*.ts --outDir build",
+    "build": "buf generate ./proto && tsc $(find src | grep .ts) --outDir build",
     "prepublish": "npm run build",
     "release": "standard-version"
   },

@@ -5,7 +5,7 @@ const ram = require('random-access-memory');
 const schema = Observation.encode({
   id: 'test-id',
   version: '1',
-  createdAt: (new Date()).toString(),
+  createdAt: new Date(),
   type: 'Observation',
   links: '',
   refs: [],

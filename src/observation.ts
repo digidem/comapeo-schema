@@ -1,9 +1,15 @@
 /* eslint-disable */
 import * as _m0 from "protobufjs/minimal";
+import { ListValue, NullValue, nullValueFromJSON, nullValueToJSON } from "./google/protobuf/struct";
+import { Timestamp } from "./google/protobuf/timestamp";
 
-export const protobufPackage = "";
+export const protobufPackage = "observation";
 
 export interface Value {
+  /** Represents a null value. */
+  nullValue:
+    | NullValue
+    | undefined;
   /** Represents a double value. */
   numberValue:
     | number
@@ -17,7 +23,11 @@ export interface Value {
     | boolean
     | undefined;
   /** Represents a structured value. */
-  structValue: Struct | undefined;
+  structValue:
+    | Struct
+    | undefined;
+  /** Represents a repeated `Value`. */
+  listValue: Array<any> | undefined;
 }
 
 export interface Struct {
@@ -31,18 +41,11 @@ export interface Struct_FieldsEntry {
 }
 
 export interface Observation {
-  id: string;
-  version: string;
-  createdAt: string;
-  timestamp?: string | undefined;
+  /** 32-byte random generated number */
+  id: Uint8Array;
+  createdAt: Date | undefined;
   userId?: string | undefined;
-  deviceId?:
-    | string
-    | undefined;
-  /** maybe this could be an enum? */
-  type: string;
   links: string;
-  schemaVersion: number;
   lat?: number | undefined;
   lon?: number | undefined;
   refs: Struct[];
@@ -60,11 +63,21 @@ export interface Observation_Metadata_Location {
 }
 
 function createBaseValue(): Value {
-  return { numberValue: undefined, stringValue: undefined, boolValue: undefined, structValue: undefined };
+  return {
+    nullValue: undefined,
+    numberValue: undefined,
+    stringValue: undefined,
+    boolValue: undefined,
+    structValue: undefined,
+    listValue: undefined,
+  };
 }
 
 export const Value = {
   encode(message: Value, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.nullValue !== undefined) {
+      writer.uint32(8).int32(message.nullValue);
+    }
     if (message.numberValue !== undefined) {
       writer.uint32(17).double(message.numberValue);
     }
@@ -77,6 +90,9 @@ export const Value = {
     if (message.structValue !== undefined) {
       Struct.encode(message.structValue, writer.uint32(42).fork()).ldelim();
     }
+    if (message.listValue !== undefined) {
+      ListValue.encode(ListValue.wrap(message.listValue), writer.uint32(50).fork()).ldelim();
+    }
     return writer;
   },
 
@@ -87,6 +103,9 @@ export const Value = {
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
+        case 1:
+          message.nullValue = reader.int32() as any;
+          break;
         case 2:
           message.numberValue = reader.double();
           break;
@@ -99,6 +118,9 @@ export const Value = {
         case 5:
           message.structValue = Struct.decode(reader, reader.uint32());
           break;
+        case 6:
+          message.listValue = ListValue.unwrap(ListValue.decode(reader, reader.uint32()));
+          break;
         default:
           reader.skipType(tag & 7);
           break;
@@ -109,31 +131,38 @@ export const Value = {
 
   fromJSON(object: any): Value {
     return {
+      nullValue: isSet(object.nullValue) ? nullValueFromJSON(object.nullValue) : undefined,
       numberValue: isSet(object.numberValue) ? Number(object.numberValue) : undefined,
       stringValue: isSet(object.stringValue) ? String(object.stringValue) : undefined,
       boolValue: isSet(object.boolValue) ? Boolean(object.boolValue) : undefined,
       structValue: isSet(object.structValue) ? Struct.fromJSON(object.structValue) : undefined,
+      listValue: Array.isArray(object.listValue) ? [...object.listValue] : undefined,
     };
   },
 
   toJSON(message: Value): unknown {
     const obj: any = {};
+    message.nullValue !== undefined &&
+      (obj.nullValue = message.nullValue !== undefined ? nullValueToJSON(message.nullValue) : undefined);
     message.numberValue !== undefined && (obj.numberValue = message.numberValue);
     message.stringValue !== undefined && (obj.stringValue = message.stringValue);
     message.boolValue !== undefined && (obj.boolValue = message.boolValue);
     message.structValue !== undefined &&
       (obj.structValue = message.structValue ? Struct.toJSON(message.structValue) : undefined);
+    message.listValue !== undefined && (obj.listValue = message.listValue);
     return obj;
   },
 
   fromPartial<I extends Exact<DeepPartial<Value>, I>>(object: I): Value {
     const message = createBaseValue();
+    message.nullValue = object.nullValue ?? undefined;
     message.numberValue = object.numberValue ?? undefined;
     message.stringValue = object.stringValue ?? undefined;
     message.boolValue = object.boolValue ?? undefined;
     message.structValue = (object.structValue !== undefined && object.structValue !== null)
       ? Struct.fromPartial(object.structValue)
       : undefined;
+    message.listValue = object.listValue ?? undefined;
     return message;
   },
 };
@@ -265,15 +294,10 @@ export const Struct_FieldsEntry = {
 
 function createBaseObservation(): Observation {
   return {
-    id: "",
-    version: "",
-    createdAt: "",
-    timestamp: undefined,
+    id: new Uint8Array(),
+    createdAt: undefined,
     userId: undefined,
-    deviceId: undefined,
-    type: "",
     links: "",
-    schemaVersion: 0,
     lat: undefined,
     lon: undefined,
     refs: [],
@@ -284,47 +308,32 @@ function createBaseObservation(): Observation {
 
 export const Observation = {
   encode(message: Observation, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
+    if (message.id.length !== 0) {
+      writer.uint32(10).bytes(message.id);
     }
-    if (message.version !== "") {
-      writer.uint32(18).string(message.version);
-    }
-    if (message.createdAt !== "") {
-      writer.uint32(26).string(message.createdAt);
-    }
-    if (message.timestamp !== undefined) {
-      writer.uint32(34).string(message.timestamp);
+    if (message.createdAt !== undefined) {
+      Timestamp.encode(toTimestamp(message.createdAt), writer.uint32(18).fork()).ldelim();
     }
     if (message.userId !== undefined) {
-      writer.uint32(42).string(message.userId);
-    }
-    if (message.deviceId !== undefined) {
-      writer.uint32(50).string(message.deviceId);
-    }
-    if (message.type !== "") {
-      writer.uint32(58).string(message.type);
+      writer.uint32(26).string(message.userId);
     }
     if (message.links !== "") {
-      writer.uint32(66).string(message.links);
-    }
-    if (message.schemaVersion !== 0) {
-      writer.uint32(72).int32(message.schemaVersion);
+      writer.uint32(34).string(message.links);
     }
     if (message.lat !== undefined) {
-      writer.uint32(85).float(message.lat);
+      writer.uint32(45).float(message.lat);
     }
     if (message.lon !== undefined) {
-      writer.uint32(93).float(message.lon);
+      writer.uint32(53).float(message.lon);
     }
     for (const v of message.refs) {
-      Struct.encode(v!, writer.uint32(98).fork()).ldelim();
+      Struct.encode(v!, writer.uint32(58).fork()).ldelim();
     }
     for (const v of message.attachments) {
-      Struct.encode(v!, writer.uint32(106).fork()).ldelim();
+      Struct.encode(v!, writer.uint32(66).fork()).ldelim();
     }
     if (message.tags !== undefined) {
-      Struct.encode(message.tags, writer.uint32(114).fork()).ldelim();
+      Struct.encode(message.tags, writer.uint32(74).fork()).ldelim();
     }
     return writer;
   },
@@ -337,45 +346,30 @@ export const Observation = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          message.id = reader.string();
+          message.id = reader.bytes();
           break;
         case 2:
-          message.version = reader.string();
+          message.createdAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
           break;
         case 3:
-          message.createdAt = reader.string();
-          break;
-        case 4:
-          message.timestamp = reader.string();
-          break;
-        case 5:
           message.userId = reader.string();
           break;
-        case 6:
-          message.deviceId = reader.string();
-          break;
-        case 7:
-          message.type = reader.string();
-          break;
-        case 8:
+        case 4:
           message.links = reader.string();
           break;
-        case 9:
-          message.schemaVersion = reader.int32();
-          break;
-        case 10:
+        case 5:
           message.lat = reader.float();
           break;
-        case 11:
+        case 6:
           message.lon = reader.float();
           break;
-        case 12:
+        case 7:
           message.refs.push(Struct.decode(reader, reader.uint32()));
           break;
-        case 13:
+        case 8:
           message.attachments.push(Struct.decode(reader, reader.uint32()));
           break;
-        case 14:
+        case 9:
           message.tags = Struct.decode(reader, reader.uint32());
           break;
         default:
@@ -388,15 +382,10 @@ export const Observation = {
 
   fromJSON(object: any): Observation {
     return {
-      id: isSet(object.id) ? String(object.id) : "",
-      version: isSet(object.version) ? String(object.version) : "",
-      createdAt: isSet(object.createdAt) ? String(object.createdAt) : "",
-      timestamp: isSet(object.timestamp) ? String(object.timestamp) : undefined,
+      id: isSet(object.id) ? bytesFromBase64(object.id) : new Uint8Array(),
+      createdAt: isSet(object.createdAt) ? fromJsonTimestamp(object.createdAt) : undefined,
       userId: isSet(object.userId) ? String(object.userId) : undefined,
-      deviceId: isSet(object.deviceId) ? String(object.deviceId) : undefined,
-      type: isSet(object.type) ? String(object.type) : "",
       links: isSet(object.links) ? String(object.links) : "",
-      schemaVersion: isSet(object.schemaVersion) ? Number(object.schemaVersion) : 0,
       lat: isSet(object.lat) ? Number(object.lat) : undefined,
       lon: isSet(object.lon) ? Number(object.lon) : undefined,
       refs: Array.isArray(object?.refs) ? object.refs.map((e: any) => Struct.fromJSON(e)) : [],
@@ -407,15 +396,10 @@ export const Observation = {
 
   toJSON(message: Observation): unknown {
     const obj: any = {};
-    message.id !== undefined && (obj.id = message.id);
-    message.version !== undefined && (obj.version = message.version);
-    message.createdAt !== undefined && (obj.createdAt = message.createdAt);
-    message.timestamp !== undefined && (obj.timestamp = message.timestamp);
+    message.id !== undefined && (obj.id = base64FromBytes(message.id !== undefined ? message.id : new Uint8Array()));
+    message.createdAt !== undefined && (obj.createdAt = message.createdAt.toISOString());
     message.userId !== undefined && (obj.userId = message.userId);
-    message.deviceId !== undefined && (obj.deviceId = message.deviceId);
-    message.type !== undefined && (obj.type = message.type);
     message.links !== undefined && (obj.links = message.links);
-    message.schemaVersion !== undefined && (obj.schemaVersion = Math.round(message.schemaVersion));
     message.lat !== undefined && (obj.lat = message.lat);
     message.lon !== undefined && (obj.lon = message.lon);
     if (message.refs) {
@@ -434,15 +418,10 @@ export const Observation = {
 
   fromPartial<I extends Exact<DeepPartial<Observation>, I>>(object: I): Observation {
     const message = createBaseObservation();
-    message.id = object.id ?? "";
-    message.version = object.version ?? "";
-    message.createdAt = object.createdAt ?? "";
-    message.timestamp = object.timestamp ?? undefined;
+    message.id = object.id ?? new Uint8Array();
+    message.createdAt = object.createdAt ?? undefined;
     message.userId = object.userId ?? undefined;
-    message.deviceId = object.deviceId ?? undefined;
-    message.type = object.type ?? "";
     message.links = object.links ?? "";
-    message.schemaVersion = object.schemaVersion ?? 0;
     message.lat = object.lat ?? undefined;
     message.lon = object.lon ?? undefined;
     message.refs = object.refs?.map((e) => Struct.fromPartial(e)) || [];
@@ -559,6 +538,50 @@ export const Observation_Metadata_Location = {
   },
 };
 
+declare var self: any | undefined;
+declare var window: any | undefined;
+declare var global: any | undefined;
+var globalThis: any = (() => {
+  if (typeof globalThis !== "undefined") {
+    return globalThis;
+  }
+  if (typeof self !== "undefined") {
+    return self;
+  }
+  if (typeof window !== "undefined") {
+    return window;
+  }
+  if (typeof global !== "undefined") {
+    return global;
+  }
+  throw "Unable to locate global object";
+})();
+
+function bytesFromBase64(b64: string): Uint8Array {
+  if (globalThis.Buffer) {
+    return Uint8Array.from(globalThis.Buffer.from(b64, "base64"));
+  } else {
+    const bin = globalThis.atob(b64);
+    const arr = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; ++i) {
+      arr[i] = bin.charCodeAt(i);
+    }
+    return arr;
+  }
+}
+
+function base64FromBytes(arr: Uint8Array): string {
+  if (globalThis.Buffer) {
+    return globalThis.Buffer.from(arr).toString("base64");
+  } else {
+    const bin: string[] = [];
+    arr.forEach((byte) => {
+      bin.push(String.fromCharCode(byte));
+    });
+    return globalThis.btoa(bin.join(""));
+  }
+}
+
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
 
 export type DeepPartial<T> = T extends Builtin ? T
@@ -569,6 +592,28 @@ export type DeepPartial<T> = T extends Builtin ? T
 type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
+
+function toTimestamp(date: Date): Timestamp {
+  const seconds = date.getTime() / 1_000;
+  const nanos = (date.getTime() % 1_000) * 1_000_000;
+  return { seconds, nanos };
+}
+
+function fromTimestamp(t: Timestamp): Date {
+  let millis = t.seconds * 1_000;
+  millis += t.nanos / 1_000_000;
+  return new Date(millis);
+}
+
+function fromJsonTimestamp(o: any): Date {
+  if (o instanceof Date) {
+    return o;
+  } else if (typeof o === "string") {
+    return new Date(o);
+  } else {
+    return fromTimestamp(Timestamp.fromJSON(o));
+  }
+}
 
 function isObject(value: any): boolean {
   return typeof value === "object" && value !== null;
