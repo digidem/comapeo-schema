@@ -1,5 +1,4 @@
 syntax = "proto3";
-
 message Value {
   // The kind of value.
   oneof kind {
@@ -28,9 +27,9 @@ message Observation {
   string version = 2;
   string created_at = 3;
   optional string timestamp = 4;
-  optional string userId = 5;
-  optional string deviceId = 6;
-  string type = 7;
+  optional string user_id = 5;
+  optional string device_id = 6;
+  string type = 7; // maybe this could be an enum?
   string links = 8;
   int32 schema_version = 9;
   optional float lat = 10;
@@ -39,8 +38,8 @@ message Observation {
   repeated Struct attachments = 13;
   optional Struct tags = 14;
 
-  message metadata {
-    message location {
+  message Metadata {
+    message Location {
       optional float precision = 1;
       optional int32 altitude = 2;
     }
