@@ -1,15 +1,28 @@
-import Schema from "../src";
+import Schema from '../src';
+import Hypercore from 'hypercore';
+import ram from 'random-access-memory';
 
 const schema = new Schema({
   id: 'test-id',
-  version: '1',
+  version: '0',
+  schemaVersion: 1,
   createdAt: (new Date()).toString(),
-  type: 'Animal', // maybe this should be an enum??
-  links: 'hi',
-  schemaVersion: 10,
-  refs: [{ test: true }]
+  type: 'Animal',
 });
 
-console.log(schema);
-console.log(Schema.decode({ id: 'hola', createdAt: (new Date()).toString() }));
+const core = new Hypercore(ram, { valueEncoding: 'binary' });
+core.append(schema.encode());
+
+(async () => {
+  try {
+    const data = await core.get(0);
+    if (!Schema.equals(Schema.decode(data), schema)) {
+      throw new Error(`data doesn't match: ${data} != ${schema}`);
+    } else {
+      console.log('data matches');
+    }
+  } catch (err) {
+    console.log(err);
+  }
+})()
 

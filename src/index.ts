@@ -6,8 +6,8 @@ class Schema extends Observation {
     super(obj);
   }
 
-  static decode(obj: JsonValue) {
-    return Schema.fromJson(obj);
+  static decode(data: Uint8Array) {
+    return Schema.fromBinary(data);
   }
 
   encode() {
