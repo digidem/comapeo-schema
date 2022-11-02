@@ -26,12 +26,10 @@
   },
   "homepage": "https://github.com/digidem/mapeo-schema#readme",
   "devDependencies": {
-    "@bufbuild/protoc-gen-es": "^0.2.1",
     "ts-node": "^10.9.1",
     "ts-proto": "^1.131.0"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^0.2.1",
     "hypercore": "^10.4.1",
     "random-access-memory": "^6.0.0"
   }
