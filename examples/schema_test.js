@@ -1,6 +1,6 @@
-import { Observation } from '../src/observation';
-import Hypercore from 'hypercore';
-import ram from 'random-access-memory';
+const { Observation } = require('../build/observation');
+const Hypercore = require('hypercore');
+const ram = require('random-access-memory');
 
 const schema = Observation.encode({
   id: 'test-id',

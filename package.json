@@ -4,10 +4,8 @@
   "description": "JSON schema and flow types for Mapeo",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node src/index.ts",
-    "example": "ts-node -T examples/schema_test.ts",
-    "build": "",
-    "generate": "buf generate ./proto",
+    "example": "node examples/schema_test.js",
+    "build": "buf generate ./proto && tsc src/*.ts --outDir build",
     "prepublish": "npm run build",
     "release": "standard-version"
   },
@@ -26,8 +24,8 @@
   },
   "homepage": "https://github.com/digidem/mapeo-schema#readme",
   "devDependencies": {
-    "ts-node": "^10.9.1",
-    "ts-proto": "^1.131.0"
+    "ts-proto": "^1.131.0",
+    "tsc": "^2.0.4"
   },
   "dependencies": {
     "hypercore": "^10.4.1",
