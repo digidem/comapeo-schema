@@ -33,9 +33,11 @@ message Observation {
 
   // this is basically the core seq number
   /* string version = 2; */
-
+  // When the record was created
   google.protobuf.Timestamp created_at = 2;
-  optional string user_id = 3;
+  // When the record was last modified
+  google.protobuf.Timestamp timestamp = 3;
+  optional string user_id = 4;
 
   // derived from coreKey and identityKey
   /* optional string device_id = 6; */
@@ -43,7 +45,7 @@ message Observation {
   // move to magic bytes
   /* string type = 7; */
 
-  string links = 4;
+  repeated string links = 4;
 
   // move to magic bytes
   /* int32 schema_version = 9; */

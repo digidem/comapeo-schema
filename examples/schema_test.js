@@ -1,31 +1,28 @@
-const { Observation } = require('../build/observation');
-const Hypercore = require('hypercore');
-const ram = require('random-access-memory');
+// import { Observation } from '../types/observation.js';
+import { encode, decode } from '../src/index.js'
+import Hypercore from 'hypercore';
+import ram from 'random-access-memory';
+import { randomBytes } from 'node:crypto'
 
-const schema = Observation.encode({
-  id: 'test-id',
-  version: '1',
+const schema = encode({
+  id: randomBytes(32),
   createdAt: new Date(),
-  type: 'Observation',
-  links: '',
+  links: [],
   refs: [],
   attachments: [],
-  schemaVersion: 1
-}).finish();
+});
 
 const core = new Hypercore(ram, { valueEncoding: 'binary' });
 core.append(schema);
 
-(async () => {
-  try {
-    const data = await core.get(0);
-    if (Buffer.compare(data, schema) !== 0) {
-      throw new Error(`data doesn't match: ${data} != ${schema}`);
-    } else {
-      console.log('data matches <3');
-    }
-  } catch (err) {
-    console.log(err);
+try {
+  const data = await core.get(0);
+  console.log(decode(data));
+  if (Buffer.compare(data, schema) !== 0) {
+    throw new Error(`data doesn't match: ${data} != ${schema}`);
+  } else {
+    console.log('data matches <3');
   }
-})()
-
+} catch (err) {
+  console.log(err);
+}

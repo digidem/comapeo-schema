@@ -3,9 +3,10 @@
   "version": "2.0.2",
   "description": "JSON schema and flow types for Mapeo",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "example": "node examples/schema_test.js",
-    "build": "buf generate ./proto && tsc $(find src | grep .ts) --outDir build",
+    "example": "node --experimental-specifier-resolution=node examples/schema_test.js",
+    "type": "buf generate ./proto && tsc",
     "prepublish": "npm run build",
     "release": "standard-version"
   },
