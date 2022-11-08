@@ -45,16 +45,16 @@ message Observation {
   // move to magic bytes
   /* string type = 7; */
 
-  repeated string links = 4;
+  repeated string links = 5;
 
   // move to magic bytes
   /* int32 schema_version = 9; */
 
-  optional float lat = 5;
-  optional float lon = 6;
-  repeated Struct refs = 7;
-  repeated Struct attachments = 8;
-  optional Struct tags = 9;
+  optional float lat = 6;
+  optional float lon = 7;
+  repeated Struct refs = 8;
+  repeated Struct attachments = 9;
+  optional Struct tags = 10;
 
   message Metadata {
     message Location {
