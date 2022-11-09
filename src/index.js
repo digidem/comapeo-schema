@@ -1,13 +1,19 @@
 import { Observation } from '../types/observation.js';
 
+const schemaVersion = "1";
+const schemaTypesMap = {
+  observation: {magicByte: "1", schema: Observation }
+};
+
 export const encode = (obj) => {
   // obj is validated against the protobuf and has the necessary fields
   // returns a buf ready to be sended to a core
   // this bufs has the protobuf data prepended with 2 magic bytes 
   // informing record type and schema version respectively
-  const buf = Observation.encode(obj).finish();
-  const type = Buffer.from([49]);
-  const version = Buffer.from([49]);
+  const schema = schemaTypesMap[obj.type].schema;
+  const buf = schema.encode(obj).finish();
+  const type = Buffer.from(schemaTypesMap[obj.type].magicByte);
+  const version = Buffer.from(schemaVersion);
   const bufs = [type, version, buf];
   return Buffer.concat(bufs);
 };

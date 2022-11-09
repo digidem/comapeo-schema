@@ -48,7 +48,7 @@ export interface Observation {
     | Date
     | undefined;
   /** When the record was last modified */
-  timestamp: Date | undefined;
+  timestamp?: Date | undefined;
   userId?: string | undefined;
   links: string[];
   lat?: number | undefined;

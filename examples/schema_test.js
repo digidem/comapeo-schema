@@ -1,13 +1,12 @@
-// import { Observation } from '../types/observation.js';
 import { encode, decode } from '../src/index.js'
 import Hypercore from 'hypercore';
 import ram from 'random-access-memory';
 import { randomBytes } from 'node:crypto'
 
 const record = encode({
+  type: "observation",
   id: randomBytes(32),
-  createdAt: new Date('2022-04-01'),
-  timestamp: new Date(),
+  createdAt: new Date(),
   links: [],
   refs: [],
   attachments: [],
