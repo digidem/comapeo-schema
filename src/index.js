@@ -11,7 +11,7 @@ export const encode = (obj) => {
   // informing record type and schema version respectively
   const schema = schemaTypesMap[obj.type].schema
   const type = Buffer.from(schemaTypesMap[obj.type].magicByte)
-  const version = obj.schemaVersion
+  const version = Buffer.from(obj.schemaVersion)
   const buf = schema.encode(obj).finish()
   return Buffer.concat([type, version, buf])
 }
