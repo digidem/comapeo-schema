@@ -25,6 +25,9 @@
   },
   "homepage": "https://github.com/digidem/mapeo-schema#readme",
   "devDependencies": {
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-standard": "^5.0.0",
+    "standard": "^17.0.0",
     "ts-proto": "^1.131.0",
     "tsc": "^2.0.4"
   },

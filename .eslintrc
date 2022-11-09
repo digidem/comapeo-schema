@@ -1,0 +1,7 @@
+{
+  "extends": ["standard"],
+  "plugins": ["standard"],
+  "ignorePatterns": [ "node_modules/**/*.js" ],
+  "parserOptions":{"sourceType": "module", "ecmaVersion": 2022},
+  "env": { "es6":true }
+}
