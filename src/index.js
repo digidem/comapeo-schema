@@ -18,11 +18,20 @@ export const encode = (obj) => {
   return Buffer.concat(bufs);
 };
 
+const findSchema = (type) => (acc,val) => {
+  if(schemaTypesMap[val].magicByte === type){
+    return val;
+  }
+  return acc;
+};
+
 export const decode = (buf) => {
   // receives a Buffer and turns it into an object validated against the schema
-  const type = buf.slice(0, 1);
+  const type = buf.slice(0, 1).toString();
   const version = buf.slice(1, 2);
-  console.log("record of type", type.toString());
+  const key = Object.keys(schemaTypesMap).reduce(findSchema(type), null)
+  const schema = schemaTypesMap[key].schema;
+  console.log("record of type", type);
   console.log("schema version", version.toString());
-  return Observation.decode(buf.slice(2, buf.length));
+  return schema.decode(buf.slice(2, buf.length));
 };
