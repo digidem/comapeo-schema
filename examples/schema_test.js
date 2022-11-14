@@ -14,11 +14,13 @@ const record = encode({
 })
 
 const core = new Hypercore(ram, { valueEncoding: 'binary' })
+await core.ready()
 core.append(record)
 
 try {
-  const data = await core.get(0)
-  console.log(decode(data))
+  const index = 0
+  const data = await core.get(index)
+  console.log(decode(data, { key: core.key, index }))
   if (Buffer.compare(data, record) !== 0) {
     throw new Error(`data doesn't match: ${data} != ${record}`)
   } else {
