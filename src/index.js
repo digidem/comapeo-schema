@@ -25,14 +25,14 @@ export const decode = (buf, opts) => {
   assert(opts.key !== undefined && Buffer.isBuffer(opts.key), 'opts.key should be a Buffer')
   assert(opts.index !== undefined && typeof opts.index === 'number', 'index should be a Number')
   const type = buf.slice(0, 1).toString()
-  const version = buf.slice(1, 2)
+  const schemaVersion = buf.slice(1, 2).toString()
   const record = buf.slice(2, buf.length)
   const recordType = Object.keys(schemaTypesMap).reduce(findSchema(type), null)
   const schema = schemaTypesMap[recordType].schema
   const doc = schema.decode(record)
   doc.id = doc.id.toString('hex')
   doc.type = recordType
-  doc.schemaVersion = version.toString()
+  doc.schemaVersion = schemaVersion
   doc.version = opts.key.toString('hex') + '/' + opts.index.toString()
   return doc
 }
