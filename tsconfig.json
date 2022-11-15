@@ -12,6 +12,6 @@
     "checkJs": false,
     "esModuleInterop": true
   },
-  "include": ["types/*.ts"],
+  "include": ["types/proto/*.ts"],
   "exclude": ["node_modules"]
 }

@@ -6,7 +6,7 @@ import { randomBytes } from 'node:crypto'
 const record = encode({
   type: 'observation',
   schemaVersion: '1',
-  id: randomBytes(32),
+  id: randomBytes(32).toString('hex'),
   createdAt: new Date(),
   links: [],
   refs: [],

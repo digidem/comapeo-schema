@@ -1,16 +1,24 @@
-import { Observation } from '../types/observation.js'
+import { Observation as ObservationProbuf } from '../types/proto/observation.js'
+import {
+  isValid,
+  Observation as ObservationSchema
+} from '../types/schema/observation.js'
 import assert from 'node:assert'
 
 const schemaTypesMap = {
-  observation: { magicByte: '1', schema: Observation }
+  observation: {
+    magicByte: '1',
+    protobufSchema: ObservationProbuf,
+    jsonSchema: ObservationSchema
+  }
 }
 
+/** Encode a an object validated against a schema as a binary protobuf to send to an hypercore.
+* @param {ObservationSchema} obj - Object to be encoded
+* @returns {Buffer} protobuf encoded buffer with 2 bytes prepended, one for the type of record and the other for the version of the schema */
 export const encode = (obj) => {
-  // obj is validated against the client schema and has the necessary fields
-  // returns a buf ready to be sended to a core
-  // this bufs has the protobuf data prepended with 2 magic bytes
-  // informing record type and schema version respectively
-  const schema = schemaTypesMap[obj.type].schema
+  assert(isValid(schemaTypesMap[obj.type].jsonSchema)(obj), `invalid ${obj.type}`)
+  const schema = schemaTypesMap[obj.type].protobufSchema
   const type = Buffer.from(schemaTypesMap[obj.type].magicByte)
   const version = Buffer.from(obj.schemaVersion)
   const buf = schema.encode(obj).finish()
@@ -19,7 +27,13 @@ export const encode = (obj) => {
 
 const findSchema = (type) => (acc, val) => schemaTypesMap[val].magicByte === type ? val : acc
 
-// opts is { key: Buffer, index: Number }
+/** Decode a Buffer as an object validated against the corresponding schema
+* @param {Buffer} buf - protobuf encoded Buffer to be decoded (probably obtained from an hypercore)
+* @param {Object} opts - Object containing key and index of the hypercore
+* @param {Buffer} opts.key - Public key of the hypercore
+* @param {Number} opts.index - Index of the entry
+* @returns {ObservationSchema}
+* */
 export const decode = (buf, opts) => {
   assert(typeof opts === 'object', 'opts is missing')
   assert(opts.key !== undefined && Buffer.isBuffer(opts.key), 'opts.key should be a Buffer')
@@ -28,11 +42,12 @@ export const decode = (buf, opts) => {
   const schemaVersion = buf.slice(1, 2).toString()
   const record = buf.slice(2, buf.length)
   const recordType = Object.keys(schemaTypesMap).reduce(findSchema(type), null)
-  const schema = schemaTypesMap[recordType].schema
+  const schema = schemaTypesMap[recordType].protobufSchema
   const doc = schema.decode(record)
   doc.id = doc.id.toString('hex')
   doc.type = recordType
   doc.schemaVersion = schemaVersion
   doc.version = opts.key.toString('hex') + '/' + opts.index.toString()
+  assert(isValid(schemaTypesMap[recordType].jsonSchema)(doc), `invalid ${recordType} document!`)
   return doc
 }
