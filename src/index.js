@@ -2,7 +2,7 @@ import { Observation as ObservationProbuf } from '../types/proto/observation.js'
 import {
   isValid,
   Observation as ObservationSchema
-} from '../types/schema/observation.js'
+} from '../types/schema/index.js'
 import assert from 'node:assert'
 
 const schemaTypesMap = {
@@ -38,9 +38,9 @@ export const decode = (buf, opts) => {
   assert(typeof opts === 'object', 'opts is missing')
   assert(opts.key !== undefined && Buffer.isBuffer(opts.key), 'opts.key should be a Buffer')
   assert(opts.index !== undefined && typeof opts.index === 'number', 'index should be a Number')
-  const type = buf.slice(0, 1).toString()
-  const schemaVersion = buf.slice(1, 2).toString()
-  const record = buf.slice(2, buf.length)
+  const type = buf.subarray(0, 1).toString()
+  const schemaVersion = buf.subarray(1, 2).toString()
+  const record = buf.subarray(2, buf.length)
   const recordType = Object.keys(schemaTypesMap).reduce(findSchema(type), null)
   const schema = schemaTypesMap[recordType].protobufSchema
   const doc = schema.decode(record)
