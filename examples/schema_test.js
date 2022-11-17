@@ -10,7 +10,10 @@ const record = encode({
   links: [],
   created_at: new Date().toJSON(),
   refs: [],
-  attachments: []
+  attachments: [],
+  metadata: {
+    manual_location: true
+  }
 })
 
 const core = new Hypercore(ram, { valueEncoding: 'binary' })

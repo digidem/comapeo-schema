@@ -138,13 +138,13 @@
             }
           }
         },
-        "manualLocation": {
+        "manual_location": {
           "description": "Whether location has been set manually",
           "type": "boolean",
           "default": false
         }
       },
-      "additionalProperties": true
+      "additionalProperties": false
     },
     "refs": {
       "type": "array",

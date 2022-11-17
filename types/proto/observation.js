@@ -1,7 +1,7 @@
 /* eslint-disable */
-import _m0 from "protobufjs/minimal";
-import { ListValue, nullValueFromJSON, nullValueToJSON } from "./google/protobuf/struct";
-import { Timestamp } from "./google/protobuf/timestamp";
+import _m0 from "protobufjs/minimal.js";
+import { ListValue, nullValueFromJSON, nullValueToJSON } from "./google/protobuf/struct.js";
+import { Timestamp } from "./google/protobuf/timestamp.js";
 export const protobufPackage = "observation";
 function createBaseValue() {
     return {
@@ -219,18 +219,7 @@ export const Struct_FieldsEntry = {
     },
 };
 function createBaseObservation() {
-    return {
-        id: new Uint8Array(),
-        created_at: "",
-        timestamp: undefined,
-        user_id: undefined,
-        links: [],
-        lat: undefined,
-        lon: undefined,
-        refs: [],
-        attachments: [],
-        tags: undefined,
-    };
+    return { id: new Uint8Array(), created_at: "", links: [], refs: [], attachments: [] };
 }
 export const Observation = {
     encode(message, writer = _m0.Writer.create()) {
@@ -263,6 +252,9 @@ export const Observation = {
         }
         if (message.tags !== undefined) {
             Struct.encode(message.tags, writer.uint32(82).fork()).ldelim();
+        }
+        if (message.metadata !== undefined) {
+            Observation_Metadata.encode(message.metadata, writer.uint32(90).fork()).ldelim();
         }
         return writer;
     },
@@ -303,6 +295,9 @@ export const Observation = {
                 case 10:
                     message.tags = Struct.decode(reader, reader.uint32());
                     break;
+                case 11:
+                    message.metadata = Observation_Metadata.decode(reader, reader.uint32());
+                    break;
                 default:
                     reader.skipType(tag & 7);
                     break;
@@ -322,6 +317,7 @@ export const Observation = {
             refs: Array.isArray(object === null || object === void 0 ? void 0 : object.refs) ? object.refs.map((e) => Struct.fromJSON(e)) : [],
             attachments: Array.isArray(object === null || object === void 0 ? void 0 : object.attachments) ? object.attachments.map((e) => Struct.fromJSON(e)) : [],
             tags: isSet(object.tags) ? Struct.fromJSON(object.tags) : undefined,
+            metadata: isSet(object.metadata) ? Observation_Metadata.fromJSON(object.metadata) : undefined,
         };
     },
     toJSON(message) {
@@ -351,6 +347,8 @@ export const Observation = {
             obj.attachments = [];
         }
         message.tags !== undefined && (obj.tags = message.tags ? Struct.toJSON(message.tags) : undefined);
+        message.metadata !== undefined &&
+            (obj.metadata = message.metadata ? Observation_Metadata.toJSON(message.metadata) : undefined);
         return obj;
     },
     fromPartial(object) {
@@ -366,16 +364,22 @@ export const Observation = {
         message.refs = ((_h = object.refs) === null || _h === void 0 ? void 0 : _h.map((e) => Struct.fromPartial(e))) || [];
         message.attachments = ((_j = object.attachments) === null || _j === void 0 ? void 0 : _j.map((e) => Struct.fromPartial(e))) || [];
         message.tags = (object.tags !== undefined && object.tags !== null) ? Struct.fromPartial(object.tags) : undefined;
+        message.metadata = (object.metadata !== undefined && object.metadata !== null)
+            ? Observation_Metadata.fromPartial(object.metadata)
+            : undefined;
         return message;
     },
 };
 function createBaseObservation_Metadata() {
-    return { manual_location: undefined };
+    return {};
 }
 export const Observation_Metadata = {
     encode(message, writer = _m0.Writer.create()) {
+        if (message.location !== undefined) {
+            Observation_Metadata_Location.encode(message.location, writer.uint32(10).fork()).ldelim();
+        }
         if (message.manual_location !== undefined) {
-            writer.uint32(24).bool(message.manual_location);
+            writer.uint32(16).bool(message.manual_location);
         }
         return writer;
     },
@@ -386,7 +390,10 @@ export const Observation_Metadata = {
         while (reader.pos < end) {
             const tag = reader.uint32();
             switch (tag >>> 3) {
-                case 3:
+                case 1:
+                    message.location = Observation_Metadata_Location.decode(reader, reader.uint32());
+                    break;
+                case 2:
                     message.manual_location = reader.bool();
                     break;
                 default:
@@ -397,22 +404,30 @@ export const Observation_Metadata = {
         return message;
     },
     fromJSON(object) {
-        return { manual_location: isSet(object.manual_location) ? Boolean(object.manual_location) : undefined };
+        return {
+            location: isSet(object.location) ? Observation_Metadata_Location.fromJSON(object.location) : undefined,
+            manual_location: isSet(object.manual_location) ? Boolean(object.manual_location) : undefined,
+        };
     },
     toJSON(message) {
         const obj = {};
+        message.location !== undefined &&
+            (obj.location = message.location ? Observation_Metadata_Location.toJSON(message.location) : undefined);
         message.manual_location !== undefined && (obj.manual_location = message.manual_location);
         return obj;
     },
     fromPartial(object) {
         var _a;
         const message = createBaseObservation_Metadata();
+        message.location = (object.location !== undefined && object.location !== null)
+            ? Observation_Metadata_Location.fromPartial(object.location)
+            : undefined;
         message.manual_location = (_a = object.manual_location) !== null && _a !== void 0 ? _a : undefined;
         return message;
     },
 };
 function createBaseObservation_Metadata_Location() {
-    return { precision: undefined, altitude: undefined };
+    return {};
 }
 export const Observation_Metadata_Location = {
     encode(message, writer = _m0.Writer.create()) {

@@ -85,7 +85,6 @@ export interface Observation {
      * Whether location has been set manually
      */
     manualLocation?: boolean;
-    [k: string]: unknown;
   };
   /**
    * References to any nodes or ways that this observation is related to.

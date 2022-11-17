@@ -5,9 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "example": "node --experimental-specifier-resolution=node examples/schema_test.js",
+    "example": "node examples/schema_test.js",
     "type": "buf generate ./proto && json2ts -i schema/ -o types/schema/ && tsc",
-    "schema": "json2ts -i schema/ -o types/schema/",
     "prepublish": "npm run build",
     "release": "standard-version"
   },

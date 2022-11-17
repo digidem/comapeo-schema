@@ -62,6 +62,8 @@ message Observation {
       optional float precision = 1;
       optional int32 altitude = 2;
     }
-    optional bool manual_location = 3;
+    optional Location location = 1;
+    optional bool manual_location = 2;
   }
+  optional Metadata metadata = 11;
 }

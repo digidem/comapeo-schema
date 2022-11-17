@@ -7,3 +7,5 @@ plugins:
     opt: 
       - esModuleInterop=true 
       - snakeToCamel=false
+      - importSuffix=.js
+      - initializeFieldsAsUndefined=false

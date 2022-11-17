@@ -1,4 +1,4 @@
-import { Observation as ObservationProbuf } from '../types/proto/observation.js'
+import { Observation } from '../types/proto/observation.js'
 import assert from 'node:assert'
 import fs from 'node:fs'
 import Ajv from 'ajv'
@@ -11,7 +11,7 @@ addFormats(ajv)
 const schemaTypesMap = {
   observation: {
     magicByte: '1',
-    protobufSchema: ObservationProbuf,
+    protobufSchema: Observation,
     jsonSchema: loadJSON('./../schema/observation.json')
   }
 }
