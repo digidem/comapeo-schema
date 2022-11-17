@@ -6,3 +6,4 @@ plugins:
     path: node_modules/ts-proto/protoc-gen-ts_proto
     opt: 
       - esModuleInterop=true 
+      - snakeToCamel=false

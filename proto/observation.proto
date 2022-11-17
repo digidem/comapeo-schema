@@ -34,7 +34,8 @@ message Observation {
   // this is basically the core seq number
   /* string version = 2; */
   // When the record was created
-  google.protobuf.Timestamp created_at = 2;
+  // google.protobuf.Timestamp created_at = 2;
+  string created_at = 2;
   // When the record was last modified
   optional google.protobuf.Timestamp timestamp = 3;
   optional string user_id = 4;

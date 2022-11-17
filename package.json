@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "example": "node --experimental-specifier-resolution=node examples/schema_test.js",
-    "type": "buf generate ./proto && tsc",
+    "type": "buf generate ./proto && json2ts -i schema/ -o types/schema/ && tsc",
+    "schema": "json2ts -i schema/ -o types/schema/",
     "prepublish": "npm run build",
     "release": "standard-version"
   },
@@ -27,16 +28,16 @@
   "devDependencies": {
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-standard": "^5.0.0",
+    "hypercore": "^10.4.1",
+    "json-schema-to-typescript": "^11.0.2",
+    "random-access-memory": "^6.0.0",
     "standard": "^17.0.0",
     "ts-proto": "^1.131.0",
-    "tsc": "^2.0.4",
     "typescript": "^4.8.4"
   },
   "dependencies": {
     "@sinclair/typebox": "^0.25.8",
     "ajv": "^8.11.2",
-    "ajv-formats": "^2.1.1",
-    "hypercore": "^10.4.1",
-    "random-access-memory": "^6.0.0"
+    "ajv-formats": "^2.1.1"
   }
 }

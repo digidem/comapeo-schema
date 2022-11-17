@@ -185,5 +185,5 @@
       "additionalProperties": true
     }
   },
-  "required": ["id", "version", "created_at", "type", "schemaVersion"]
+  "required": ["id", "created_at", "type", "schemaVersion"]
 }

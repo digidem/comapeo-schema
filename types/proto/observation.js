@@ -5,33 +5,33 @@ import { Timestamp } from "./google/protobuf/timestamp";
 export const protobufPackage = "observation";
 function createBaseValue() {
     return {
-        nullValue: undefined,
-        numberValue: undefined,
-        stringValue: undefined,
-        boolValue: undefined,
-        structValue: undefined,
-        listValue: undefined,
+        null_value: undefined,
+        number_value: undefined,
+        string_value: undefined,
+        bool_value: undefined,
+        struct_value: undefined,
+        list_value: undefined,
     };
 }
 export const Value = {
     encode(message, writer = _m0.Writer.create()) {
-        if (message.nullValue !== undefined) {
-            writer.uint32(8).int32(message.nullValue);
+        if (message.null_value !== undefined) {
+            writer.uint32(8).int32(message.null_value);
         }
-        if (message.numberValue !== undefined) {
-            writer.uint32(17).double(message.numberValue);
+        if (message.number_value !== undefined) {
+            writer.uint32(17).double(message.number_value);
         }
-        if (message.stringValue !== undefined) {
-            writer.uint32(26).string(message.stringValue);
+        if (message.string_value !== undefined) {
+            writer.uint32(26).string(message.string_value);
         }
-        if (message.boolValue !== undefined) {
-            writer.uint32(32).bool(message.boolValue);
+        if (message.bool_value !== undefined) {
+            writer.uint32(32).bool(message.bool_value);
         }
-        if (message.structValue !== undefined) {
-            Struct.encode(message.structValue, writer.uint32(42).fork()).ldelim();
+        if (message.struct_value !== undefined) {
+            Struct.encode(message.struct_value, writer.uint32(42).fork()).ldelim();
         }
-        if (message.listValue !== undefined) {
-            ListValue.encode(ListValue.wrap(message.listValue), writer.uint32(50).fork()).ldelim();
+        if (message.list_value !== undefined) {
+            ListValue.encode(ListValue.wrap(message.list_value), writer.uint32(50).fork()).ldelim();
         }
         return writer;
     },
@@ -43,22 +43,22 @@ export const Value = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 1:
-                    message.nullValue = reader.int32();
+                    message.null_value = reader.int32();
                     break;
                 case 2:
-                    message.numberValue = reader.double();
+                    message.number_value = reader.double();
                     break;
                 case 3:
-                    message.stringValue = reader.string();
+                    message.string_value = reader.string();
                     break;
                 case 4:
-                    message.boolValue = reader.bool();
+                    message.bool_value = reader.bool();
                     break;
                 case 5:
-                    message.structValue = Struct.decode(reader, reader.uint32());
+                    message.struct_value = Struct.decode(reader, reader.uint32());
                     break;
                 case 6:
-                    message.listValue = ListValue.unwrap(ListValue.decode(reader, reader.uint32()));
+                    message.list_value = ListValue.unwrap(ListValue.decode(reader, reader.uint32()));
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -69,37 +69,37 @@ export const Value = {
     },
     fromJSON(object) {
         return {
-            nullValue: isSet(object.nullValue) ? nullValueFromJSON(object.nullValue) : undefined,
-            numberValue: isSet(object.numberValue) ? Number(object.numberValue) : undefined,
-            stringValue: isSet(object.stringValue) ? String(object.stringValue) : undefined,
-            boolValue: isSet(object.boolValue) ? Boolean(object.boolValue) : undefined,
-            structValue: isSet(object.structValue) ? Struct.fromJSON(object.structValue) : undefined,
-            listValue: Array.isArray(object.listValue) ? [...object.listValue] : undefined,
+            null_value: isSet(object.null_value) ? nullValueFromJSON(object.null_value) : undefined,
+            number_value: isSet(object.number_value) ? Number(object.number_value) : undefined,
+            string_value: isSet(object.string_value) ? String(object.string_value) : undefined,
+            bool_value: isSet(object.bool_value) ? Boolean(object.bool_value) : undefined,
+            struct_value: isSet(object.struct_value) ? Struct.fromJSON(object.struct_value) : undefined,
+            list_value: Array.isArray(object.list_value) ? [...object.list_value] : undefined,
         };
     },
     toJSON(message) {
         const obj = {};
-        message.nullValue !== undefined &&
-            (obj.nullValue = message.nullValue !== undefined ? nullValueToJSON(message.nullValue) : undefined);
-        message.numberValue !== undefined && (obj.numberValue = message.numberValue);
-        message.stringValue !== undefined && (obj.stringValue = message.stringValue);
-        message.boolValue !== undefined && (obj.boolValue = message.boolValue);
-        message.structValue !== undefined &&
-            (obj.structValue = message.structValue ? Struct.toJSON(message.structValue) : undefined);
-        message.listValue !== undefined && (obj.listValue = message.listValue);
+        message.null_value !== undefined &&
+            (obj.null_value = message.null_value !== undefined ? nullValueToJSON(message.null_value) : undefined);
+        message.number_value !== undefined && (obj.number_value = message.number_value);
+        message.string_value !== undefined && (obj.string_value = message.string_value);
+        message.bool_value !== undefined && (obj.bool_value = message.bool_value);
+        message.struct_value !== undefined &&
+            (obj.struct_value = message.struct_value ? Struct.toJSON(message.struct_value) : undefined);
+        message.list_value !== undefined && (obj.list_value = message.list_value);
         return obj;
     },
     fromPartial(object) {
         var _a, _b, _c, _d, _e;
         const message = createBaseValue();
-        message.nullValue = (_a = object.nullValue) !== null && _a !== void 0 ? _a : undefined;
-        message.numberValue = (_b = object.numberValue) !== null && _b !== void 0 ? _b : undefined;
-        message.stringValue = (_c = object.stringValue) !== null && _c !== void 0 ? _c : undefined;
-        message.boolValue = (_d = object.boolValue) !== null && _d !== void 0 ? _d : undefined;
-        message.structValue = (object.structValue !== undefined && object.structValue !== null)
-            ? Struct.fromPartial(object.structValue)
+        message.null_value = (_a = object.null_value) !== null && _a !== void 0 ? _a : undefined;
+        message.number_value = (_b = object.number_value) !== null && _b !== void 0 ? _b : undefined;
+        message.string_value = (_c = object.string_value) !== null && _c !== void 0 ? _c : undefined;
+        message.bool_value = (_d = object.bool_value) !== null && _d !== void 0 ? _d : undefined;
+        message.struct_value = (object.struct_value !== undefined && object.struct_value !== null)
+            ? Struct.fromPartial(object.struct_value)
             : undefined;
-        message.listValue = (_e = object.listValue) !== null && _e !== void 0 ? _e : undefined;
+        message.list_value = (_e = object.list_value) !== null && _e !== void 0 ? _e : undefined;
         return message;
     },
 };
@@ -221,9 +221,9 @@ export const Struct_FieldsEntry = {
 function createBaseObservation() {
     return {
         id: new Uint8Array(),
-        createdAt: undefined,
+        created_at: "",
         timestamp: undefined,
-        userId: undefined,
+        user_id: undefined,
         links: [],
         lat: undefined,
         lon: undefined,
@@ -237,14 +237,14 @@ export const Observation = {
         if (message.id.length !== 0) {
             writer.uint32(10).bytes(message.id);
         }
-        if (message.createdAt !== undefined) {
-            Timestamp.encode(toTimestamp(message.createdAt), writer.uint32(18).fork()).ldelim();
+        if (message.created_at !== "") {
+            writer.uint32(18).string(message.created_at);
         }
         if (message.timestamp !== undefined) {
             Timestamp.encode(toTimestamp(message.timestamp), writer.uint32(26).fork()).ldelim();
         }
-        if (message.userId !== undefined) {
-            writer.uint32(34).string(message.userId);
+        if (message.user_id !== undefined) {
+            writer.uint32(34).string(message.user_id);
         }
         for (const v of message.links) {
             writer.uint32(42).string(v);
@@ -277,13 +277,13 @@ export const Observation = {
                     message.id = reader.bytes();
                     break;
                 case 2:
-                    message.createdAt = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
+                    message.created_at = reader.string();
                     break;
                 case 3:
                     message.timestamp = fromTimestamp(Timestamp.decode(reader, reader.uint32()));
                     break;
                 case 4:
-                    message.userId = reader.string();
+                    message.user_id = reader.string();
                     break;
                 case 5:
                     message.links.push(reader.string());
@@ -313,9 +313,9 @@ export const Observation = {
     fromJSON(object) {
         return {
             id: isSet(object.id) ? bytesFromBase64(object.id) : new Uint8Array(),
-            createdAt: isSet(object.createdAt) ? fromJsonTimestamp(object.createdAt) : undefined,
+            created_at: isSet(object.created_at) ? String(object.created_at) : "",
             timestamp: isSet(object.timestamp) ? fromJsonTimestamp(object.timestamp) : undefined,
-            userId: isSet(object.userId) ? String(object.userId) : undefined,
+            user_id: isSet(object.user_id) ? String(object.user_id) : undefined,
             links: Array.isArray(object === null || object === void 0 ? void 0 : object.links) ? object.links.map((e) => String(e)) : [],
             lat: isSet(object.lat) ? Number(object.lat) : undefined,
             lon: isSet(object.lon) ? Number(object.lon) : undefined,
@@ -327,9 +327,9 @@ export const Observation = {
     toJSON(message) {
         const obj = {};
         message.id !== undefined && (obj.id = base64FromBytes(message.id !== undefined ? message.id : new Uint8Array()));
-        message.createdAt !== undefined && (obj.createdAt = message.createdAt.toISOString());
+        message.created_at !== undefined && (obj.created_at = message.created_at);
         message.timestamp !== undefined && (obj.timestamp = message.timestamp.toISOString());
-        message.userId !== undefined && (obj.userId = message.userId);
+        message.user_id !== undefined && (obj.user_id = message.user_id);
         if (message.links) {
             obj.links = message.links.map((e) => e);
         }
@@ -357,9 +357,9 @@ export const Observation = {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j;
         const message = createBaseObservation();
         message.id = (_a = object.id) !== null && _a !== void 0 ? _a : new Uint8Array();
-        message.createdAt = (_b = object.createdAt) !== null && _b !== void 0 ? _b : undefined;
+        message.created_at = (_b = object.created_at) !== null && _b !== void 0 ? _b : "";
         message.timestamp = (_c = object.timestamp) !== null && _c !== void 0 ? _c : undefined;
-        message.userId = (_d = object.userId) !== null && _d !== void 0 ? _d : undefined;
+        message.user_id = (_d = object.user_id) !== null && _d !== void 0 ? _d : undefined;
         message.links = ((_e = object.links) === null || _e === void 0 ? void 0 : _e.map((e) => e)) || [];
         message.lat = (_f = object.lat) !== null && _f !== void 0 ? _f : undefined;
         message.lon = (_g = object.lon) !== null && _g !== void 0 ? _g : undefined;
@@ -370,12 +370,12 @@ export const Observation = {
     },
 };
 function createBaseObservation_Metadata() {
-    return { manualLocation: undefined };
+    return { manual_location: undefined };
 }
 export const Observation_Metadata = {
     encode(message, writer = _m0.Writer.create()) {
-        if (message.manualLocation !== undefined) {
-            writer.uint32(24).bool(message.manualLocation);
+        if (message.manual_location !== undefined) {
+            writer.uint32(24).bool(message.manual_location);
         }
         return writer;
     },
@@ -387,7 +387,7 @@ export const Observation_Metadata = {
             const tag = reader.uint32();
             switch (tag >>> 3) {
                 case 3:
-                    message.manualLocation = reader.bool();
+                    message.manual_location = reader.bool();
                     break;
                 default:
                     reader.skipType(tag & 7);
@@ -397,17 +397,17 @@ export const Observation_Metadata = {
         return message;
     },
     fromJSON(object) {
-        return { manualLocation: isSet(object.manualLocation) ? Boolean(object.manualLocation) : undefined };
+        return { manual_location: isSet(object.manual_location) ? Boolean(object.manual_location) : undefined };
     },
     toJSON(message) {
         const obj = {};
-        message.manualLocation !== undefined && (obj.manualLocation = message.manualLocation);
+        message.manual_location !== undefined && (obj.manual_location = message.manual_location);
         return obj;
     },
     fromPartial(object) {
         var _a;
         const message = createBaseObservation_Metadata();
-        message.manualLocation = (_a = object.manualLocation) !== null && _a !== void 0 ? _a : undefined;
+        message.manual_location = (_a = object.manual_location) !== null && _a !== void 0 ? _a : undefined;
         return message;
     },
 };

@@ -4,11 +4,11 @@ import ram from 'random-access-memory'
 import { randomBytes } from 'node:crypto'
 
 const record = encode({
-  type: 'observation',
-  schemaVersion: '1',
   id: randomBytes(32).toString('hex'),
-  createdAt: new Date(),
+  type: 'observation',
+  schemaVersion: 4,
   links: [],
+  created_at: new Date().toJSON(),
   refs: [],
   attachments: []
 })
