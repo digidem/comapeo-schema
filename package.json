@@ -2,12 +2,15 @@
   "name": "mapeo-schema",
   "version": "2.0.2",
   "description": "JSON schema and flow types for Mapeo",
-  "main": "index.js",
+  "main": "src/index.js",
   "type": "module",
   "scripts": {
     "example": "node examples/schema_test.js",
-    "type": "buf generate ./proto && json2ts -i schema/ -o types/schema/ && tsc",
-    "prepublish": "npm run build",
+    "protobuf": "buf generate ./proto",
+    "jsonschema": "json2ts -i schema/ -o types/schema/",
+    "tsc": "tsc",
+    "doc": "typedoc --plugin typedoc-plugin-markdown",
+    "build": "npm-run-all protobuf jsonschema tsc doc",
     "release": "standard-version"
   },
   "repository": {
@@ -29,6 +32,7 @@
     "eslint-plugin-standard": "^5.0.0",
     "hypercore": "^10.4.1",
     "json-schema-to-typescript": "^11.0.2",
+    "npm-run-all": "^4.1.5",
     "random-access-memory": "^6.0.0",
     "standard": "^17.0.0",
     "ts-proto": "^1.131.0",
@@ -37,6 +41,8 @@
   "dependencies": {
     "@sinclair/typebox": "^0.25.8",
     "ajv": "^8.11.2",
-    "ajv-formats": "^2.1.1"
+    "ajv-formats": "^2.1.1",
+    "typedoc": "^0.23.21",
+    "typedoc-plugin-markdown": "^3.13.6"
   }
 }
