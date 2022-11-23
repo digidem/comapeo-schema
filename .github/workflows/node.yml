@@ -23,4 +23,3 @@ jobs:
       - run: buf --version
       - run: npm ci
       - run: npm run build --if-present
-

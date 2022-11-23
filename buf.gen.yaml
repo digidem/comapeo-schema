@@ -4,8 +4,8 @@ plugins:
     out: types/proto
     strategy: all
     path: node_modules/ts-proto/protoc-gen-ts_proto
-    opt: 
-      - esModuleInterop=true 
+    opt:
+      - esModuleInterop=true
       - snakeToCamel=false
       - importSuffix=.js
       - initializeFieldsAsUndefined=false

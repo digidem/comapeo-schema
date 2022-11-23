@@ -8,7 +8,8 @@ import fs from 'node:fs'
 import Ajv from 'ajv'
 import addFormats from 'ajv-formats'
 
-const loadJSON = (path) => JSON.parse(fs.readFileSync(new URL(path, import.meta.url)))
+const loadJSON = (path) =>
+  JSON.parse(fs.readFileSync(new URL(path, import.meta.url)))
 const ajv = new Ajv()
 addFormats(ajv)
 
@@ -16,8 +17,8 @@ const schemaTypesMap = {
   observation: {
     magicByte: '1',
     protobufSchema: Observation,
-    jsonSchema: loadJSON('./../schema/observation.json')
-  }
+    jsonSchema: loadJSON('./../schema/observation.json'),
+  },
 }
 /**
 Encode a an object validated against a schema as a binary protobuf to send to an hypercore.
@@ -36,15 +37,16 @@ export const encode = (obj) => {
   return Buffer.concat([type, version, protobuf])
 }
 
-const findSchema = (type) => (acc, val) => schemaTypesMap[val].magicByte === type ? val : acc
+const findSchema = (type) => (acc, val) =>
+  schemaTypesMap[val].magicByte === type ? val : acc
 
 /** Decode a Buffer as an object validated against the corresponding schema
-* @param {Buffer} buf - Buffer to be decoded (probably obtained from an hypercore)
-* @param {Object} opts - Object containing key and index of the hypercore
-* @param {Buffer} opts.key - Public key of the hypercore
-* @param {Number} opts.index - Index of the entry
-* @returns {import('../types/schema/observation')}
-* */
+ * @param {Buffer} buf - Buffer to be decoded (probably obtained from an hypercore)
+ * @param {Object} opts - Object containing key and index of the hypercore
+ * @param {Buffer} opts.key - Public key of the hypercore
+ * @param {Number} opts.index - Index of the entry
+ * @returns {import('../types/schema/observation')}
+ * */
 export const decode = (buf, opts) => {
   assert(typeof opts === 'object', 'opts is missing')
   assert(

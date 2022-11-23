@@ -1,7 +1,16 @@
 {
-  "extends": ["standard"],
-  "plugins": ["standard"],
-  "ignorePatterns": [ "node_modules/**/*.js" ],
-  "parserOptions":{"sourceType": "module", "ecmaVersion": 2022},
-  "env": { "es6":true }
-}
+    "env": {
+      "commonjs": true,
+      "es2021": true,
+      "node": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "ecmaVersion": "latest",
+      "sourceType": "module"
+    },
+    "rules": {
+      "prettier/prettier": "error"
+    },
+    "plugins": ["prettier"]
+  }

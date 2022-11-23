@@ -12,8 +12,8 @@ const record = encode({
   refs: [],
   attachments: [],
   metadata: {
-    manual_location: true
-  }
+    manual_location: true,
+  },
 })
 
 const core = new Hypercore(ram, { valueEncoding: 'binary' })
