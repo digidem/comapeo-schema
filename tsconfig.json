@@ -10,11 +10,11 @@
     "moduleResolution": "node",
     "allowJs": true,
     "checkJs": false,
-    "emitDeclarationOnly": true,
+    "emitDeclarationOnly": false,
     "esModuleInterop": true,
     "declaration": true,
     "declarationMap": false
   },
-  "include": ["src/index.js", "types/proto/*.ts", "types/schema/*.d.ts"],
+  "include": ["types/proto/*.ts", "types/schema/*.d.ts"],
   "exclude": ["node_modules"]
 }
