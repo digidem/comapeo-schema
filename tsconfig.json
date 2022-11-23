@@ -8,13 +8,13 @@
     "resolveJsonModule": true,
     "module": "es2022",
     "moduleResolution": "node",
-    "allowJs": true,
+    "allowJs": false,
     "checkJs": false,
     "emitDeclarationOnly": false,
     "esModuleInterop": true,
     "declaration": true,
     "declarationMap": false
   },
-  "include": ["types/proto/*.ts", "types/schema/*.d.ts"],
+  "include": ["src/index.js", "types/proto/*.ts", "types/schema/*.d.ts"],
   "exclude": ["node_modules"]
 }
