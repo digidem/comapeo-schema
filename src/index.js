@@ -1,3 +1,7 @@
+/**
+ * @module mapeo-schema
+ */
+
 import { Observation } from '../types/proto/observation.js'
 import assert from 'node:assert'
 import fs from 'node:fs'
@@ -17,7 +21,7 @@ const schemaTypesMap = {
 }
 /**
 Encode a an object validated against a schema as a binary protobuf to send to an hypercore.
-* @param {ObservationSchema} obj - Object to be encoded
+* @param {import('../types/schema/observation')} obj - Object to be encoded
 * @returns {Buffer} protobuf encoded buffer with 2 bytes prepended, one for the type of record and the other for the version of the schema */
 export const encode = (obj) => {
   const recordType = schemaTypesMap[obj.type]
@@ -39,7 +43,7 @@ const findSchema = (type) => (acc, val) => schemaTypesMap[val].magicByte === typ
 * @param {Object} opts - Object containing key and index of the hypercore
 * @param {Buffer} opts.key - Public key of the hypercore
 * @param {Number} opts.index - Index of the entry
-* @returns {ObservationSchema}
+* @returns {import('../types/schema/observation')}
 * */
 export const decode = (buf, opts) => {
   assert(typeof opts === 'object', 'opts is missing')
