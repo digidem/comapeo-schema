@@ -2,7 +2,7 @@
  * @module mapeo-schema
  */
 
-import { Observation } from '../types/proto/observation.js'
+import { Observation } from './types/proto/observation.js'
 import assert from 'node:assert'
 import fs from 'node:fs'
 import Ajv from 'ajv'
@@ -17,7 +17,7 @@ const schemaTypesMap = {
   observation: {
     magicByte: '1',
     protobufSchema: Observation,
-    jsonSchema: loadJSON('./../schema/observation.json'),
+    jsonSchema: loadJSON('./schema/observation.json'),
   },
 }
 /**

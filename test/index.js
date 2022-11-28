@@ -1,5 +1,5 @@
 import test from 'tape'
-import { encode, decode } from '../src/index.js'
+import { encode, decode } from '../index.js'
 import Hypercore from 'hypercore'
 import ram from 'random-access-memory'
 import { randomBytes } from 'node:crypto'
