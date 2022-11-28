@@ -37,7 +37,10 @@ node_modules/
 jspm_packages/
 
 # TypeScript v1 declaration files
-typings/
+types/*
+
+# typedoc documentation
+docs/*
 
 # Optional npm cache directory
 .npm
@@ -56,10 +59,3 @@ typings/
 
 # dotenv environment variables file
 .env
-
-# next.js build output
-.next
-
-/*.js
-/index.js.flow
-/test/valid_flow/generated.js.flow
