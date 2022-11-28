@@ -9,8 +9,9 @@
     "protobuf": "buf generate ./proto",
     "jsonschema": "json2ts -i schema/ -o types/schema/",
     "tsc": "tsc",
+    "tsc-index": "tsc index.js -d --emitDeclarationOnly --allowJs --allowSyntheticDefaultImports",
     "doc": "typedoc --plugin typedoc-plugin-markdown",
-    "build": "npm-run-all protobuf jsonschema tsc doc",
+    "build": "npm-run-all protobuf jsonschema tsc tsc-index doc",
     "test": "tape 'test/**/*.js'"
   },
   "repository": {
