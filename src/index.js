@@ -25,15 +25,18 @@ Encode a an object validated against a schema as a binary protobuf to send to an
 * @param {import('../types/schema/observation')} obj - Object to be encoded
 * @returns {Buffer} protobuf encoded buffer with 2 bytes prepended, one for the type of record and the other for the version of the schema */
 export const encode = (obj) => {
-  const recordType = schemaTypesMap[obj.type]
+  const record = Object.assign({}, obj)
+  const recordType = schemaTypesMap[record.type]
   const validate = ajv.compile(recordType.jsonSchema)
-  const isValid = validate(obj)
+  const isValid = validate(record)
   assert(isValid, JSON.stringify(validate.errors, true, 2))
-
+  // id is a hex encoded string, but is turned into bytes when protobufed,
+  // so we turn it into a buffer before that
+  record.id = Buffer.from(record.id, 'hex')
   const schema = recordType.protobufSchema
   const type = Buffer.from(recordType.magicByte)
-  const version = Buffer.from(obj.schemaVersion.toString())
-  const protobuf = schema.encode(obj).finish()
+  const version = Buffer.from(record.schemaVersion.toString())
+  const protobuf = schema.encode(record).finish()
   return Buffer.concat([type, version, protobuf])
 }
 
@@ -62,7 +65,6 @@ export const decode = (buf, opts) => {
   const recordType = Object.keys(schemaTypesMap).reduce(findSchema(type), null)
   const schema = schemaTypesMap[recordType].protobufSchema
   const record = schema.decode(buf.subarray(2, buf.length))
-
   record.id = record.id.toString('hex')
   record.type = recordType
   record.schemaVersion = parseInt(schemaVersion)
