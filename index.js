@@ -15,7 +15,7 @@ addFormats(ajv)
 
 const schemaTypesMap = {
   observation: {
-    magicByte: '1',
+    magicByte: 0, // this is one byte-length (0-255)
     protobufSchema: Observation,
     jsonSchema: loadJSON('./schema/observation.json'),
   },
@@ -34,7 +34,7 @@ export const encode = (obj) => {
   // so we turn it into a buffer before that
   record.id = Buffer.from(record.id, 'hex')
   const schema = recordType.protobufSchema
-  const type = Buffer.from(recordType.magicByte)
+  const type = Buffer.from([recordType.magicByte])
   const version = Buffer.from(record.schemaVersion.toString())
   const protobuf = schema.encode(record).finish()
   return Buffer.concat([type, version, protobuf])
@@ -60,7 +60,7 @@ export const decode = (buf, opts) => {
     opts.index !== undefined && typeof opts.index === 'number',
     'index should be a Number'
   )
-  const type = buf.subarray(0, 1).toString()
+  const type = buf.subarray(0, 1)[0]
   const schemaVersion = buf.subarray(1, 2).toString()
   const recordType = Object.keys(schemaTypesMap).reduce(findSchema(type), null)
   const schema = schemaTypesMap[recordType].protobufSchema

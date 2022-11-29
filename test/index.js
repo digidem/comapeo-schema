@@ -165,8 +165,9 @@ test('test if we get valid decoded object comparing various fields returned', as
   const index = 0
 
   const decodedRecord = decode(record, { key: core.key, index })
+  const version = `${core.key.toString('hex')}/${index}`
 
   t.equals(decodedRecord.id, obj.id)
-  t.equals(decodedRecord.version, `${core.key.toString('hex')}/${index}`)
+  t.equals(decodedRecord.version, version)
   t.equals(decodedRecord.created_at, obj.created_at)
 })
