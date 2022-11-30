@@ -3,6 +3,7 @@ import { encode, decode } from '../index.js'
 import Hypercore from 'hypercore'
 import ram from 'random-access-memory'
 import { randomBytes } from 'node:crypto'
+import { AssertionError } from 'node:assert'
 
 test('test encoding of record with missing fields', async (t) => {
   t.plan(1)
@@ -10,7 +11,7 @@ test('test encoding of record with missing fields', async (t) => {
     encode({
       id: randomBytes(32).toString('hex'),
     })
-  })
+  }, TypeError)
 })
 
 test('test encoding of wrong record type', async (t) => {
@@ -28,7 +29,7 @@ test('test encoding of wrong record type', async (t) => {
         manual_location: true,
       },
     })
-  })
+  }, TypeError)
 })
 
 test('test encoding of record with wrong schema version', async (t) => {
@@ -46,7 +47,7 @@ test('test encoding of record with wrong schema version', async (t) => {
         manual_location: true,
       },
     })
-  })
+  }, AssertionError)
 })
 
 test('test encoding of record with wrong date format', async (t) => {
@@ -64,10 +65,11 @@ test('test encoding of record with wrong date format', async (t) => {
         manual_location: true,
       },
     })
-  })
+  }, AssertionError)
 })
 
 test('test encoding of rightfully formated record', async (t) => {
+  t.plan(1)
   t.doesNotThrow(() => {
     encode({
       id: randomBytes(32).toString('hex'),
@@ -85,6 +87,7 @@ test('test encoding of rightfully formated record', async (t) => {
 })
 
 test('test encoding, saving and retreiving same record from hypercore', async (t) => {
+  t.plan(1)
   const record = encode({
     id: randomBytes(32).toString('hex'),
     type: 'observation',
@@ -106,6 +109,7 @@ test('test encoding, saving and retreiving same record from hypercore', async (t
 })
 
 test('test decoding of record without passing core key and index', async (t) => {
+  t.plan(1)
   const record = encode({
     id: randomBytes(32).toString('hex'),
     type: 'observation',
@@ -124,6 +128,7 @@ test('test decoding of record without passing core key and index', async (t) => 
 })
 
 test('test decoding of record passing core key and index', async (t) => {
+  t.plan(1)
   const record = encode({
     id: randomBytes(32).toString('hex'),
     type: 'observation',
@@ -146,7 +151,6 @@ test('test decoding of record passing core key and index', async (t) => {
 })
 
 test('test if we get valid decoded object comparing various fields returned', async (t) => {
-  t.plan(3)
   const obj = {
     id: randomBytes(32).toString('hex'),
     type: 'observation',
@@ -159,15 +163,14 @@ test('test if we get valid decoded object comparing various fields returned', as
       manual_location: true,
     },
   }
+  const fields = Object.keys(obj)
   const record = encode(obj)
   const core = new Hypercore(ram, { valueEncoding: 'binary' })
   await core.ready()
   const index = 0
-
   const decodedRecord = decode(record, { key: core.key, index })
-  const version = `${core.key.toString('hex')}/${index}`
-
-  t.equals(decodedRecord.id, obj.id)
-  t.equals(decodedRecord.version, version)
-  t.equals(decodedRecord.created_at, obj.created_at)
+  t.plan(fields.length)
+  fields.forEach((field) => {
+    t.deepEqual(decodedRecord[field], obj[field], `comparing ${field}`)
+  })
 })
