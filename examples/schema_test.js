@@ -23,6 +23,7 @@ core.append(record)
 try {
   const index = 0
   const data = await core.get(index)
+  console.log('decoded data', decode(data, { key: core.key, index }))
   if (Buffer.compare(data, record) !== 0) {
     throw new Error(`data doesn't match: ${data} != ${record}`)
   } else {
