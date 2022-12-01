@@ -15,7 +15,7 @@ addFormats(ajv)
 
 const schemaTypesMap = {
   observation: {
-    magicByte: 0, // this is one byte-length (0-255)
+    blockPrefix: 0, // this is one byte-length (0-255)
     protobufSchema: Observation,
     jsonSchema: loadJSON('./schema/observation.json'),
   },
@@ -34,14 +34,14 @@ export const encode = (obj) => {
   // so we turn it into a buffer before that
   record.id = Buffer.from(record.id, 'hex')
   const schema = recordType.protobufSchema
-  const type = Buffer.from([recordType.magicByte])
+  const type = Buffer.from([recordType.blockPrefix])
   const version = Buffer.from([record.schemaVersion])
   const protobuf = schema.encode(record).finish()
   return Buffer.concat([type, version, protobuf])
 }
 
 const findSchema = (type) => (acc, val) =>
-  schemaTypesMap[val].magicByte === type ? val : acc
+  schemaTypesMap[val].blockPrefix === type ? val : acc
 
 /**
  * Decode a Buffer as an object validated against the corresponding schema
