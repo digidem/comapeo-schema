@@ -5,6 +5,7 @@
 import { Observation } from './types/proto/observation.js'
 import assert from 'node:assert'
 import fs from 'node:fs'
+import b4a from 'b4a'
 import Ajv from 'ajv'
 import addFormats from 'ajv-formats'
 
@@ -15,7 +16,7 @@ addFormats(ajv)
 
 const schemaTypesMap = {
   observation: {
-    blockPrefix: 0, // this is one byte-length (0-255)
+    blockPrefix: 'obse', // 4 byte string
     protobufSchema: Observation,
     jsonSchema: loadJSON('./schema/observation.json'),
   },
@@ -32,12 +33,12 @@ export const encode = (obj) => {
   assert(isValid, JSON.stringify(validate.errors, true, 2))
   // id is a hex encoded string, but is turned into bytes when protobufed,
   // so we turn it into a buffer before that
-  record.id = Buffer.from(record.id, 'hex')
+  record.id = b4a.from(record.id, 'hex')
   const schema = recordType.protobufSchema
-  const type = Buffer.from([recordType.blockPrefix])
-  const version = Buffer.from([record.schemaVersion])
+  const type = b4a.from(recordType.blockPrefix)
+  const version = b4a.from([record.schemaVersion])
   const protobuf = schema.encode(record).finish()
-  return Buffer.concat([type, version, protobuf])
+  return b4a.concat([type, version, protobuf])
 }
 
 const findSchema = (type) => (acc, val) =>
@@ -54,19 +55,19 @@ const findSchema = (type) => (acc, val) =>
 export const decode = (buf, opts) => {
   assert(typeof opts === 'object', 'opts is missing')
   assert(
-    opts.key !== undefined && Buffer.isBuffer(opts.key),
+    opts.key !== undefined && b4a.isBuffer(opts.key),
     'opts.key should be a Buffer'
   )
   assert(
     opts.index !== undefined && typeof opts.index === 'number',
     'index should be a Number'
   )
-  const type = buf.subarray(0, 1)[0]
-  const schemaVersion = buf.subarray(1, 2)[0]
+  const type = buf.subarray(0, 4).toString()
+  const schemaVersion = buf.subarray(4, 5)[0]
   const recordType = Object.keys(schemaTypesMap).reduce(findSchema(type), null)
   const schema = schemaTypesMap[recordType].protobufSchema
 
-  let record = schema.decode(buf.subarray(2, buf.length))
+  let record = schema.decode(buf.subarray(5, buf.length))
   record = {
     ...record,
     id: record.id.toString('hex'),
