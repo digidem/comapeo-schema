@@ -30,16 +30,9 @@ const recordTypeToBlockPrefix = {
 const blockPrefixToSchema = {
   obse: {
     protobufSchema: Observation,
-    jsonSchema: loadJSON('./schema/observation.json'),
+    validate: ajv.compile(loadJSON('./schema/observation.json')),
   },
 }
-
-// generate validating functions beforehand
-Object.keys(blockPrefixToSchema).forEach((blockPrefix) => {
-  blockPrefixToSchema[blockPrefix].validate = ajv.compile(
-    blockPrefixToSchema[blockPrefix].jsonSchema
-  )
-})
 
 /**
  * Validate an object against the schema type
