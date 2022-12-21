@@ -1,4 +1,4 @@
-import { encode, decode } from '../index.js'
+import { encode, decode, validate } from '../index.js'
 import Hypercore from 'hypercore'
 import ram from 'random-access-memory'
 import { randomBytes } from 'node:crypto'
@@ -23,7 +23,9 @@ core.append(record)
 try {
   const index = 0
   const data = await core.get(index)
-  console.log('decoded data', decode(data, { key: core.key, index }))
+  const decodedData = decode(data, { key: core.key, index })
+  if (!validate(decodedData)) throw new Error(`couldn't validate data`)
+  console.log('decoded data', decodedData)
   if (Buffer.compare(data, record) !== 0) {
     throw new Error(`data doesn't match: ${data} != ${record}`)
   } else {

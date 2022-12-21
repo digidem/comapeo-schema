@@ -2,12 +2,12 @@
 /**
  * @module mapeo-schema
  */
-
-import { Observation } from './types/proto/observation.js'
 import fs from 'node:fs'
 import b4a from 'b4a'
 import Ajv from 'ajv'
 import addFormats from 'ajv-formats'
+import glob from 'glob-promise'
+import { assert } from 'node:console'
 
 /**
  * @param {string} path
@@ -16,23 +16,75 @@ import addFormats from 'ajv-formats'
 const loadJSON = (path) =>
   JSON.parse(fs.readFileSync(new URL(path, import.meta.url)).toString())
 
+/**
+ * @param {any} schema
+ * @returns {Object}
+ */
+const parseId = (schema) => {
+  const arr = new URL(schema['$id']).pathname.split('/')
+  const schemaVersion = arr.pop()
+  const dataTypeId = arr.pop()
+  // const [, , schemaVersion, dataTypeId] = arr
+  return { schemaVersion, dataTypeId }
+}
+
 const ajv = new Ajv()
 addFormats(ajv)
+const schemaFiles = await glob('./schema/*.json')
 
-const recordTypeBlockSize = 4
+const blockPrefixToSchema = {}
+for (let schemaFile of schemaFiles) {
+  const schema = loadJSON(schemaFile)
+  const { schemaVersion, dataTypeId } = parseId(schema)
+  const type = schema.title
+
+  // TODO: remove this once every jsonSchema as a corresponding protobufSchema
+  let protobufSchema = null
+  try {
+    protobufSchema = await import(`./types/proto/${type.toLowerCase()}.js`)
+    // this is horrible,
+    // but I can't index and element directly returned from a dynamic import since its async
+    protobufSchema = protobufSchema[type]
+  } catch (e) {
+    console.log('ERROR', 'protobuf schema not found', type)
+  }
+
+  // TODO: research why enum types are failing to compile
+  let validate = null
+  try {
+    validate = ajv.compile(schema)
+  } catch (e) {
+    console.log('ERROR', 'compiling schema', schemaFile)
+  }
+  blockPrefixToSchema[`${dataTypeId}/${schemaVersion}`] = {
+    type,
+    schema,
+    validate,
+    protobufSchema,
+  }
+}
+
+// this should be change to 32 once we generate random ids for record types
+const dataTypeIdSize = 4
+// this should be changed to 4
 const schemaVersionSize = 1
 
-// TODO: generate random 32 byte string for the value of each schema to use as a prefix
-const recordTypeToBlockPrefix = {
-  observation: 'obse',
-}
-
-const blockPrefixToSchema = {
-  obse: {
-    protobufSchema: Observation,
-    validate: ajv.compile(loadJSON('./schema/observation.json')),
-  },
-}
+/**
+ * Given a record type and version, find the corresponding blockPrefix if it exists
+ * @param {Object} obj
+ * @param {string} obj.type
+ * @param {number} obj.version
+ * @returns {string | undefined} blockPrefix for corresponding schema
+ */
+const findSchema = ({ type, version }) =>
+  Object.keys(blockPrefixToSchema).find((blockPrefix) => {
+    // we need to compare the version since we can have multiple versions of the same schema
+    const [, v] = blockPrefix.split('/')
+    return (
+      blockPrefixToSchema[blockPrefix].type.toLowerCase() === type &&
+      version === parseInt(v)
+    )
+  })
 
 /**
  * Validate an object against the schema type
@@ -40,7 +92,7 @@ const blockPrefixToSchema = {
  * @returns {Boolean} indicating if the object is valid
  */
 export const validate = (obj) => {
-  const blockPrefix = recordTypeToBlockPrefix[obj.type]
+  const blockPrefix = findSchema({ type: obj.type, version: obj.schemaVersion })
   return blockPrefixToSchema[blockPrefix].validate(obj)
 }
 
@@ -48,19 +100,20 @@ export const validate = (obj) => {
  * TODO: obj should be more generic since there are other recordTypes
  * Encode a an object validated against a schema as a binary protobuf to send to an hypercore.
  * @param {import('./types/schema/observation').Observation} obj - Object to be encoded
- * @returns {Buffer} protobuf encoded buffer with recordTypeBlockSize + schemaVersionSize bytes prepended, one for the type of record and the other for the version of the schema */
+ * @returns {Buffer | Uint8Array} protobuf encoded buffer with recordTypeBlockSize + schemaVersionSize bytes prepended, one for the type of record and the other for the version of the schema */
 export const encode = (obj) => {
   const record = Object.assign({}, obj)
-  const blockPrefix = recordTypeToBlockPrefix[record.type]
-  const recordType = blockPrefixToSchema[blockPrefix]
-  // id is a hex encoded string, but is turned into bytes when protobufed,
-  // so we turn it into a buffer before that
-  record.id = b4a.from(record.id, 'hex')
-  const schema = recordType.protobufSchema
-  const type = b4a.from(blockPrefix)
+  const blockPrefix = findSchema({ type: obj.type, version: obj.schemaVersion })
+  assert(
+    blockPrefix,
+    `schema of type ${obj.type} and version ${obj.schemaVersion} not found`
+  )
+  const schema = blockPrefixToSchema[blockPrefix]
+  // how can we crash if blockPrefix is undefined? shouldn't an assertion be enough?
+  const dataTypeId = b4a.from(blockPrefix.split('/')[0])
   const version = b4a.from([record.schemaVersion])
-  const protobuf = schema.encode(record).finish()
-  return b4a.concat([type, version, protobuf])
+  const protobuf = schema.profobufSchema.encode(record).finish()
+  return b4a.concat([dataTypeId, version, protobuf])
 }
 
 /**
@@ -72,22 +125,21 @@ export const encode = (obj) => {
  * @returns {import('./types/schema/observation')}
  * */
 export const decode = (buf, opts) => {
-  const blockPrefix = buf.subarray(0, recordTypeBlockSize).toString()
+  const dataTypeId = buf.subarray(0, dataTypeIdSize).toString()
   const schemaVersion = buf.subarray(
-    recordTypeBlockSize,
-    recordTypeBlockSize + schemaVersionSize
+    dataTypeIdSize,
+    dataTypeIdSize + schemaVersionSize
   )[0]
+  const blockPrefix = `${dataTypeId}/${schemaVersion}`
   const schema = blockPrefixToSchema[blockPrefix].protobufSchema
   let record = schema.decode(
-    buf.subarray(recordTypeBlockSize + schemaVersionSize, buf.length)
+    buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
   )
 
   return {
     ...record,
     id: record.id.toString('hex'),
-    type: Object.keys(recordTypeToBlockPrefix).find(
-      (recordType) => recordTypeToBlockPrefix[recordType] === blockPrefix
-    ),
+    type: blockPrefixToSchema[blockPrefix].type.toLowerCase(),
     schemaVersion: schemaVersion,
     version: `${opts.key.toString('hex')}/${opts.index.toString()}`,
   }

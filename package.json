@@ -51,6 +51,8 @@
     "ajv": "^8.11.2",
     "ajv-formats": "^2.1.1",
     "b4a": "^1.6.1",
+    "glob": "^8.0.3",
+    "glob-promise": "^5.0.0",
     "typedoc": "^0.23.21",
     "typedoc-plugin-markdown": "^3.13.6"
   }
