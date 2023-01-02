@@ -1,0 +1,12 @@
+{
+    "id": "0e4e04b9d06413b233dcb5b0bbd03d5a07836f7bafd41f82975217b70e690f10",
+    "type": "observation",
+    "schemaVersion": 4,
+    "links": [],
+    "created_at": "2023-01-02T13:17:59.775Z",
+    "refs": [],
+    "attachments": [],
+    "metadata": {
+        "manual_location": true
+    }
+}

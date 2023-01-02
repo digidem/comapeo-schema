@@ -3,11 +3,11 @@
  * @module mapeo-schema
  */
 import fs from 'node:fs'
+import { assert } from 'node:console'
 import b4a from 'b4a'
 import Ajv from 'ajv'
 import addFormats from 'ajv-formats'
 import glob from 'glob-promise'
-import { assert } from 'node:console'
 
 /**
  * @param {string} path
@@ -38,13 +38,12 @@ for (let schemaFile of schemaFiles) {
   const { schemaVersion, dataTypeId } = parseId(schema)
   const type = schema.title
 
-  // TODO: remove this once every jsonSchema as a corresponding protobufSchema
+  // TODO: remove this try/catch once every jsonSchema as a corresponding protobufSchema
   let protobufSchema = null
   try {
-    protobufSchema = await import(`./types/proto/${type.toLowerCase()}.js`)
-    // this is horrible,
-    // but I can't index and element directly returned from a dynamic import since its async
-    protobufSchema = protobufSchema[type]
+    protobufSchema = (await import(`./types/proto/${type.toLowerCase()}.js`))[
+      type
+    ]
   } catch (e) {
     console.log('ERROR', 'protobuf schema not found', type)
   }
@@ -109,16 +108,19 @@ export const encode = (obj) => {
     `schema of type ${obj.type} and version ${obj.schemaVersion} not found`
   )
   const schema = blockPrefixToSchema[blockPrefix]
+  // id is a hex encoded string, but is turned into bytes when protobufed,
+  // so we turn it into a buffer before that. TS doesn't like this since we are turning a string (id) into a buffer in-place
+  record.id = b4a.from(record.id, 'hex')
   // how can we crash if blockPrefix is undefined? shouldn't an assertion be enough?
   const dataTypeId = b4a.from(blockPrefix.split('/')[0])
   const version = b4a.from([record.schemaVersion])
-  const protobuf = schema.profobufSchema.encode(record).finish()
+  const protobuf = schema.protobufSchema.encode(record).finish()
   return b4a.concat([dataTypeId, version, protobuf])
 }
 
 /**
  * Decode a Buffer as an object validated against the corresponding schema
- * @param {Buffer} buf - Buffer to be decoded (probably obtained from an hypercore)
+ * @param {Buffer} buf - Buffer to be decoded
  * @param {Object} opts - Object containing key and index of the hypercore
  * @param {Buffer} opts.key - Public key of the hypercore
  * @param {Number} opts.index - Index of the entry
@@ -135,7 +137,6 @@ export const decode = (buf, opts) => {
   let record = schema.decode(
     buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
   )
-
   return {
     ...record,
     id: record.id.toString('hex'),
