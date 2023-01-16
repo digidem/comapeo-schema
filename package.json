@@ -4,6 +4,7 @@
   "description": "JSON schema and flow types for Mapeo",
   "main": "index.js",
   "type": "module",
+  "types": "index.d.ts",
   "exports": {
     ".": "./index.js",
     "./validateCommon": "./lib/validateCommon.js",
