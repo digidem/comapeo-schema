@@ -60,3 +60,6 @@ docs/*
 
 # dotenv environment variables file
 .env
+
+# generated code
+dist
