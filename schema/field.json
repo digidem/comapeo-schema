@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "http://mapeo.world/schemas/field.json",
+  "$id": "http://mapeo.world/schemas/field/4",
   "title": "Field",
   "description": "A field defines a form field that will be shown to the user when creating or editing a map entity. Presets define which fields are shown to the user for a particular map entity. The field definition defines whether the field should show as a text box, multiple choice, single-select, etc. It defines what tag-value is set when the field is entered.",
   "type": "object",

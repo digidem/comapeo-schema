@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "http://mapeo.world/schemas/filter.json",
+  "$id": "http://mapeo.world/schemas/filter/4",
   "title": "Filter",
   "description": "A filter is a saved view of data in the Mapeo database, filtered by tag or date. E.g. a filter could define observations between two dates, or only observations with the tag `public=true`",
   "type": "object",

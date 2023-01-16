@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "http://mapeo.world/schemas/common.json",
+  "$id": "http://mapeo.world/schemas/common/4",
   "title": "Common",
   "description": "These properties are shared by all objects in the Mapeo database.",
   "type": "object",
