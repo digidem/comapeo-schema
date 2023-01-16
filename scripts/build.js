@@ -47,9 +47,7 @@ let schemaExports = ''
 let schemaDeclarationExports = ''
 
 moduleFilenames.forEach((filename) => {
-  moduleImports += `import { ${stripExt(
-    filename
-  )} } from './lib/${filename}';\n`
+  moduleImports += `import { ${stripExt(filename)} } from './lib/${filename}';\n`
   moduleExports += `export { ${stripExt(filename)} };\n`
 })
 
