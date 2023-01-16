@@ -44,7 +44,9 @@ let moduleImports = ''
 let moduleExports = ''
 let schemaReads = ''
 let schemaExports = ''
+let schemaDeclarationImports = ''
 let schemaDeclarationExports = ''
+let typeInterfaceDeclarationExports = ''
 
 moduleFilenames.forEach((filename) => {
   moduleImports += `import { ${stripExt(filename)} } from './lib/${filename}';\n`
@@ -53,9 +55,12 @@ moduleFilenames.forEach((filename) => {
 
 schemaFiles.forEach((filename) => {
   const parsedName = capitalizeFirst(stripExt(filename))
-  schemaReads += `const ${parsedName} = JSON.parse(await readFile(new URL('./schema/${filename}', import.meta.url), 'utf-8'));\n`
-  schemaExports += `export { ${parsedName} };\n`
-  schemaDeclarationExports += `export * from './types/${parsedName}';\n`
+  const exportedName = `${parsedName}Schema`
+  schemaReads += `const ${exportedName} = JSON.parse(await readFile(new URL('./schema/${filename}', import.meta.url), 'utf-8'));\n`
+  schemaDeclarationImports += `import ${exportedName}Def from './schema/${filename}';\n`
+  schemaDeclarationExports += `export type ${exportedName} = typeof ${exportedName}Def;\n`
+  schemaExports += `export { ${exportedName} };\n`
+  typeInterfaceDeclarationExports += `export * from './types/${parsedName}';\n`
 })
 
 const indexFileContents = `import { readFile } from 'fs/promises';
@@ -68,8 +73,13 @@ ${schemaExports}
 
 await fs.writeFile(indexFilepath, indexFileContents)
 
+// Create index.d.ts file
 const tsDeclarationFilePath = path.join(rootDirectory, 'index.d.ts')
-const tsDeclarationFileContents = `${moduleImports}\n${moduleExports}\n${schemaDeclarationExports}`
+const tsDeclarationFileContents = `${moduleImports}
+${moduleExports}
+${schemaDeclarationImports}
+${schemaDeclarationExports}
+${typeInterfaceDeclarationExports}`
 await fs.writeFile(tsDeclarationFilePath, tsDeclarationFileContents)
 
 const examplesFolder = path.join(rootDirectory, 'examples')

@@ -10,6 +10,18 @@ export { validateFilter };
 export { validateObservation };
 export { validatePreset };
 
+import CommonSchemaDef from './schema/common.json';
+import FieldSchemaDef from './schema/field.json';
+import FilterSchemaDef from './schema/filter.json';
+import ObservationSchemaDef from './schema/observation.json';
+import PresetSchemaDef from './schema/preset.json';
+
+export type CommonSchema = typeof CommonSchemaDef;
+export type FieldSchema = typeof FieldSchemaDef;
+export type FilterSchema = typeof FilterSchemaDef;
+export type ObservationSchema = typeof ObservationSchemaDef;
+export type PresetSchema = typeof PresetSchemaDef;
+
 export * from './types/Common';
 export * from './types/Field';
 export * from './types/Filter';
