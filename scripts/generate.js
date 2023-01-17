@@ -1,4 +1,10 @@
 // @ts-check
+// This script is use to generate various files to be used at runtime:
+// * dist/schemas.js - all the validating functions for jsonSchema
+// * dist/schemasPrefix.js - a map from doctype to {schemaVersion, dataTypeId}
+// * types/schema/index.d.ts - Union type for all the JsonSchemas
+// * types/proto/index.js - Exports all protobufs from one file
+
 import fs from 'node:fs'
 import path from 'path'
 import { URL } from 'url'
@@ -19,9 +25,7 @@ const loadJSON = (path) =>
  * reducer; grab the jsonSchema, get the $id to grab schemaVersion and dataTypeId
  * @param {Object} acc - accumulator
  * @param {Object} schema
- * @returns {Object} obj
- * @returns {String} obj.schemaVersion
- * @returns {String} obj.dataTypeId
+ * @returns {{schemaVersion: String, dataTypeId: String}} obj
  */
 const parseId = (acc, schema) => {
   const arr = new URL(schema['$id']).pathname.split('/')
@@ -65,6 +69,17 @@ export default schemasPrefix`
 fs.writeFileSync(
   path.join(__dirname, '../dist/schemasPrefix.js'),
   schemasPrefix
+)
+
+// generate index.d.ts
+const jsonSchemaType = `
+${schemas
+  .map(({ title }) => `import { ${title} } from './${title.toLowerCase()}'`)
+  .join('\n')} 
+export type MapeoRecord = ${schemas.map(({ title }) => title).join(' | ')}`
+fs.writeFileSync(
+  path.join(__dirname, '../types/schema/index.d.ts'),
+  jsonSchemaType
 )
 
 // generate index.js for protobuf schemas

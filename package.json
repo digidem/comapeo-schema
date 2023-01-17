@@ -10,6 +10,7 @@
     "jsonschema": "json2ts -i schema/ -o types/schema/",
     "tsc": "tsc",
     "tsc-index": "tsc index.js -d --emitDeclarationOnly --allowJs --allowSyntheticDefaultImports --module es2022 --target es2019 --moduleResolution node",
+    "generate": "node scripts/generate.js",
     "doc": "typedoc --plugin typedoc-plugin-markdown",
     "build": "npm-run-all protobuf jsonschema tsc tsc-index doc",
     "test": "tape 'test/**/*.js'"
@@ -51,6 +52,7 @@
     "ajv": "^8.11.2",
     "ajv-formats": "^2.1.1",
     "b4a": "^1.6.1",
+    "compact-encoding": "^2.11.0",
     "glob": "^8.0.3",
     "glob-promise": "^5.0.0",
     "typedoc": "^0.23.21",
