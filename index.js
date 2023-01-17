@@ -2,98 +2,67 @@
 /**
  * @module mapeo-schema
  */
-import fs from 'node:fs'
-import { assert } from 'node:console'
+import assert from 'node:assert'
 import b4a from 'b4a'
-import Ajv from 'ajv'
-import addFormats from 'ajv-formats'
-import glob from 'glob-promise'
+import * as JSONSchemas from './dist/schemas.js'
+import * as ProtobufSchemas from './types/proto/index.js'
+import schemasPrefix from './dist/schemasPrefix.js'
+import * as cenc from 'compact-encoding'
+
+// console.log(cenc.encode(cenc.uint8array, Uint8Array.of(1, 2, 4, 5, 6, 255)))
+// console.log(randomBytes(6).toString('hex'))
+// console.log(cenc.encode(cenc.raw.uint8array, Uint8Array.from(bytebuf)))
+// console.log(Buffer.from(bytebuf.toString('hex'), 'hex'))
+
+const dataTypeIdSize = 6
+const schemaVersionSize = 2
 
 /**
- * @param {string} path
- * @returns {Object}
- */
-const loadJSON = (path) =>
-  JSON.parse(fs.readFileSync(new URL(path, import.meta.url)).toString())
-
-/**
- * @param {any} schema
- * @returns {Object}
- */
-const parseId = (schema) => {
-  const arr = new URL(schema['$id']).pathname.split('/')
-  const schemaVersion = arr.pop()
-  const dataTypeId = arr.pop()
-  // const [, , schemaVersion, dataTypeId] = arr
-  return { schemaVersion, dataTypeId }
-}
-
-const ajv = new Ajv()
-addFormats(ajv)
-const schemaFiles = await glob('./schema/*.json')
-
-const blockPrefixToSchema = {}
-for (let schemaFile of schemaFiles) {
-  const schema = loadJSON(schemaFile)
-  const { schemaVersion, dataTypeId } = parseId(schema)
-  const type = schema.title
-
-  // TODO: remove this try/catch once every jsonSchema as a corresponding protobufSchema
-  let protobufSchema = null
-  try {
-    protobufSchema = (await import(`./types/proto/${type.toLowerCase()}.js`))[
-      type
-    ]
-  } catch (e) {
-    console.log('ERROR', 'protobuf schema not found', type)
-  }
-
-  // TODO: research why enum types are failing to compile
-  let validate = null
-  try {
-    validate = ajv.compile(schema)
-  } catch (e) {
-    console.log('ERROR', 'compiling schema', schemaFile)
-  }
-  blockPrefixToSchema[`${dataTypeId}/${schemaVersion}`] = {
-    type,
-    schema,
-    validate,
-    protobufSchema,
-  }
-}
-
-// this should be change to 32 once we generate random ids for record types
-const dataTypeIdSize = 4
-// this should be changed to 4
-const schemaVersionSize = 1
-
-/**
- * Given a record type and version, find the corresponding blockPrefix if it exists
+ * given a schemaVersion and type, return a buffer with the corresponding data
  * @param {Object} obj
- * @param {string} obj.type
- * @param {number} obj.version
- * @returns {string | undefined} blockPrefix for corresponding schema
+ * @param {string} obj.dataTypeId hex encoded string of a 6-byte buffer indicating type
+ * @param {string} obj.schemaVersion hex encoded string of a 2-byte buffer indicating schema version
+ * @returns {Buffer} blockPrefix for corresponding schema
  */
-const findSchema = ({ type, version }) =>
-  Object.keys(blockPrefixToSchema).find((blockPrefix) => {
-    // we need to compare the version since we can have multiple versions of the same schema
-    const [, v] = blockPrefix.split('/')
-    return (
-      blockPrefixToSchema[blockPrefix].type.toLowerCase() === type &&
-      version === parseInt(v)
-    )
-  })
+const encodeBlockPrefix = ({ dataTypeId, schemaVersion }) =>
+  Buffer.concat([
+    cenc.encode(cenc.hex.fixed(dataTypeIdSize), dataTypeId),
+    cenc.encode(cenc.hex.fixed(schemaVersionSize), schemaVersion),
+  ])
+
+/**
+ *  given a buffer, return schemaVersion and type
+ *  @param {Buffer} buf
+ *  @returns {{dataTypeId:String, schemaVersion:String}}
+ */
+const decodeBlockPrefix = (buf) => {
+  const state = cenc.state()
+  state.buffer = buf
+  state.start = 0
+  state.end = dataTypeIdSize
+  const dataTypeId = cenc.hex.fixed(6).decode(state)
+
+  state.start = dataTypeIdSize
+  state.end = dataTypeIdSize + schemaVersionSize
+  const schemaVersion = cenc.hex.fixed(2).decode(state)
+
+  return { dataTypeId, schemaVersion }
+}
+
+// const buf = encodeBlockPrefix({
+//   dataTypeId: 'f5fd57de7067',
+//   schemaVersion: '0004',
+// })
+// console.log(buf)
+// const obj = decodeBlockPrefix(buf)
+// console.log(obj)
 
 /**
  * Validate an object against the schema type
  * @param {import('./types/schema/observation').Observation} obj - Object to be encoded
  * @returns {Boolean} indicating if the object is valid
  */
-export const validate = (obj) => {
-  const blockPrefix = findSchema({ type: obj.type, version: obj.schemaVersion })
-  return blockPrefixToSchema[blockPrefix].validate(obj)
-}
+export const validate = (obj) => JSONSchemas[obj.type](obj)
 
 /**
  * TODO: obj should be more generic since there are other recordTypes

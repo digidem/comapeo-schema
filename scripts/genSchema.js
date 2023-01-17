@@ -27,7 +27,7 @@ const parseId = (acc, schema) => {
   const arr = new URL(schema['$id']).pathname.split('/')
   const schemaVersion = arr.pop()
   const dataTypeId = arr.pop()
-  acc[schema.title] = { schemaVersion, dataTypeId }
+  acc[schema.title.toLowerCase()] = { schemaVersion, dataTypeId }
   return acc
 }
 
@@ -45,7 +45,7 @@ ajv.addKeyword('meta:enum')
 let schemaValidations = standaloneCode(
   ajv,
   schemas.reduce((obj, schema) => {
-    obj[schema['title']] = schema['$id']
+    obj[schema.title.toLowerCase()] = schema['$id']
     return obj
   }, {})
 )
