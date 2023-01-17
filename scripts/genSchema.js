@@ -1,3 +1,4 @@
+// @ts-check
 import fs from 'node:fs'
 import path from 'path'
 import { URL } from 'url'
@@ -15,49 +16,24 @@ const loadJSON = (path) =>
 /**
  * reducer; grab the jsonSchema, get the $id to grab schemaVersion and dataTypeId
  * @param {Object} acc - accumulator
- * @param {Object} schemas
- * @param {Object} schemas.jsonSchema
+ * @param {Object} schema
  * @returns {Object} obj
  * @returns {String} obj.schemaVersion
  * @returns {String} obj.dataTypeId
  */
-const parseId = (acc, { jsonSchema }) => {
-  const arr = new URL(jsonSchema['$id']).pathname.split('/')
+const parseId = (acc, schema) => {
+  const arr = new URL(schema['$id']).pathname.split('/')
   const schemaVersion = arr.pop()
   const dataTypeId = arr.pop()
-  acc[jsonSchema.title] = { schemaVersion, dataTypeId }
+  acc[schema.title] = { schemaVersion, dataTypeId }
   return acc
 }
-/**
- * load protobuf and jsonSchemas into object
- * @returns {Object} schemas
- * @returns {Object} schemas.jsonSchemas
- * @returns {Object} schemas.protobufSchemas
- */
-const loadSchemas = async () => {
-  return await Promise.all(
-    (
-      await glob('../schema/*.json', { cwd: 'scripts' })
-    ).map(async (path) => {
-      let protobufSchema = null
-      const jsonSchema = loadJSON(path)
-      const type = jsonSchema.title
-      try {
-        protobufSchema = (
-          await import(`../types/proto/${type.toLowerCase()}.js`)
-        )[type]
-      } catch (e) {
-        console.log('ERROR', 'protobuf schema not found', type)
-      }
-      return { jsonSchema, protobufSchema }
-    })
-  )
-}
 
-const schemas = await loadSchemas()
+const schemas = glob.sync('../schema/*.json', { cwd: 'scripts' }).map(loadJSON)
+
 // compile schemas
 const ajv = new Ajv({
-  schemas: schemas.map(({ jsonSchema }) => jsonSchema),
+  schemas: schemas,
   code: { source: true, esm: true },
   formats: { 'date-time': true },
 })
@@ -66,17 +42,10 @@ ajv.addKeyword('meta:enum')
 // generate code
 let schemaValidations = standaloneCode(
   ajv,
-  schemas.reduce((obj, { jsonSchema }) => {
-    obj[jsonSchema['title']] = jsonSchema['$id']
+  schemas.reduce((obj, schema) => {
+    obj[schema['title']] = schema['$id']
     return obj
   }, {})
-)
-
-// serialize protobuf schemas to file?
-console.log(
-  schemas
-    .filter(({ protobufSchema }) => protobufSchema !== null)
-    .map(({ protobufSchema }) => protobufSchema.encode.toString())
 )
 
 // generate object to store schema prefixes
@@ -84,8 +53,25 @@ const schemasPrefix = `export const schemasPrefix = ${JSON.stringify(
   schemas.reduce(parseId, {})
 )}`
 
+// dump all to file
 const __dirname = new URL('.', import.meta.url).pathname
 fs.writeFileSync(
   path.join(__dirname, '../dist', 'schemas.js'),
   schemaValidations + schemasPrefix
+)
+
+// generate index.js for protobuf schemas
+const protobufFiles = glob.sync('*.js', { cwd: 'types/proto' })
+const lines = []
+for (const protobufFilename of protobufFiles) {
+  // skip index.js
+  if (protobufFilename === 'index.js') continue
+  const mod = await import(`../types/proto/${protobufFilename}`)
+  const exports = Object.keys(mod)
+  const line = `export { ${exports.join(', ')} } from './${protobufFilename}'`
+  lines.push(line)
+}
+fs.writeFileSync(
+  path.join(__dirname, '../types/proto/index.js'),
+  lines.join('\n')
 )
