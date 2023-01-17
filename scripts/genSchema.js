@@ -6,6 +6,8 @@ import Ajv from 'ajv'
 import standaloneCode from 'ajv/dist/standalone/index.js'
 import glob from 'glob-promise'
 
+const __dirname = new URL('.', import.meta.url).pathname
+
 /**
  * @param {string} path
  * @returns {Object}
@@ -48,16 +50,21 @@ let schemaValidations = standaloneCode(
   }, {})
 )
 
-// generate object to store schema prefixes
-const schemasPrefix = `export const schemasPrefix = ${JSON.stringify(
-  schemas.reduce(parseId, {})
-)}`
-
 // dump all to file
-const __dirname = new URL('.', import.meta.url).pathname
 fs.writeFileSync(
   path.join(__dirname, '../dist', 'schemas.js'),
-  schemaValidations + schemasPrefix
+  schemaValidations
+)
+
+// generate object to store schema prefixes
+const schemasPrefix = `const schemasPrefix = ${JSON.stringify(
+  schemas.reduce(parseId, {})
+)}\n
+export default schemasPrefix`
+
+fs.writeFileSync(
+  path.join(__dirname, '../dist/schemasPrefix.js'),
+  schemasPrefix
 )
 
 // generate index.js for protobuf schemas
