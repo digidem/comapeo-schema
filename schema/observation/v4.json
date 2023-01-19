@@ -41,21 +41,56 @@
             }
           }
         }
+
       }
     }
   },
   "type": "object",
-  "allOf": [{"$ref":"common.json"}],
   "properties": {
-    "dataTypeId":{
-      "description": "Type of document, must be 'observation'",
-      "type": "string",
-      "const": "f5fd57de7067"
+    "id": {
+      "description": "Unique value that identifies this element",
+      "type": "string"
     },
-    "schemaVersion":{
-      "description": "version of this schema, must be 0004",
+    "version": {
+      "description": "Unique value that identifies this particular version of this element",
+      "type": "string"
+    },
+    "created_at": {
+      "description": "RFC3339-formatted datetime of when the first version of the element was created",
       "type": "string",
-      "const": "0004"
+      "format": "date-time"
+    },
+    "timestamp": {
+      "description": "RFC3339-formatted datetime of when this version of the element was created",
+      "type": "string",
+      "format": "date-time"
+    },
+    "userId": {
+      "description": "ID of the user who made this edit",
+      "type": "string"
+    },
+    "deviceId": {
+      "description": "ID of the device that made this edit",
+      "type": "string"
+    },
+    "type": {
+      "description": "Must be `observation`",
+      "type": "string",
+      "enum": ["observation"]
+    },
+    "links": {
+      "description": "Version ids of the previous document versions this one is replacing",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "schemaVersion": {
+      "description": "Version of this schema. Should increment for breaking changes to the schema",
+      "type": "number",
+      "minimum": 1,
+      "enum": [4]
     },
     "lat": {
       "description": "latitude of the observation",
@@ -103,13 +138,13 @@
             }
           }
         },
-        "manual_location": {
+        "manualLocation": {
           "description": "Whether location has been set manually",
           "type": "boolean",
           "default": false
         }
       },
-      "additionalProperties": false
+      "additionalProperties": true
     },
     "refs": {
       "type": "array",
@@ -150,5 +185,5 @@
       "additionalProperties": true
     }
   },
-  "required": []
+  "required": ["id", "version", "created_at", "type", "schemaVersion"]
 }
