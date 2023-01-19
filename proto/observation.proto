@@ -1,38 +1,17 @@
 syntax = "proto3";
+package mapeo;
 
-package observation;
 import "google/protobuf/struct.proto";
+import "common.proto";
 
 message Observation {
-  // 32-byte random generated number
-  bytes id = 1;
+  Common common = 1;
 
-  // this is basically the core seq number
-  /* string version = 2; */
-  // When the record was created
-  // google.protobuf.Timestamp created_at = 2;
-  string created_at = 2;
-  // When the record was last modified
-  /* optional google.protobuf.Timestamp timestamp = 3; */
-  optional string timestamp = 3;
-  optional string user_id = 4;
-
-  // derived from coreKey and identityKey
-  /* optional string device_id = 6; */
-
-  // move to magic bytes
-  /* string type = 7; */
-
-  repeated string links = 5;
-
-  // move to magic bytes
-  /* int32 schema_version = 9; */
-
-  optional float lat = 6;
-  optional float lon = 7;
-  repeated google.protobuf.Struct refs = 8;
-  repeated google.protobuf.Struct attachments = 9;
-  optional google.protobuf.Struct tags = 10;
+  optional float lat = 2;
+  optional float lon = 3;
+  repeated google.protobuf.Struct refs = 4;
+  repeated google.protobuf.Struct attachments = 5;
+  optional google.protobuf.Struct tags = 6;
 
   message Metadata {
     message Location {
@@ -42,5 +21,5 @@ message Observation {
     optional Location location = 1;
     optional bool manual_location = 2;
   }
-  optional Metadata metadata = 11;
+  optional Metadata metadata = 7;
 }

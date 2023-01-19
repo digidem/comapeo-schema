@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "http://mapeo.world/schemas/f5fd57de7067/4",
+  "$id": "http://mapeo.world/schemas/observation.json",
   "title": "Observation",
   "description": "An observation is something that has been observed at a particular time and place. It is a subjective statement of 'I saw/heard this, here'",
   "definitions": {
@@ -45,51 +45,17 @@
     }
   },
   "type": "object",
+  "allOf": [{"$ref":"common.json"}],
   "properties": {
-    "id": {
-      "description": "Unique value that identifies this element",
-      "type": "string"
-    },
-    "version": {
-      "description": "Unique value that identifies this particular version of this element",
-      "type": "string"
-    },
-    "created_at": {
-      "description": "RFC3339-formatted datetime of when the first version of the element was created",
+    "dataTypeId":{
+      "description": "Type of document, must be 'observation'",
       "type": "string",
-      "format": "date-time"
+      "const": "f5fd57de7067"
     },
-    "timestamp": {
-      "description": "RFC3339-formatted datetime of when this version of the element was created",
+    "schemaVersion":{
+      "description": "version of this schema, must be 0004",
       "type": "string",
-      "format": "date-time"
-    },
-    "userId": {
-      "description": "ID of the user who made this edit",
-      "type": "string"
-    },
-    "deviceId": {
-      "description": "ID of the device that made this edit",
-      "type": "string"
-    },
-    "type": {
-      "description": "Must be `observation`",
-      "type": "string",
-      "enum": ["observation"]
-    },
-    "links": {
-      "description": "Version ids of the previous document versions this one is replacing",
-      "type": "array",
-      "uniqueItems": true,
-      "items": {
-        "type": "string"
-      }
-    },
-    "schemaVersion": {
-      "description": "Version of this schema. Should increment for breaking changes to the schema",
-      "type": "number",
-      "minimum": 1,
-      "enum": [4]
+      "const": "0004"
     },
     "lat": {
       "description": "latitude of the observation",
@@ -184,5 +150,5 @@
       "additionalProperties": true
     }
   },
-  "required": ["id", "created_at", "type", "schemaVersion"]
+  "required": []
 }

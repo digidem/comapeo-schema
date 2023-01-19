@@ -62,4 +62,4 @@ docs/*
 .env
 
 # generated code
-dist
+dist/*

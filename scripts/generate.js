@@ -21,17 +21,40 @@ const __dirname = new URL('.', import.meta.url).pathname
 const loadJSON = (path) =>
   JSON.parse(fs.readFileSync(new URL(path, import.meta.url)).toString())
 
+// /**
+//  * reducer; grab the jsonSchema, get the $id to grab schemaVersion and dataTypeId
+//  * @param {Object} acc - accumulator
+//  * @param {Object} schema
+//  * @returns {{schemaVersion: String, dataTypeId: String}} obj
+//  */
+// const parseId = (acc, schema) => {
+//   const arr = new URL(schema['$id']).pathname.split('/')
+//   const schemaVersion = arr.pop()
+//   const dataTypeId = arr.pop()
+//   acc[schema.title.toLowerCase()] = { schemaVersion, dataTypeId }
+//   return acc
+// }
+
 /**
- * reducer; grab the jsonSchema, get the $id to grab schemaVersion and dataTypeId
+ * reducer; grab the schema, get the schemaVersion and dataTypeId
  * @param {Object} acc - accumulator
  * @param {Object} schema
  * @returns {{schemaVersion: String, dataTypeId: String}} obj
  */
-const parseId = (acc, schema) => {
-  const arr = new URL(schema['$id']).pathname.split('/')
-  const schemaVersion = arr.pop()
-  const dataTypeId = arr.pop()
-  acc[schema.title.toLowerCase()] = { schemaVersion, dataTypeId }
+const getVersionAndDataTypeId = (
+  acc,
+  {
+    title,
+    properties: {
+      dataTypeId: { const: dataTypeId },
+      schemaVersion: { const: schemaVersion },
+    },
+  }
+) => {
+  acc[title] = {
+    dataTypeId,
+    schemaVersion,
+  }
   return acc
 }
 
@@ -60,9 +83,16 @@ fs.writeFileSync(
   schemaValidations
 )
 
-// generate object to store schema prefixes
+// // generate object to store schema prefixes
+// const schemasPrefix = `const schemasPrefix = ${JSON.stringify(
+//   schemas.reduce(parseId, {})
+// )}\n
+// export default schemasPrefix`
+
 const schemasPrefix = `const schemasPrefix = ${JSON.stringify(
-  schemas.reduce(parseId, {})
+  schemas
+    .filter((schema) => schema.properties.dataTypeId.const)
+    .reduce(getVersionAndDataTypeId, {})
 )}\n
 export default schemasPrefix`
 
@@ -90,7 +120,7 @@ for (const protobufFilename of protobufFiles) {
   if (protobufFilename === 'index.js') continue
   const mod = await import(`../types/proto/${protobufFilename}`)
   const exports = Object.keys(mod)
-  const line = `export { ${exports.join(', ')} } from './${protobufFilename}'`
+  const line = `export { ${exports[0]} } from './${protobufFilename}'`
   lines.push(line)
 }
 fs.writeFileSync(

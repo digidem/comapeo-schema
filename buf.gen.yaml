@@ -9,3 +9,4 @@ plugins:
       - snakeToCamel=false
       - importSuffix=.js
       - initializeFieldsAsUndefined=false
+      # - useOptionals=all
