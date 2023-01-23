@@ -12,7 +12,7 @@
     "tsc-index": "tsc index.js -d --emitDeclarationOnly --allowJs --allowSyntheticDefaultImports --module es2022 --target es2019 --moduleResolution node",
     "generate": "node scripts/generate.js",
     "doc": "typedoc --plugin typedoc-plugin-markdown",
-    "build": "npm-run-all protobuf jsonschema tsc tsc-index generate doc",
+    "build": "npm-run-all protobuf jsonschema generate tsc tsc-index doc",
     "test": "tape 'test/**/*.js'"
   },
   "repository": {
@@ -40,7 +40,7 @@
     "prettier": "^2.8.0",
     "random-access-memory": "^6.0.0",
     "tape": "^5.6.1",
-    "ts-proto": "^1.131.0",
+    "ts-proto": "^1.138.0",
     "typescript": "^4.8.4"
   },
   "prettier": {

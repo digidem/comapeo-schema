@@ -15,6 +15,12 @@ import glob from 'glob-promise'
 const __dirname = new URL('.', import.meta.url).pathname
 
 /**
+ * @param {String} str
+ * @returns {String}
+ */
+const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1)
+
+/**
  * @param {string} path
  * @returns {Object}
  */
@@ -41,22 +47,22 @@ const loadJSON = (path) =>
  * @param {Object} schema
  * @returns {{schemaVersion: String, dataTypeId: String}} obj
  */
-const getVersionAndDataTypeId = (
-  acc,
-  {
-    title,
-    properties: {
-      dataTypeId: { const: dataTypeId },
-      schemaVersion: { const: schemaVersion },
-    },
-  }
-) => {
-  acc[title] = {
-    dataTypeId,
-    schemaVersion,
-  }
-  return acc
-}
+// const getVersionAndDataTypeId = (
+//   acc,
+//   {
+//     title,
+//     properties: {
+//       dataTypeId: { const: dataTypeId },
+//       schemaVersion: { const: schemaVersion },
+//     },
+//   }
+// ) => {
+//   acc[title] = {
+//     dataTypeId,
+//     schemaVersion,
+//   }
+//   return acc
+// }
 
 const schemas = glob
   .sync('../schema/*/*.json', { cwd: 'scripts' })
@@ -109,9 +115,28 @@ fs.writeFileSync(
 // generate index.d.ts
 const jsonSchemaType = `
 ${schemas
-  .map(({ title }) => `import { ${title} } from './${title.toLowerCase()}'`)
-  .join('\n')} 
-export type MapeoRecord = ${schemas.map(({ title }) => title).join(' | ')}`
+  .map(
+    /** @param {Object} schema */
+    (schema) => {
+      const version = schema.properties.schemaVersion.enum
+      const varName = `${schema.title.toLowerCase()}_${version ? version : 0}`
+      return `import { ${capitalize(
+        schema.title
+      )} as ${varName} } from './${schema.title.toLowerCase()}/v${
+        version || 1
+      }'`
+    }
+  )
+  .join('\n')}
+export type MapeoRecord = ${schemas
+  .map(
+    /** @param {Object} schema */
+    (schema) => {
+      const version = schema.properties.schemaVersion.enum
+      return `${schema.title.toLowerCase()}_${version ? version : 0}`
+    }
+  )
+  .join(' | ')}`
 fs.writeFileSync(
   path.join(__dirname, '../types/schema/index.d.ts'),
   jsonSchemaType

@@ -1,5 +1,5 @@
 {
-  "entryPoints": ["./types/schema/*.d.ts", "./src/index.js"],
+  "entryPoints": ["./types/schema/**/*.d.ts", "./src/index.js"],
   "out": "./docs/api/",
   "allReflectionsHaveOwnDocument": true,
   "cleanOutputDir": true,
