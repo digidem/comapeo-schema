@@ -58,7 +58,18 @@ const getVersionAndDataTypeId = (
   return acc
 }
 
-const schemas = glob.sync('../schema/*.json', { cwd: 'scripts' }).map(loadJSON)
+const schemas = glob
+  .sync('../schema/*/*.json', { cwd: 'scripts' })
+  .map(loadJSON)
+
+const schemaExports = schemas.reduce((acc, schema) => {
+  const schemaVersion = schema.properties.schemaVersion.enum
+  const key = `${schema.title.toLowerCase()}_${
+    schemaVersion ? schemaVersion : 0
+  }`
+  acc[key] = schema['$id']
+  return acc
+}, {})
 
 // compile schemas
 const ajv = new Ajv({
@@ -69,13 +80,7 @@ const ajv = new Ajv({
 ajv.addKeyword('meta:enum')
 
 // generate code
-let schemaValidations = standaloneCode(
-  ajv,
-  schemas.reduce((obj, schema) => {
-    obj[schema.title.toLowerCase()] = schema['$id']
-    return obj
-  }, {})
-)
+let schemaValidations = standaloneCode(ajv, schemaExports)
 
 // dump all to file
 fs.writeFileSync(
@@ -89,17 +94,17 @@ fs.writeFileSync(
 // )}\n
 // export default schemasPrefix`
 
-const schemasPrefix = `const schemasPrefix = ${JSON.stringify(
-  schemas
-    .filter((schema) => schema.properties.dataTypeId.const)
-    .reduce(getVersionAndDataTypeId, {})
-)}\n
-export default schemasPrefix`
+// const schemasPrefix = `const schemasPrefix = ${JSON.stringify(
+//   schemas
+//     .filter((schema) => schema.properties.dataTypeId.const)
+//     .reduce(getVersionAndDataTypeId, {})
+// )}\n
+// export default schemasPrefix`
 
-fs.writeFileSync(
-  path.join(__dirname, '../dist/schemasPrefix.js'),
-  schemasPrefix
-)
+// fs.writeFileSync(
+//   path.join(__dirname, '../dist/schemasPrefix.js'),
+//   schemasPrefix
+// )
 
 // generate index.d.ts
 const jsonSchemaType = `
