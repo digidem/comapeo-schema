@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+for file in schema/**/*.json
+do
+  echo "$file"
+  echo $(dirname $file)
+  name="${file%%.*}"
+  mkdir -p types/$(dirname $file)
+  cat "$file" | json2ts --cwd 'schema/*' > "types/$name.ts"
+done

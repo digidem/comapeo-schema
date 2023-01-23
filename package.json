@@ -7,7 +7,7 @@
   "scripts": {
     "example": "node examples/schema_test.js",
     "protobuf": "buf generate ./proto",
-    "jsonschema": "json2ts --cwd schema/ -i schema/ -o types/schema/",
+    "jsonschema": "scripts/./jsonts",
     "tsc": "tsc",
     "tsc-index": "tsc index.js -d --emitDeclarationOnly --allowJs --allowSyntheticDefaultImports --module es2022 --target es2019 --moduleResolution node",
     "generate": "node scripts/generate.js",
