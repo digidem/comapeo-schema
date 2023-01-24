@@ -2,28 +2,17 @@
 /**
  * @module mapeo-schema
  */
-// console.log('test')
-
-import assert from 'node:assert'
-// import b4a from 'b4a'
 import * as cenc from 'compact-encoding'
 import * as JSONSchemas from './dist/schemas.js'
 import * as ProtobufSchemas from './types/proto/index.js'
 import schemasPrefix from './dist/schemasPrefix.js'
-import { randomBytes } from 'node:crypto'
 
 const dataTypeIdSize = 6
 const schemaVersionSize = 2
 
-// /**
-//  * @param {String} str
-//  * @returns {String}
-//  */
-// const capitalize = (str) => str.charAt(0).toUpperCase() + str.slice(1)
-
 /**
  * @param {import('./types/schema/index').MapeoRecord} obj - Object to be encoded
- *  @returns {import('./types/proto/index').ProtobufSchemas}
+ * @returns {import('./types/proto/index').ProtobufSchemas}
  */
 const jsonSchemaToProto = (obj) => {
   const commonKeys = [
@@ -42,7 +31,9 @@ const jsonSchemaToProto = (obj) => {
       acc[k] = obj[k]
       return acc
     }, {})
-  const protoObj = {
+
+  /** @type {import('./types/proto/index').ProtobufSchemas} */
+  return {
     ...uncommon,
     common: {
       id: Buffer.from(obj.id, 'hex'),
@@ -53,18 +44,29 @@ const jsonSchemaToProto = (obj) => {
       deviceId: obj.deviceId,
     },
   }
-  return protoObj
 }
 
-// const protoToJsonSchema = (obj, { dataTypeId, schemaVersion }) => {
-//   const jsonSchemaObj = {
-//     ...obj,
-//     id: b4a.from(obj.id).toString('hex'),
-//     dataTypeId,
-//     schemaVersion,
-//   }
-//   return jsonSchemaObj
-// }
+/**
+ * @param {import('./types/proto/index').ProtobufSchemas} protobufObj
+ * @param {Object} obj
+ * @param {String} obj.schemaVersion
+ * @param {String} obj.type
+ * @param {String} obj.version
+ * @returns {import('./types/schema/index').MapeoRecord}
+ */
+const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
+  const common = protobufObj.common
+  delete protobufObj.common
+  const jsonSchemaObj = {
+    ...protobufObj,
+    ...common,
+    schemaVersion,
+    type,
+    version,
+  }
+  jsonSchemaObj.id = jsonSchemaObj.id.toString('hex')
+  return jsonSchemaObj
+}
 
 /**
  * given a schemaVersion and type, return a buffer with the corresponding data
@@ -73,7 +75,7 @@ const jsonSchemaToProto = (obj) => {
  * @param {string} obj.schemaVersion hex encoded string of a 2-byte buffer indicating schema version
  * @returns {Buffer} blockPrefix for corresponding schema
  */
-const encodeBlockPrefix = ({ dataTypeId, schemaVersion }) =>
+export const encodeBlockPrefix = ({ dataTypeId, schemaVersion }) =>
   // @ts-ignore
   Buffer.concat([
     cenc.encode(cenc.hex.fixed(dataTypeIdSize), dataTypeId),
@@ -85,7 +87,7 @@ const encodeBlockPrefix = ({ dataTypeId, schemaVersion }) =>
  *  @param {Buffer} buf
  *  @returns {{dataTypeId:String, schemaVersion:String}}
  */
-const decodeBlockPrefix = (buf) => {
+export const decodeBlockPrefix = (buf) => {
   const state = cenc.state()
   // @ts-ignore
   state.buffer = buf
@@ -100,78 +102,40 @@ const decodeBlockPrefix = (buf) => {
   return { dataTypeId, schemaVersion }
 }
 
-// const buf = encodeBlockPrefix({
-//   dataTypeId: 'f5fd57de7067',
-//   schemaVersion: '0004',
-// })
-// console.log(buf)
-// const obj = decodeBlockPrefix(buf)
-// console.log(obj)
-
 /**
  * Validate an object against the schema type
  * @param {import('./types/schema/index').MapeoRecord} obj - Object to be encoded
  * @returns {Boolean} indicating if the object is valid
  */
 export const validate = (obj) => {
+  console.log(obj.type.toLowerCase, JSONSchemas)
   const key = `${obj.type.toLowerCase()}_${obj.schemaVersion}`
   return JSONSchemas[key](obj)
 }
 
 /**
- * TODO: obj should be more generic since there are other recordTypes
  * Encode a an object validated against a schema as a binary protobuf to send to an hypercore.
  * @param {import('./types/schema/index').MapeoRecord} obj - Object to be encoded
  * @returns {Buffer} protobuf encoded buffer with recordTypeBlockSize + schemaVersionSize bytes prepended, one for the type of record and the other for the version of the schema */
 export const encode = (obj) => {
   const blockPrefix = encodeBlockPrefix(schemasPrefix[obj.type])
   const record = jsonSchemaToProto(obj)
-  assert(
-    blockPrefix,
-    `schema of type ${obj.type} and version ${obj.schemaVersion} not found`
-  )
   const protobuf = ProtobufSchemas[obj.type].encode(record).finish()
   return Buffer.concat([blockPrefix, protobuf])
 }
 
-const rec = encode({
-  id: randomBytes(32).toString('hex'),
-  type: 'Observation',
-  schemaVersion: 4,
-  version: '1',
-  links: [],
-  timestamp: new Date().toJSON(),
-  created_at: new Date().toJSON(),
-  refs: [],
-  attachments: [],
-})
-console.log(rec)
-console.log(decodeBlockPrefix(rec))
-
-// /**
-//  * Decode a Buffer as an object validated against the corresponding schema
-//  * @param {Buffer} buf - Buffer to be decoded
-//  * @param {Object} opts - Object containing key and index of the hypercore
-//  * @param {Buffer} opts.key - Public key of the hypercore
-//  * @param {Number} opts.index - Index of the entry
-//  * @returns {import('./types/schema/observation')}
-//  * */
-// export const decode = (buf, opts) => {
-//   const dataTypeId = buf.subarray(0, dataTypeIdSize).toString()
-//   const schemaVersion = buf.subarray(
-//     dataTypeIdSize,
-//     dataTypeIdSize + schemaVersionSize
-//   )[0]
-//   const blockPrefix = `${dataTypeId}/${schemaVersion}`
-//   const schema = blockPrefixToSchema[blockPrefix].protobufSchema
-//   let record = schema.decode(
-//     buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
-//   )
-//   return {
-//     ...record,
-//     id: record.id.toString('hex'),
-//     type: blockPrefixToSchema[blockPrefix].type.toLowerCase(),
-//     schemaVersion: schemaVersion,
-//     version: `${opts.key.toString('hex')}/${opts.index.toString()}`,
-//   }
-// }
+/**
+ * Decode a Buffer as an object validated against the corresponding schema
+ * @param {Buffer} buf - Buffer to be decoded
+ * @returns {import('./types/schema/index').MapeoRecord}
+ * */
+export const decode = (buf, { coreId, seq }) => {
+  const { dataTypeId, schemaVersion } = decodeBlockPrefix(buf)
+  const type = Object.keys(schemasPrefix).filter(
+    (key) => schemasPrefix[key]['dataTypeId'] === dataTypeId
+  )[0]
+  const version = `${coreId}/${seq}`
+  const record = buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
+  const protobufObj = ProtobufSchemas[type].decode(record)
+  return protoToJsonSchema(protobufObj, { schemaVersion, type, version })
+}
