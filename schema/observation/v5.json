@@ -46,12 +46,12 @@
     }
   },
   "type": "object",
-  "allOf":[{"$ref": "../common/v2.json"}],
+  "allOf":[{"$ref": "../common/v1.json"}],
   "properties": {
     "type": {
       "description": "Must be `observation`",
       "type": "string",
-      "enum": ["observation"]
+      "enum": ["Observation"]
     },
     "schemaVersion": {
       "description": "Version of this schema. Should increment for breaking changes to the schema",
