@@ -46,7 +46,7 @@ test('test encoding of rightfully formated record', async (t) => {
 })
 
 test('test encoding, decoding of record and comparing the two versions', async (t) => {
-  const record = decode(encode(docs.good), { key: randomBytes(32), index: 0 })
+  const record = decode(encode(docs.good), { coreId: randomBytes(32), seq: 0 })
   const fields = Object.keys(docs.good)
   fields.forEach((field) => {
     t.deepEqual(record[field], docs.good[field], `comparing ${field}`)
