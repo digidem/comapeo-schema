@@ -5,7 +5,7 @@
 import * as cenc from 'compact-encoding'
 import * as JSONSchemas from './dist/schemas.js'
 import * as ProtobufSchemas from './types/proto/index.js'
-import schemasPrefix from './dist/schemasPrefix.js'
+import schemasPrefix from './schemasPrefix.js'
 
 const dataTypeIdSize = 6
 const schemaVersionSize = 2
@@ -72,20 +72,21 @@ const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
  * given a schemaVersion and type, return a buffer with the corresponding data
  * @param {Object} obj
  * @param {string} obj.dataTypeId hex encoded string of a 6-byte buffer indicating type
- * @param {string} obj.schemaVersion hex encoded string of a 2-byte buffer indicating schema version
+ * @param {number} obj.schemaVersion number to indicate version. Gets converted to a padded 4-byte hex string
  * @returns {Buffer} blockPrefix for corresponding schema
  */
-export const encodeBlockPrefix = ({ dataTypeId, schemaVersion }) =>
+export const encodeBlockPrefix = ({ dataTypeId, schemaVersion }) => {
   // @ts-ignore
-  Buffer.concat([
+  return Buffer.concat([
     cenc.encode(cenc.hex.fixed(dataTypeIdSize), dataTypeId),
-    cenc.encode(cenc.hex.fixed(schemaVersionSize), schemaVersion),
+    cenc.encode(cenc.uint16, schemaVersion),
   ])
+}
 
 /**
  *  given a buffer, return schemaVersion and type
  *  @param {Buffer} buf
- *  @returns {{dataTypeId:String, schemaVersion:String}}
+ *  @returns {{dataTypeId:String, schemaVersion:Number}}
  */
 export const decodeBlockPrefix = (buf) => {
   const state = cenc.state()
@@ -97,7 +98,7 @@ export const decodeBlockPrefix = (buf) => {
 
   state.start = dataTypeIdSize
   state.end = dataTypeIdSize + schemaVersionSize
-  const schemaVersion = cenc.hex.fixed(2).decode(state)
+  const schemaVersion = cenc.uint16.decode(state)
 
   return { dataTypeId, schemaVersion }
 }
@@ -108,7 +109,6 @@ export const decodeBlockPrefix = (buf) => {
  * @returns {Boolean} indicating if the object is valid
  */
 export const validate = (obj) => {
-  console.log(obj.type.toLowerCase, JSONSchemas)
   const key = `${obj.type.toLowerCase()}_${obj.schemaVersion}`
   return JSONSchemas[key](obj)
 }
@@ -118,7 +118,10 @@ export const validate = (obj) => {
  * @param {import('./types/schema/index').MapeoRecord} obj - Object to be encoded
  * @returns {Buffer} protobuf encoded buffer with recordTypeBlockSize + schemaVersionSize bytes prepended, one for the type of record and the other for the version of the schema */
 export const encode = (obj) => {
-  const blockPrefix = encodeBlockPrefix(schemasPrefix[obj.type])
+  const blockPrefix = encodeBlockPrefix({
+    dataTypeId: schemasPrefix[obj.type],
+    schemaVersion: obj.schemaVersion === undefined ? 0 : obj.schemaVersion,
+  })
   const record = jsonSchemaToProto(obj)
   const protobuf = ProtobufSchemas[obj.type].encode(record).finish()
   return Buffer.concat([blockPrefix, protobuf])
@@ -132,7 +135,7 @@ export const encode = (obj) => {
 export const decode = (buf, { coreId, seq }) => {
   const { dataTypeId, schemaVersion } = decodeBlockPrefix(buf)
   const type = Object.keys(schemasPrefix).filter(
-    (key) => schemasPrefix[key]['dataTypeId'] === dataTypeId
+    (key) => schemasPrefix[key] === dataTypeId
   )[0]
   const version = `${coreId}/${seq}`
   const record = buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
