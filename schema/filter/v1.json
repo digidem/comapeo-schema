@@ -1,0 +1,63 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://mapeo.world/schemas/filter.json",
+  "title": "Filter",
+  "description": "A filter is a saved view of data in the Mapeo database, filtered by tag or date. E.g. a filter could define observations between two dates, or only observations with the tag `public=true`",
+  "type": "object",
+  "properties": {
+    "id": {
+      "description": "Unique value that identifies this element",
+      "type": "string"
+    },
+    "version": {
+      "description": "Unique value that identifies this particular version of this element",
+      "type": "string"
+    },
+    "created_at": {
+      "description": "RFC3339-formatted datetime of when the first version of the element was created",
+      "type": "string",
+      "format": "date-time"
+    },
+    "timestamp": {
+      "description": "RFC3339-formatted datetime of when this version of the element was created",
+      "type": "string",
+      "format": "date-time"
+    },
+    "userId": {
+      "description": "ID of the user who edited/created this record",
+      "type": "string"
+    },
+    "deviceId": {
+      "description": "ID of the device that made this edit",
+      "type": "string"
+    },
+    "type": {
+      "description": "Must be `filter`",
+      "type": "string",
+      "enum": ["filter"]
+    },
+    "links": {
+      "description": "Version ids of the previous document versions this one is replacing",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "schemaVersion": {
+      "description": "Version of this schema. Should increment for breaking changes to the schema",
+      "type": "number",
+      "minimum": 1,
+      "enum": [1]
+    },
+    "filter": {
+      "type": "array",
+      "description": "A filter expression as defined in https://docs.mapbox.com/mapbox-gl-js/style-spec/#other-filter but where the special fields `$type` refers to the mapeo type (observation, node, way etc) and `$id` is the mapeo id."
+    },
+    "name": {
+      "type": "string",
+      "description": "A human-readable name for this filter."
+    }
+  },
+  "required": ["id", "version", "created_at", "type", "schemaVersion", "filter", "name"]
+}
