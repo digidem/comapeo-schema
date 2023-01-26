@@ -52,14 +52,15 @@ const jsonSchemaToProto = (obj) => {
  * @returns {import('./types/schema/index').MapeoRecord}
  */
 const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
+  const common = protobufObj.common
+  delete protobufObj.common
   return {
     ...protobufObj,
-    ...protobufObj.common,
+    ...common,
     schemaVersion,
     type,
     version,
-    // I really don't like this
-    id: protobufObj.common?.id.toString('hex') || '',
+    id: common?.id.toString('hex') || '',
   }
 }
 
