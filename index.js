@@ -27,29 +27,26 @@ const jsonSchemaToProto = (obj) => {
   /** @type {Object} */
   const uncommon = Object.keys(obj)
     .filter((k) => !commonKeys.includes(k))
-    .reduce((acc, k) => {
-      acc[k] = obj[k]
-      return acc
+    .reduce((uncommon, k) => {
+      uncommon[k] = obj[k]
+      return uncommon
     }, {})
+  const common = Object.keys(commonKeys).reduce((common, field) => {
+    if (obj[field]) common[field] = obj[field]
+    return common
+  }, {})
 
   /** @type {import('./types/proto/index').ProtobufSchemas} */
   return {
     ...uncommon,
-    common: {
-      id: Buffer.from(obj.id, 'hex'),
-      created_at: obj.created_at,
-      links: obj.links,
-      timestamp: obj.timestamp,
-      userId: obj.userId,
-      deviceId: obj.deviceId,
-    },
+    ...common,
   }
 }
 
 /**
  * @param {import('./types/proto/index').ProtobufSchemas} protobufObj
  * @param {Object} obj
- * @param {String} obj.schemaVersion
+ * @param {Number} obj.schemaVersion
  * @param {String} obj.type
  * @param {String} obj.version
  * @returns {import('./types/schema/index').MapeoRecord}
@@ -57,14 +54,15 @@ const jsonSchemaToProto = (obj) => {
 const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
   const common = protobufObj.common
   delete protobufObj.common
+  /** @type {import('./types/schema/index').MapeoRecord} */
   const jsonSchemaObj = {
     ...protobufObj,
     ...common,
     schemaVersion,
     type,
     version,
+    id: protobufObj.id.toString('hex'),
   }
-  jsonSchemaObj.id = jsonSchemaObj.id.toString('hex')
   return jsonSchemaObj
 }
 
@@ -110,7 +108,11 @@ export const decodeBlockPrefix = (buf) => {
  */
 export const validate = (obj) => {
   const key = `${obj.type.toLowerCase()}_${obj.schemaVersion}`
-  return JSONSchemas[key](obj)
+
+  const validatefn = JSONSchemas[key]
+  const isValid = validatefn(obj)
+  if (!isValid) throw new Error(JSON.stringify(validatefn.errors, null, 4))
+  return isValid
 }
 
 /**
@@ -137,7 +139,7 @@ export const decode = (buf, { coreId, seq }) => {
   const type = Object.keys(schemasPrefix).filter(
     (key) => schemasPrefix[key] === dataTypeId
   )[0]
-  const version = `${coreId}/${seq}`
+  const version = `${coreId.toString('hex')}/${seq.toString()}`
   const record = buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
   const protobufObj = ProtobufSchemas[type].decode(record)
   return protoToJsonSchema(protobufObj, { schemaVersion, type, version })

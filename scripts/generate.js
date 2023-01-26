@@ -79,7 +79,7 @@ type: string;
 schemaVersion: number;
 [key:string]: any;
 }
-export type MapeoRecord = ${schemas
+export type MapeoRecord = (${schemas
   .map(
     /** @param {Object} schema */
     (schema) => {
@@ -87,21 +87,21 @@ export type MapeoRecord = ${schemas
       return `${schema.title.toLowerCase()}_${version ? version : 0}`
     }
   )
-  .join(' | ')} & base
+  .join(' | ')}) & base
 `
 fs.writeFileSync(
   path.join(__dirname, '../types/schema/index.d.ts'),
   jsonSchemaType
 )
 
-// generate index.js for protobuf schemas
+// generate index.js for protobuf schemas and index.d.ts
 const protobufFiles = glob.sync('*.js', { cwd: 'types/proto' })
 const linesjs = []
 const linesdts = []
 const union = protobufFiles
   .filter((f) => f !== 'index.js')
   .map((f) => capitalize(path.parse(f).name))
-  .join(' | ')
+  .join(' & ')
 
 for (const protobufFilename of protobufFiles) {
   // skip index.js
