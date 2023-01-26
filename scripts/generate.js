@@ -57,7 +57,7 @@ fs.writeFileSync(
   schemaValidations
 )
 
-// generate index.d.ts
+// generate types/schema/index.d.ts
 const jsonSchemaType = `
 ${schemas
   .map(
@@ -73,6 +73,12 @@ ${schemas
     }
   )
   .join('\n')}
+
+interface base {
+type: string;
+schemaVersion: number;
+[key:string]: any;
+}
 export type MapeoRecord = ${schemas
   .map(
     /** @param {Object} schema */
@@ -81,7 +87,8 @@ export type MapeoRecord = ${schemas
       return `${schema.title.toLowerCase()}_${version ? version : 0}`
     }
   )
-  .join(' | ')}`
+  .join(' | ')} & base
+`
 fs.writeFileSync(
   path.join(__dirname, '../types/schema/index.d.ts'),
   jsonSchemaType
