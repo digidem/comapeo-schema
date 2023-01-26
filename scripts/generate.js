@@ -101,7 +101,7 @@ const linesdts = []
 const union = protobufFiles
   .filter((f) => f !== 'index.js')
   .map((f) => capitalize(path.parse(f).name))
-  .join(' & ')
+  .join(' | ')
 
 for (const protobufFilename of protobufFiles) {
   // skip index.js

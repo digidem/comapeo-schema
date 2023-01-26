@@ -27,19 +27,19 @@ const jsonSchemaToProto = (obj) => {
   /** @type {Object} */
   const uncommon = Object.keys(obj)
     .filter((k) => !commonKeys.includes(k))
-    .reduce((uncommon, k) => {
-      uncommon[k] = obj[k]
-      return uncommon
+    .reduce((acc, k) => {
+      acc[k] = obj[k]
+      return acc
     }, {})
-  const common = Object.keys(commonKeys).reduce((common, field) => {
+
+  const common = commonKeys.reduce((common, field) => {
     if (obj[field]) common[field] = obj[field]
     return common
   }, {})
 
-  /** @type {import('./types/proto/index').ProtobufSchemas} */
   return {
     ...uncommon,
-    ...common,
+    common,
   }
 }
 
@@ -54,16 +54,14 @@ const jsonSchemaToProto = (obj) => {
 const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
   const common = protobufObj.common
   delete protobufObj.common
-  /** @type {import('./types/schema/index').MapeoRecord} */
-  const jsonSchemaObj = {
+  return {
     ...protobufObj,
     ...common,
     schemaVersion,
     type,
     version,
-    id: protobufObj.id.toString('hex'),
+    id: common.id.toString('hex'),
   }
-  return jsonSchemaObj
 }
 
 /**
