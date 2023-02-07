@@ -1,7 +1,9 @@
+// @ts-check
 import { encode, decode, validate } from '../index.js'
 import Hypercore from 'hypercore'
 import ram from 'random-access-memory'
 import { randomBytes } from 'node:crypto'
+
 const obj = {
   id: randomBytes(32).toString('hex'),
   type: 'Observation',

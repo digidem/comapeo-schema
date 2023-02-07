@@ -12,6 +12,7 @@
     "tsc-index": "tsc index.js -d --emitDeclarationOnly --allowJs --allowSyntheticDefaultImports --module es2022 --target es2019 --moduleResolution node",
     "generate": "node scripts/generate.js",
     "doc": "typedoc --plugin typedoc-plugin-markdown",
+    "clean": "rm -rf types dist docs",
     "build": "npm-run-all protobuf jsonschema generate tsc tsc-index doc",
     "test": "tape 'test/**/*.js'"
   },

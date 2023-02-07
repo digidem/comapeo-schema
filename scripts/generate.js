@@ -51,6 +51,10 @@ ajv.addKeyword('meta:enum')
 // generate code
 let schemaValidations = standaloneCode(ajv, schemaExports)
 
+const dist = path.join(__dirname, '../dist')
+if (!fs.existsSync(dist)) {
+  fs.mkdirSync(dist)
+}
 // dump all to file
 fs.writeFileSync(
   path.join(__dirname, '../dist', 'schemas.js'),
@@ -95,26 +99,24 @@ fs.writeFileSync(
 )
 
 // generate index.js for protobuf schemas and index.d.ts
-const protobufFiles = glob.sync('*.js', { cwd: 'types/proto' })
+const protobufFiles = glob.sync('*.ts', { cwd: 'types/proto' })
 const linesjs = []
 const linesdts = []
 const union = protobufFiles
+  .filter((f) => !f.match(/.d/))
   .filter((f) => f !== 'index.js')
   .map((f) => capitalize(path.parse(f).name))
   .join(' & ')
 
-for (const protobufFilename of protobufFiles) {
-  // skip index.js
-  if (protobufFilename === 'index.js') continue
-  const mod = await import(`../types/proto/${protobufFilename}`)
-  const exports = Object.keys(mod)
-  const linejs = `export { ${exports[0]} } from './${protobufFilename}'`
-  const linedts = `import { ${exports[0]} } from './${
-    path.parse(protobufFilename).name
-  }'`
-  linesdts.push(linedts)
-  linesjs.push(linejs)
-}
+protobufFiles
+  .filter((f) => !f.match(/.d/))
+  .map((f) => {
+    const name = path.parse(f).name
+    const linejs = `export { ${capitalize(name)} } from './${name}.js'`
+    const linets = `import { ${capitalize(name)} } from './${name}'`
+    linesdts.push(linets)
+    linesjs.push(linejs)
+  })
 fs.writeFileSync(
   path.join(__dirname, '../types/proto/index.js'),
   linesjs.join('\n')
