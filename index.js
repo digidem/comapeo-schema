@@ -60,7 +60,7 @@ const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
     schemaVersion,
     type,
     version,
-    id: common?.id.toString('hex') || '',
+    id: common ? common.id.toString('hex') : '',
   }
 }
 
