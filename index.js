@@ -33,10 +33,15 @@ const jsonSchemaToProto = (obj) => {
     }, {})
 
   const common = commonKeys.reduce((common, field) => {
-    if (obj[field]) common[field] = obj[field]
+    if (obj[field]) {
+      if (field === 'id') {
+        common[field] = Buffer.from(obj[field], 'hex')
+      } else {
+        common[field] = obj[field]
+      }
+    }
     return common
   }, {})
-
   return {
     ...uncommon,
     common,
