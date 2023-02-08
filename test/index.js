@@ -12,10 +12,13 @@ const loadJSON = (path) => {
   }
 }
 
-const docs = (await glob('./docs/*.json')).map(loadJSON).reduce((acc, val) => {
-  acc[val.name] = val.doc
-  return acc
-}, {})
+const docs = glob
+  .sync('./docs/*.json', { cwd: 'test' })
+  .map(loadJSON)
+  .reduce((acc, val) => {
+    acc[val.name] = val.doc
+    return acc
+  }, {})
 
 test('test encoding of record with missing fields', async (t) => {
   t.plan(1)
