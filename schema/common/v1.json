@@ -49,5 +49,5 @@
       "minimum": 1
     }
   },
-  "required": ["id", "version", "created_at", "type"]
+  "required": ["id", "created_at", "type"]
 }
