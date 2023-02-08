@@ -121,7 +121,7 @@ export const validate = (obj) => {
 /**
  * Encode a an object validated against a schema as a binary protobuf to send to an hypercore.
  * @param {import('./types/schema/index').MapeoRecord} obj - Object to be encoded
- * @returns {Buffer} protobuf encoded buffer with recordTypeBlockSize + schemaVersionSize bytes prepended, one for the type of record and the other for the version of the schema */
+ * @returns {Buffer} protobuf encoded buffer with dataTypeIdSize + schemaVersionSize bytes prepended, one for the type of record and the other for the version of the schema */
 export const encode = (obj) => {
   const blockPrefix = encodeBlockPrefix({
     dataTypeId: schemasPrefix[obj.type],

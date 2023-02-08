@@ -52,10 +52,14 @@ test('test encoding, decoding of record and comparing the two versions', async (
   const record = decode(encode(docs.good), { coreId: randomBytes(32), seq: 0 })
   const fields = Object.keys(docs.good)
   fields.forEach((field) => {
-    const msg = `comparing ${field}`
+    const msg = `checking existence of ${field}`
+    // check if field exists
     record[field] && docs.good[field] ? t.pass(msg) : t.fail(msg)
-    // this would fail if on the json schema we allow additional fields
-    // t.deepEqual(record[field], docs.good[field], `comparing ${field}`)
+    // if field is not an object, check equality
+    // since objects as fields mean the possibility of additionalFields in jsonSchemas
+    if (typeof record[field] !== 'object') {
+      t.equal(record[field], docs.good[field], `comparing value of ${field}`)
+    }
   })
 })
 
