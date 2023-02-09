@@ -124,11 +124,11 @@ export const validate = (obj) => {
  * @returns {Buffer} protobuf encoded buffer with dataTypeIdSize + schemaVersionSize bytes prepended, one for the type of record and the other for the version of the schema */
 export const encode = (obj) => {
   const blockPrefix = encodeBlockPrefix({
-    dataTypeId: schemasPrefix[obj.type],
+    dataTypeId: schemasPrefix[formatSchemaType(obj.type)],
     schemaVersion: obj.schemaVersion === undefined ? 0 : obj.schemaVersion,
   })
   const record = jsonSchemaToProto(obj)
-  const protobuf = ProtobufSchemas[obj.type].encode(record).finish()
+  const protobuf = ProtobufSchemas[formatSchemaType(obj.type)].encode(record).finish()
   return Buffer.concat([blockPrefix, protobuf])
 }
 
@@ -146,4 +146,13 @@ export const decode = (buf, { coreId, seq }) => {
   const record = buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
   const protobufObj = ProtobufSchemas[type].decode(record)
   return protoToJsonSchema(protobufObj, { schemaVersion, type, version })
+}
+
+/**
+ * Format schema type string to match protobuf/schema prefix type lookups
+ * @param {String} text
+ * @returns {String} First letter capitalized, the rest lowercased
+ */ 
+function formatSchemaType(text) {
+  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
 }
