@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "http://mapeo.world/schemas/common.json",
-  "title": "common",
+  "$id": "http://mapeo.world/schemas/common/v1.json",
+  "title": "Common",
   "description": "These properties are shared by all objects in the Mapeo database.",
   "type": "object",
   "properties": {
@@ -49,5 +49,5 @@
       "minimum": 1
     }
   },
-  "required": ["id", "version", "created_at", "type"]
+  "required": ["id", "created_at", "type"]
 }

@@ -1,0 +1,10 @@
+{
+  "entryPoints": ["./types/schema/**/*.d.ts", "./src/index.js"],
+  "out": "./docs/api/",
+  "allReflectionsHaveOwnDocument": true,
+  "cleanOutputDir": true,
+  "readme": "none",
+  "name": "API",
+  "excludePrivate": true,
+  "excludeExternals": true
+}

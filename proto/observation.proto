@@ -1,0 +1,25 @@
+syntax = "proto3";
+package mapeo;
+
+import "google/protobuf/struct.proto";
+import "common.proto";
+
+message Observation {
+  Common common = 1;
+
+  optional float lat = 2;
+  optional float lon = 3;
+  repeated google.protobuf.Struct refs = 4;
+  repeated google.protobuf.Struct attachments = 5;
+  optional google.protobuf.Struct tags = 6;
+
+  message Metadata {
+    message Location {
+      optional float precision = 1;
+      optional int32 altitude = 2;
+    }
+    optional Location location = 1;
+    optional bool manual_location = 2;
+  }
+  optional Metadata metadata = 7;
+}
