@@ -6,6 +6,7 @@ import * as cenc from 'compact-encoding'
 import * as JSONSchemas from './dist/schemas.js'
 import * as ProtobufSchemas from './types/proto/index.js'
 import schemasPrefix from './schemasPrefix.js'
+import { formatSchemaType } from './utils.js'
 
 const dataTypeIdSize = 6
 const schemaVersionSize = 2
@@ -95,7 +96,7 @@ export const decodeBlockPrefix = (buf) => {
   state.buffer = buf
   state.start = 0
   state.end = dataTypeIdSize
-  const dataTypeId = cenc.hex.fixed(6).decode(state)
+  const dataTypeId = cenc.hex.fixed(dataTypeIdSize).decode(state)
 
   state.start = dataTypeIdSize
   state.end = dataTypeIdSize + schemaVersionSize
@@ -124,11 +125,14 @@ export const validate = (obj) => {
  * @returns {Buffer} protobuf encoded buffer with dataTypeIdSize + schemaVersionSize bytes prepended, one for the type of record and the other for the version of the schema */
 export const encode = (obj) => {
   const blockPrefix = encodeBlockPrefix({
-    dataTypeId: schemasPrefix[formatSchemaType(obj.type)],
-    schemaVersion: obj.schemaVersion === undefined ? 0 : obj.schemaVersion,
+    dataTypeId: schemasPrefix[formatSchemaType(obj.type)].dataTypeId,
+    // TODO: how to handle wrong/missing schemaVersions?
+    schemaVersion: obj.schemaVersion === undefined ? 1 : obj.schemaVersion,
   })
   const record = jsonSchemaToProto(obj)
-  const protobuf = ProtobufSchemas[formatSchemaType(obj.type)].encode(record).finish()
+  const protobuf = ProtobufSchemas[formatSchemaType(obj.type)]
+    .encode(record)
+    .finish()
   return Buffer.concat([blockPrefix, protobuf])
 }
 
@@ -139,20 +143,12 @@ export const encode = (obj) => {
  * */
 export const decode = (buf, { coreId, seq }) => {
   const { dataTypeId, schemaVersion } = decodeBlockPrefix(buf)
-  const type = Object.keys(schemasPrefix).filter(
-    (key) => schemasPrefix[key] === dataTypeId
-  )[0]
+  const type = Object.keys(schemasPrefix).reduce(
+    (type, key) => (schemasPrefix[key].dataTypeId === dataTypeId ? key : type),
+    ''
+  )
   const version = `${coreId.toString('hex')}/${seq.toString()}`
   const record = buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
   const protobufObj = ProtobufSchemas[type].decode(record)
   return protoToJsonSchema(protobufObj, { schemaVersion, type, version })
-}
-
-/**
- * Format schema type string to match protobuf/schema prefix type lookups
- * @param {String} text
- * @returns {String} First letter capitalized, the rest lowercased
- */ 
-function formatSchemaType(text) {
-  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
 }
