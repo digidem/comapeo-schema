@@ -1,4 +1,4 @@
-const schemasDataTypeId = {
-  Observation: '71f85084cb94',
+const schemasPrefix = {
+  Observation: { dataTypeId: '71f85084cb94', schemaVersions: [4, 5] },
 }
-export default schemasDataTypeId
+export default schemasPrefix
