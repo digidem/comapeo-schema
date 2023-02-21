@@ -7,6 +7,7 @@ import * as JSONSchemas from './dist/schemas.js'
 import * as ProtobufSchemas from './types/proto/index.js'
 import schemasPrefix from './schemasPrefix.js'
 import { formatSchemaType } from './utils.js'
+import { and } from 'ajv/dist/compile/codegen/index.js'
 
 const dataTypeIdSize = 6
 const schemaVersionSize = 2
@@ -43,6 +44,15 @@ const jsonSchemaToProto = (obj) => {
     }
     return common
   }, {})
+
+  const key = `${formatSchemaType(obj.type)}_${obj.schemaVersion}`
+  // TODO, match for every schema that doesn't inherit common/v1.json
+  if (key === 'Observation_4') {
+    return {
+      ...uncommon,
+      ...common,
+    }
+  }
   return {
     ...uncommon,
     common,
@@ -58,14 +68,26 @@ const jsonSchemaToProto = (obj) => {
  * @returns {import('./types/schema/index').MapeoRecord}
  */
 const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
-  const common = protobufObj.common
-  delete protobufObj.common
-  return {
+  const key = `${formatSchemaType(type)}_${schemaVersion}`
+  const obj = {
     ...protobufObj,
-    ...common,
     schemaVersion,
     type,
     version,
+  }
+  // TODO, match for every schema that doesn't inherit common/v1.json
+  if (key === 'Observation_4') {
+    return {
+      ...obj,
+      id: obj.id.toString('hex'),
+      type: obj.type.toLowerCase(),
+    }
+  }
+  const common = protobufObj.common
+  delete obj.common
+  return {
+    ...obj,
+    ...common,
     id: common ? common.id.toString('hex') : '',
   }
 }
@@ -124,13 +146,20 @@ export const validate = (obj) => {
  * @param {import('./types/schema/index').MapeoRecord} obj - Object to be encoded
  * @returns {Buffer} protobuf encoded buffer with dataTypeIdSize + schemaVersionSize bytes prepended, one for the type of record and the other for the version of the schema */
 export const encode = (obj) => {
+  const key = `${formatSchemaType(obj.type)}_${obj.schemaVersion}`
+  if (!ProtobufSchemas[key]) {
+    throw new Error(
+      `Invalid schemaVersion for ${obj.type} version ${obj.schemaVersion}`
+    )
+  }
   const blockPrefix = encodeBlockPrefix({
     dataTypeId: schemasPrefix[formatSchemaType(obj.type)].dataTypeId,
-    // TODO: how to handle wrong/missing schemaVersions?
-    schemaVersion: obj.schemaVersion === undefined ? 1 : obj.schemaVersion,
+    schemaVersion: obj.schemaVersion,
   })
   const record = jsonSchemaToProto(obj)
-  const protobuf = ProtobufSchemas[formatSchemaType(obj.type)]
+  const protobuf = ProtobufSchemas[
+    `${formatSchemaType(obj.type)}_${obj.schemaVersion}`
+  ]
     .encode(record)
     .finish()
   return Buffer.concat([blockPrefix, protobuf])
@@ -149,6 +178,7 @@ export const decode = (buf, { coreId, seq }) => {
   )
   const version = `${coreId.toString('hex')}/${seq.toString()}`
   const record = buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
-  const protobufObj = ProtobufSchemas[type].decode(record)
+  const key = `${formatSchemaType(type)}_${schemaVersion}`
+  const protobufObj = ProtobufSchemas[key].decode(record)
   return protoToJsonSchema(protobufObj, { schemaVersion, type, version })
 }

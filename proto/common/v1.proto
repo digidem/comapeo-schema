@@ -1,7 +1,7 @@
 syntax = "proto3";
 package mapeo;
 
-message Common {
+message Common_1 {
   string created_at = 1;
   optional string deviceId = 2;
   // 32-byte random generated number

@@ -51,7 +51,7 @@
     "type": {
       "description": "Must be `observation`",
       "type": "string",
-      "enum": ["observation"]
+      "enum": ["Observation"]
     },
     "schemaVersion": {
       "description": "Version of this schema. Should increment for breaking changes to the schema",

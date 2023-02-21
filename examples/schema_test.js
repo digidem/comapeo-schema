@@ -8,10 +8,11 @@ const obj = {
   id: randomBytes(32).toString('hex'),
   type: 'Observation',
   schemaVersion: 5,
-  links: [],
   created_at: new Date().toJSON(),
+  links: [],
   refs: [],
   attachments: [],
+  tags: {},
   metadata: {
     manual_location: true,
   },
@@ -26,7 +27,7 @@ try {
   const index = 0
   const data = await core.get(index)
   const decodedData = decode(data, { coreId: core.key, seq: index })
-  console.log('decoded data', decodedData)
+  console.log('decoded', decodedData)
   console.log('VALID?', validate(decodedData))
   if (Buffer.compare(data, record) !== 0) {
     throw new Error(`data doesn't match: ${data} != ${record}`)

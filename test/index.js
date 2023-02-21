@@ -34,14 +34,12 @@ test('test encoding of wrong record type', async (t) => {
   })
 })
 
-// TODO: handle bad schema versions in encode function
-// test('test encoding of record with wrong schema version', async (t) => {
-//   t.plan(1)
-//   console.log(docs.badSchemaVersion, encode(docs.badSchemaVersion))
-//   t.throws(() => {
-//     encode(docs.badSchemaVersion)
-//   })
-// })
+test('test encoding of record with wrong schema version', async (t) => {
+  t.plan(1)
+  t.throws(() => {
+    encode(docs.badSchemaVersion)
+  })
+})
 
 test('test encoding of rightfully formated record', async (t) => {
   t.plan(1)

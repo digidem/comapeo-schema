@@ -94,24 +94,37 @@ fs.writeFileSync(
 )
 
 // generate index.js for protobuf schemas and index.d.ts
-const protobufFiles = glob.sync('*.ts', { cwd: 'types/proto' })
+const protobufFiles = glob.sync('../types/proto/*/*.ts', { cwd: 'scripts' })
+const obj = protobufFiles
+  .filter((f) => !f.match(/.d/))
+  .map((p) => {
+    const arr = p.split('/')
+    return {
+      type: arr[arr.length - 2],
+      version: arr[arr.length - 1].split('.')[0],
+    }
+  })
+
 const linesjs = []
 const linesdts = []
-const union = protobufFiles
-  .filter((f) => !f.match(/.d/))
-  .filter((f) => f !== 'index.js')
-  .map((f) => formatSchemaType(path.parse(f).name))
+const union = obj
+  .map((t) => `${formatSchemaType(t.type)}_${t.version.replace('v', '')}`)
   .join(' & ')
 
-protobufFiles
-  .filter((f) => !f.match(/.d/))
-  .map((f) => {
-    const name = path.parse(f).name
-    const linejs = `export { ${formatSchemaType(name)} } from './${name}.js'`
-    const linets = `import { ${formatSchemaType(name)} } from './${name}'`
-    linesdts.push(linets)
-    linesjs.push(linejs)
-  })
+obj.forEach((f) => {
+  const linejs = `export { ${formatSchemaType(f.type)}_${f.version.replace(
+    'v',
+    ''
+  )} } from './${f.type}/${f.version}.js'`
+
+  const linedts = `import { ${formatSchemaType(f.type)}_${f.version.replace(
+    'v',
+    ''
+  )} } from './${f.type}/${f.version}'`
+  linesdts.push(linedts)
+  linesjs.push(linejs)
+})
+
 fs.writeFileSync(
   path.join(__dirname, '../types/proto/index.js'),
   linesjs.join('\n')
