@@ -11,7 +11,7 @@ import { URL } from 'url'
 import Ajv from 'ajv'
 import standaloneCode from 'ajv/dist/standalone/index.js'
 import glob from 'glob-promise'
-import { formatSchemaType } from '../utils.js'
+import { formatSchemaKey, formatSchemaType } from '../utils.js'
 
 const __dirname = new URL('.', import.meta.url).pathname
 
@@ -28,9 +28,7 @@ const schemas = glob
 
 const schemaExports = schemas.reduce((acc, schema) => {
   const schemaVersion = schema.properties.schemaVersion.enum
-  const key = `${schema.title.toLowerCase()}_${
-    schemaVersion ? schemaVersion : 0
-  }`
+  const key = formatSchemaKey(schema.title, schemaVersion)
   acc[key] = schema['$id']
   return acc
 }, {})

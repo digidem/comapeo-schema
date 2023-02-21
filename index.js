@@ -6,8 +6,7 @@ import * as cenc from 'compact-encoding'
 import * as JSONSchemas from './dist/schemas.js'
 import * as ProtobufSchemas from './types/proto/index.js'
 import schemasPrefix from './schemasPrefix.js'
-import { formatSchemaType } from './utils.js'
-import { and } from 'ajv/dist/compile/codegen/index.js'
+import { formatSchemaType, formatSchemaKey } from './utils.js'
 
 const dataTypeIdSize = 6
 const schemaVersionSize = 2
@@ -45,7 +44,7 @@ const jsonSchemaToProto = (obj) => {
     return common
   }, {})
 
-  const key = `${formatSchemaType(obj.type)}_${obj.schemaVersion}`
+  const key = formatSchemaKey(obj.type, obj.schemaVersion)
   // TODO, match for every schema that doesn't inherit common/v1.json
   if (key === 'Observation_4') {
     return {
@@ -68,7 +67,7 @@ const jsonSchemaToProto = (obj) => {
  * @returns {import('./types/schema/index').MapeoRecord}
  */
 const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
-  const key = `${formatSchemaType(type)}_${schemaVersion}`
+  const key = formatSchemaKey(type, schemaVersion)
   const obj = {
     ...protobufObj,
     schemaVersion,
@@ -133,8 +132,8 @@ export const decodeBlockPrefix = (buf) => {
  * @returns {Boolean} indicating if the object is valid
  */
 export const validate = (obj) => {
-  const key = `${obj.type.toLowerCase()}_${obj.schemaVersion}`
-
+  const key = formatSchemaKey(obj.type, obj.schemaVersion)
+  console.log(JSONSchemas)
   const validatefn = JSONSchemas[key]
   const isValid = validatefn(obj)
   if (!isValid) throw new Error(JSON.stringify(validatefn.errors, null, 4))
@@ -146,7 +145,7 @@ export const validate = (obj) => {
  * @param {import('./types/schema/index').MapeoRecord} obj - Object to be encoded
  * @returns {Buffer} protobuf encoded buffer with dataTypeIdSize + schemaVersionSize bytes prepended, one for the type of record and the other for the version of the schema */
 export const encode = (obj) => {
-  const key = `${formatSchemaType(obj.type)}_${obj.schemaVersion}`
+  const key = formatSchemaKey(obj.type, obj.schemaVersion)
   if (!ProtobufSchemas[key]) {
     throw new Error(
       `Invalid schemaVersion for ${obj.type} version ${obj.schemaVersion}`
@@ -175,7 +174,7 @@ export const decode = (buf, { coreId, seq }) => {
   )
   const version = `${coreId.toString('hex')}/${seq.toString()}`
   const record = buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
-  const key = `${formatSchemaType(type)}_${schemaVersion}`
+  const key = formatSchemaKey(type, schemaVersion)
   if (!ProtobufSchemas[key]) {
     throw new Error(
       `Invalid schemaVersion for ${type} version ${schemaVersion}`
