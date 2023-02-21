@@ -176,6 +176,11 @@ export const decode = (buf, { coreId, seq }) => {
   const version = `${coreId.toString('hex')}/${seq.toString()}`
   const record = buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
   const key = `${formatSchemaType(type)}_${schemaVersion}`
+  if (!ProtobufSchemas[key]) {
+    throw new Error(
+      `Invalid schemaVersion for ${type} version ${schemaVersion}`
+    )
+  }
   const protobufObj = ProtobufSchemas[key].decode(record)
   return protoToJsonSchema(protobufObj, { schemaVersion, type, version })
 }
