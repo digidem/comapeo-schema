@@ -6,13 +6,9 @@ import { randomBytes } from 'node:crypto'
 
 const obj = {
   id: randomBytes(32).toString('hex'),
-  type: 'Observation',
-  schemaVersion: 5,
+  type: 'observation',
+  schemaVersion: 4,
   created_at: new Date().toJSON(),
-  links: [],
-  refs: [],
-  attachments: [],
-  tags: {},
   metadata: {
     manual_location: true,
   },

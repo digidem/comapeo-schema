@@ -157,11 +157,8 @@ export const encode = (obj) => {
     schemaVersion: obj.schemaVersion,
   })
   const record = jsonSchemaToProto(obj)
-  const protobuf = ProtobufSchemas[
-    `${formatSchemaType(obj.type)}_${obj.schemaVersion}`
-  ]
-    .encode(record)
-    .finish()
+  const partial = ProtobufSchemas[key].fromPartial(record)
+  const protobuf = ProtobufSchemas[key].encode(partial).finish()
   return Buffer.concat([blockPrefix, protobuf])
 }
 

@@ -14,7 +14,7 @@ message Observation_4 {
   optional float lon = 10;
   repeated google.protobuf.Struct refs = 11;
   repeated google.protobuf.Struct attachments = 12;
-  google.protobuf.Struct tags = 13;
+  optional google.protobuf.Struct tags = 13;
   message Metadata {
     optional bool manual_location = 1;
 
