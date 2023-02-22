@@ -16,26 +16,31 @@ import { formatSchemaKey, formatSchemaType } from '../utils.js'
 const __dirname = new URL('.', import.meta.url).pathname
 
 /**
- * @param {string} path
- * @returns {Object}
+ * @param {string} p
+ * @returns {{type: String, schemaVersion: string, schema:Object}}
  */
-const loadJSON = (path) =>
-  JSON.parse(fs.readFileSync(new URL(path, import.meta.url)).toString())
+const loadJSON = (p) => {
+  const parsedPath = path.parse(p)
+  return {
+    type: formatSchemaType(parsedPath.dir.replace('../schema/', '')),
+    schemaVersion: parsedPath.name.replace('v', ''),
+    schema: JSON.parse(fs.readFileSync(new URL(p, import.meta.url)).toString()),
+  }
+}
 
 const schemas = glob
   .sync('../schema/*/*.json', { cwd: 'scripts' })
   .map(loadJSON)
 
-const schemaExports = schemas.reduce((acc, schema) => {
-  const schemaVersion = schema.properties.schemaVersion.enum
-  const key = formatSchemaKey(schema.title, schemaVersion)
+const schemaExports = schemas.reduce((acc, { schema, schemaVersion, type }) => {
+  const key = formatSchemaKey(type, parseInt(schemaVersion))
   acc[key] = schema['$id']
   return acc
 }, {})
 
 // compile schemas
 const ajv = new Ajv({
-  schemas: schemas,
+  schemas: schemas.map(({ schema }) => schema),
   code: { source: true, esm: true },
   formats: { 'date-time': true },
 })
@@ -59,14 +64,11 @@ const jsonSchemaType = `
 ${schemas
   .map(
     /** @param {Object} schema */
-    (schema) => {
-      const version = schema.properties.schemaVersion.enum
-      const varName = `${schema.title.toLowerCase()}_${version ? version : 0}`
+    ({ schemaVersion, type }) => {
+      const varName = `${type.toLowerCase()}_${schemaVersion}`
       return `import { ${formatSchemaType(
-        schema.title
-      )} as ${varName} } from './${schema.title.toLowerCase()}/v${
-        version || 1
-      }'`
+        type
+      )} as ${varName} } from './${type.toLowerCase()}/v${schemaVersion}'`
     }
   )
   .join('\n')}
@@ -79,9 +81,8 @@ schemaVersion: number;
 export type MapeoRecord = (${schemas
   .map(
     /** @param {Object} schema */
-    (schema) => {
-      const version = schema.properties.schemaVersion.enum
-      return `${schema.title.toLowerCase()}_${version ? version : 0}`
+    ({ schemaVersion, type }) => {
+      return `${type.toLowerCase()}_${schemaVersion}`
     }
   )
   .join(' | ')}) & base
