@@ -4,7 +4,7 @@ import Hypercore from 'hypercore'
 import ram from 'random-access-memory'
 import { randomBytes } from 'node:crypto'
 
-// FILTER
+// FILTER_1
 // const obj = {
 //   id: randomBytes(32).toString('hex'),
 //   type: 'filter',
@@ -14,15 +14,24 @@ import { randomBytes } from 'node:crypto'
 //   name: 'john',
 // }
 
-// PRESET
+// PRESET_1
 // const obj = {
 //   id: randomBytes(32).toString('hex'),
 //   type: 'preset',
 //   schemaVersion: 1,
 //   created_at: new Date().toJSON(),
-//   tags: ['observation'],
+//   tags: { nature: 'tree' },
+//   geometry: ['point'],
 //   name: 'john',
 // }
+
+// FIELD_1
+const obj = {
+  id: randomBytes(32).toString('hex'),
+  type: 'Field',
+  schemaVersion: 1,
+  key: 'hi',
+}
 
 // OBSERVATION 4
 // const obj = {
@@ -33,12 +42,12 @@ import { randomBytes } from 'node:crypto'
 // }
 
 // OBSERVATION 5
-const obj = {
-  id: randomBytes(32).toString('hex'),
-  type: 'Observation',
-  schemaVersion: 5,
-  created_at: new Date().toJSON(),
-}
+// const obj = {
+//   id: randomBytes(32).toString('hex'),
+//   type: 'Observation',
+//   schemaVersion: 5,
+//   created_at: new Date().toJSON(),
+// }
 
 const record = encode(obj)
 

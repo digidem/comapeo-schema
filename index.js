@@ -46,7 +46,12 @@ const jsonSchemaToProto = (obj) => {
 
   const key = formatSchemaKey(obj.type, obj.schemaVersion)
   // this matches for every schema that doesn't inherit common/v1.json
-  if (key === 'Observation_4' || key === 'Preset_1' || key === 'Filter_1') {
+  if (
+    key === 'Observation_4' ||
+    key === 'Preset_1' ||
+    key === 'Filter_1' ||
+    key === 'Field_1'
+  ) {
     return {
       ...uncommon,
       ...common,
@@ -84,7 +89,7 @@ const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
   }
 
   // Preset_1 doesn't have a version field and doesn't accept additional fields
-  if (key === 'Preset_1') {
+  if (key === 'Preset_1' || key === 'Field_1') {
     delete obj['version']
     return {
       ...obj,
@@ -144,6 +149,12 @@ export const decodeBlockPrefix = (buf) => {
  */
 export const validate = (obj) => {
   const key = formatSchemaKey(obj.type, obj.schemaVersion)
+  // Preset_1 doesn't have a type field, so validation won't pass
+  // but we still need it to now which schema to validate, so we delete it after grabbing the key
+  if (key === 'Preset_1') delete obj['type']
+  // Field_1 doesn't have a schemaVersion field, so validation won't pass
+  // but we still need it to now which schema to validate, so we delete it after grabbing the key
+  if (key === 'Field_1') delete obj['schemaVersion']
   const validatefn = JSONSchemas[key]
   const isValid = validatefn(obj)
   if (!isValid) throw new Error(JSON.stringify(validatefn.errors, null, 4))

@@ -17,23 +17,25 @@ const __dirname = new URL('.', import.meta.url).pathname
 
 /**
  * @param {string} p
- * @returns {{type: String, schemaVersion: string, schema:Object}}
+ * @returns {{type: String, schemaVersion: Number, schema:Object}}
  */
-const loadJSON = (p) => {
-  const parsedPath = path.parse(p)
+const loadSchema = (p) => {
+  const { dir, name } = path.parse(p)
   return {
-    type: formatSchemaType(parsedPath.dir.replace('../schema/', '')),
-    schemaVersion: parsedPath.name.replace('v', ''),
+    // we get the type of the schema from the directory
+    type: formatSchemaType(dir.replace('../schema/', '')),
+    // we get the version from the filename
+    schemaVersion: parseInt(name.replace('v', '')),
     schema: JSON.parse(fs.readFileSync(new URL(p, import.meta.url)).toString()),
   }
 }
 
 const schemas = glob
   .sync('../schema/*/*.json', { cwd: 'scripts' })
-  .map(loadJSON)
+  .map(loadSchema)
 
 const schemaExports = schemas.reduce((acc, { schema, schemaVersion, type }) => {
-  const key = formatSchemaKey(type, parseInt(schemaVersion))
+  const key = formatSchemaKey(type, schemaVersion)
   acc[key] = schema['$id']
   return acc
 }, {})
@@ -74,8 +76,8 @@ ${schemas
   .join('\n')}
 
 interface base {
-type: string;
-schemaVersion: number;
+type?: string;
+schemaVersion?: number;
 [key:string]: any;
 }
 export type MapeoRecord = (${schemas
@@ -95,31 +97,34 @@ fs.writeFileSync(
 // generate index.js for protobuf schemas and index.d.ts
 const protobufFiles = glob.sync('../types/proto/*/*.ts', { cwd: 'scripts' })
 const obj = protobufFiles
-  .filter((f) => !f.match(/.d/))
+  .filter((f) => !f.match(/.d.ts/))
   .map((p) => {
-    const arr = p.split('/')
+    const { name, dir } = path.parse(p)
     return {
-      type: arr[arr.length - 2],
-      version: arr[arr.length - 1].split('.')[0],
+      type: dir.replace('../types/proto/', ''),
+      schemaVersion: name,
     }
   })
 
 const linesjs = []
 const linesdts = []
 const union = obj
-  .map((t) => `${formatSchemaType(t.type)}_${t.version.replace('v', '')}`)
+  .map(
+    ({ type, schemaVersion }) =>
+      `${formatSchemaType(type)}_${schemaVersion.replace('v', '')}`
+  )
   .join(' & ')
 
-obj.forEach((f) => {
-  const linejs = `export { ${formatSchemaType(f.type)}_${f.version.replace(
+obj.forEach(({ type, schemaVersion }) => {
+  const linejs = `export { ${formatSchemaType(type)}_${schemaVersion.replace(
     'v',
     ''
-  )} } from './${f.type}/${f.version}.js'`
+  )} } from './${type}/${schemaVersion}.js'`
 
-  const linedts = `import { ${formatSchemaType(f.type)}_${f.version.replace(
+  const linedts = `import { ${formatSchemaType(type)}_${schemaVersion.replace(
     'v',
     ''
-  )} } from './${f.type}/${f.version}'`
+  )} } from './${type}/${schemaVersion}'`
   linesdts.push(linedts)
   linesjs.push(linejs)
 })

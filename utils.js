@@ -8,8 +8,8 @@ export const formatSchemaType = (str) =>
 
 /**
  * Turn a schema type and version into `${type}_${schemaVersion}`
- * @param {String} type
- * @param {Number} schemaVersion
+ * @param {String | undefined} type
+ * @param {Number | undefined} schemaVersion
  */
 export const formatSchemaKey = (type, schemaVersion) =>
   `${formatSchemaType(type)}_${schemaVersion}`
