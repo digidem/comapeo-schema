@@ -88,7 +88,7 @@ const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
     }
   }
 
-  // Preset_1 doesn't have a version field and doesn't accept additional fields
+  // Preset_1 and Field_1 don't have a version field and doesn't accept additional fields
   if (key === 'Preset_1' || key === 'Field_1') {
     delete obj['version']
     return {
@@ -111,7 +111,7 @@ const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
  * given a schemaVersion and type, return a buffer with the corresponding data
  * @param {Object} obj
  * @param {string} obj.dataTypeId hex encoded string of a 6-byte buffer indicating type
- * @param {number} obj.schemaVersion number to indicate version. Gets converted to a padded 4-byte hex string
+ * @param {number | undefined} obj.schemaVersion number to indicate version. Gets converted to a padded 4-byte hex string
  * @returns {Buffer} blockPrefix for corresponding schema
  */
 export const encodeBlockPrefix = ({ dataTypeId, schemaVersion }) => {
