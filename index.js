@@ -45,8 +45,8 @@ const jsonSchemaToProto = (obj) => {
   }, {})
 
   const key = formatSchemaKey(obj.type, obj.schemaVersion)
-  // TODO, match for every schema that doesn't inherit common/v1.json
-  if (key === 'Observation_4') {
+  // this matches for every schema that doesn't inherit common/v1.json
+  if (key === 'Observation_4' || key === 'Preset_1' || key === 'Filter_1') {
     return {
       ...uncommon,
       ...common,
@@ -72,22 +72,33 @@ const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
     ...protobufObj,
     schemaVersion,
     type,
-    version,
   }
-  // TODO, match for every schema that doesn't inherit common/v1.json
-  if (key === 'Observation_4') {
+  // Observation_4 and Filter_1 have a lowecase 'type'
+  if (key === 'Observation_4' || key === 'Filter_1') {
     return {
       ...obj,
       id: obj.id.toString('hex'),
       type: obj.type.toLowerCase(),
+      version,
     }
   }
+
+  // Preset_1 doesn't have a version field and doesn't accept additional fields
+  if (key === 'Preset_1') {
+    delete obj['version']
+    return {
+      ...obj,
+      id: obj.id.toString('hex'),
+    }
+  }
+
   const common = protobufObj.common
   delete obj.common
   return {
     ...obj,
     ...common,
     id: common ? common.id.toString('hex') : '',
+    version,
   }
 }
 
@@ -133,7 +144,6 @@ export const decodeBlockPrefix = (buf) => {
  */
 export const validate = (obj) => {
   const key = formatSchemaKey(obj.type, obj.schemaVersion)
-  console.log(JSONSchemas)
   const validatefn = JSONSchemas[key]
   const isValid = validatefn(obj)
   if (!isValid) throw new Error(JSON.stringify(validatefn.errors, null, 4))
@@ -151,6 +161,7 @@ export const encode = (obj) => {
       `Invalid schemaVersion for ${obj.type} version ${obj.schemaVersion}`
     )
   }
+
   const blockPrefix = encodeBlockPrefix({
     dataTypeId: schemasPrefix[formatSchemaType(obj.type)].dataTypeId,
     schemaVersion: obj.schemaVersion,

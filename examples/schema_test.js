@@ -4,15 +4,42 @@ import Hypercore from 'hypercore'
 import ram from 'random-access-memory'
 import { randomBytes } from 'node:crypto'
 
+// FILTER
+// const obj = {
+//   id: randomBytes(32).toString('hex'),
+//   type: 'filter',
+//   schemaVersion: 1,
+//   created_at: new Date().toJSON(),
+//   filter: ['observation'],
+//   name: 'john',
+// }
+
+// PRESET
+// const obj = {
+//   id: randomBytes(32).toString('hex'),
+//   type: 'preset',
+//   schemaVersion: 1,
+//   created_at: new Date().toJSON(),
+//   tags: ['observation'],
+//   name: 'john',
+// }
+
+// OBSERVATION 4
+// const obj = {
+//   id: randomBytes(32).toString('hex'),
+//   type: 'Observation',
+//   schemaVersion: 4,
+//   created_at: new Date().toJSON(),
+// }
+
+// OBSERVATION 5
 const obj = {
   id: randomBytes(32).toString('hex'),
-  type: 'observation',
-  schemaVersion: 4,
+  type: 'Observation',
+  schemaVersion: 5,
   created_at: new Date().toJSON(),
-  metadata: {
-    manual_location: true,
-  },
 }
+
 const record = encode(obj)
 
 const core = new Hypercore(ram, { valueEncoding: 'binary' })
