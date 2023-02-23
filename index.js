@@ -6,7 +6,7 @@ import * as cenc from 'compact-encoding'
 import * as JSONSchemas from './dist/schemas.js'
 import * as ProtobufSchemas from './types/proto/index.js'
 import schemasPrefix from './schemasPrefix.js'
-import { formatSchemaType, formatSchemaKey } from './utils.js'
+import { inheritsFromCommon, formatSchemaKey } from './utils.js'
 
 const dataTypeIdSize = 6
 const schemaVersionSize = 2
@@ -45,21 +45,16 @@ const jsonSchemaToProto = (obj) => {
   }, {})
 
   const key = formatSchemaKey(obj.type, obj.schemaVersion)
-  // this matches for every schema that doesn't inherit common/v1.json
-  if (
-    key === 'Observation_4' ||
-    key === 'Preset_1' ||
-    key === 'Filter_1' ||
-    key === 'Field_1'
-  ) {
+  if (inheritsFromCommon(key)) {
     return {
       ...uncommon,
-      ...common,
+      common,
     }
   }
+  // this matches for every schema that doesn't inherit common/v1.json
   return {
     ...uncommon,
-    common,
+    ...common,
   }
 }
 
@@ -77,15 +72,6 @@ const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
     ...protobufObj,
     schemaVersion,
     type,
-  }
-  // Observation_4 and Filter_1 have a lowecase 'type'
-  if (key === 'Observation_4' || key === 'Filter_1') {
-    return {
-      ...obj,
-      id: obj.id.toString('hex'),
-      type: obj.type.toLowerCase(),
-      version,
-    }
   }
 
   // Preset_1 and Field_1 don't have a version field and doesn't accept additional fields
@@ -167,14 +153,16 @@ export const validate = (obj) => {
  * @returns {Buffer} protobuf encoded buffer with dataTypeIdSize + schemaVersionSize bytes prepended, one for the type of record and the other for the version of the schema */
 export const encode = (obj) => {
   const key = formatSchemaKey(obj.type, obj.schemaVersion)
+  // some schemas don't have type field so it can be undefined
+  const type = obj.type || ''
   if (!ProtobufSchemas[key]) {
     throw new Error(
-      `Invalid schemaVersion for ${obj.type} version ${obj.schemaVersion}`
+      `Invalid schemaVersion for ${type} version ${obj.schemaVersion}`
     )
   }
 
   const blockPrefix = encodeBlockPrefix({
-    dataTypeId: schemasPrefix[formatSchemaType(obj.type)].dataTypeId,
+    dataTypeId: schemasPrefix[type].dataTypeId,
     schemaVersion: obj.schemaVersion,
   })
   const record = jsonSchemaToProto(obj)

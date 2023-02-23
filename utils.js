@@ -13,3 +13,14 @@ export const formatSchemaType = (str) =>
  */
 export const formatSchemaKey = (type, schemaVersion) =>
   `${formatSchemaType(type)}_${schemaVersion}`
+
+/**
+ * Checks if the type of record inherits from a common one
+ * @param {String} key - type of doc build from ${type}_${schemaVersion}
+ * @returns {boolean}
+ */
+export const inheritsFromCommon = (key) =>
+  key !== 'Observation_4' ||
+  key !== 'Preset_1' ||
+  key !== 'Filter_1' ||
+  key !== 'Field_1'
