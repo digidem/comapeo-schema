@@ -20,7 +20,7 @@ export const formatSchemaKey = (type, schemaVersion) =>
  * @returns {boolean}
  */
 export const inheritsFromCommon = (key) =>
-  key !== 'Observation_4' ||
-  key !== 'Preset_1' ||
-  key !== 'Filter_1' ||
+  key !== 'Observation_4' &&
+  key !== 'Preset_1' &&
+  key !== 'Filter_1' &&
   key !== 'Field_1'

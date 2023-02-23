@@ -28,34 +28,20 @@ const jsonSchemaToProto = (obj) => {
   /** @type {Object} */
   const uncommon = Object.keys(obj)
     .filter((k) => !commonKeys.includes(k))
-    .reduce((acc, k) => {
-      acc[k] = obj[k]
-      return acc
-    }, {})
+    .reduce((uncommon, field) => ({ ...uncommon, [field]: obj[field] }), {})
 
-  const common = commonKeys.reduce((common, field) => {
-    if (obj[field]) {
-      if (field === 'id') {
-        common[field] = Buffer.from(obj[field], 'hex')
-      } else {
-        common[field] = obj[field]
-      }
-    }
-    return common
-  }, {})
+  /** @type {Object} */
+  const common = commonKeys
+    .filter((field) => obj[field])
+    .reduce((common, field) => ({ ...common, [field]: obj[field] }), {})
+  common.id = Buffer.from(obj['id'], 'hex')
 
   const key = formatSchemaKey(obj.type, obj.schemaVersion)
-  if (inheritsFromCommon(key)) {
-    return {
-      ...uncommon,
-      common,
-    }
-  }
-  // this matches for every schema that doesn't inherit common/v1.json
-  return {
-    ...uncommon,
-    ...common,
-  }
+  // when we inherit from common, common is actually a field inside the protobuf object,
+  // so we don't destructure it
+  return inheritsFromCommon(key)
+    ? { ...uncommon, common }
+    : { ...uncommon, ...common }
 }
 
 /**
@@ -68,29 +54,20 @@ const jsonSchemaToProto = (obj) => {
  */
 const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
   const key = formatSchemaKey(type, schemaVersion)
-  const obj = {
-    ...protobufObj,
-    schemaVersion,
-    type,
+  /** @type {Object} */
+  let obj = { ...protobufObj, schemaVersion, type }
+  if (obj.common) {
+    obj = { ...obj, ...obj.common }
+    delete obj.common
   }
 
   // Preset_1 and Field_1 don't have a version field and doesn't accept additional fields
-  if (key === 'Preset_1' || key === 'Field_1') {
-    delete obj['version']
-    return {
-      ...obj,
-      id: obj.id.toString('hex'),
-    }
+  if (key !== 'Preset_1' && key !== 'Field_1') {
+    obj.version = version
   }
 
-  const common = protobufObj.common
-  delete obj.common
-  return {
-    ...obj,
-    ...common,
-    id: common ? common.id.toString('hex') : '',
-    version,
-  }
+  obj.id = obj.id.toString('hex')
+  return obj
 }
 
 /**
@@ -135,12 +112,14 @@ export const decodeBlockPrefix = (buf) => {
  */
 export const validate = (obj) => {
   const key = formatSchemaKey(obj.type, obj.schemaVersion)
+
   // Preset_1 doesn't have a type field, so validation won't pass
   // but we still need it to now which schema to validate, so we delete it after grabbing the key
   if (key === 'Preset_1') delete obj['type']
   // Field_1 doesn't have a schemaVersion field, so validation won't pass
   // but we still need it to now which schema to validate, so we delete it after grabbing the key
   if (key === 'Field_1') delete obj['schemaVersion']
+
   const validatefn = JSONSchemas[key]
   const isValid = validatefn(obj)
   if (!isValid) throw new Error(JSON.stringify(validatefn.errors, null, 4))
@@ -182,14 +161,16 @@ export const decode = (buf, { coreId, seq }) => {
     (type, key) => (schemasPrefix[key].dataTypeId === dataTypeId ? key : type),
     ''
   )
-  const version = `${coreId.toString('hex')}/${seq.toString()}`
-  const record = buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
   const key = formatSchemaKey(type, schemaVersion)
   if (!ProtobufSchemas[key]) {
     throw new Error(
       `Invalid schemaVersion for ${type} version ${schemaVersion}`
     )
   }
+
+  const version = `${coreId.toString('hex')}/${seq.toString()}`
+  const record = buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
+
   const protobufObj = ProtobufSchemas[key].decode(record)
   return protoToJsonSchema(protobufObj, { schemaVersion, type, version })
 }
