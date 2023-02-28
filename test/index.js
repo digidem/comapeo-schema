@@ -42,31 +42,47 @@ test('test encoding of record with wrong schema version', async (t) => {
 })
 
 test('test encoding of rightfully formated record', async (t) => {
-  t.plan(1)
-  t.doesNotThrow(() => {
-    encode(docs.good)
+  const goodDocs = Object.keys(docs.good)
+  t.plan(goodDocs.length)
+  goodDocs.forEach((k) => {
+    const doc = docs.good[k]
+    t.doesNotThrow(() => {
+      encode(doc)
+    })
   })
 })
 
 test('test encoding, decoding of record and comparing the two versions', async (t) => {
-  const record = decode(encode(docs.good), { coreId: randomBytes(32), seq: 0 })
-  const fields = Object.keys(docs.good)
-  fields.forEach((field) => {
-    const msg = `checking existence of ${field}`
-    // check if field exists
-    record[field] && docs.good[field] ? t.pass(msg) : t.fail(msg)
-    // if field is not an object, check equality
-    // since objects as fields mean the possibility of additionalFields in jsonSchemas
-    if (typeof record[field] !== 'object') {
-      t.equal(record[field], docs.good[field], `comparing value of ${field}`)
-    }
+  const goodDocs = Object.keys(docs.good)
+  goodDocs.forEach((k) => {
+    const doc = docs.good[k]
+    const record = decode(encode(doc), {
+      coreId: randomBytes(32),
+      seq: 0,
+    })
+    const fields = Object.keys(doc)
+    // t.plan(goodDocs.length * fields.length * 2)
+    fields.forEach((f) => {
+      const msg = `checking ${f} for ${k}`
+      record[f] && doc[f] ? t.pass(msg) : t.fail(msg)
+
+      // if field is not an object, check equality
+      // since objects as fields usually mean the possibility of additionalFields in jsonSchemas
+      if (typeof record[f] !== 'object') {
+        t.equal(record[f], doc[f], `comparing value of ${f} for ${k}`)
+      }
+    })
   })
 })
 
 test('test decoding of record without passing core key and index', async (t) => {
-  t.plan(1)
-  const record = encode(docs.good)
-  t.throws(() => {
-    decode(record)
+  const goodDocs = Object.keys(docs.good)
+  t.plan(goodDocs.length)
+  goodDocs.forEach((key) => {
+    const doc = docs.good[key]
+    const record = encode(doc)
+    t.throws(() => {
+      decode(record)
+    }, `testing ${key}`)
   })
 })

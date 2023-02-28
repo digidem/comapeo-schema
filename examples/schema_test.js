@@ -5,38 +5,37 @@ import ram from 'random-access-memory'
 import { randomBytes } from 'node:crypto'
 
 // FILTER_1
-// const obj = {
-//   id: randomBytes(32).toString('hex'),
-//   type: 'filter',
-//   schemaVersion: 1,
-//   created_at: new Date().toJSON(),
-//   filter: ['observation'],
-//   name: 'john',
-// }
+const obj = {
+  id: randomBytes(32).toString('hex'),
+  type: 'filter',
+  schemaVersion: 1,
+  created_at: new Date().toJSON(),
+  filter: ['observation'],
+  name: 'john',
+}
 
 // PRESET_1
 // const obj = {
 //   id: randomBytes(32).toString('hex'),
-//   type: 'preset',
+//   type: 'Preset',
 //   schemaVersion: 1,
-//   created_at: new Date().toJSON(),
 //   tags: { nature: 'tree' },
 //   geometry: ['point'],
 //   name: 'john',
 // }
 
 // FIELD_1
-const obj = {
-  id: randomBytes(32).toString('hex'),
-  type: 'Field',
-  schemaVersion: 1,
-  key: 'hi',
-}
+// const obj = {
+//   id: randomBytes(32).toString('hex'),
+//   type: 'Field',
+//   schemaVersion: 1,
+//   key: 'hi',
+// }
 
 // OBSERVATION 4
 // const obj = {
 //   id: randomBytes(32).toString('hex'),
-//   type: 'Observation',
+//   type: 'observation',
 //   schemaVersion: 4,
 //   created_at: new Date().toJSON(),
 // }

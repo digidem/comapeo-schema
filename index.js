@@ -53,7 +53,6 @@ const jsonSchemaToProto = (obj) => {
  * @returns {import('./types/schema/index').MapeoRecord}
  */
 const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
-  const key = formatSchemaKey(type, schemaVersion)
   /** @type {Object} */
   let obj = { ...protobufObj, schemaVersion, type }
   if (obj.common) {
@@ -61,7 +60,8 @@ const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
     delete obj.common
   }
 
-  // Preset_1 and Field_1 don't have a version field and doesn't accept additional fields
+  // Preset_1 and Field_1 don't have a version field and don't accept additional fields
+  const key = formatSchemaKey(type, schemaVersion)
   if (key !== 'Preset_1' && key !== 'Field_1') {
     obj.version = version
   }

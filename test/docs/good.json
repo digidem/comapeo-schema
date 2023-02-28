@@ -1,12 +1,48 @@
 {
-    "id": "0e4e04b9d06413b233dcb5b0bbd03d5a07836f7bafd41f82975217b70e690f10",
-    "type": "Observation",
-    "schemaVersion": 5,
-    "links": [],
-    "created_at": "2023-01-02T13:17:59.775Z",
-    "refs": [],
-    "attachments": [],
-    "metadata": {
-        "manual_location": true
+    "observation_4": {
+        "id": "295f6861699930714d04edbe31b26e19214940c5be190e12fe2b1c82e454bed7",
+        "type": "observation",
+        "schemaVersion": 4,
+        "links": [],
+        "created_at": "2023-02-28T14:58:07.711Z",
+        "refs": [],
+        "attachments": [],
+        "metadata": {
+            "manual_location": true
+        }
+    },
+    "observation_5": {
+        "id": "a246a13b1bdddc5d312f5051f7c83cd3a912a0051087b5d13404334c00f03ab3",
+        "type": "Observation",
+        "schemaVersion": 5,
+        "created_at": "2023-02-28T14:58:07.711Z"
+    },
+    "filter": {
+        "id": "dac6892c0d4259080f32948ecd3a3231a3159141fa6d9d5a68c80cd2671fa895",
+        "type": "filter",
+        "schemaVersion": 1,
+        "created_at": "2023-02-28T14:58:07.711Z",
+        "filter": [
+            "observation"
+        ],
+        "name": "john"
+    },
+    "preset": {
+        "id": "d50c7526e78e938ed9b85b82062897e05f45ec316071f92d5a86ad384ad56d6f",
+        "type": "Preset",
+        "schemaVersion": 1,
+        "tags": {
+            "nature": "tree"
+        },
+        "geometry": [
+            "point"
+        ],
+        "name": "john"
+    },
+    "field": {
+        "id": "da6445be7c2d5b891cf2783131481ca55c3f0bd898cb7744c143d921c42fe05f",
+        "type": "Field",
+        "schemaVersion": 1,
+        "key": "hi"
     }
 }
