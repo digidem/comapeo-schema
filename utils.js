@@ -4,7 +4,7 @@
  * @returns {String} First letter capitalized, the rest lowercased
  */
 export const formatSchemaType = (str) =>
-  str.charAt(0).toUpperCase() + str.slice(1).toLowerCase()
+  str.charAt(0).toUpperCase() + str.slice(1)
 
 /**
  * Turn a schema type and version into `${type}_${schemaVersion}`

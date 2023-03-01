@@ -1,10 +1,10 @@
 {
     "observation_4": {
-        "id": "295f6861699930714d04edbe31b26e19214940c5be190e12fe2b1c82e454bed7",
+        "id": "e5f4fc2dcc561a34b91d9d5bdfaebc996d4d50963825fc43df4111026100eae4",
         "type": "observation",
         "schemaVersion": 4,
         "links": [],
-        "created_at": "2023-02-28T14:58:07.711Z",
+        "created_at": "2023-03-01T17:13:04.628Z",
         "refs": [],
         "attachments": [],
         "metadata": {
@@ -12,23 +12,23 @@
         }
     },
     "observation_5": {
-        "id": "a246a13b1bdddc5d312f5051f7c83cd3a912a0051087b5d13404334c00f03ab3",
+        "id": "0137f29f892d9160b445af146e90b47858416d83713f9f63f019121b3de4d87b",
         "type": "Observation",
         "schemaVersion": 5,
-        "created_at": "2023-02-28T14:58:07.711Z"
+        "created_at": "2023-03-01T17:13:04.628Z"
     },
     "filter": {
-        "id": "dac6892c0d4259080f32948ecd3a3231a3159141fa6d9d5a68c80cd2671fa895",
+        "id": "4b6c1ddbc6166a95eebe48f50477c151bb033b879628e494a3c8b4ff98a9646f",
         "type": "filter",
         "schemaVersion": 1,
-        "created_at": "2023-02-28T14:58:07.711Z",
+        "created_at": "2023-03-01T17:13:04.628Z",
         "filter": [
             "observation"
         ],
         "name": "john"
     },
     "preset": {
-        "id": "d50c7526e78e938ed9b85b82062897e05f45ec316071f92d5a86ad384ad56d6f",
+        "id": "b83340d248ee599a80a70ced2671e14d0909b39c9f6ede7be8e0bb1961c1b756",
         "type": "Preset",
         "schemaVersion": 1,
         "tags": {
@@ -40,9 +40,31 @@
         "name": "john"
     },
     "field": {
-        "id": "da6445be7c2d5b891cf2783131481ca55c3f0bd898cb7744c143d921c42fe05f",
+        "id": "8772606a3b1a2f537d5cd4a84a3024e2f553ae4a161255b78acfc05cadf2b2d9",
         "type": "Field",
         "schemaVersion": 1,
         "key": "hi"
+    },
+    "coreOwnership": {
+        "type": "coreOwnership",
+        "schemaVersion": 1,
+        "id": "d0c87aaf2afa65959d708dd779965b1294e22f326ad05c44714a4b4c131341b6",
+        "coreId": "c79ebaf961bf8598d6200c99c929bf4212346a1911122090367764990d105313",
+        "projectId": "1984d0fec810d324a8d600a26462e74a9398927ad18e70735ac1958d1f2f0bea",
+        "storeType": "blob",
+        "authorIndex": 10,
+        "deviceIndex": 10,
+        "action": "core:owner"
+    },
+    "device": {
+        "type": "Device",
+        "schemaVersion": 1,
+        "id": "637ddc6abcab6bfcad7d79f4388581d962dcce26744b9e0125dd9fa079dd2ede",
+        "action": "device:add",
+        "authorId": "8cdea85a935f9eb0fc34266c66c3ec70c183ed7f4124279ff090bd9368b88ce6",
+        "projectId": "268827d07807accd55f4a2cca624ef2b97f2adbb65d2b5033d51a8b42ed7d469",
+        "signature": "hi",
+        "authorIndex": 10,
+        "deviceIndex": 10
     }
 }

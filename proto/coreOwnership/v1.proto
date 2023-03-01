@@ -1,0 +1,16 @@
+syntax = "proto3";
+package mapeo;
+
+import "google/protobuf/struct.proto";
+import "common/v1.proto";
+
+message CoreOwnership_1 {
+  Common_1 common = 1;
+  string action = 2;
+  string coreId = 3;
+  string projectId = 4;
+  string storeType = 5;
+  string signature = 6;
+  int32 authorIndex = 7;
+  int32 deviceIndex = 8;
+}

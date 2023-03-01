@@ -5,14 +5,40 @@ import ram from 'random-access-memory'
 import { randomBytes } from 'node:crypto'
 
 // FILTER_1
+// const obj = {
+//   id: randomBytes(32).toString('hex'),
+//   type: 'filter',
+//   schemaVersion: 1,
+//   created_at: new Date().toJSON(),
+//   filter: ['observation'],
+//   name: 'john',
+// }
+
+// DEVICE
 const obj = {
-  id: randomBytes(32).toString('hex'),
-  type: 'filter',
+  type: 'Device',
   schemaVersion: 1,
-  created_at: new Date().toJSON(),
-  filter: ['observation'],
-  name: 'john',
+  id: randomBytes(32).toString('hex'),
+  action: 'device:add',
+  authorId: randomBytes(32).toString('hex'),
+  projectId: randomBytes(32).toString('hex'),
+  signature: 'hi',
+  authorIndex: 10,
+  deviceIndex: 10,
 }
+
+// CORE OWNERSHIP
+// const obj = {
+//   type: 'coreOwnership',
+//   schemaVersion: 1,
+//   id: randomBytes(32).toString('hex'),
+//   coreId: randomBytes(32).toString('hex'),
+//   projectId: randomBytes(32).toString('hex'),
+//   storeType: 'blob',
+//   authorIndex: 10,
+//   deviceIndex: 10,
+//   action: 'core:owner',
+// }
 
 // PRESET_1
 // const obj = {

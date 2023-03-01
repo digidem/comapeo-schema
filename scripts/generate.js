@@ -23,7 +23,7 @@ const loadSchema = (p) => {
   const { dir, name } = path.parse(p)
   return {
     // we get the type of the schema from the directory
-    type: formatSchemaType(dir.replace('../schema/', '')),
+    type: dir.replace('../schema/', ''),
     // we get the version from the filename
     schemaVersion: parseInt(name.replace('v', '')),
     schema: JSON.parse(fs.readFileSync(new URL(p, import.meta.url)).toString()),
@@ -67,10 +67,10 @@ ${schemas
   .map(
     /** @param {Object} schema */
     ({ schemaVersion, type }) => {
-      const varName = `${type.toLowerCase()}_${schemaVersion}`
+      const varName = `${formatSchemaType(type)}_${schemaVersion}`
       return `import { ${formatSchemaType(
         type
-      )} as ${varName} } from './${type.toLowerCase()}/v${schemaVersion}'`
+      )} as ${varName} } from './${type}/v${schemaVersion}'`
     }
   )
   .join('\n')}
@@ -78,13 +78,12 @@ ${schemas
 interface base {
 type?: string;
 schemaVersion?: number;
-[key:string]: any;
 }
 export type MapeoRecord = (${schemas
   .map(
     /** @param {Object} schema */
     ({ schemaVersion, type }) => {
-      return `${type.toLowerCase()}_${schemaVersion}`
+      return `${formatSchemaType(type)}_${schemaVersion}`
     }
   )
   .join(' | ')}) & base
