@@ -1,5 +1,5 @@
 import test from 'tape'
-import { encode, decode } from '../index.js'
+import { encode, decode, validate } from '../index.js'
 import glob from 'glob-promise'
 import { readFileSync } from 'node:fs'
 import { basename } from 'node:path'
@@ -49,6 +49,22 @@ test('test encoding of rightfully formated record', async (t) => {
     t.doesNotThrow(() => {
       encode(doc)
     })
+  })
+})
+
+test('test validation of record', async (t) => {
+  const goodDocs = Object.keys(docs.good)
+  t.plan(goodDocs.length)
+  goodDocs.forEach((k) => {
+    const doc = docs.good[k]
+    const record = decode(encode(doc), {
+      coreId: randomBytes(32),
+      seq: 0,
+    })
+    t.doesNotThrow(() => {
+      // field has a type which is different from the rest :|
+      if (k !== 'field') validate(record)
+    }, `testing validation of ${k}`)
   })
 })
 
