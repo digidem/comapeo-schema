@@ -9,7 +9,7 @@ message Common_1 {
   // 32-byte random generated number
   bytes id = 3;
   repeated string links = 4;
-  optional string timestamp = 5;
+  optional google.protobuf.Timestamp timestamp = 5;
   optional string userId = 6;
 }
 /* ignored fields and differences from common.json jsonSchema

@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 message Observation_4 {
   bytes id = 1;
   google.protobuf.Timestamp created_at = 4;
-  optional string timestamp = 5;
+  optional google.protobuf.Timestamp timestamp = 5;
   optional string userId = 6;
   optional string deviceId = 7;
   repeated string links = 8;

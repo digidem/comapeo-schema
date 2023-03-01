@@ -33,6 +33,7 @@ export const docs = {
       schemaVersion: 4,
       links: [],
       created_at: new Date().toJSON(),
+      timestamp: new Date().toJSON(),
       refs: [],
       attachments: [],
       metadata: {
@@ -44,9 +45,11 @@ export const docs = {
       type: 'Observation',
       schemaVersion: 5,
       created_at: new Date().toJSON(),
+      timestamp: new Date().toJSON(),
     },
     filter: {
       id: randomBytes(32).toString('hex'),
+      timestamp: new Date().toJSON(),
       type: 'filter',
       schemaVersion: 1,
       created_at: new Date().toJSON(),
@@ -78,6 +81,7 @@ export const docs = {
       deviceIndex: 10,
       action: 'core:owner',
       created_at: new Date().toJSON(),
+      timestamp: new Date().toJSON(),
     },
     device: {
       type: 'Device',
@@ -90,6 +94,7 @@ export const docs = {
       authorIndex: 10,
       deviceIndex: 10,
       created_at: new Date().toJSON(),
+      timestamp: new Date().toJSON(),
     },
     role: {
       id: randomBytes(32).toString('hex'),
@@ -102,6 +107,7 @@ export const docs = {
       authorIndex: 10,
       deviceIndex: 10,
       created_at: new Date().toJSON(),
+      timestamp: new Date().toJSON(),
     },
   },
 }
