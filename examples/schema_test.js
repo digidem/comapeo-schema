@@ -15,13 +15,26 @@ import { randomBytes } from 'node:crypto'
 // }
 
 // DEVICE
+// const obj = {
+//   type: 'Device',
+//   schemaVersion: 1,
+//   id: randomBytes(32).toString('hex'),
+//   action: 'device:add',
+//   authorId: randomBytes(32).toString('hex'),
+//   projectId: randomBytes(32).toString('hex'),
+//   signature: 'hi',
+//   authorIndex: 10,
+//   deviceIndex: 10,
+// }
+
+// ROLE
 const obj = {
-  type: 'Device',
-  schemaVersion: 1,
   id: randomBytes(32).toString('hex'),
-  action: 'device:add',
-  authorId: randomBytes(32).toString('hex'),
+  type: 'Role',
+  schemaVersion: 1,
+  role: 'project-creator',
   projectId: randomBytes(32).toString('hex'),
+  action: 'role:set',
   signature: 'hi',
   authorIndex: 10,
   deviceIndex: 10,
