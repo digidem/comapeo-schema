@@ -33,6 +33,7 @@ const obj = {
   type: 'Role',
   schemaVersion: 1,
   role: 'project-creator',
+  created_at: new Date(),
   projectId: randomBytes(32).toString('hex'),
   action: 'role:set',
   signature: 'hi',

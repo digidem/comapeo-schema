@@ -34,7 +34,10 @@ const jsonSchemaToProto = (obj) => {
   const common = commonKeys
     .filter((field) => obj[field])
     .reduce((common, field) => ({ ...common, [field]: obj[field] }), {})
+
   common.id = Buffer.from(obj['id'], 'hex')
+  // turn date represented as string to Date
+  common.created_at = new Date(common.created_at)
 
   const key = formatSchemaKey(obj.type, obj.schemaVersion)
   // when we inherit from common, common is actually a field inside the protobuf object,
@@ -67,6 +70,8 @@ const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
   }
 
   obj.id = obj.id.toString('hex')
+  // turn date represented as Date to string
+  if (obj.created_at) obj.created_at = obj.created_at.toJSON()
   return obj
 }
 

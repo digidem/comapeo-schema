@@ -1,24 +1,7 @@
 import test from 'tape'
 import { encode, decode, validate } from '../index.js'
-import glob from 'glob-promise'
-import { readFileSync } from 'node:fs'
-import { basename } from 'node:path'
 import { randomBytes } from 'node:crypto'
-
-const loadJSON = (path) => {
-  return {
-    name: basename(path).replace('.json', ''),
-    doc: JSON.parse(readFileSync(new URL(path, import.meta.url)).toString()),
-  }
-}
-
-const docs = glob
-  .sync('./docs/*.json', { cwd: 'test' })
-  .map(loadJSON)
-  .reduce((acc, val) => {
-    acc[val.name] = val.doc
-    return acc
-  }, {})
+import { docs } from './docs.js'
 
 test('test encoding of record with missing fields', async (t) => {
   t.plan(1)
@@ -48,7 +31,7 @@ test('test encoding of rightfully formated record', async (t) => {
     const doc = docs.good[k]
     t.doesNotThrow(() => {
       encode(doc)
-    })
+    }, `testing ${k}`)
   })
 })
 
@@ -79,6 +62,7 @@ test('test encoding, decoding of record and comparing the two versions', async (
     const fields = Object.keys(doc)
     // t.plan(goodDocs.length * fields.length * 2)
     fields.forEach((f) => {
+      console.log(typeof record[f], typeof doc[f])
       const msg = `checking ${f} for ${k}`
       record[f] && doc[f] ? t.pass(msg) : t.fail(msg)
 
