@@ -1,13 +1,15 @@
 syntax = "proto3";
 package mapeo;
 
-message Common {
-  string created_at = 1;
+import "google/protobuf/timestamp.proto";
+
+message Common_1 {
+  google.protobuf.Timestamp created_at = 1;
   optional string deviceId = 2;
   // 32-byte random generated number
   bytes id = 3;
   repeated string links = 4;
-  optional string timestamp = 5;
+  optional google.protobuf.Timestamp timestamp = 5;
   optional string userId = 6;
 }
 /* ignored fields and differences from common.json jsonSchema

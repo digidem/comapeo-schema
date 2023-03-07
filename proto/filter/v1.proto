@@ -1,0 +1,16 @@
+syntax = "proto3";
+package mapeo;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+
+message Filter_1 {
+  bytes id = 1;
+  google.protobuf.Timestamp created_at = 2;
+  repeated string  filter = 3;
+  string name = 4;
+  optional google.protobuf.Timestamp timestamp = 5;
+  optional string userId = 6;
+  optional string deviceId = 7;
+  repeated string links = 8;
+}

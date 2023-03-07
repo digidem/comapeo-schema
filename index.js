@@ -6,6 +6,7 @@ import * as cenc from 'compact-encoding'
 import * as JSONSchemas from './dist/schemas.js'
 import * as ProtobufSchemas from './types/proto/index.js'
 import schemasPrefix from './schemasPrefix.js'
+import { inheritsFromCommon, formatSchemaKey } from './utils.js'
 
 const dataTypeIdSize = 6
 const schemaVersionSize = 2
@@ -27,25 +28,24 @@ const jsonSchemaToProto = (obj) => {
   /** @type {Object} */
   const uncommon = Object.keys(obj)
     .filter((k) => !commonKeys.includes(k))
-    .reduce((acc, k) => {
-      acc[k] = obj[k]
-      return acc
-    }, {})
+    .reduce((uncommon, field) => ({ ...uncommon, [field]: obj[field] }), {})
 
-  const common = commonKeys.reduce((common, field) => {
-    if (obj[field]) {
-      if (field === 'id') {
-        common[field] = Buffer.from(obj[field], 'hex')
-      } else {
-        common[field] = obj[field]
-      }
-    }
-    return common
-  }, {})
-  return {
-    ...uncommon,
-    common,
-  }
+  /** @type {Object} */
+  const common = commonKeys
+    .filter((field) => obj[field])
+    .reduce((common, field) => ({ ...common, [field]: obj[field] }), {})
+
+  common.id = Buffer.from(obj['id'], 'hex')
+  // turn date represented as string to Date
+  common.created_at = new Date(common.created_at)
+  common.timestamp = new Date(common.timestamp)
+
+  const key = formatSchemaKey(obj.type, obj.schemaVersion)
+  // when we inherit from common, common is actually a field inside the protobuf object,
+  // so we don't destructure it
+  return inheritsFromCommon(key)
+    ? { ...uncommon, common }
+    : { ...uncommon, ...common }
 }
 
 /**
@@ -57,23 +57,31 @@ const jsonSchemaToProto = (obj) => {
  * @returns {import('./types/schema/index').MapeoRecord}
  */
 const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
-  const common = protobufObj.common
-  delete protobufObj.common
-  return {
-    ...protobufObj,
-    ...common,
-    schemaVersion,
-    type,
-    version,
-    id: common ? common.id.toString('hex') : '',
+  /** @type {Object} */
+  let obj = { ...protobufObj, schemaVersion, type }
+  if (obj.common) {
+    obj = { ...obj, ...obj.common }
+    delete obj.common
   }
+
+  // Preset_1 and Field_1 don't have a version field and don't accept additional fields
+  const key = formatSchemaKey(type, schemaVersion)
+  if (key !== 'Preset_1' && key !== 'Field_1') {
+    obj.version = version
+  }
+
+  obj.id = obj.id.toString('hex')
+  // turn date represented as Date to string
+  if (obj.created_at) obj.created_at = obj.created_at.toJSON()
+  if (obj.timestamp) obj.timestamp = obj.timestamp.toJSON()
+  return obj
 }
 
 /**
  * given a schemaVersion and type, return a buffer with the corresponding data
  * @param {Object} obj
  * @param {string} obj.dataTypeId hex encoded string of a 6-byte buffer indicating type
- * @param {number} obj.schemaVersion number to indicate version. Gets converted to a padded 4-byte hex string
+ * @param {number | undefined} obj.schemaVersion number to indicate version. Gets converted to a padded 4-byte hex string
  * @returns {Buffer} blockPrefix for corresponding schema
  */
 export const encodeBlockPrefix = ({ dataTypeId, schemaVersion }) => {
@@ -95,7 +103,7 @@ export const decodeBlockPrefix = (buf) => {
   state.buffer = buf
   state.start = 0
   state.end = dataTypeIdSize
-  const dataTypeId = cenc.hex.fixed(6).decode(state)
+  const dataTypeId = cenc.hex.fixed(dataTypeIdSize).decode(state)
 
   state.start = dataTypeIdSize
   state.end = dataTypeIdSize + schemaVersionSize
@@ -110,7 +118,14 @@ export const decodeBlockPrefix = (buf) => {
  * @returns {Boolean} indicating if the object is valid
  */
 export const validate = (obj) => {
-  const key = `${obj.type.toLowerCase()}_${obj.schemaVersion}`
+  const key = formatSchemaKey(obj.type, obj.schemaVersion)
+
+  // Preset_1 doesn't have a type field, so validation won't pass
+  // but we still need it to now which schema to validate, so we delete it after grabbing the key
+  if (key === 'Preset_1') delete obj['type']
+  // Field_1 doesn't have a schemaVersion field, so validation won't pass
+  // but we still need it to now which schema to validate, so we delete it after grabbing the key
+  if (key === 'Field_1') delete obj['schemaVersion']
 
   const validatefn = JSONSchemas[key]
   const isValid = validatefn(obj)
@@ -123,12 +138,22 @@ export const validate = (obj) => {
  * @param {import('./types/schema/index').MapeoRecord} obj - Object to be encoded
  * @returns {Buffer} protobuf encoded buffer with dataTypeIdSize + schemaVersionSize bytes prepended, one for the type of record and the other for the version of the schema */
 export const encode = (obj) => {
+  const key = formatSchemaKey(obj.type, obj.schemaVersion)
+  // some schemas don't have type field so it can be undefined
+  const type = obj.type || ''
+  if (!ProtobufSchemas[key]) {
+    throw new Error(
+      `Invalid schemaVersion for ${type} version ${obj.schemaVersion}`
+    )
+  }
+
   const blockPrefix = encodeBlockPrefix({
-    dataTypeId: schemasPrefix[formatSchemaType(obj.type)],
-    schemaVersion: obj.schemaVersion === undefined ? 0 : obj.schemaVersion,
+    dataTypeId: schemasPrefix[type].dataTypeId,
+    schemaVersion: obj.schemaVersion,
   })
   const record = jsonSchemaToProto(obj)
-  const protobuf = ProtobufSchemas[formatSchemaType(obj.type)].encode(record).finish()
+  const partial = ProtobufSchemas[key].fromPartial(record)
+  const protobuf = ProtobufSchemas[key].encode(partial).finish()
   return Buffer.concat([blockPrefix, protobuf])
 }
 
@@ -139,20 +164,20 @@ export const encode = (obj) => {
  * */
 export const decode = (buf, { coreId, seq }) => {
   const { dataTypeId, schemaVersion } = decodeBlockPrefix(buf)
-  const type = Object.keys(schemasPrefix).filter(
-    (key) => schemasPrefix[key] === dataTypeId
-  )[0]
+  const type = Object.keys(schemasPrefix).reduce(
+    (type, key) => (schemasPrefix[key].dataTypeId === dataTypeId ? key : type),
+    ''
+  )
+  const key = formatSchemaKey(type, schemaVersion)
+  if (!ProtobufSchemas[key]) {
+    throw new Error(
+      `Invalid schemaVersion for ${type} version ${schemaVersion}`
+    )
+  }
+
   const version = `${coreId.toString('hex')}/${seq.toString()}`
   const record = buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
-  const protobufObj = ProtobufSchemas[type].decode(record)
-  return protoToJsonSchema(protobufObj, { schemaVersion, type, version })
-}
 
-/**
- * Format schema type string to match protobuf/schema prefix type lookups
- * @param {String} text
- * @returns {String} First letter capitalized, the rest lowercased
- */ 
-function formatSchemaType(text) {
-  return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
+  const protobufObj = ProtobufSchemas[key].decode(record)
+  return protoToJsonSchema(protobufObj, { schemaVersion, type, version })
 }
