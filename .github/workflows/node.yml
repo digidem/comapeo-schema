@@ -25,6 +25,11 @@ jobs:
       - name: Install buf cli
         uses: bufbuild/buf-setup-action@v1.9.0
       - run: buf --version
+      - name: Cache buf binary
+        uses: actions/cache@v3
+        with:
+          path: /opt/hostedcachetool/buf/1.9.0/x64/bin/
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/buf') }}
       - name: Setup upterm session
         uses: lhotari/action-upterm@v1
         with:
