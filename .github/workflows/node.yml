@@ -25,12 +25,12 @@ jobs:
       - name: Install buf cli
         uses: bufbuild/buf-setup-action@v1.9.0
       - run: buf --version
-        uses: actions/cache@v3
       - name: get buf hash
         id: buf-hash
         run: |
           echo "bufHash=$(shasum $(which buf) | awk '{print $1}')" >> $GITHUB_OUTPUT
       - name: Cache buf binary
+        uses: actions/cache@v3
         with:
           path: /opt/hostedcachetool/buf/1.9.0/x64/bin/
           key: ${{ steps.buf-hash.outputs.bufHash }}
