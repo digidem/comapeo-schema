@@ -22,6 +22,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+      - name: Check if buf is already installed
+        run: buf --version
       - name: Install buf cli
         uses: bufbuild/buf-setup-action@v1.9.0
       - run: buf --version
