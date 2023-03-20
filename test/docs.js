@@ -4,7 +4,7 @@ export const docs = {
   onlyId: { id: randomBytes(32).toString('hex') },
   badDocType: {
     id: randomBytes(32).toString('hex'),
-    type: 'doesnotexist',
+    schemaType: 'doesnotexist',
     schemaVersion: 4,
     links: [],
     created_at: new Date().toJSON(),
@@ -16,7 +16,7 @@ export const docs = {
   },
   badSchemaVersion: {
     id: randomBytes(32).toString('hex'),
-    type: 'observation',
+    schemaType: 'observation',
     schemaVersion: null,
     links: [],
     created_at: new Date().toJSON(),
@@ -29,7 +29,7 @@ export const docs = {
   good: {
     observation_4: {
       id: randomBytes(32).toString('hex'),
-      type: 'observation',
+      schemaType: 'observation',
       schemaVersion: 4,
       links: [],
       created_at: new Date().toJSON(),
@@ -42,7 +42,7 @@ export const docs = {
     },
     observation_5: {
       id: randomBytes(32).toString('hex'),
-      type: 'Observation',
+      schemaType: 'Observation',
       schemaVersion: 5,
       created_at: new Date().toJSON(),
       timestamp: new Date().toJSON(),
@@ -50,7 +50,7 @@ export const docs = {
     filter: {
       id: randomBytes(32).toString('hex'),
       timestamp: new Date().toJSON(),
-      type: 'filter',
+      schemaType: 'filter',
       schemaVersion: 1,
       created_at: new Date().toJSON(),
       filter: ['observation'],
@@ -58,7 +58,7 @@ export const docs = {
     },
     preset: {
       id: randomBytes(32).toString('hex'),
-      type: 'Preset',
+      schemaType: 'Preset',
       schemaVersion: 1,
       tags: { nature: 'tree' },
       geometry: ['point'],
@@ -66,12 +66,13 @@ export const docs = {
     },
     field: {
       id: randomBytes(32).toString('hex'),
-      type: 'Field',
+      schemaType: 'Field',
       schemaVersion: 1,
       key: 'hi',
+      type: 'text',
     },
     coreOwnership: {
-      type: 'coreOwnership',
+      schemaType: 'coreOwnership',
       schemaVersion: 1,
       id: randomBytes(32).toString('hex'),
       coreId: randomBytes(32).toString('hex'),
@@ -84,7 +85,7 @@ export const docs = {
       timestamp: new Date().toJSON(),
     },
     device: {
-      type: 'Device',
+      schemaType: 'Device',
       schemaVersion: 1,
       id: randomBytes(32).toString('hex'),
       action: 'device:add',
@@ -98,7 +99,7 @@ export const docs = {
     },
     role: {
       id: randomBytes(32).toString('hex'),
-      type: 'Role',
+      schemaType: 'Role',
       schemaVersion: 1,
       role: 'project-creator',
       projectId: randomBytes(32).toString('hex'),
