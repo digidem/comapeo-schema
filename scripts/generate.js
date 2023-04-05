@@ -2,8 +2,9 @@
 // This script is use to generate various files to be used at runtime:
 // * dist/schemas.js - all the validating functions for jsonSchema
 // * types/schema/index.d.ts - Union type for all the JsonSchemas
-// * types/schema/index.d.ts - Union type for all the ProtobufSchemas
+// * types/proto/index.d.ts - Union type for all the ProtobufSchemas
 // * types/proto/index.js - Exports all protobufs from one file
+// * types/index.d.ts - re-exports JSONSchema and ProtobufSchema types for better importing
 
 import fs from 'node:fs'
 import path from 'path'
@@ -62,6 +63,17 @@ fs.writeFileSync(
   schemaValidations
 )
 
+const latestSchemaVersions = schemas.reduce((acc, { schemaVersion, type }) => {
+  if (!acc[type]) {
+    acc[type] = schemaVersion
+  } else {
+    if (acc[type] < schemaVersion) {
+      acc[type] = schemaVersion
+    }
+  }
+  return acc
+}, {})
+
 // types/schema/index.d.ts
 const jsonSchemaType = `
 ${schemas
@@ -83,12 +95,20 @@ schemaVersion?: number;
 export type JSONSchema = (${schemas
   .map(
     /** @param {Object} schema */
-    ({ schemaVersion, type }) => {
-      return `${formatSchemaType(type)}_${schemaVersion}`
-    }
+    ({ schemaVersion, type }) => `${formatSchemaType(type)}_${schemaVersion}`
   )
   .join(' | ')}) & base
-`
+${schemas
+  .filter(
+    ({ schemaVersion, type }) => latestSchemaVersions[type] === schemaVersion
+  )
+  .map(
+    ({ type }) =>
+      `export { ${formatSchemaType(type)} } from './${type}/v${
+        latestSchemaVersions[type]
+      }'`
+  )
+  .join('\n')}`
 fs.writeFileSync(
   path.join(__dirname, '../types/schema/index.d.ts'),
   jsonSchemaType
@@ -115,6 +135,20 @@ const union = obj
   )
   .join(' | ')
 
+const latestVersionsExport = schemas
+  .filter(
+    ({ schemaVersion, type }) => latestSchemaVersions[type] === schemaVersion
+  )
+  .map(
+    ({ type, schemaVersion }) =>
+      `export { ${formatSchemaType(
+        type
+      )}_${schemaVersion} as ${formatSchemaType(type)} } from './${type}/v${
+        latestSchemaVersions[type]
+      }'`
+  )
+  .join('\n')
+
 obj.forEach(({ type, schemaVersion }) => {
   const linejs = `export { ${formatSchemaType(type)}_${schemaVersion.replace(
     'v',
@@ -136,7 +170,8 @@ fs.writeFileSync(
 fs.writeFileSync(
   path.join(__dirname, '../types/proto/index.d.ts'),
   `${linesdts.join('\n')}
-export type ProtobufSchema = ${union}`
+export type ProtobufSchema = ${union}
+${latestVersionsExport}`
 )
 
 // types/index.d.ts

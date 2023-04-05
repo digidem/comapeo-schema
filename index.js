@@ -10,7 +10,6 @@ import { inheritsFromCommon, formatSchemaKey } from './utils.js'
 
 const dataTypeIdSize = 6
 const schemaVersionSize = 2
-
 /**
  * @param {import('./types').JSONSchema} obj - Object to be encoded
  * @returns {import('./types').ProtobufSchema}
