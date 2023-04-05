@@ -99,15 +99,15 @@ export type JSONSchema = (${schemas
   )
   .join(' | ')}) & base
 ${schemas
-  .filter(
-    ({ schemaVersion, type }) => latestSchemaVersions[type] === schemaVersion
-  )
-  .map(
-    ({ type }) =>
-      `export { ${formatSchemaType(type)} } from './${type}/v${
-        latestSchemaVersions[type]
-      }'`
-  )
+  .map(({ type, schemaVersion }) => {
+    const as =
+      latestSchemaVersions[type] !== schemaVersion
+        ? `as ${formatSchemaType(type)}_${schemaVersion}`
+        : ''
+    return `export { ${formatSchemaType(type)} ${as} } from './${type}/v${
+      latestSchemaVersions[type]
+    }'`
+  })
   .join('\n')}`
 fs.writeFileSync(
   path.join(__dirname, '../types/schema/index.d.ts'),
@@ -135,17 +135,14 @@ const union = obj
   )
   .join(' | ')
 
-const latestVersionsExport = schemas
-  .filter(
-    ({ schemaVersion, type }) => latestSchemaVersions[type] === schemaVersion
-  )
+const individualExports = schemas
   .map(
     ({ type, schemaVersion }) =>
-      `export { ${formatSchemaType(
-        type
-      )}_${schemaVersion} as ${formatSchemaType(type)} } from './${type}/v${
-        latestSchemaVersions[type]
-      }'`
+      `export { ${formatSchemaType(type)}_${schemaVersion} ${
+        latestSchemaVersions[type] === schemaVersion
+          ? `as ${formatSchemaType(type)}`
+          : ''
+      }} from './${type}/v${schemaVersion}'`
   )
   .join('\n')
 
@@ -171,7 +168,7 @@ fs.writeFileSync(
   path.join(__dirname, '../types/proto/index.d.ts'),
   `${linesdts.join('\n')}
 export type ProtobufSchema = ${union}
-${latestVersionsExport}`
+${individualExports}`
 )
 
 // types/index.d.ts
