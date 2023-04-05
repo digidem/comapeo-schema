@@ -66,16 +66,19 @@ fs.writeFileSync(
   schemaValidations
 )
 
-const latestSchemaVersions = schemas.reduce((acc, { schemaVersion, type }) => {
-  if (!acc[type]) {
-    acc[type] = schemaVersion
-  } else {
-    if (acc[type] < schemaVersion) {
-      acc[type] = schemaVersion
+const latestSchemaVersions = schemas.reduce(
+  (acc, { schemaVersion, schemaType }) => {
+    if (!acc[schemaType]) {
+      acc[schemaType] = schemaVersion
+    } else {
+      if (acc[schemaType] < schemaVersion) {
+        acc[schemaType] = schemaVersion
+      }
     }
-  }
-  return acc
-}, {})
+    return acc
+  },
+  {}
+)
 
 // types/schema/index.d.ts
 const jsonSchemaType = `
@@ -99,18 +102,19 @@ schemaVersion?: number;
 export type JSONSchema = (${schemas
   .map(
     /** @param {Object} schema */
-    ({ schemaVersion, type }) => `${formatSchemaType(type)}_${schemaVersion}`
+    ({ schemaVersion, schemaType }) =>
+      `${formatSchemaType(schemaType)}_${schemaVersion}`
   )
   .join(' | ')}) & base
 ${schemas
-  .map(({ type, schemaVersion }) => {
+  .map(({ schemaType, schemaVersion }) => {
     const as =
-      latestSchemaVersions[type] !== schemaVersion
-        ? `as ${formatSchemaType(type)}_${schemaVersion}`
+      latestSchemaVersions[schemaType] !== schemaVersion
+        ? `as ${formatSchemaType(schemaType)}_${schemaVersion}`
         : ''
-    return `export { ${formatSchemaType(type)} ${as} } from './${type}/v${
-      latestSchemaVersions[type]
-    }'`
+    return `export { ${formatSchemaType(
+      schemaType
+    )} ${as} } from './${schemaType}/v${latestSchemaVersions[schemaType]}'`
   })
   .join('\n')}`
 fs.writeFileSync(
@@ -141,12 +145,12 @@ const union = obj
 
 const individualExports = schemas
   .map(
-    ({ type, schemaVersion }) =>
-      `export { ${formatSchemaType(type)}_${schemaVersion} ${
-        latestSchemaVersions[type] === schemaVersion
-          ? `as ${formatSchemaType(type)}`
+    ({ schemaType, schemaVersion }) =>
+      `export { ${formatSchemaType(schemaType)}_${schemaVersion} ${
+        latestSchemaVersions[schemaType] === schemaVersion
+          ? `as ${formatSchemaType(schemaType)}`
           : ''
-      }} from './${type}/v${schemaVersion}'`
+      }} from './${schemaType}/v${schemaVersion}'`
   )
   .join('\n')
 
