@@ -39,7 +39,7 @@ const jsonSchemaToProto = (obj) => {
   common.created_at = new Date(common.created_at)
   common.timestamp = new Date(common.timestamp)
 
-  const key = formatSchemaKey(obj.type, obj.schemaVersion)
+  const key = formatSchemaKey(obj.schemaType, obj.schemaVersion)
   // when we inherit from common, common is actually a field inside the protobuf object,
   // so we don't destructure it
   return inheritsFromCommon(key)
@@ -51,20 +51,23 @@ const jsonSchemaToProto = (obj) => {
  * @param {import('./types').ProtobufSchema} protobufObj
  * @param {Object} obj
  * @param {Number} obj.schemaVersion
- * @param {String} obj.type
+ * @param {String} obj.schemaType
  * @param {String} obj.version
  * @returns {import('./types').JSONSchema}
  */
-const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
+const protoToJsonSchema = (
+  protobufObj,
+  { schemaVersion, schemaType, version }
+) => {
   /** @type {Object} */
-  let obj = { ...protobufObj, schemaVersion, type }
+  let obj = { ...protobufObj, schemaVersion, schemaType }
   if (obj.common) {
     obj = { ...obj, ...obj.common }
     delete obj.common
   }
 
   // Preset_1 and Field_1 don't have a version field and don't accept additional fields
-  const key = formatSchemaKey(type, schemaVersion)
+  const key = formatSchemaKey(schemaType, schemaVersion)
   if (key !== 'Preset_1' && key !== 'Field_1') {
     obj.version = version
   }
@@ -79,7 +82,7 @@ const protoToJsonSchema = (protobufObj, { schemaVersion, type, version }) => {
 /**
  * given a schemaVersion and type, return a buffer with the corresponding data
  * @param {Object} obj
- * @param {string} obj.dataTypeId hex encoded string of a 6-byte buffer indicating type
+ * @param {string} obj.dataTypeId hex encoded string of a 6-byte buffer indicating schemaType
  * @param {number | undefined} obj.schemaVersion number to indicate version. Gets converted to a padded 4-byte hex string
  * @returns {Buffer} blockPrefix for corresponding schema
  */
@@ -92,7 +95,7 @@ export const encodeBlockPrefix = ({ dataTypeId, schemaVersion }) => {
 }
 
 /**
- *  given a buffer, return schemaVersion and type
+ *  given a buffer, return schemaVersion and dataTypeId
  *  @param {Buffer} buf
  *  @returns {{dataTypeId:String, schemaVersion:Number}}
  */
@@ -117,14 +120,22 @@ export const decodeBlockPrefix = (buf) => {
  * @returns {Boolean} indicating if the object is valid
  */
 export const validate = (obj) => {
-  const key = formatSchemaKey(obj.type, obj.schemaVersion)
+  const key = formatSchemaKey(obj.schemaType, obj.schemaVersion)
 
   // Preset_1 doesn't have a type field, so validation won't pass
   // but we still need it to now which schema to validate, so we delete it after grabbing the key
-  if (key === 'Preset_1') delete obj['type']
-  // Field_1 doesn't have a schemaVersion field, so validation won't pass
+  if (key === 'Preset_1') delete obj['schemaType']
+  // Field_1 doesn't have a schemaVersion nor schemaType field, so validation won't pass
   // but we still need it to now which schema to validate, so we delete it after grabbing the key
-  if (key === 'Field_1') delete obj['schemaVersion']
+  if (key === 'Field_1') {
+    delete obj['schemaVersion']
+    delete obj['schemaType']
+  }
+
+  if (key === 'Observation_4' || key === 'Filter_1') {
+    obj.type = obj.schemaType
+    delete obj.schemaType
+  }
 
   const validatefn = Schemas[key]
   const isValid = validatefn(obj)
@@ -137,17 +148,17 @@ export const validate = (obj) => {
  * @param {import('./types').JSONSchema} obj - Object to be encoded
  * @returns {Buffer} protobuf encoded buffer with dataTypeIdSize + schemaVersionSize bytes prepended, one for the type of record and the other for the version of the schema */
 export const encode = (obj) => {
-  const key = formatSchemaKey(obj.type, obj.schemaVersion)
+  const key = formatSchemaKey(obj.schemaType, obj.schemaVersion)
   // some schemas don't have type field so it can be undefined
-  const type = obj.type || ''
+  const schemaType = obj.schemaType || ''
   if (!ProtobufSchemas[key]) {
     throw new Error(
-      `Invalid schemaVersion for ${type} version ${obj.schemaVersion}`
+      `Invalid schemaVersion for ${schemaType} version ${obj.schemaVersion}`
     )
   }
 
   const blockPrefix = encodeBlockPrefix({
-    dataTypeId: schemasPrefix[type].dataTypeId,
+    dataTypeId: schemasPrefix[schemaType].dataTypeId,
     schemaVersion: obj.schemaVersion,
   })
   const record = jsonSchemaToProto(obj)
@@ -163,14 +174,14 @@ export const encode = (obj) => {
  * */
 export const decode = (buf, { coreId, seq }) => {
   const { dataTypeId, schemaVersion } = decodeBlockPrefix(buf)
-  const type = Object.keys(schemasPrefix).reduce(
+  const schemaType = Object.keys(schemasPrefix).reduce(
     (type, key) => (schemasPrefix[key].dataTypeId === dataTypeId ? key : type),
     ''
   )
-  const key = formatSchemaKey(type, schemaVersion)
+  const key = formatSchemaKey(schemaType, schemaVersion)
   if (!ProtobufSchemas[key]) {
     throw new Error(
-      `Invalid schemaVersion for ${type} version ${schemaVersion}`
+      `Invalid schemaVersion for ${schemaType} version ${schemaVersion}`
     )
   }
 
@@ -178,5 +189,5 @@ export const decode = (buf, { coreId, seq }) => {
   const record = buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
 
   const protobufObj = ProtobufSchemas[key].decode(record)
-  return protoToJsonSchema(protobufObj, { schemaVersion, type, version })
+  return protoToJsonSchema(protobufObj, { schemaVersion, schemaType, version })
 }

@@ -31,7 +31,7 @@
       "description": "ID of the device that made this edit",
       "type": "string"
     },
-    "type": {
+    "schemaType": {
       "description": "enum that defines the type of document in the database (defines which schema should be used)",
       "type": "string"
     },
@@ -49,5 +49,5 @@
       "minimum": 1
     }
   },
-  "required": ["id", "created_at", "type"]
+  "required": ["id", "created_at", "schemaType"]
 }

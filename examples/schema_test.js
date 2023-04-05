@@ -16,7 +16,7 @@ import { randomBytes } from 'node:crypto'
 
 // DEVICE
 // const obj = {
-//   type: 'Device',
+//   schemaType: 'Device',
 //   schemaVersion: 1,
 //   id: randomBytes(32).toString('hex'),
 //   action: 'device:add',
@@ -28,18 +28,18 @@ import { randomBytes } from 'node:crypto'
 // }
 
 // ROLE
-const obj = {
-  id: randomBytes(32).toString('hex'),
-  type: 'Role',
-  schemaVersion: 1,
-  role: 'project-creator',
-  created_at: new Date(),
-  projectId: randomBytes(32).toString('hex'),
-  action: 'role:set',
-  signature: 'hi',
-  authorIndex: 10,
-  deviceIndex: 10,
-}
+// const obj = {
+//   id: randomBytes(32).toString('hex'),
+//   schemaType: 'Role',
+//   schemaVersion: 1,
+//   role: 'project-creator',
+//   created_at: new Date(),
+//   projectId: randomBytes(32).toString('hex'),
+//   action: 'role:set',
+//   signature: 'hi',
+//   authorIndex: 10,
+//   deviceIndex: 10,
+// }
 
 // CORE OWNERSHIP
 // const obj = {
@@ -65,17 +65,18 @@ const obj = {
 // }
 
 // FIELD_1
-// const obj = {
-//   id: randomBytes(32).toString('hex'),
-//   type: 'Field',
-//   schemaVersion: 1,
-//   key: 'hi',
-// }
+const obj = {
+  id: randomBytes(32).toString('hex'),
+  schemaType: 'Field',
+  schemaVersion: 1,
+  key: ['hi'],
+  type: 'text',
+}
 
 // OBSERVATION 4
 // const obj = {
 //   id: randomBytes(32).toString('hex'),
-//   type: 'observation',
+//   schemaType: 'observation',
 //   schemaVersion: 4,
 //   created_at: new Date().toJSON(),
 // }

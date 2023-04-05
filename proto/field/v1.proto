@@ -7,4 +7,5 @@ message Field_1 {
   bytes id = 1;
   // keys can be an array of strings or a string
   google.protobuf.Any key = 2;
+  string type = 3;
 }
