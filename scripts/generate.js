@@ -2,8 +2,9 @@
 // This script is use to generate various files to be used at runtime:
 // * dist/schemas.js - all the validating functions for jsonSchema
 // * types/schema/index.d.ts - Union type for all the JsonSchemas
-// * types/schema/index.d.ts - Union type for all the ProtobufSchemas
+// * types/proto/index.d.ts - Union type for all the ProtobufSchemas
 // * types/proto/index.js - Exports all protobufs from one file
+// * types/index.d.ts - re-exports JSONSchema and ProtobufSchema types for better importing
 
 import fs from 'node:fs'
 import path from 'path'
@@ -51,20 +52,35 @@ const ajv = new Ajv({
 })
 ajv.addKeyword('meta:enum')
 
-// generate code
+// generate validation code
 let schemaValidations = standaloneCode(ajv, schemaExports)
 
 const dist = path.join(__dirname, '../dist')
 if (!fs.existsSync(dist)) {
   fs.mkdirSync(dist)
 }
-// dump all to file
+
+// dist/schemas.js
 fs.writeFileSync(
   path.join(__dirname, '../dist', 'schemas.js'),
   schemaValidations
 )
 
-// generate types/schema/index.d.ts
+const latestSchemaVersions = schemas.reduce(
+  (acc, { schemaVersion, schemaType }) => {
+    if (!acc[schemaType]) {
+      acc[schemaType] = schemaVersion
+    } else {
+      if (acc[schemaType] < schemaVersion) {
+        acc[schemaType] = schemaVersion
+      }
+    }
+    return acc
+  },
+  {}
+)
+
+// types/schema/index.d.ts
 const jsonSchemaType = `
 ${schemas
   .map(
@@ -83,21 +99,30 @@ schemaType?: string;
 type?: string;
 schemaVersion?: number;
 }
-export type MapeoRecord = (${schemas
+export type JSONSchema = (${schemas
   .map(
     /** @param {Object} schema */
-    ({ schemaVersion, schemaType }) => {
-      return `${formatSchemaType(schemaType)}_${schemaVersion}`
-    }
+    ({ schemaVersion, schemaType }) =>
+      `${formatSchemaType(schemaType)}_${schemaVersion}`
   )
   .join(' | ')}) & base
-`
+${schemas
+  .map(({ schemaType, schemaVersion }) => {
+    const as =
+      latestSchemaVersions[schemaType] !== schemaVersion
+        ? `as ${formatSchemaType(schemaType)}_${schemaVersion}`
+        : ''
+    return `export { ${formatSchemaType(
+      schemaType
+    )} ${as} } from './${schemaType}/v${latestSchemaVersions[schemaType]}'`
+  })
+  .join('\n')}`
 fs.writeFileSync(
   path.join(__dirname, '../types/schema/index.d.ts'),
   jsonSchemaType
 )
 
-// generate index.js for protobuf schemas and index.d.ts
+// types/proto/index.d.ts and types/proto/index.js
 const protobufFiles = glob.sync('../types/proto/*/*.ts', { cwd: 'scripts' })
 const obj = protobufFiles
   .filter((f) => !f.match(/.d.ts/))
@@ -116,7 +141,18 @@ const union = obj
     ({ schemaType, schemaVersion }) =>
       `${formatSchemaType(schemaType)}_${schemaVersion.replace('v', '')}`
   )
-  .join(' & ')
+  .join(' | ')
+
+const individualExports = schemas
+  .map(
+    ({ schemaType, schemaVersion }) =>
+      `export { ${formatSchemaType(schemaType)}_${schemaVersion} ${
+        latestSchemaVersions[schemaType] === schemaVersion
+          ? `as ${formatSchemaType(schemaType)}`
+          : ''
+      }} from './${schemaType}/v${schemaVersion}'`
+  )
+  .join('\n')
 
 obj.forEach(({ schemaType, schemaVersion }) => {
   const linejs = `export { ${formatSchemaType(
@@ -143,5 +179,13 @@ fs.writeFileSync(
 fs.writeFileSync(
   path.join(__dirname, '../types/proto/index.d.ts'),
   `${linesdts.join('\n')}
-export type ProtobufSchemas = ${union}`
+export type ProtobufSchema = ${union}
+${individualExports}`
+)
+
+// types/index.d.ts
+fs.writeFileSync(
+  path.join(__dirname, '../types/index.d.ts'),
+  `export { ProtobufSchema } from './proto'
+export { JSONSchema } from './schema'`
 )

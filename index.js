@@ -3,17 +3,16 @@
  * @module mapeo-schema
  */
 import * as cenc from 'compact-encoding'
-import * as JSONSchemas from './dist/schemas.js'
+import * as Schemas from './dist/schemas.js'
 import * as ProtobufSchemas from './types/proto/index.js'
 import schemasPrefix from './schemasPrefix.js'
 import { inheritsFromCommon, formatSchemaKey } from './utils.js'
 
 const dataTypeIdSize = 6
 const schemaVersionSize = 2
-
 /**
- * @param {import('./types/schema/index').MapeoRecord} obj - Object to be encoded
- * @returns {import('./types/proto/index').ProtobufSchemas}
+ * @param {import('./types').JSONSchema} obj - Object to be encoded
+ * @returns {import('./types').ProtobufSchema}
  */
 const jsonSchemaToProto = (obj) => {
   const commonKeys = [
@@ -49,12 +48,12 @@ const jsonSchemaToProto = (obj) => {
 }
 
 /**
- * @param {import('./types/proto/index').ProtobufSchemas} protobufObj
+ * @param {import('./types').ProtobufSchema} protobufObj
  * @param {Object} obj
  * @param {Number} obj.schemaVersion
  * @param {String} obj.schemaType
  * @param {String} obj.version
- * @returns {import('./types/schema/index').MapeoRecord}
+ * @returns {import('./types').JSONSchema}
  */
 const protoToJsonSchema = (
   protobufObj,
@@ -117,7 +116,7 @@ export const decodeBlockPrefix = (buf) => {
 
 /**
  * Validate an object against the schema type
- * @param {import('./types/schema/index').MapeoRecord} obj - Object to be encoded
+ * @param {import('./types').JSONSchema} obj - Object to be encoded
  * @returns {Boolean} indicating if the object is valid
  */
 export const validate = (obj) => {
@@ -138,7 +137,7 @@ export const validate = (obj) => {
     delete obj.schemaType
   }
 
-  const validatefn = JSONSchemas[key]
+  const validatefn = Schemas[key]
   const isValid = validatefn(obj)
   if (!isValid) throw new Error(JSON.stringify(validatefn.errors, null, 4))
   return isValid
@@ -146,7 +145,7 @@ export const validate = (obj) => {
 
 /**
  * Encode a an object validated against a schema as a binary protobuf to send to an hypercore.
- * @param {import('./types/schema/index').MapeoRecord} obj - Object to be encoded
+ * @param {import('./types').JSONSchema} obj - Object to be encoded
  * @returns {Buffer} protobuf encoded buffer with dataTypeIdSize + schemaVersionSize bytes prepended, one for the type of record and the other for the version of the schema */
 export const encode = (obj) => {
   const key = formatSchemaKey(obj.schemaType, obj.schemaVersion)
@@ -171,7 +170,7 @@ export const encode = (obj) => {
 /**
  * Decode a Buffer as an object validated against the corresponding schema
  * @param {Buffer} buf - Buffer to be decoded
- * @returns {import('./types/schema/index').MapeoRecord}
+ * @returns {import('./types').JSONSchema}
  * */
 export const decode = (buf, { coreId, seq }) => {
   const { dataTypeId, schemaVersion } = decodeBlockPrefix(buf)
