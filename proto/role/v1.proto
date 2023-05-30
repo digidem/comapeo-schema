@@ -9,7 +9,9 @@ message Role_1 {
   string role = 2;
   string projectId = 3;
   string action = 4;
-  string signature = 5;
-  int32 authorIndex = 6;
-  int32 deviceIndex = 7;
+  string type = 5;
+  string signature = 6;
+  int32 authorIndex = 7;
+  int32 deviceIndex = 8;
+  string authorId = 9;
 }

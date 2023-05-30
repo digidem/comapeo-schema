@@ -8,11 +8,11 @@ export const formatSchemaType = (str) =>
 
 /**
  * Turn a schema type and version into `${type}_${schemaVersion}`
- * @param {String | undefined} type
+ * @param {String | undefined} schemaType
  * @param {Number | undefined} schemaVersion
  */
-export const formatSchemaKey = (type, schemaVersion) =>
-  `${formatSchemaType(type)}_${schemaVersion}`
+export const formatSchemaKey = (schemaType, schemaVersion) =>
+  `${formatSchemaType(schemaType)}_${schemaVersion}`
 
 /**
  * Checks if the type of record inherits from a common one

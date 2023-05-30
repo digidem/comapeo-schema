@@ -2,12 +2,13 @@
   "name": "mapeo-schema",
   "version": "2.0.2",
   "description": "JSON schema and flow types for Mapeo",
-  "main": "src/index.js",
   "type": "module",
   "exports": {
-    "types/": "./types/index.d.ts",
-    "types/schema": "./types/schema/index.d.ts",
-    "types/proto": "./types/proto/index.d.ts"
+    ".": "./index.js",
+    "./schema-prefixes": "./schema-prefixes.js",
+    "./types": "./types/index.d.ts",
+    "./types/schema": "./types/schema/index.d.ts",
+    "./types/proto": "./types/proto/index.d.ts"
   },
   "scripts": {
     "example": "node examples/schema_test.js",

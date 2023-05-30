@@ -5,7 +5,7 @@
 import * as cenc from 'compact-encoding'
 import * as Schemas from './dist/schemas.js'
 import * as ProtobufSchemas from './types/proto/index.js'
-import schemasPrefix from './schemasPrefix.js'
+import * as schemaPrefixes from './schema-prefixes.js'
 import { inheritsFromCommon, formatSchemaKey } from './utils.js'
 
 const dataTypeIdSize = 6
@@ -158,7 +158,7 @@ export const encode = (obj) => {
   }
 
   const blockPrefix = encodeBlockPrefix({
-    dataTypeId: schemasPrefix[schemaType].dataTypeId,
+    dataTypeId: schemaPrefixes[schemaType].dataTypeId,
     schemaVersion: obj.schemaVersion,
   })
   const record = jsonSchemaToProto(obj)
@@ -174,8 +174,8 @@ export const encode = (obj) => {
  * */
 export const decode = (buf, { coreId, seq }) => {
   const { dataTypeId, schemaVersion } = decodeBlockPrefix(buf)
-  const schemaType = Object.keys(schemasPrefix).reduce(
-    (type, key) => (schemasPrefix[key].dataTypeId === dataTypeId ? key : type),
+  const schemaType = Object.keys(schemaPrefixes).reduce(
+    (type, key) => (schemaPrefixes[key].dataTypeId === dataTypeId ? key : type),
     ''
   )
   const key = formatSchemaKey(schemaType, schemaVersion)
@@ -190,4 +190,24 @@ export const decode = (buf, { coreId, seq }) => {
 
   const protobufObj = ProtobufSchemas[key].decode(record)
   return protoToJsonSchema(protobufObj, { schemaVersion, schemaType, version })
+}
+
+/**
+ * Get the JSON schema for a given schemaName and schemaVersion
+ * @param {Object} options
+ * @param {String} options.schemaType
+ * @param {Number} options.schemaVersion
+ * @returns 
+ */
+export const getJsonSchema = ({ schemaType, schemaVersion }) => {
+  const key = formatSchemaKey(schemaType, schemaVersion)
+  return Schemas[key]
+}
+
+/**
+ * Return the schema prefix for a given schemaName and schemaVersion
+ * @param {String} schemaType
+ */
+export const getSchemaPrefix = (schemaType) => {
+  return schemaPrefixes[schemaType]
 }
