@@ -35,10 +35,9 @@ const jsonSchemaToProto = (obj) => {
     .reduce((common, field) => ({ ...common, [field]: obj[field] }), {})
 
   common.id = Buffer.from(obj['id'], 'hex')
-  // turn date represented as string to Date
-  common.created_at = new Date(common.created_at)
-  common.timestamp = new Date(common.timestamp)
-
+  // turn date represented as int to Date
+  common.created_at = new Date(common.created_at).valueOf()
+  common.timestamp = new Date(common.timestamp).valueOf()
   const key = formatSchemaKey(obj.schemaType, obj.schemaVersion)
   // when we inherit from common, common is actually a field inside the protobuf object,
   // so we don't destructure it
@@ -71,11 +70,13 @@ const protoToJsonSchema = (
   if (key !== 'Preset_1' && key !== 'Field_1') {
     obj.version = version
   }
-
+  // if (key === 'Field_1') obj.key = obj.key.value.toString()
   obj.id = obj.id.toString('hex')
-  // turn date represented as Date to string
-  if (obj.created_at) obj.created_at = obj.created_at.toJSON()
-  if (obj.timestamp) obj.timestamp = obj.timestamp.toJSON()
+  // since timestamp is optional, check if === 0 and delete it
+  if (obj.timestamp === 0) delete obj.timestamp
+  // turn date represented as int to string
+  if (obj.created_at) obj.created_at = new Date(obj.created_at).toJSON()
+  if (obj.timestamp) obj.timestamp = new Date(obj.timestamp).toJSON()
   return obj
 }
 
@@ -123,7 +124,7 @@ export const validate = (obj) => {
   const key = formatSchemaKey(obj.schemaType, obj.schemaVersion)
 
   // Preset_1 doesn't have a type field, so validation won't pass
-  // but we still need it to now which schema to validate, so we delete it after grabbing the key
+  // but we still need it to know which schema to validate, so we delete it after grabbing the key
   if (key === 'Preset_1') delete obj['schemaType']
   // Field_1 doesn't have a schemaVersion nor schemaType field, so validation won't pass
   // but we still need it to now which schema to validate, so we delete it after grabbing the key
@@ -170,6 +171,9 @@ export const encode = (obj) => {
 /**
  * Decode a Buffer as an object validated against the corresponding schema
  * @param {Buffer} buf - Buffer to be decoded
+ * @param {Object} obj
+ * @param {String} obj.coreId
+ * @param {Number} obj.seq
  * @returns {import('./types').JSONSchema}
  * */
 export const decode = (buf, { coreId, seq }) => {
@@ -184,7 +188,6 @@ export const decode = (buf, { coreId, seq }) => {
       `Invalid schemaVersion for ${schemaType} version ${schemaVersion}`
     )
   }
-
   const version = `${coreId.toString('hex')}/${seq.toString()}`
   const record = buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
 
