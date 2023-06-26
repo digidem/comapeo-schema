@@ -92,7 +92,6 @@ objs.forEach(test)
 async function test(obj){
   const record = encode(obj)
   const k = obj.schemaType || obj.type
-  if(k !== 'Field') return
   const core = new Hypercore(ram, { valueEncoding: 'binary' })
   await core.ready()
   core.append(record)
@@ -101,7 +100,7 @@ async function test(obj){
     const index = 0
     const data = await core.get(index)
     const decodedData = decode(data, { coreId: core.key, seq: index })
-    console.log(`trying ${obj.schemaType || obj.type}`)
+    console.log(`trying ${k}`)
     console.log('data', decodedData)
     console.log(`VALID? `, validate(decodedData), '\n')
     if (Buffer.compare(data, record) !== 0) {

@@ -172,7 +172,7 @@ export const encode = (obj) => {
  * Decode a Buffer as an object validated against the corresponding schema
  * @param {Buffer} buf - Buffer to be decoded
  * @param {Object} obj
- * @param {String} obj.coreId
+ * @param {Buffer} obj.coreId
  * @param {Number} obj.seq
  * @returns {import('./types').JSONSchema}
  * */
