@@ -35,9 +35,18 @@ const jsonSchemaToProto = (obj) => {
     .reduce((common, field) => ({ ...common, [field]: obj[field] }), {})
 
   common.id = Buffer.from(obj['id'], 'hex')
-  // turn date represented as int to Date
-  common.created_at = new Date(common.created_at).valueOf()
-  common.timestamp = new Date(common.timestamp).valueOf()
+
+  // observation v4 and filter v1 will keep representing Dates as protobuf Timestamps
+  if ((obj.schemaType === 'observation' && obj.schemaVersion === 4) ||
+    (obj.schemaType === 'filter' && obj.schemaVersion === 1)) {
+    common.created_at = new Date(common.created_at)
+    common.timestamp = new Date(common.timestamp)
+  } else {
+    // turn date represented as int to Date
+    common.created_at = new Date(common.created_at).valueOf()
+    common.timestamp = new Date(common.timestamp).valueOf()
+  }
+
   const key = formatSchemaKey(obj.schemaType, obj.schemaVersion)
   // when we inherit from common, common is actually a field inside the protobuf object,
   // so we don't destructure it
