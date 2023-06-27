@@ -43,7 +43,7 @@ jobs:
           semver: ${{ github.event.inputs.semver }}
           npm-tag: ${{ startsWith('pre', github.event.inputs.semver) && 'next' || 'latest' }}
           # optional: set this secret in your repo config for publishing to NPM
-          # npm-token: ${{ secrets.NPM_TOKEN }}
+          npm-token: ${{ secrets.NPM_TOKEN }}
           build-command: |
             npm install
             npm run build
