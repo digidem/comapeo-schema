@@ -19,7 +19,7 @@
     "doc": "typedoc --plugin typedoc-plugin-markdown",
     "clean": "rm -rf types dist docs",
     "build": "npm-run-all protobuf jsonschema generate tsc tsc-index doc",
-    "prepare": "npm run build",
+    "prepublishOnly": "npm run build",
     "test": "tape 'test/**/*.js'"
   },
   "repository": {
