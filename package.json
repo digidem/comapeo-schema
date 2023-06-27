@@ -37,17 +37,17 @@
   },
   "homepage": "https://github.com/digidem/mapeo-schema#readme",
   "devDependencies": {
-    "@types/tape": "^4.13.2",
-    "c8": "^7.12.0",
-    "eslint": "^8.28.0",
+    "@types/tape": "^5.6.0",
+    "c8": "^8.0.0",
+    "eslint": "^8.43.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "hypercore": "^10.4.1",
-    "json-schema-to-typescript": "^11.0.2",
+    "hypercore": "^10.17.0",
+    "json-schema-to-typescript": "^13.0.2",
     "npm-run-all": "^4.1.5",
-    "prettier": "^2.8.0",
-    "random-access-memory": "^6.0.0",
-    "tape": "^5.6.1",
-    "ts-proto": "^1.138.0",
+    "prettier": "^2.8.8",
+    "random-access-memory": "^6.2.0",
+    "tape": "^5.6.3",
+    "ts-proto": "^1.150.1",
     "typescript": "^4.8.4"
   },
   "prettier": {
@@ -56,12 +56,12 @@
   },
   "dependencies": {
     "@sinclair/typebox": "^0.25.8",
-    "ajv": "^8.11.2",
+    "ajv": "^8.12.0",
     "ajv-formats": "^2.1.1",
-    "b4a": "^1.6.1",
-    "compact-encoding": "^2.11.0",
+    "b4a": "^1.6.4",
+    "compact-encoding": "^2.12.0",
     "glob": "^8.0.3",
-    "glob-promise": "^5.0.0",
+    "glob-promise": "^6.0.3",
     "typedoc": "^0.23.21",
     "typedoc-plugin-markdown": "^3.13.6"
   }
