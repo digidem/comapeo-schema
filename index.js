@@ -75,8 +75,8 @@ const protoToJsonSchema = (
   obj.id = obj.id.toString('hex')
 
   // turn date to string
-  if (obj.created_at) obj.created_at = obj.created_at.toJSON()
-  if (obj.timestamp) obj.timestamp = obj.timestamp.toJSON()
+  // if (obj.created_at) obj.created_at = obj.created_at.toJSON()
+  // if (obj.timestamp) obj.timestamp = obj.timestamp.toJSON()
   return obj
 }
 

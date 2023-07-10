@@ -6,6 +6,7 @@ plugins:
     path: node_modules/ts-proto/protoc-gen-ts_proto
     opt:
       - esModuleInterop=true
+      - useDate=string
       - importSuffix=.js
       - env=node
       - snakeToCamel=false
