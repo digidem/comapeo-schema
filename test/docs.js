@@ -72,7 +72,7 @@ export const docs = {
       type: 'text',
     },
     coreOwnership: {
-      schemaType: 'coreOwnership',
+      schemaType: 'CoreOwnership',
       schemaVersion: 1,
       id: randomBytes(32).toString('hex'),
       coreId: randomBytes(32).toString('hex'),
