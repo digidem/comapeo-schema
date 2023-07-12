@@ -67,6 +67,14 @@ export const docs = {
     field: {
       id: randomBytes(32).toString('hex'),
       schemaType: 'Field',
+      schemaVersion: 2,
+      created_at: new Date().toJSON(),
+      key: ['hi'],
+      type: 'text',
+    },
+    field_1: {
+      id: randomBytes(32).toString('hex'),
+      schemaType: 'Field',
       schemaVersion: 1,
       key: 'hi',
       type: 'text',

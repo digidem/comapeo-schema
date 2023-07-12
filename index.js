@@ -40,6 +40,14 @@ const jsonSchemaToProto = (obj) => {
   common.timestamp = new Date(common.timestamp)
 
   const key = formatSchemaKey(obj.schemaType, obj.schemaVersion)
+
+  // Field_1 can be a string or an array of string
+  // Field_2 is always an array of strings.
+  // So to mantain compatibility, if key is a string we wrap it in an Array
+  if (key === 'Field_1' && uncommon.key && typeof uncommon.key === 'string') {
+    uncommon.key = [uncommon.key]
+  }
+
   // when we inherit from common, common is actually a field inside the protobuf object,
   // so we don't destructure it
   return inheritsFromCommon(key)

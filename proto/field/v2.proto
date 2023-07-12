@@ -2,9 +2,10 @@ syntax = "proto3";
 package mapeo;
 
 import "google/protobuf/any.proto";
+import "common/v1.proto";
 
-message Field_1 {
-  bytes id = 1;
+message Field_2 {
+  Common_1 common = 1;
   repeated string key = 2;
   string type = 3;
 }
