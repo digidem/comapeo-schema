@@ -7,5 +7,6 @@ const schemasPrefix = {
   coreOwnership: { dataTypeId: '73f85084cb80', schemaVersions: [1] },
   Device: { dataTypeId: '13f85084cb80', schemaVersions: [1] },
   Role: { dataTypeId: '13fa5384cb80', schemaVersions: [1] },
+  Project: { dataTypeId: '13fa5384cb81', schemaVersions: [1] },
 }
 export default schemasPrefix
