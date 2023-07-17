@@ -24,6 +24,21 @@ export const getLastVersionForSchema = (schemaType) => {
   const versions = schemasPrefix[schemaType]['schemaVersions']
   return versions.reduce((a, b) => Math.max(a, b), -Infinity).toString()
 }
+
+/**
+ * Turn a hex-encoded string to a byte buffer
+ * @param {String} hexStr
+ * @returns {Buffer}
+ */
+export const hexStringToBuffer = (hexStr) => Buffer.from(hexStr, 'hex')
+
+/**
+ * Turn a hex-encoded string to a byte buffer
+ * @param {Buffer} buf
+ * @returns {String}
+ */
+export const bufferToHexString = (buf) => buf.toString('hex')
+
 /**
  * Checks if the type of record inherits from a common one
  * @param {String} key - type of doc build from ${type}_${schemaVersion}

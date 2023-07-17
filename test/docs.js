@@ -45,6 +45,7 @@ export const docs = {
       schemaType: 'Observation',
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
+      links: ['a498daf102']
     },
     filter: {
       id: randomBytes(32).toString('hex'),

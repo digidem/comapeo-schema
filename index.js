@@ -6,7 +6,7 @@ import * as cenc from 'compact-encoding'
 import * as Schemas from './dist/schemas.js'
 import * as ProtobufSchemas from './types/proto/index.js'
 import schemasPrefix from './schemasPrefix.js'
-import { inheritsFromCommon, formatSchemaKey } from './utils.js'
+import { inheritsFromCommon, formatSchemaKey, hexStringToBuffer, bufferToHexString } from './utils.js'
 
 const dataTypeIdSize = 6
 const schemaVersionSize = 2
@@ -35,7 +35,8 @@ const jsonSchemaToProto = (obj) => {
     .filter((field) => obj[field])
     .reduce((common, field) => ({ ...common, [field]: obj[field] }), {})
 
-  common.id = Buffer.from(obj['id'], 'hex')
+  common.id = hexStringToBuffer(obj.id)
+  common.links = common.links.map(hexStringToBuffer)
 
   // turn date represented as string to Date (Filter_1 and Observation_4 use pascal case)
   if (key === 'Filter_1' || key === 'Observation_4') {
@@ -78,8 +79,8 @@ const protoToJsonSchema = (
     obj.version = version
   }
 
-
-  obj.id = obj.id.toString('hex')
+  obj.id = bufferToHexString(obj.id)
+  obj.links = obj.links.map(bufferToHexString)
 
   // turn date represented as Date to string (Filter_1 and Observation_4 use pascal case)
   if (key === 'Filter_1' || key === 'Observation_4') {
