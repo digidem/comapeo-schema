@@ -67,10 +67,10 @@ import { randomBytes } from 'node:crypto'
 // FIELD_1
 const obj = {
   id: randomBytes(32).toString('hex'),
-  schemaType: 'Field',
+  schemaType: 'Project',
   schemaVersion: 1,
-  key: ['hi'],
-  type: 'text',
+  name: 'My Project',
+  created_at: new Date().toJSON(),
 }
 
 // OBSERVATION 4

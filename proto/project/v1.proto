@@ -1,0 +1,10 @@
+syntax = "proto3";
+package mapeo;
+
+import "google/protobuf/struct.proto";
+import "common/v1.proto";
+
+message Project_1 {
+  Common_1 common = 1;
+  string name = 2;
+}

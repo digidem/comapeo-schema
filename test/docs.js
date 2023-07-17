@@ -110,6 +110,13 @@ export const docs = {
       created_at: new Date().toJSON(),
       timestamp: new Date().toJSON(),
     },
+    project: {
+      id: randomBytes(32).toString('hex'),
+      schemaType: 'Project',
+      schemaVersion: 1,
+      created_at: new Date().toJSON(),
+      name: 'My Project',
+    },
   },
 }
 // Object.keys(docs).forEach(save)
