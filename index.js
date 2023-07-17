@@ -6,7 +6,13 @@ import * as cenc from 'compact-encoding'
 import * as Schemas from './dist/schemas.js'
 import * as ProtobufSchemas from './types/proto/index.js'
 import schemasPrefix from './schemasPrefix.js'
-import { inheritsFromCommon, formatSchemaKey, hexStringToBuffer, bufferToHexString } from './utils.js'
+import {
+  inheritsFromCommon,
+  formatSchemaKey,
+  hexStringToBuffer,
+  bufferToHexString,
+  getLastVersionForSchema,
+} from './utils.js'
 
 const dataTypeIdSize = 6
 const schemaVersionSize = 2
@@ -15,43 +21,43 @@ const schemaVersionSize = 2
  * @returns {import('./types').ProtobufSchema}
  */
 const jsonSchemaToProto = (obj) => {
-  const key = formatSchemaKey(obj.schemaType, obj.schemaVersion)
-  const commonKeys = [
-    'id',
-    'createdAt',
-    'links',
-    'updatedAt',
-    'userId',
-    'deviceId',
-  ]
+  // const key = formatSchemaKey(obj.schemaType, obj.schemaVersion)
+  // const commonKeys = [
+  //   'id',
+  //   'createdAt',
+  //   'links',
+  //   'updatedAt',
+  //   'userId',
+  //   'deviceId',
+  // ]
 
-  /** @type {Object} */
-  const uncommon = Object.keys(obj)
-    .filter((k) => !commonKeys.includes(k))
-    .reduce((uncommon, field) => ({ ...uncommon, [field]: obj[field] }), {})
+  // /** @type {Object} */
+  // const uncommon = Object.keys(obj)
+  //   .filter((k) => !commonKeys.includes(k))
+  //   .reduce((uncommon, field) => ({ ...uncommon, [field]: obj[field] }), {})
 
-  /** @type {Object} */
-  const common = commonKeys
-    .filter((field) => obj[field])
-    .reduce((common, field) => ({ ...common, [field]: obj[field] }), {})
+  // /** @type {Object} */
+  // const common = commonKeys
+  //   .filter((field) => obj[field])
+  //   .reduce((common, field) => ({ ...common, [field]: obj[field] }), {})
 
-  common.id = hexStringToBuffer(obj.id)
-  common.links = common.links.map(hexStringToBuffer)
+  // @ts-ignore
+  obj.id = hexStringToBuffer(obj.id)
+  // @ts-ignore
+  if(obj.links){
+    obj.links = obj.links.map(hexStringToBuffer)
+  }
 
   // turn date represented as string to Date (Filter_1 and Observation_4 use pascal case)
-  if (key === 'Filter_1' || key === 'Observation_4') {
-    common.created_at = new Date(common.createdAt)
-    common.updated_at = new Date(common.updatedAt)
-  } else {
-    common.createdAt = new Date(common.createdAt)
-    common.updatedAt = new Date(common.updatedAt)
-  }
+  // @ts-ignore
+  obj.createdAt = new Date(obj.createdAt)
+  // @ts-ignore
+  obj.updatedAt = new Date(obj.updatedAt)
 
   // when we inherit from common, common is actually a field inside the protobuf object,
   // so we don't destructure it
-  return inheritsFromCommon(key)
-    ? { ...uncommon, common }
-    : { ...uncommon, ...common }
+  // @ts-ignore
+  return obj
 }
 
 /**
@@ -80,17 +86,16 @@ const protoToJsonSchema = (
   }
 
   obj.id = bufferToHexString(obj.id)
-  obj.links = obj.links.map(bufferToHexString)
-
+  if(obj.links){
+    obj.links = obj.links.map(bufferToHexString)
+  }
   // turn date represented as Date to string (Filter_1 and Observation_4 use pascal case)
   if (key === 'Filter_1' || key === 'Observation_4') {
     obj.schemaVersion = schemaVersion
-    if (obj.created_at) {
-      obj.created_at = obj.created_at.toJSON()
-    }
-    if (obj.updated_at) {
-      obj.updated_at = obj.updated_at.toJSON()
-    }
+    obj.created_at = obj.createdAt.toJSON()
+    obj.updated_at = obj.updatedAt.toJSON()
+    delete obj.createdAt
+    delete obj.updatedAt
   } else {
     if (obj.createdAt) obj.createdAt = obj.createdAt.toJSON()
     if (obj.updatedAt) obj.updatedAt = obj.updatedAt.toJSON()
@@ -170,15 +175,26 @@ export const encode = (obj) => {
   const key = formatSchemaKey(obj.schemaType, obj.schemaVersion)
   // some schemas don't have type field so it can be undefined
   const schemaType = obj.schemaType || ''
+
+  // check if schemaType is valid
   if (!ProtobufSchemas[key]) {
     throw new Error(
       `Invalid schemaVersion for ${schemaType} version ${obj.schemaVersion}`
     )
   }
 
+  // check if using lastSchemaVersion
+  const lastSchemaVersion = getLastVersionForSchema(schemaType)
+  if (obj.schemaVersion && lastSchemaVersion !== obj.schemaVersion) {
+    throw new Error(
+      `Invalid schema version ${obj.schemaVersion} for ${schemaType}.
+Only valid to use schema version ${lastSchemaVersion}`
+    )
+  }
+
   const blockPrefix = encodeBlockPrefix({
     dataTypeId: schemasPrefix[schemaType].dataTypeId,
-    schemaVersion: obj.schemaVersion,
+    schemaVersion: lastSchemaVersion,
   })
   const record = jsonSchemaToProto(obj)
   const partial = ProtobufSchemas[key].fromPartial(record)

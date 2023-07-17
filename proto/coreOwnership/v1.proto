@@ -2,15 +2,21 @@ syntax = "proto3";
 package mapeo;
 
 import "google/protobuf/struct.proto";
-import "common/v1.proto";
+import "google/protobuf/timestamp.proto";
 
 message CoreOwnership_1 {
-  Common_1 common = 1;
-  string action = 2;
-  string coreId = 3;
-  string projectId = 4;
-  string storeType = 5;
-  string signature = 6;
-  int32 authorIndex = 7;
-  int32 deviceIndex = 8;
+  // This fields were manually copy and pasted from ../common/v1.proto
+  google.protobuf.Timestamp createdAt = 1;
+  // 32-byte random generated number
+  bytes id = 2;
+  repeated bytes links = 3;
+  google.protobuf.Timestamp updatedAt = 4;
+
+  string action = 5;
+  string coreId = 6;
+  string projectId = 7;
+  string storeType = 8;
+  string signature = 9;
+  int32 authorIndex = 10;
+  int32 deviceIndex = 11;
 }

@@ -2,16 +2,21 @@ syntax = "proto3";
 package mapeo;
 
 import "google/protobuf/struct.proto";
-import "common/v1.proto";
+import "google/protobuf/timestamp.proto";
 
 message Observation_5 {
-  Common_1 common = 1;
+  // This fields were manually copy and pasted from ../common/v1.proto
+  google.protobuf.Timestamp createdAt = 1;
+  // 32-byte random generated number
+  bytes id = 2;
+  repeated bytes links = 3;
+  google.protobuf.Timestamp updatedAt = 4;
 
-  optional float lat = 2;
-  optional float lon = 3;
-  repeated google.protobuf.Struct refs = 4;
-  repeated google.protobuf.Struct attachments = 5;
-  optional google.protobuf.Struct tags = 6;
+  optional float lat = 5;
+  optional float lon = 6;
+  repeated google.protobuf.Struct refs = 7;
+  repeated google.protobuf.Struct attachments = 8;
+  optional google.protobuf.Struct tags = 9;
 
   message Metadata {
     message Location {
@@ -21,5 +26,5 @@ message Observation_5 {
     optional Location location = 1;
     optional bool manual_location = 2;
   }
-  optional Metadata metadata = 7;
+  optional Metadata metadata = 10;
 }

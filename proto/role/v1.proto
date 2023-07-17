@@ -2,14 +2,20 @@ syntax = "proto3";
 package mapeo;
 
 import "google/protobuf/struct.proto";
-import "common/v1.proto";
+import "google/protobuf/timestamp.proto";
 
 message Role_1 {
-  Common_1 common = 1;
-  string role = 2;
-  string projectId = 3;
-  string action = 4;
-  string signature = 5;
-  int32 authorIndex = 6;
-  int32 deviceIndex = 7;
+  // This fields were manually copy and pasted from ../common/v1.proto
+  google.protobuf.Timestamp createdAt = 1;
+  // 32-byte random generated number
+  bytes id = 2;
+  repeated bytes links = 3;
+  google.protobuf.Timestamp updatedAt = 4;
+
+  string role = 5;
+  string projectId = 6;
+  string action = 7;
+  string signature = 8;
+  int32 authorIndex = 9;
+  int32 deviceIndex = 10;
 }

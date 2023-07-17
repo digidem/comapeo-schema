@@ -13,16 +13,16 @@ export const formatSchemaType = (str) =>
  * @param {Number | undefined} schemaVersion
  */
 export const formatSchemaKey = (type, schemaVersion) =>
-  `${formatSchemaType(type)}_${schemaVersion || getLastVersionForSchema(type)}`
+  `${formatSchemaType(type)}_${schemaVersion || getLastVersionForSchema(type).toString()}`
 
 /**
  * Get the last version of a schema given a schemaType
  * @param {String} schemaType
- * @returns {String} schemaVersion
+ * @returns {Number} schemaVersion
  */
 export const getLastVersionForSchema = (schemaType) => {
   const versions = schemasPrefix[schemaType]['schemaVersions']
-  return versions.reduce((a, b) => Math.max(a, b), -Infinity).toString()
+  return versions.reduce((a, b) => Math.max(a, b), -Infinity)
 }
 
 /**

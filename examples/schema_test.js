@@ -9,7 +9,7 @@ const objs = docs.good
 Object.keys(objs).forEach(test)
 
 async function test(key) {
-  if(key !== 'filter') return
+  if(key !== 'observation_5') return
   const obj = objs[key]
   const record = encode(obj)
   const k = obj.schemaType || obj.type

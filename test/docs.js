@@ -16,8 +16,8 @@ export const docs = {
   },
   badSchemaVersion: {
     id: randomBytes(32).toString('hex'),
-    schemaType: 'observation',
-    schemaVersion: null,
+    schemaType: 'Observation',
+    schemaVersion: 4,
     links: [],
     createdAt: new Date().toJSON(),
     refs: [],
@@ -29,8 +29,7 @@ export const docs = {
   good: {
     observation_4: {
       id: randomBytes(32).toString('hex'),
-      schemaType: 'observation',
-      schemaVersion: 4,
+      schemaType: 'Observation',
       links: [],
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
@@ -45,19 +44,21 @@ export const docs = {
       schemaType: 'Observation',
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
-      links: ['a498daf102']
+      links: [],
     },
     filter: {
       id: randomBytes(32).toString('hex'),
+      createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
       schemaType: 'filter',
       schemaVersion: 1,
-      createdAt: new Date().toJSON(),
       filter: ['observation'],
       name: 'john',
+      links: [],
     },
     preset: {
       id: randomBytes(32).toString('hex'),
+      createdAt: new Date().toJSON(),
       schemaType: 'Preset',
       schemaVersion: 1,
       tags: { nature: 'tree' },
@@ -66,10 +67,13 @@ export const docs = {
     },
     field: {
       id: randomBytes(32).toString('hex'),
+      createdAt: new Date().toJSON(),
+      updatedAt: new Date().toJSON(),
       schemaType: 'Field',
       schemaVersion: 1,
       key: 'hi',
       type: 'text',
+      links: [],
     },
     coreOwnership: {
       schemaType: 'coreOwnership',
@@ -83,6 +87,7 @@ export const docs = {
       action: 'core:owner',
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
+      links: [],
     },
     device: {
       schemaType: 'Device',
@@ -96,6 +101,7 @@ export const docs = {
       deviceIndex: 10,
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
+      links: [],
     },
     role: {
       id: randomBytes(32).toString('hex'),
@@ -109,7 +115,7 @@ export const docs = {
       deviceIndex: 10,
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
+      links: [],
     },
   },
 }
-// Object.keys(docs).forEach(save)
