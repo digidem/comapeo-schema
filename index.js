@@ -15,11 +15,12 @@ const schemaVersionSize = 2
  * @returns {import('./types').ProtobufSchema}
  */
 const jsonSchemaToProto = (obj) => {
+  const key = formatSchemaKey(obj.schemaType, obj.schemaVersion)
   const commonKeys = [
     'id',
-    'created_at',
+    'createdAt',
     'links',
-    'timestamp',
+    'updatedAt',
     'userId',
     'deviceId',
   ]
@@ -35,11 +36,16 @@ const jsonSchemaToProto = (obj) => {
     .reduce((common, field) => ({ ...common, [field]: obj[field] }), {})
 
   common.id = Buffer.from(obj['id'], 'hex')
-  // turn date represented as string to Date
-  common.created_at = new Date(common.created_at)
-  common.timestamp = new Date(common.timestamp)
 
-  const key = formatSchemaKey(obj.schemaType, obj.schemaVersion)
+  // turn date represented as string to Date (Filter_1 and Observation_4 use pascal case)
+  if (key === 'Filter_1' || key === 'Observation_4') {
+    common.created_at = new Date(common.createdAt)
+    common.updated_at = new Date(common.updatedAt)
+  } else {
+    common.createdAt = new Date(common.createdAt)
+    common.updatedAt = new Date(common.updatedAt)
+  }
+
   // when we inherit from common, common is actually a field inside the protobuf object,
   // so we don't destructure it
   return inheritsFromCommon(key)
@@ -59,23 +65,35 @@ const protoToJsonSchema = (
   protobufObj,
   { schemaVersion, schemaType, version }
 ) => {
+  const key = formatSchemaKey(schemaType, schemaVersion)
   /** @type {Object} */
-  let obj = { ...protobufObj, schemaVersion, schemaType }
+  let obj = { ...protobufObj, schemaType }
   if (obj.common) {
     obj = { ...obj, ...obj.common }
     delete obj.common
   }
 
   // Preset_1 and Field_1 don't have a version field and don't accept additional fields
-  const key = formatSchemaKey(schemaType, schemaVersion)
   if (key !== 'Preset_1' && key !== 'Field_1') {
     obj.version = version
   }
 
+
   obj.id = obj.id.toString('hex')
-  // turn date represented as Date to string
-  if (obj.created_at) obj.created_at = obj.created_at.toJSON()
-  if (obj.timestamp) obj.timestamp = obj.timestamp.toJSON()
+
+  // turn date represented as Date to string (Filter_1 and Observation_4 use pascal case)
+  if (key === 'Filter_1' || key === 'Observation_4') {
+    obj.schemaVersion = schemaVersion
+    if (obj.created_at) {
+      obj.created_at = obj.created_at.toJSON()
+    }
+    if (obj.updated_at) {
+      obj.updated_at = obj.updated_at.toJSON()
+    }
+  } else {
+    if (obj.createdAt) obj.createdAt = obj.createdAt.toJSON()
+    if (obj.updatedAt) obj.updatedAt = obj.updatedAt.toJSON()
+  }
   return obj
 }
 

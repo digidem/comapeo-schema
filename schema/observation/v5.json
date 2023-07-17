@@ -53,12 +53,6 @@
       "type": "string",
       "enum": ["Observation"]
     },
-    "schemaVersion": {
-      "description": "Version of this schema. Should increment for breaking changes to the schema",
-      "type": "number",
-      "minimum": 1,
-      "enum": [5]
-    },
     "lat": {
       "description": "latitude of the observation",
       "type": ["number", "null"],
@@ -152,5 +146,5 @@
       "additionalProperties": true
     }
   },
-  "required": ["id", "version", "created_at", "schemaType", "schemaVersion"]
+  "required": ["id", "version","schemaType"]
 }

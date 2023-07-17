@@ -6,30 +6,22 @@
   "type": "object",
   "properties": {
     "id": {
-      "description": "Unique value that identifies this element",
+      "description": "Hex-encoded 32-byte buffer",
       "type": "string"
     },
     "version": {
-      "description": "Unique value that identifies this particular version of this element",
+      "description": "id (hex-encoded 32-byte buffer) and core sequence number, separated by '/'",
       "type": "string"
     },
-    "created_at": {
+    "createdAt": {
       "description": "RFC3339-formatted datetime of when the first version of the element was created",
       "type": "string",
       "format": "date-time"
     },
-    "timestamp": {
+    "updatedAt": {
       "description": "RFC3339-formatted datetime of when this version of the element was created",
       "type": "string",
       "format": "date-time"
-    },
-    "userId": {
-      "description": "ID of the user who made this edit",
-      "type": "string"
-    },
-    "deviceId": {
-      "description": "ID of the device that made this edit",
-      "type": "string"
     },
     "schemaType": {
       "description": "enum that defines the type of document in the database (defines which schema should be used)",
@@ -42,12 +34,7 @@
       "items": {
         "type": "string"
       }
-    },
-    "schemaVersion": {
-      "description": "Version of schema. Should increment for breaking changes to the schema",
-      "type": "number",
-      "minimum": 1
     }
   },
-  "required": ["id", "created_at", "schemaType"]
+  "required": ["id", "createdAt", "schemaType", "updatedAt", "links"]
 }

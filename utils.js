@@ -1,3 +1,4 @@
+import schemasPrefix from './schemasPrefix.js'
 /**
  * Format schema type string to match protobuf/schema prefix type lookups
  * @param {String} str
@@ -12,8 +13,17 @@ export const formatSchemaType = (str) =>
  * @param {Number | undefined} schemaVersion
  */
 export const formatSchemaKey = (type, schemaVersion) =>
-  `${formatSchemaType(type)}_${schemaVersion}`
+  `${formatSchemaType(type)}_${schemaVersion || getLastVersionForSchema(type)}`
 
+/**
+ * Get the last version of a schema given a schemaType
+ * @param {String} schemaType
+ * @returns {String} schemaVersion
+ */
+export const getLastVersionForSchema = (schemaType) => {
+  const versions = schemasPrefix[schemaType]['schemaVersions']
+  return versions.reduce((a, b) => Math.max(a, b), -Infinity).toString()
+}
 /**
  * Checks if the type of record inherits from a common one
  * @param {String} key - type of doc build from ${type}_${schemaVersion}

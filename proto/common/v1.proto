@@ -4,13 +4,11 @@ package mapeo;
 import "google/protobuf/timestamp.proto";
 
 message Common_1 {
-  google.protobuf.Timestamp created_at = 1;
-  optional string deviceId = 2;
+  google.protobuf.Timestamp createdAt = 1;
   // 32-byte random generated number
-  bytes id = 3;
-  repeated string links = 4;
-  optional google.protobuf.Timestamp timestamp = 5;
-  optional string userId = 6;
+  bytes id = 2;
+  repeated bytes links = 3;
+  google.protobuf.Timestamp updatedAt = 4;
 }
 /* ignored fields and differences from common.json jsonSchema
  * id is a byte buffer here and a string in jsonSchema
