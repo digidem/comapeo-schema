@@ -28,7 +28,7 @@
       "type": "string"
     },
     "links": {
-      "description": "Version ids of the previous document versions this one is replacing",
+      "description": "Version ids of the previous document versions this one is replacing. Each link is id (hex-encoded 32 byte buffer) and sequence number, separated by '/'",
       "type": "array",
       "uniqueItems": true,
       "items": {

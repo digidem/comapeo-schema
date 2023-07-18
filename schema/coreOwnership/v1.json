@@ -5,7 +5,10 @@
   "type": "object",
   "allOf":[{"$ref": "../common/v1.json"}],
   "properties": {
-    "schemaType": { "type": "string", "pattern": "^coreOwnership$" },
+    "schemaType": {
+      "type": "string",
+      "enum": ["coreOwnership"]
+      },
     "action": {
       "type": "string",
       "enum": ["core:owner"]

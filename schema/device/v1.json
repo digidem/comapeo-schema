@@ -7,7 +7,7 @@
   "properties": {
     "schemaType": {
       "type": "string",
-      "pattern": "^Device$"
+      "enum": ["device"]
     },
     "action": {
       "type": "string",

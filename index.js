@@ -27,8 +27,6 @@ const jsonSchemaToProto = (obj) => {
   //   'createdAt',
   //   'links',
   //   'updatedAt',
-  //   'userId',
-  //   'deviceId',
   // ]
 
   // /** @type {Object} */
@@ -42,22 +40,28 @@ const jsonSchemaToProto = (obj) => {
   //   .reduce((common, field) => ({ ...common, [field]: obj[field] }), {})
 
   // @ts-ignore
-  obj.id = hexStringToBuffer(obj.id)
-  // @ts-ignore
-  if(obj.links){
-    obj.links = obj.links.map(hexStringToBuffer)
-  }
+  // obj.id = hexStringToBuffer(obj.id)
+  // if (obj.links) {
+  //   // @ts-ignore
+  //   obj.links =
+  // }
 
-  // turn date represented as string to Date (Filter_1 and Observation_4 use pascal case)
-  // @ts-ignore
-  obj.createdAt = new Date(obj.createdAt)
-  // @ts-ignore
-  obj.updatedAt = new Date(obj.updatedAt)
+  // // turn date represented as string to Date (Filter_1 and Observation_4 use pascal case)
+  // // @ts-ignore
+  // obj.createdAt = new Date(obj.createdAt)
+  // // @ts-ignore
+  // obj.updatedAt = new Date(obj.updatedAt)
 
   // when we inherit from common, common is actually a field inside the protobuf object,
   // so we don't destructure it
   // @ts-ignore
-  return obj
+  return {
+    ...obj,
+    id: hexStringToBuffer(obj.id),
+    links: obj.links.map(hexStringToBuffer),
+    createdAt: new Date(obj.createdAt),
+    updatedAt: new Date(obj.updatedAt),
+  }
 }
 
 /**
@@ -72,7 +76,7 @@ const protoToJsonSchema = (
   protobufObj,
   { schemaVersion, schemaType, version }
 ) => {
-  const key = formatSchemaKey(schemaType, schemaVersion)
+  const key = formatSchemaKey(schemaType)
   /** @type {Object} */
   let obj = { ...protobufObj, schemaType }
   if (obj.common) {
@@ -81,25 +85,25 @@ const protoToJsonSchema = (
   }
 
   // Preset_1 and Field_1 don't have a version field and don't accept additional fields
-  if (key !== 'Preset_1' && key !== 'Field_1') {
-    obj.version = version
-  }
+  // if (key !== 'Preset_1' && key !== 'Field_1') {
+  //   obj.version = version
+  // }
 
   obj.id = bufferToHexString(obj.id)
-  if(obj.links){
+  if (obj.links) {
     obj.links = obj.links.map(bufferToHexString)
   }
   // turn date represented as Date to string (Filter_1 and Observation_4 use pascal case)
-  if (key === 'Filter_1' || key === 'Observation_4') {
-    obj.schemaVersion = schemaVersion
-    obj.created_at = obj.createdAt.toJSON()
-    obj.updated_at = obj.updatedAt.toJSON()
-    delete obj.createdAt
-    delete obj.updatedAt
-  } else {
-    if (obj.createdAt) obj.createdAt = obj.createdAt.toJSON()
-    if (obj.updatedAt) obj.updatedAt = obj.updatedAt.toJSON()
-  }
+  // if (key === 'Filter_1' || key === 'Observation_4') {
+  //   obj.schemaVersion = schemaVersion
+  //   obj.created_at = obj.createdAt.toJSON()
+  //   obj.updated_at = obj.updatedAt.toJSON()
+  //   delete obj.createdAt
+  //   delete obj.updatedAt
+  // } else {
+  // }
+  obj.createdAt = obj.createdAt.toJSON()
+  obj.updatedAt = obj.updatedAt.toJSON()
   return obj
 }
 
@@ -144,7 +148,7 @@ export const decodeBlockPrefix = (buf) => {
  * @returns {Boolean} indicating if the object is valid
  */
 export const validate = (obj) => {
-  const key = formatSchemaKey(obj.schemaType, obj.schemaVersion)
+  const key = formatSchemaKey(obj.schemaType)
 
   // Preset_1 doesn't have a type field, so validation won't pass
   // but we still need it to now which schema to validate, so we delete it after grabbing the key
@@ -172,28 +176,25 @@ export const validate = (obj) => {
  * @param {import('./types').JSONSchema} obj - Object to be encoded
  * @returns {Buffer} protobuf encoded buffer with dataTypeIdSize + schemaVersionSize bytes prepended, one for the type of record and the other for the version of the schema */
 export const encode = (obj) => {
-  const key = formatSchemaKey(obj.schemaType, obj.schemaVersion)
-  // some schemas don't have type field so it can be undefined
-  const schemaType = obj.schemaType || ''
-
+  const key = `${formatSchemaKey(obj.schemaType)}`
   // check if schemaType is valid
   if (!ProtobufSchemas[key]) {
     throw new Error(
-      `Invalid schemaVersion for ${schemaType} version ${obj.schemaVersion}`
+      `Invalid schemaVersion for ${obj.schemaType} version ${obj.schemaVersion}`
     )
   }
 
   // check if using lastSchemaVersion
-  const lastSchemaVersion = getLastVersionForSchema(schemaType)
+  const lastSchemaVersion = getLastVersionForSchema(obj.schemaType)
   if (obj.schemaVersion && lastSchemaVersion !== obj.schemaVersion) {
     throw new Error(
-      `Invalid schema version ${obj.schemaVersion} for ${schemaType}.
+      `Invalid schema version ${obj.schemaVersion} for ${obj.schemaType}.
 Only valid to use schema version ${lastSchemaVersion}`
     )
   }
 
   const blockPrefix = encodeBlockPrefix({
-    dataTypeId: schemasPrefix[schemaType].dataTypeId,
+    dataTypeId: schemasPrefix[obj.schemaType].dataTypeId,
     schemaVersion: lastSchemaVersion,
   })
   const record = jsonSchemaToProto(obj)
@@ -213,7 +214,7 @@ export const decode = (buf, { coreId, seq }) => {
     (type, key) => (schemasPrefix[key].dataTypeId === dataTypeId ? key : type),
     ''
   )
-  const key = formatSchemaKey(schemaType, schemaVersion)
+  const key = formatSchemaKey(schemaType)
   if (!ProtobufSchemas[key]) {
     throw new Error(
       `Invalid schemaVersion for ${schemaType} version ${schemaVersion}`

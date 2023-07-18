@@ -9,7 +9,6 @@ const objs = docs.good
 Object.keys(objs).forEach(test)
 
 async function test(key) {
-  if(key !== 'observation_5') return
   const obj = objs[key]
   const record = encode(obj)
   const k = obj.schemaType || obj.type
@@ -20,8 +19,8 @@ async function test(key) {
   try {
     const index = 0
     const data = await core.get(index)
-    const decodedData = decode(data, { coreId: core.key, seq: index })
     console.log(`trying ${k}`)
+    const decodedData = decode(data, { coreId: core.key, seq: index })
     console.log('data', decodedData)
     console.log(`VALID? `, validate(decodedData), '\n')
     if (Buffer.compare(data, record) !== 0) {

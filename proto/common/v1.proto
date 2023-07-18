@@ -3,11 +3,16 @@ package mapeo;
 
 import "google/protobuf/timestamp.proto";
 
+
 message Common_1 {
   google.protobuf.Timestamp createdAt = 1;
   // 32-byte random generated number
   bytes id = 2;
-  repeated bytes links = 3;
+  message Link {
+    bytes coreId = 1;
+    int32 seq = 2;
+  }
+  repeated Link links = 3;
   google.protobuf.Timestamp updatedAt = 4;
 }
 /* ignored fields and differences from common.json jsonSchema

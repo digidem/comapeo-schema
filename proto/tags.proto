@@ -1,0 +1,30 @@
+syntax = "proto3";
+package mapeo;
+
+// TAGS
+enum NullValue {
+  NULL_VALUE = 0;
+}
+message TagsPrimitive {
+  oneof kind {
+    NullValue null_value = 1;
+    double number_value = 2;
+    string string_value = 3;
+    bool boolean_value = 4;
+  }
+}
+message ListValue {
+  repeated TagsPrimitive values = 1;
+}
+
+
+message Value {
+  oneof kind {
+    TagsPrimitive primitive_value = 1;
+    ListValue list_value = 2;
+  }
+}
+
+message Tags {
+  map<string,Value> fields = 1;
+}

@@ -37,7 +37,7 @@ const schemas = glob
 
 const schemaExports = schemas.reduce(
   (acc, { schema, schemaVersion, schemaType }) => {
-    const key = formatSchemaKey(schemaType, schemaVersion)
+    const key = formatSchemaKey(schemaType)
     acc[key] = schema['$id']
     return acc
   },
@@ -94,18 +94,13 @@ ${schemas
   )
   .join('\n')}
 
-interface base {
-schemaType?: string;
-type?: string;
-schemaVersion?: number;
-}
 export type JSONSchema = (${schemas
   .map(
     /** @param {Object} schema */
     ({ schemaVersion, schemaType }) =>
       `${formatSchemaType(schemaType)}_${schemaVersion}`
   )
-  .join(' | ')}) & base
+  .join(' | ')})
 ${schemas
   .map(({ schemaType, schemaVersion }) => {
     const as =

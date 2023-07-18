@@ -10,10 +10,9 @@ export const formatSchemaType = (str) =>
 /**
  * Turn a schema type and version into `${type}_${schemaVersion}`
  * @param {String | undefined} type
- * @param {Number | undefined} schemaVersion
  */
-export const formatSchemaKey = (type, schemaVersion) =>
-  `${formatSchemaType(type)}_${schemaVersion || getLastVersionForSchema(type).toString()}`
+export const formatSchemaKey = (type) =>
+  `${formatSchemaType(type)}_${getLastVersionForSchema(type).toString()}`
 
 /**
  * Get the last version of a schema given a schemaType

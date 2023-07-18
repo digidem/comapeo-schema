@@ -10,4 +10,5 @@ plugins:
       - env=node
       - snakeToCamel=false
       - useOptionals=messages
+      - stringEnums=true
       # - initializeFieldsAsUndefined=true

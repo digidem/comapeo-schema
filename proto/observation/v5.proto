@@ -3,28 +3,74 @@ package mapeo;
 
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
+import "tags.proto";
 
 message Observation_5 {
-  // This fields were manually copy and pasted from ../common/v1.proto
+  // BEGIN of copy-pasted fields ../common/v1.proto
   google.protobuf.Timestamp createdAt = 1;
   // 32-byte random generated number
   bytes id = 2;
-  repeated bytes links = 3;
+  message Link {
+    bytes coreId = 1;
+    int32 seq = 2;
+  }
+  repeated Link links = 3;
   google.protobuf.Timestamp updatedAt = 4;
+  // END of copy-pasted fields ../common/v1.proto
 
   optional float lat = 5;
   optional float lon = 6;
-  repeated google.protobuf.Struct refs = 7;
-  repeated google.protobuf.Struct attachments = 8;
-  optional google.protobuf.Struct tags = 9;
 
+  message Ref {
+    bytes id = 1;
+  }
+  repeated Ref refs = 7;
+
+  // ATTACHMENT
+  enum AttachmentType {
+    photo = 0;
+    video = 1;
+    audio = 2;
+  }
+  message Attachment {
+    bytes driveId = 1;
+    string name = 2;
+    AttachmentType type = 3;
+  }
+  repeated Attachment attachments = 8;
+
+  // TAGS
+  optional Tags tags = 9;
+
+  // METADATA
   message Metadata {
-    message Location {
-      optional float precision = 1;
-      optional int32 altitude = 2;
+    optional bool manualLocation = 1;
+
+    message Position {
+      google.protobuf.Timestamp timestamp = 1;
+      bool mocked = 2;
+
+      message Coords {
+        float latitude = 1;
+        float longitude = 2;
+        float altitude = 3;
+        float heading = 4;
+        float speed = 5;
+        float acurracy = 6;
+      }
+      optional Coords coords = 3;
     }
-    optional Location location = 1;
-    optional bool manual_location = 2;
+
+    message PositionProvider {
+      bool gpsAvailable = 1;
+      bool passiveAvailable = 2;
+      bool locationServicesEnabled = 3;
+      bool networkAvailable = 4;
+    }
+
+    optional Position position = 3;
+    optional Position lastSavedPosition = 4;
+    optional PositionProvider positionProvider = 5;
   }
   optional Metadata metadata = 10;
 }

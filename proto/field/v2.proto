@@ -1,0 +1,44 @@
+syntax = "proto3";
+package mapeo;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "tags.proto";
+
+message Field_2 {
+  // BEGIN of copy-pasted fields ../common/v1.proto
+  google.protobuf.Timestamp createdAt = 1;
+  // 32-byte random generated number
+  bytes id = 2;
+  message Link {
+    bytes coreId = 1;
+    int32 seq = 2;
+  }
+  repeated Link links = 3;
+  google.protobuf.Timestamp updatedAt = 4;
+  // END of copy-pasted fields ../common/v1.proto
+
+  string tagKey = 5;
+  enum Type {
+    text = 0;
+    number = 1;
+    selectOne = 2;
+    selectMultiple = 3;
+  }
+  Type type = 6;
+  string label = 7;
+  enum Appearance {
+    multiline = 0;
+    singleline = 1;
+  }
+  Appearance appearance = 8;
+  bool snakeCase = 9;
+  message Option {
+    string label = 1;
+    TagsPrimitive value = 2;
+  }
+  repeated Option options = 10;
+  bool universal = 11;
+  optional string placeholder = 12;
+  optional string helperText = 13;
+}

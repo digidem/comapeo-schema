@@ -7,7 +7,7 @@
   "properties": {
     "schemaType": {
       "type": "string",
-      "pattern": "^Role$"
+      "enum": ["role"]
     },
     "role": {
       "type": "string",
