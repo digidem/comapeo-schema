@@ -106,7 +106,11 @@
     "tags": {
       "type": "object",
       "description": "User-defined key-value pairs relevant to this observation",
-      "properties": {},
+      "properties": {
+        "fields": {
+          "type": "object"
+        }
+      },
       "additionalProperties": false
     },
     "metadata": {
@@ -152,6 +156,6 @@
       "additionalProperties": false
     }
   },
-  "required": ["schemaType"],
+  "required": ["schemaType", "tags"],
   "additionalProperties": true
 }

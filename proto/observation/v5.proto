@@ -39,7 +39,7 @@ message Observation_5 {
   repeated Attachment attachments = 8;
 
   // TAGS
-  optional Tags tags = 9;
+  Tags tags = 9;
 
   // METADATA
   message Metadata {

@@ -32,6 +32,7 @@ export const docs = {
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
       links: [],
+      tags: { fields: { myTag: 10 } },
     },
     preset: {
       id: randomBytes(32).toString('hex'),
