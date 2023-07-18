@@ -91,5 +91,12 @@ export const docs = {
       updatedAt: new Date().toJSON(),
       links: [],
     },
+    project: {
+      id: randomBytes(32).toString('hex'),
+      schemaType: 'project',
+      createdAt: new Date().toJSON(),
+      name: 'My Project',
+      links:[]
+    },
   },
 }

@@ -88,7 +88,6 @@ const protoToJsonSchema = (
   // if (key !== 'Preset_1' && key !== 'Field_1') {
   //   obj.version = version
   // }
-
   obj.id = bufferToHexString(obj.id)
   if (obj.links) {
     obj.links = obj.links.map(bufferToHexString)

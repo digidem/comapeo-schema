@@ -1,7 +1,6 @@
 syntax = "proto3";
 package mapeo;
 
-import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "tags.proto";
 

@@ -1,0 +1,20 @@
+syntax = "proto3";
+package mapeo;
+
+import "google/protobuf/timestamp.proto";
+
+message Project_1 {
+  // BEGIN of copy-pasted fields ../common/v1.proto
+  google.protobuf.Timestamp createdAt = 1;
+  // 32-byte random generated number
+  bytes id = 2;
+  message Link {
+    bytes coreId = 1;
+    int32 seq = 2;
+  }
+  repeated Link links = 3;
+  google.protobuf.Timestamp updatedAt = 4;
+  // END of copy-pasted fields ../common/v1.proto
+
+  string name = 5;
+}
