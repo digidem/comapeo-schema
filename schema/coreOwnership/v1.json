@@ -23,5 +23,6 @@
     "signature": { "type": "string" },
     "authorIndex": { "type": "integer" },
     "deviceIndex": { "type": "integer" }
-  }
+  },
+  "required": ["schemaType"]
 }

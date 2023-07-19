@@ -1,6 +1,5 @@
 // @ts-check
 // This script is use to generate various files to be used at runtime:
-// * dist/schemas.js - all the validating functions for jsonSchema
 // * types/schema/index.d.ts - Union type for all the JsonSchemas
 // * types/proto/index.d.ts - Union type for all the ProtobufSchemas
 // * types/proto/index.js - Exports all protobufs from one file
@@ -9,10 +8,8 @@
 import fs from 'node:fs'
 import path from 'path'
 import { URL } from 'url'
-import Ajv from 'ajv'
-import standaloneCode from 'ajv/dist/standalone/index.js'
 import glob from 'glob-promise'
-import { formatSchemaKey, formatSchemaType } from '../utils.js'
+import { formatSchemaType } from '../utils.js'
 
 const __dirname = new URL('.', import.meta.url).pathname
 
@@ -36,43 +33,6 @@ const loadSchema = (p) => {
 const schemas = glob
   .sync('/tmp/schema/*/*.json', { cwd: 'scripts' })
   .map(loadSchema)
-// // avoid having common in loaded schemas since we are embeding it
-// .filter(({ schemaType }) => schemaType !== 'common')
-
-// const common = readJSON('../schema/common/v1.json')
-
-// const schemaExports = schemas.reduce((acc, { schema, schemaType }) => {
-//   const key = formatSchemaKey(schemaType)
-//   acc[key] = schema['$id']
-//   return acc
-// }, {})
-
-// const mergeCommon = ({ schema }) => {
-//   schema.properties = { ...common.properties, ...schema.properties }
-//   return schema
-// }
-
-// compile schemas
-// const ajv = new Ajv({
-//   schemas: schemas.map(({schema}) => schema),
-//   code: { source: true, esm: true },
-//   formats: { 'date-time': true },
-// })
-// ajv.addKeyword('meta:enum')
-
-// // generate validation code
-// let schemaValidations = standaloneCode(ajv, schemaExports)
-
-// const dist = path.join(__dirname, '../dist')
-// if (!fs.existsSync(dist)) {
-//   fs.mkdirSync(dist)
-// }
-
-// // write to -> dist/schemas.js
-// fs.writeFileSync(
-//   path.join(__dirname, '../dist', 'schemas.js'),
-//   schemaValidations
-// )
 
 const latestSchemaVersions = schemas.reduce(
   (acc, { schemaVersion, schemaType }) => {
@@ -191,5 +151,9 @@ ${individualExports}`
 fs.writeFileSync(
   path.join(__dirname, '../types/index.d.ts'),
   `export { ProtobufSchema } from './proto'
-export { JSONSchema } from './schema'`
+export { JSONSchema } from './schema'
+export type schemaType =  ${schemas
+    .map(({ schemaType }) => `'${schemaType}'`)
+    .join(' | ')} | string
+`
 )

@@ -15,16 +15,6 @@ export const formatSchemaKey = (type) =>
   `${formatSchemaType(type)}_${getLastVersionForSchema(type).toString()}`
 
 /**
- * Get the last version of a schema given a schemaType
- * @param {String} schemaType
- * @returns {Number} schemaVersion
- */
-export const getLastVersionForSchema = (schemaType) => {
-  const versions = schemasPrefix[schemaType]['schemaVersions']
-  return versions.reduce((a, b) => Math.max(a, b), -Infinity)
-}
-
-/**
  * Turn a hex-encoded string to a byte buffer
  * @param {String} hexStr
  * @returns {Buffer}
@@ -39,12 +29,24 @@ export const hexStringToBuffer = (hexStr) => Buffer.from(hexStr, 'hex')
 export const bufferToHexString = (buf) => buf.toString('hex')
 
 /**
- * Checks if the type of record inherits from a common one
- * @param {String} key - type of doc build from ${type}_${schemaVersion}
- * @returns {boolean}
+ * Get the last version of a schema given a schemaType
+ * @param {String} schemaType
+ * @returns {number} schemaVersion
  */
-export const inheritsFromCommon = (key) =>
-  key !== 'Observation_4' &&
-  key !== 'Preset_1' &&
-  key !== 'Filter_1' &&
-  key !== 'Field_1'
+export const getLastVersionForSchema = (schemaType) => {
+  const versions = schemasPrefix[schemaType]['schemaVersions']
+  return versions.reduce((a, b) => Math.max(a, b), -Infinity)
+}
+
+export const hexStringToCoreVersion = (hexStr) => {
+  const [id, seq] = hexStr.split('/')
+  return { coreId: Buffer.from(id, 'hex'), seq: Number(seq) }
+}
+
+/**
+ * Turn a an object with {coreId:Buffer, seq:Number} to hex-encoded string of coreId/seq to
+ * @param {coreVersion} coreVersionObj
+ * @returns {String}
+ */
+export const coreVersionToHexString = (coreVersionObj) =>
+  `${coreVersionObj.coreId.toString('hex')}/${coreVersionObj.seq}`

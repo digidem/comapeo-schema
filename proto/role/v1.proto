@@ -6,13 +6,17 @@ import "google/protobuf/timestamp.proto";
 
 message Role_1 {
 
-  // This fields were manually copy and pasted from ../common/v1.proto
+  // BEGIN OF COMMON
   google.protobuf.Timestamp createdAt = 1;
   // 32-byte random generated number
   bytes id = 2;
-  repeated bytes links = 3;
+  message Link {
+    bytes coreId = 1;
+    int32 seq = 2;
+  }
+  repeated Link links = 3;
   google.protobuf.Timestamp updatedAt = 4;
-  // end of copy and paste
+  // END OF COMMON
 
   string role = 5;
   string projectId = 6;

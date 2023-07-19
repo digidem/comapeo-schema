@@ -6,11 +6,14 @@ import * as cenc from 'compact-encoding'
 import * as Schemas from './dist/schemas.js'
 import * as ProtobufSchemas from './types/proto/index.js'
 import schemasPrefix from './schemasPrefix.js'
+import { randomBytes } from 'node:crypto'
 import {
   formatSchemaKey,
   hexStringToBuffer,
   bufferToHexString,
   getLastVersionForSchema,
+  hexStringToCoreVersion,
+  coreVersionToHexString,
 } from './utils.js'
 
 const dataTypeIdSize = 6
@@ -25,7 +28,7 @@ const jsonSchemaToProto = (obj) => {
   return {
     ...obj,
     id: hexStringToBuffer(obj.id),
-    links: obj.links.map(hexStringToBuffer),
+    links: obj.links.map(hexStringToCoreVersion),
     createdAt: obj.createdAt,
     updatedAt: obj.updatedAt,
   }
@@ -33,18 +36,17 @@ const jsonSchemaToProto = (obj) => {
 
 /**
  * @param {import('./types').ProtobufSchema} protobufObj
- * @param {Object} obj
- * @param {String} obj.schemaType
+ * @param {import('./types').schemaType} schemaType
  * @returns {import('./types').JSONSchema}
  */
-const protoToJsonSchema = (protobufObj, { schemaType }) => {
+const protoToJsonSchema = (protobufObj, schemaType) => {
+  // @ts-ignore
   return {
     ...protobufObj,
     // @ts-ignore
     schemaType,
     id: bufferToHexString(protobufObj.id),
-    // @ts-ignore
-    links: protobufObj.links.map(bufferToHexString),
+    links: protobufObj.links.map(coreVersionToHexString),
     createdAt: protobufObj.createdAt,
     updatedAt: protobufObj.updatedAt,
   }
@@ -138,6 +140,7 @@ Only valid to use schema version ${lastSchemaVersion}`
  * */
 export const decode = (buf, { coreId, seq }) => {
   const { dataTypeId, schemaVersion } = decodeBlockPrefix(buf)
+
   // TODO: invert schemas prefix at the top of the file so we can index by the data type id
   const schemaType = Object.keys(schemasPrefix).reduce(
     (type, key) => (schemasPrefix[key].dataTypeId === dataTypeId ? key : type),
@@ -152,5 +155,7 @@ export const decode = (buf, { coreId, seq }) => {
 
   const record = buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
   const protobufObj = ProtobufSchemas[key].decode(record)
-  return protoToJsonSchema(protobufObj, { schemaType })
+
+  // @ts-ignore
+  return protoToJsonSchema(protobufObj, schemaType)
 }
