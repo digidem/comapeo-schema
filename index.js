@@ -21,6 +21,7 @@ const schemaVersionSize = 2
  * @returns {import('./types').ProtobufSchema}
  */
 const jsonSchemaToProto = (obj) => {
+  // @ts-ignore
   return {
     ...obj,
     id: hexStringToBuffer(obj.id),
@@ -39,6 +40,7 @@ const jsonSchemaToProto = (obj) => {
 const protoToJsonSchema = (protobufObj, { schemaType }) => {
   return {
     ...protobufObj,
+    // @ts-ignore
     schemaType,
     id: bufferToHexString(protobufObj.id),
     // @ts-ignore
