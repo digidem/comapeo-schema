@@ -6,4 +6,5 @@ lint:
   use:
     - DEFAULT
 build:
-  excludes: [node_modules]
+  # do not generate files for common/v1.proto (since we're embeding it)
+  excludes: [node_modules, common/]

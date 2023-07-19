@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
 
-for file in schema/**/*.json
+for file in /tmp/schema/**/*.json
 do
   name="${file%%.*}"
-  mkdir -p types/$(dirname $file)
-  cat "$file" | json2ts --cwd 'schema/*' > "types/$name.ts"
+  p=${name#/tmp/}
+  # do not generate files for common.json (since we're embeding it)
+  # if [[ $name != *common* ]];then
+  mkdir -p types/$(dirname $p)
+  cat "$file" | json2ts --cwd 'schema/*' > "types/$p.ts"
+  # fi
 done

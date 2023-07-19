@@ -16,6 +16,8 @@ import { formatSchemaKey, formatSchemaType } from '../utils.js'
 
 const __dirname = new URL('.', import.meta.url).pathname
 
+const readJSON = (f) =>
+  JSON.parse(fs.readFileSync(new URL(f, import.meta.url)).toString())
 /**
  * @param {string} p
  * @returns {{schemaType: String, schemaVersion: Number, schema:Object}}
@@ -24,47 +26,53 @@ const loadSchema = (p) => {
   const { dir, name } = path.parse(p)
   return {
     // we get the type of the schema from the directory
-    schemaType: dir.replace('../schema/', ''),
+    schemaType: dir.replace('/tmp/schema/', ''),
     // we get the version from the filename
     schemaVersion: parseInt(name.replace('v', '')),
-    schema: JSON.parse(fs.readFileSync(new URL(p, import.meta.url)).toString()),
+    schema: readJSON(p),
   }
 }
 
 const schemas = glob
-  .sync('../schema/*/*.json', { cwd: 'scripts' })
+  .sync('/tmp/schema/*/*.json', { cwd: 'scripts' })
   .map(loadSchema)
+// // avoid having common in loaded schemas since we are embeding it
+// .filter(({ schemaType }) => schemaType !== 'common')
 
-const schemaExports = schemas.reduce(
-  (acc, { schema, schemaVersion, schemaType }) => {
-    const key = formatSchemaKey(schemaType)
-    acc[key] = schema['$id']
-    return acc
-  },
-  {}
-)
+// const common = readJSON('../schema/common/v1.json')
+
+// const schemaExports = schemas.reduce((acc, { schema, schemaType }) => {
+//   const key = formatSchemaKey(schemaType)
+//   acc[key] = schema['$id']
+//   return acc
+// }, {})
+
+// const mergeCommon = ({ schema }) => {
+//   schema.properties = { ...common.properties, ...schema.properties }
+//   return schema
+// }
 
 // compile schemas
-const ajv = new Ajv({
-  schemas: schemas.map(({ schema }) => schema),
-  code: { source: true, esm: true },
-  formats: { 'date-time': true },
-})
-ajv.addKeyword('meta:enum')
+// const ajv = new Ajv({
+//   schemas: schemas.map(({schema}) => schema),
+//   code: { source: true, esm: true },
+//   formats: { 'date-time': true },
+// })
+// ajv.addKeyword('meta:enum')
 
-// generate validation code
-let schemaValidations = standaloneCode(ajv, schemaExports)
+// // generate validation code
+// let schemaValidations = standaloneCode(ajv, schemaExports)
 
-const dist = path.join(__dirname, '../dist')
-if (!fs.existsSync(dist)) {
-  fs.mkdirSync(dist)
-}
+// const dist = path.join(__dirname, '../dist')
+// if (!fs.existsSync(dist)) {
+//   fs.mkdirSync(dist)
+// }
 
-// dist/schemas.js
-fs.writeFileSync(
-  path.join(__dirname, '../dist', 'schemas.js'),
-  schemaValidations
-)
+// // write to -> dist/schemas.js
+// fs.writeFileSync(
+//   path.join(__dirname, '../dist', 'schemas.js'),
+//   schemaValidations
+// )
 
 const latestSchemaVersions = schemas.reduce(
   (acc, { schemaVersion, schemaType }) => {
@@ -121,6 +129,7 @@ fs.writeFileSync(
 const protobufFiles = glob.sync('../types/proto/*/*.ts', { cwd: 'scripts' })
 const obj = protobufFiles
   .filter((f) => !f.match(/.d.ts/))
+  .filter((f) => !f.match(/common/))
   .map((p) => {
     const { name, dir } = path.parse(p)
     return {

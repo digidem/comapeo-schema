@@ -11,14 +11,15 @@
   },
   "scripts": {
     "example": "node examples/schema_test.js",
-    "protobuf": "buf generate ./proto",
-    "jsonschema": "scripts/./jsonts",
+    "genSchema": "node scripts/mergeCommon.js",
+    "protoTypes": "buf generate ./proto",
+    "schemaTypes": "scripts/./jsonts",
     "tsc": "tsc",
     "tsc-index": "tsc index.js -d --emitDeclarationOnly --allowJs --allowSyntheticDefaultImports --module es2022 --target es2019 --moduleResolution node",
     "generate": "node scripts/generate.js",
     "doc": "typedoc --plugin typedoc-plugin-markdown",
     "clean": "rm -rf types dist docs",
-    "build": "npm-run-all protobuf jsonschema generate tsc tsc-index doc",
+    "build": "npm-run-all genSchema protoTypes schemaTypes generate tsc tsc-index doc",
     "prepublishOnly": "npm run build",
     "test": "tape 'test/**/*.js'"
   },
