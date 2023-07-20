@@ -11,15 +11,13 @@
   },
   "scripts": {
     "example": "node examples/schema_test.js",
-    "genSchema": "node scripts/mergeCommon.js",
     "protoTypes": "buf generate ./proto",
-    "schemaTypes": "scripts/./jsonts",
     "tsc": "tsc",
     "tsc-index": "tsc index.js -d --emitDeclarationOnly --allowJs --allowSyntheticDefaultImports --module es2022 --target es2019 --moduleResolution node",
     "generate": "node scripts/generate.js",
     "doc": "typedoc --plugin typedoc-plugin-markdown",
     "clean": "rm -rf types dist docs",
-    "build": "npm-run-all genSchema protoTypes schemaTypes generate tsc tsc-index doc",
+    "build": "npm-run-all generate tsc tsc-index doc",
     "prepublishOnly": "npm run build",
     "test": "tape 'test/**/*.js'"
   },
@@ -52,7 +50,7 @@
     "random-access-memory": "^6.0.0",
     "rimraf": "^5.0.1",
     "tape": "^5.6.1",
-    "ts-proto": "^1.138.0",
+    "ts-proto": "^1.156.0",
     "typescript": "^4.8.4"
   },
   "prettier": {

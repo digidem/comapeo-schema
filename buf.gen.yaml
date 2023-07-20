@@ -12,4 +12,4 @@ plugins:
       - useDate=string
       # - useOptionals=none
       - stringEnums=true
-      # - initializeFieldsAsUndefined=true
+      - outputIndex=true
