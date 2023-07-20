@@ -37,12 +37,12 @@ const validationCode = generateValidations(config, jsonSchemas)
 fs.writeFileSync(path.join(DIST_DIRNAME, 'schemas.js'), validationCode)
 
 const jsonSchemaTSDefs = await generateJSONSchemaTS(config, jsonSchemas)
-for (const [schemaName, ts] of Object.entries(jsonSchemaTSDefs)) {
+for (const [filenameBase, ts] of Object.entries(jsonSchemaTSDefs)) {
   const filepath = path.join(
     PROJECT_ROOT,
     'types',
     'schema',
-    schemaName + '.ts'
+    filenameBase + '.ts'
   )
   fs.writeFileSync(filepath, ts)
 }

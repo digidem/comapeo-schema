@@ -18,5 +18,31 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
     })
     typescriptDefs[schemaName] = ts
   }
+
+  const indexLines = []
+
+  for (const schemaName of Object.keys(jsonSchemas)) {
+    const typeName = capitalize(schemaName)
+    indexLines.push(`import { type ${typeName}} from './${schemaName}'`)
+  }
+
+  indexLines.push('')
+  indexLines.push('export type JsonSchemaTypes = {')
+
+  for (const schemaName of Object.keys(jsonSchemas)) {
+    const typeName = capitalize(schemaName)
+    indexLines.push(`  ${schemaName}: ${typeName},`)
+  }
+
+  indexLines.push('}')
+  indexLines.push('')
+
+  for (const schemaName of Object.keys(jsonSchemas)) {
+    const typeName = capitalize(schemaName)
+    indexLines.push(`export { ${typeName} }`)
+  }
+
+  typescriptDefs.index = indexLines.join('\n')
+
   return typescriptDefs
 }
