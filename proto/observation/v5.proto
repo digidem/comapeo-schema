@@ -4,8 +4,12 @@ package mapeo;
 import "google/protobuf/timestamp.proto";
 import "tags/v1.proto";
 import "common/v1.proto";
+import "options.proto";
 
 message Observation_5 {
+  // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
+  option (dataTypeId) = "31d090df2e16";
+  option (schemaName) = "observation";
 
   Common_1 common = 1;
 

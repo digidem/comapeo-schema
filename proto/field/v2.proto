@@ -5,8 +5,12 @@ import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
 import "tags/v1.proto";
 import "common/v1.proto";
+import "options.proto";
 
 message Field_2 {
+  // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
+  option (dataTypeId) = "9c5abfbee243";
+  option (schemaName) = "field";
 
   Common_1 common = 1;
 

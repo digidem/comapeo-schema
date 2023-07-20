@@ -4,8 +4,12 @@ package mapeo;
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "common/v1.proto";
+import "options.proto";
 
 message CoreOwnership_1 {
+  // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
+  option (dataTypeId) = "9d4d39390125";
+  option (schemaName) = "coreOwnership";
 
   Common_1 common = 1;
 
