@@ -19,5 +19,6 @@
       "type": "string"
     }
   },
-  "required": ["schemaType", "name"]
+  "required": ["schemaType", "name"],
+  "additionalProperties": false
 }

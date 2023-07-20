@@ -79,5 +79,5 @@
     }
   },
   "required": ["tagKey","type", "label"],
-  "additionalProperties": true
+  "additionalProperties": false
 }

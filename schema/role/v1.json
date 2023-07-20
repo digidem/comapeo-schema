@@ -35,5 +35,6 @@
     "deviceIndex": {
       "type": "integer"
     }
-  }
+  },
+  "additionalProperties": false
 }

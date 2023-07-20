@@ -6,18 +6,31 @@ import * as cenc from 'compact-encoding'
 import * as Schemas from './dist/schemas.js'
 import * as ProtobufSchemas from './types/proto/index.js'
 import schemasPrefix from './schemasPrefix.js'
-import { randomBytes } from 'node:crypto'
 import {
   formatSchemaKey,
   hexStringToBuffer,
   bufferToHexString,
-  getLastVersionForSchema,
   hexStringToCoreVersion,
   coreVersionToHexString,
+  getLastVersionForSchema,
 } from './utils.js'
 
 const dataTypeIdSize = 6
 const schemaVersionSize = 2
+
+const dataTypeIdToSchema = Object.keys(schemasPrefix).reduce(
+  (prefixMap, schemaType) => {
+    const val = schemasPrefix[schemaType]
+    if (val.dataTypeId) {
+      prefixMap[val.dataTypeId] = {
+        schemaType,
+        schemaVersion: val.schemaVersions,
+      }
+    }
+    return prefixMap
+  },
+  {}
+)
 
 /**
  * @param {import('./types').JSONSchema} obj - Object to be encoded
@@ -36,10 +49,12 @@ const jsonSchemaToProto = (obj) => {
 
 /**
  * @param {import('./types').ProtobufSchema} protobufObj
- * @param {import('./types').schemaType} schemaType
+ * @param {Object} obj
+ * @param {import('./types').schemaType} obj.schemaType
+ * @param {string} obj.version
  * @returns {import('./types').JSONSchema}
  */
-const protoToJsonSchema = (protobufObj, schemaType) => {
+const protoToJsonSchema = (protobufObj, { schemaType, version }) => {
   // @ts-ignore
   return {
     ...protobufObj,
@@ -47,8 +62,9 @@ const protoToJsonSchema = (protobufObj, schemaType) => {
     schemaType,
     id: bufferToHexString(protobufObj.id),
     links: protobufObj.links.map(coreVersionToHexString),
-    createdAt: protobufObj.createdAt,
-    updatedAt: protobufObj.updatedAt,
+    createdAt: protobufObj.createdAt || '',
+    updatedAt: protobufObj.updatedAt || '',
+    version,
   }
 }
 
@@ -60,10 +76,9 @@ const protoToJsonSchema = (protobufObj, schemaType) => {
  * @returns {Buffer} blockPrefix for corresponding schema
  */
 export const encodeBlockPrefix = ({ dataTypeId, schemaVersion }) => {
+  // @ts-ignore
   return Buffer.concat([
-    // @ts-ignore
     cenc.encode(cenc.hex.fixed(dataTypeIdSize), dataTypeId),
-    // @ts-ignore
     cenc.encode(cenc.uint16, schemaVersion),
   ])
 }
@@ -140,22 +155,17 @@ Only valid to use schema version ${lastSchemaVersion}`
  * */
 export const decode = (buf, { coreId, seq }) => {
   const { dataTypeId, schemaVersion } = decodeBlockPrefix(buf)
-
-  // TODO: invert schemas prefix at the top of the file so we can index by the data type id
-  const schemaType = Object.keys(schemasPrefix).reduce(
-    (type, key) => (schemasPrefix[key].dataTypeId === dataTypeId ? key : type),
-    ''
-  )
+  const schemaType = dataTypeIdToSchema[dataTypeId].schemaType
   const key = formatSchemaKey(schemaType)
   if (!ProtobufSchemas[key]) {
     throw new Error(
       `Invalid schemaVersion for ${schemaType} version ${schemaVersion}`
     )
   }
+  const version = coreVersionToHexString({ coreId, seq })
 
   const record = buf.subarray(dataTypeIdSize + schemaVersionSize, buf.length)
   const protobufObj = ProtobufSchemas[key].decode(record)
 
-  // @ts-ignore
-  return protoToJsonSchema(protobufObj, schemaType)
+  return protoToJsonSchema(protobufObj, { schemaType, version })
 }
