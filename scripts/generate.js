@@ -6,7 +6,7 @@ import { rimraf } from 'rimraf'
 import { execSync } from 'child_process'
 
 import { parseConfig } from './lib/parse-config.js'
-import { generateProtoTypes } from './lib/proto-types.js'
+import { generateProtoTypes } from './lib/generate-proto-types.js'
 import { PROJECT_ROOT } from './lib/utils.js'
 import { generateConfig } from './lib/generate-config.js'
 import { readJSONSchema } from './lib/read-json-schema.js'

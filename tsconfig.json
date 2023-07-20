@@ -15,6 +15,11 @@
     "declaration": true,
     "declarationMap": false
   },
-  "include": ["types/proto/*.ts", "types/schema/*.ts"],
+  "include": [
+    "types/proto/*.ts",
+    "types/schema/*.ts",
+    "src/**/*.ts",
+    "index.js"
+  ],
   "exclude": ["node_modules"]
 }
