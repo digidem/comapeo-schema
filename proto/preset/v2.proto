@@ -4,19 +4,11 @@ package mapeo;
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "tags/v1.proto";
+import "common/v1.proto";
 
 message Preset_2 {
-  // BEGIN of copy-pasted fields ../common/v1.proto
-  google.protobuf.Timestamp createdAt = 1;
-  // 32-byte random generated number
-  bytes id = 2;
-  message Link {
-    bytes coreId = 1;
-    int32 seq = 2;
-  }
-  repeated Link links = 3;
-  google.protobuf.Timestamp updatedAt = 4;
-  // END of copy-pasted fields ../common/v1.proto
+
+  Common_1 common = 1;
 
   string name = 5;
   enum Geometry {
