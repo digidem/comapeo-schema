@@ -3,20 +3,15 @@ package mapeo;
 
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
+import "common/v1.proto";
+import "options.proto";
 
 message Device_1 {
+  // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
+  option (dataTypeId) = "e96e6c68fcc0";
+  option (schemaName) = "device";
 
-  // BEGIN OF COMMON
-  google.protobuf.Timestamp createdAt = 1;
-  // 32-byte random generated number
-  bytes id = 2;
-  message Link {
-    bytes coreId = 1;
-    int32 seq = 2;
-  }
-  repeated Link links = 3;
-  google.protobuf.Timestamp updatedAt = 4;
-  // END OF COMMON
+  Common_1 common = 1;
 
   string action = 5;
   string authorId = 6;

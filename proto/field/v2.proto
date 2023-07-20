@@ -3,20 +3,16 @@ package mapeo;
 
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
-import "tags.proto";
+import "tags/v1.proto";
+import "common/v1.proto";
+import "options.proto";
 
 message Field_2 {
-  // BEGIN of copy-pasted fields ../common/v1.proto
-  google.protobuf.Timestamp createdAt = 1;
-  // 32-byte random generated number
-  bytes id = 2;
-  message Link {
-    bytes coreId = 1;
-    int32 seq = 2;
-  }
-  repeated Link links = 3;
-  google.protobuf.Timestamp updatedAt = 4;
-  // END of copy-pasted fields ../common/v1.proto
+  // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
+  option (dataTypeId) = "9c5abfbee243";
+  option (schemaName) = "field";
+
+  Common_1 common = 1;
 
   string tagKey = 5;
   enum Type {
@@ -35,7 +31,7 @@ message Field_2 {
   bool snakeCase = 9;
   message Option {
     string label = 1;
-    TagsPrimitive value = 2;
+    Tags_1.TagsPrimitive value = 2;
   }
   repeated Option options = 10;
   bool universal = 11;

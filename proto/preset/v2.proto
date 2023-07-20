@@ -3,20 +3,16 @@ package mapeo;
 
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
-import "tags.proto";
+import "tags/v1.proto";
+import "common/v1.proto";
+import "options.proto";
 
 message Preset_2 {
-  // BEGIN of copy-pasted fields ../common/v1.proto
-  google.protobuf.Timestamp createdAt = 1;
-  // 32-byte random generated number
-  bytes id = 2;
-  message Link {
-    bytes coreId = 1;
-    int32 seq = 2;
-  }
-  repeated Link links = 3;
-  google.protobuf.Timestamp updatedAt = 4;
-  // END of copy-pasted fields ../common/v1.proto
+  // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
+  option (dataTypeId) = "d6aa854b7a99";
+  option (schemaName) = "preset";
+
+  Common_1 common = 1;
 
   string name = 5;
   enum Geometry {
@@ -27,9 +23,9 @@ message Preset_2 {
     relation = 4;
   }
   repeated Geometry geometry = 6;
-  optional Tags tags = 7;
-  optional Tags addTags = 8;
-  optional Tags removeTags = 9;
+  optional Tags_1 tags = 7;
+  optional Tags_1 addTags = 8;
+  optional Tags_1 removeTags = 9;
   repeated bytes fieldIds = 10;
   optional bytes iconId = 11;
   repeated string terms = 12;
