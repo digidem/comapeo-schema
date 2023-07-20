@@ -3,7 +3,7 @@ package mapeo;
 
 import "google/protobuf/any.proto";
 import "google/protobuf/timestamp.proto";
-import "tags.proto";
+import "tags/v1.proto";
 
 message Field_2 {
   // BEGIN of copy-pasted fields ../common/v1.proto
@@ -35,7 +35,7 @@ message Field_2 {
   bool snakeCase = 9;
   message Option {
     string label = 1;
-    TagsPrimitive value = 2;
+    Tags_1.TagsPrimitive value = 2;
   }
   repeated Option options = 10;
   bool universal = 11;

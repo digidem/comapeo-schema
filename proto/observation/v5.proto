@@ -2,7 +2,7 @@ syntax = "proto3";
 package mapeo;
 
 import "google/protobuf/timestamp.proto";
-import "tags.proto";
+import "tags/v1.proto";
 
 message Observation_5 {
   // BEGIN of copy-pasted fields ../common/v1.proto
@@ -39,7 +39,7 @@ message Observation_5 {
   repeated Attachment attachments = 8;
 
   // TAGS
-  Tags tags = 9;
+  Tags_1 tags = 9;
 
   // METADATA
   message Metadata {

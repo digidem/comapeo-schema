@@ -3,7 +3,7 @@ package mapeo;
 
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
-import "tags.proto";
+import "tags/v1.proto";
 
 message Preset_2 {
   // BEGIN of copy-pasted fields ../common/v1.proto
@@ -27,9 +27,9 @@ message Preset_2 {
     relation = 4;
   }
   repeated Geometry geometry = 6;
-  optional Tags tags = 7;
-  optional Tags addTags = 8;
-  optional Tags removeTags = 9;
+  optional Tags_1 tags = 7;
+  optional Tags_1 addTags = 8;
+  optional Tags_1 removeTags = 9;
   repeated bytes fieldIds = 10;
   optional bytes iconId = 11;
   repeated string terms = 12;
