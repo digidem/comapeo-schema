@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://mapeo.world/schemas/project/v1.json",
+  "title": "Project",
+  "type": "object",
+  "properties": {
+    "schemaType": {
+      "description": "Must be `project`",
+      "type": "string",
+      "enum": ["project"]
+    },
+    "schemaVersion": {
+      "type": "number",
+      "minimum": 1,
+      "enum": [1]
+    },
+    "name": {
+      "description": "name of the project",
+      "type": "string"
+    }
+  },
+  "required": ["schemaType", "name"],
+  "additionalProperties": false
+}

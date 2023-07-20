@@ -5,6 +5,7 @@ import { parseConfig } from './lib/parse-config.js'
 import { generateProtoTypes } from './lib/proto-types.js'
 import { PROJECT_ROOT } from './lib/utils.js'
 import { generateConfig } from './lib/generate-config.js'
+import { readJSONSchema } from './lib/read-json-schema.js'
 
 const config = parseConfig()
 const protoTypesFile = generateProtoTypes(config)
@@ -17,3 +18,7 @@ fs.writeFileSync(
 const configFile = generateConfig(config)
 
 fs.writeFileSync(path.join(PROJECT_ROOT, 'config.ts'), configFile)
+
+const jsonSchemas = readJSONSchema(config)
+
+console.log(jsonSchemas)

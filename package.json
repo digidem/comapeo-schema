@@ -38,6 +38,7 @@
   },
   "homepage": "https://github.com/digidem/mapeo-schema#readme",
   "devDependencies": {
+    "@types/json-schema": "^7.0.12",
     "@types/tape": "^4.13.2",
     "c8": "^7.12.0",
     "eslint": "^8.28.0",
