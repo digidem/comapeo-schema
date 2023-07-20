@@ -34,6 +34,8 @@ export function parseConfig() {
   const dataTypeIds = {}
   /** @type {Record<string, number>} */
   const currentSchemaVersions = {}
+  /** @type {Array<{ schemaVersion: number, schemaName: string, typeName: string }>} */
+  const protoTypeDefs = []
 
   for (const filepath of protobufFiles) {
     const sch = schema.parse(fs.readFileSync(filepath))
@@ -70,10 +72,17 @@ export function parseConfig() {
     if (!prevSchemaVersion || schemaVersion > prevSchemaVersion) {
       currentSchemaVersions[schemaName] = schemaVersion
     }
+
+    protoTypeDefs.push({
+      schemaVersion,
+      schemaName,
+      typeName: message.name,
+    })
   }
 
   return {
     dataTypeIds,
     currentSchemaVersions,
+    protoTypeDefs,
   }
 }
