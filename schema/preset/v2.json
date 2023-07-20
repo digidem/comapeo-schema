@@ -72,5 +72,6 @@
     "name",
     "geometry",
     "tags"
-  ]
+  ],
+  "additionalProperties": false
 }

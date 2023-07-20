@@ -156,5 +156,5 @@
     }
   },
   "required": ["schemaType", "tags"],
-  "additionalProperties": true
+  "additionalProperties": false
 }

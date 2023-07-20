@@ -1,4 +1,5 @@
 import schemasPrefix from './schemasPrefix.js'
+
 /**
  * Format schema type string to match protobuf/schema prefix type lookups
  * @param {String} str
@@ -38,6 +39,11 @@ export const getLastVersionForSchema = (schemaType) => {
   return versions.reduce((a, b) => Math.max(a, b), -Infinity)
 }
 
+/**
+ * Turn a an object with {coreId:Buffer, seq:Number} to hex-encoded string of coreId/seq to
+ * @param {String} hexStr
+ * @returns {{coreId:Buffer, seq: Number}}
+ */
 export const hexStringToCoreVersion = (hexStr) => {
   const [id, seq] = hexStr.split('/')
   return { coreId: Buffer.from(id, 'hex'), seq: Number(seq) }
@@ -45,7 +51,7 @@ export const hexStringToCoreVersion = (hexStr) => {
 
 /**
  * Turn a an object with {coreId:Buffer, seq:Number} to hex-encoded string of coreId/seq to
- * @param {coreVersion} coreVersionObj
+ * @param {{coreId:Buffer, seq: Number}} coreVersionObj
  * @returns {String}
  */
 export const coreVersionToHexString = (coreVersionObj) =>
