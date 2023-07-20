@@ -1,0 +1,18 @@
+syntax = "proto3";
+package mapeo;
+
+import "google/protobuf/timestamp.proto";
+import "common/v1.proto";
+import "options.proto";
+
+// Same as v1, created to test forward compatibility
+
+message Project_2 {
+  // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
+  option (dataTypeId) = "626b45fe2942";
+  option (schemaName) = "project";
+
+  Common_1 common = 1;
+
+  string name = 5;
+}
