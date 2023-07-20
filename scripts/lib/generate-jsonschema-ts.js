@@ -42,7 +42,7 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
     indexLines.push(`export { ${typeName} }`)
   }
 
-  typescriptDefs.index = indexLines.join('\n')
+  typescriptDefs.index = indexLines.join('\n') + '\n'
 
   return typescriptDefs
 }
