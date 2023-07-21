@@ -2,8 +2,6 @@ import {
   type AllProtoTypes,
   type ProtoTypesWithSchemaInfo,
   type CurrentProtoTypes,
-  type Project_1,
-  type Project_2,
   type ProtoTypeNames,
 } from '../types/proto/types'
 import { type JsonSchemaTypes } from '../types/schema'
