@@ -48,20 +48,29 @@
       "description": "List of options the user can select for single- or multi-select fields",
       "type": "array",
       "items": {
-        "anyOf": [
-          {
+        "type": "object",
+        "properties": {
+          "label": {
             "type": "string"
           },
-          {
-            "type": "boolean"
-          },
-          {
-            "type": "number"
-          },
-          {
-            "type": "null"
+          "value": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
-        ]
+        },
+        "required": ["label"]
       }
     },
     "universal": {

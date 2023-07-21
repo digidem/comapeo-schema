@@ -9,8 +9,7 @@
       "enum": ["role"]
     },
     "role": {
-      "type": "string",
-      "enum": ["project-creator", "coordinator", "member", "non-member"]
+      "type": "string"
     },
     "projectId": {
       "type": "string"

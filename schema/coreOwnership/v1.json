@@ -9,8 +9,7 @@
       "enum": ["coreOwnership"]
     },
     "action": {
-      "type": "string",
-      "enum": ["core:owner"]
+      "type": "string"
     },
     "coreId": { "type": "string" },
     "projectId": { "type": "string" },

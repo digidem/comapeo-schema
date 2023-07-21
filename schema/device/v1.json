@@ -9,8 +9,7 @@
       "enum": ["device"]
     },
     "action": {
-      "type": "string",
-      "enum": ["device:add", "device:remove", "device:restore"]
+      "type": "string"
     },
     "authorId": {
       "type": "string"
