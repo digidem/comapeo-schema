@@ -6,7 +6,7 @@
   "type": "object",
   "additionalProperties": true,
   "properties": {
-    "schemaType":{
+    "schemaName": {
       "description": "Must be `preset`",
       "type": "string",
       "enum": ["preset"]
@@ -68,10 +68,6 @@
       }
     }
   },
-  "required": [
-    "name",
-    "geometry",
-    "tags"
-  ],
+  "required": ["name", "geometry", "tags"],
   "additionalProperties": false
 }

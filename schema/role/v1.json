@@ -4,27 +4,20 @@
   "title": "Role",
   "type": "object",
   "properties": {
-    "schemaType": {
+    "schemaName": {
       "type": "string",
       "enum": ["role"]
     },
     "role": {
       "type": "string",
-      "enum": [
-        "project-creator",
-        "coordinator",
-        "member",
-        "non-member"
-      ]
+      "enum": ["project-creator", "coordinator", "member", "non-member"]
     },
     "projectId": {
       "type": "string"
     },
     "action": {
       "type": "string",
-      "enum": [
-        "role:set"
-      ]
+      "enum": ["role:set"]
     },
     "signature": {
       "type": "string"

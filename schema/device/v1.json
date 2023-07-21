@@ -4,17 +4,13 @@
   "title": "Device",
   "type": "object",
   "properties": {
-    "schemaType": {
+    "schemaName": {
       "type": "string",
       "enum": ["device"]
     },
     "action": {
       "type": "string",
-      "enum": [
-        "device:add",
-        "device:remove",
-        "device:restore"
-      ]
+      "enum": ["device:add", "device:remove", "device:restore"]
     },
     "authorId": {
       "type": "string"

@@ -4,7 +4,7 @@
   "title": "Project",
   "type": "object",
   "properties": {
-    "schemaType": {
+    "schemaName": {
       "description": "Must be `project`",
       "type": "string",
       "enum": ["project"]
@@ -19,6 +19,6 @@
       "type": "string"
     }
   },
-  "required": ["schemaType", "name"],
+  "required": ["schemaName", "name"],
   "additionalProperties": false
 }

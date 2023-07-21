@@ -5,7 +5,7 @@
   "description": "A field defines a form field that will be shown to the user when creating or editing a map entity. Presets define which fields are shown to the user for a particular map entity. The field definition defines whether the field should show as a text box, multiple choice, single-select, etc. It defines what tag-value is set when the field is entered.",
   "type": "object",
   "properties": {
-    "schemaType": {
+    "schemaName": {
       "description": "Must be `field`",
       "type": "string",
       "enum": ["field"]
@@ -23,12 +23,7 @@
         "selectOne": "Select one item from a list of pre-defined options",
         "selectMultiple": "Select any number of items from a list of pre-defined options"
       },
-      "enum": [
-        "text",
-        "number",
-        "selectOne",
-        "selectMultiple"
-      ]
+      "enum": ["text", "number", "selectOne", "selectMultiple"]
     },
     "label": {
       "description": "Default language label for the form field label",
@@ -53,15 +48,20 @@
       "description": "List of options the user can select for single- or multi-select fields",
       "type": "array",
       "items": {
-        "anyOf": [{
-          "type": "string"
-        }, {
-          "type": "boolean"
-        }, {
-          "type": "number"
-        }, {
-          "type": "null"
-        }]
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "null"
+          }
+        ]
       }
     },
     "universal": {
@@ -78,6 +78,6 @@
       "type": "string"
     }
   },
-  "required": ["tagKey","type", "label"],
+  "required": ["tagKey", "type", "label"],
   "additionalProperties": false
 }

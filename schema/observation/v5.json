@@ -42,13 +42,12 @@
             }
           }
         }
-
       }
     }
   },
   "type": "object",
   "properties": {
-    "schemaType": {
+    "schemaName": {
       "description": "Must be `observation`",
       "type": "string",
       "enum": ["observation"]
@@ -89,7 +88,7 @@
             "type": "string",
             "description": ""
           },
-          "name":{
+          "name": {
             "type": "string",
             "description": "name of the attachment"
           },
@@ -155,6 +154,6 @@
       "additionalProperties": false
     }
   },
-  "required": ["schemaType", "tags"],
+  "required": ["schemaName", "tags"],
   "additionalProperties": false
 }
