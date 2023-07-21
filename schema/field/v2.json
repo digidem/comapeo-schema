@@ -78,6 +78,6 @@
       "type": "string"
     }
   },
-  "required": ["tagKey", "type", "label"],
+  "required": ["tagKey", "type", "label", "schemaName"],
   "additionalProperties": false
 }

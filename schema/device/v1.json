@@ -28,5 +28,6 @@
       "type": "integer"
     }
   },
+  "required": ["schemaName"],
   "additionalProperties": false
 }

@@ -61,6 +61,6 @@
       }
     }
   },
-  "required": ["name", "geometry", "tags"],
+  "required": ["name", "geometry", "tags", "schemaName"],
   "additionalProperties": false
 }
