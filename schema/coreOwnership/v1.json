@@ -12,11 +12,6 @@
       "type": "string",
       "enum": ["core:owner"]
     },
-    "schemaVersion": {
-      "type": "number",
-      "minimum": 1,
-      "enum": [1]
-    },
     "coreId": { "type": "string" },
     "projectId": { "type": "string" },
     "storeType": { "type": "string" },

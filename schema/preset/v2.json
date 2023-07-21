@@ -11,12 +11,6 @@
       "type": "string",
       "enum": ["preset"]
     },
-    "schemaVersion": {
-      "description": "Version of schema. Should increment for breaking changes to the schema",
-      "type": "number",
-      "minimum": 1,
-      "enum": [2]
-    },
     "name": {
       "description": "Name for the feature in default language.",
       "type": "string"
