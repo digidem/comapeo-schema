@@ -31,9 +31,9 @@ export function readJSONSchema({ currentSchemaVersions }) {
     const { dir, name } = path.parse(filepath)
     const folderName = path.basename(dir)
     // @ts-ignore - enum not defined on JSONSchema v7
-    const schemaName = jsonSchema.properties?.schemaType?.enum[0]
+    const schemaName = jsonSchema.properties?.schemaName?.enum[0]
     if (folderName !== schemaName) {
-      throw new Error(`Unexpected schemaType '${schemaName}' in ${filepath}`)
+      throw new Error(`Unexpected schemaName '${schemaName}' in ${filepath}`)
     }
     const schemaVersion = Number.parseInt(name.replace(/^v/, ''))
     // TODO: Check $id is correct
