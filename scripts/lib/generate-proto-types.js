@@ -14,16 +14,21 @@ export function generateProtoTypes({ currentSchemaVersions, protoTypeDefs }) {
     .join('\n')
 
   const allProtoDefs =
-    'export type AllProtoDefs = ' +
+    'export type AllProtoTypes =\n  | ' +
+    protoTypeDefs
+      .map(({ typeName }) => {
+        return `${typeName}`
+      })
+      .join('\n  | ')
+
+  const protoTypesWithSchemaInfo =
+    'export type ProtoTypesWithSchemaInfo = {\n' +
     protoTypeDefs
       .map(({ schemaName, schemaVersion, typeName }) => {
-        return `{
-  schemaName: '${schemaName}',
-  schemaVersion: ${schemaVersion},
-  message: ${typeName}
-}`
+        return `  ${typeName}: ${typeName} & { schemaName: '${schemaName}', schemaVersion: ${schemaVersion} }`
       })
-      .join(' | ')
+      .join(',\n') +
+    '\n}'
 
   const currentProtoTypes =
     'export type CurrentProtoTypes = {\n' +
@@ -45,13 +50,15 @@ export function generateProtoTypes({ currentSchemaVersions, protoTypeDefs }) {
     .join('\n')
 
   const protoTypeNames =
-    'export type ProtoTypeNames = ' +
-    protoTypeDefs.map(({ typeName }) => `'${typeName}'`).join('|\n')
+    'export type ProtoTypeNames =\n  | ' +
+    protoTypeDefs.map(({ typeName }) => `'${typeName}'`).join('\n  | ')
 
   return (
     typeImports +
     '\n\n' +
     allProtoDefs +
+    '\n\n' +
+    protoTypesWithSchemaInfo +
     '\n\n' +
     currentProtoTypes +
     '\n\n' +

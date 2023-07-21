@@ -23,7 +23,7 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
 
   for (const schemaName of Object.keys(jsonSchemas)) {
     const typeName = capitalize(schemaName)
-    indexLines.push(`import { type ${typeName}} from './${schemaName}'`)
+    indexLines.push(`import { type ${typeName} } from './${schemaName}'`)
   }
 
   indexLines.push('')
