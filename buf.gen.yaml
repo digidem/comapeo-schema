@@ -9,5 +9,9 @@ plugins:
       - importSuffix=.js
       - env=node
       - snakeToCamel=false
-      - useOptionals=messages
-      # - initializeFieldsAsUndefined=true
+      - useDate=string
+      # - useOptionals=none
+      - stringEnums=true
+      - enumsAsLiterals=true
+      - unrecognizedEnum=false # TODO: Implications of this for future-compat?
+      - outputIndex=true
