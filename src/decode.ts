@@ -4,6 +4,10 @@ import {
   type CurrentProtoTypes,
   type ProtoTypeNames,
 } from '../types/proto/types'
+import {
+  type TagValue_1,
+  type TagValue_1_PrimitiveValue,
+} from '../types/proto/tags/v1'
 import { type JsonSchemaTypes } from '../types/schema'
 import * as ProtobufEncodeDecode from '../types/proto/index.mapeo'
 import { dataTypeIds } from '../config'
@@ -37,7 +41,10 @@ type CurrentProtoTypesWithSchemaInfoUnion = Extract<
 /** Union of all current JSON Schema types */
 type JsonSchemaTypesUnion = Values<JsonSchemaTypes>
 /** Just the common (shared) props from JSON schema types */
-type JsonSchemaCommon = Pick<JsonSchemaTypesUnion, ProtoTypeCommonKeys>
+type JsonSchemaCommon = Pick<
+  JsonSchemaTypesUnion,
+  ProtoTypeCommonKeys | 'version'
+>
 /** Uniquely identifies a block in a core */
 type VersionObj = { coreId: Buffer; seq: number }
 /** Union of all valid data type ids */
@@ -49,6 +56,16 @@ type SchemaDefUnion = PickUnion<
   ProtoTypesWithSchemaInfoUnion,
   'schemaName' | 'schemaVersion'
 >
+
+type TagValuePrimitive = number | string | boolean | null | undefined
+type JsonTagValue =
+  | TagValuePrimitive
+  | Array<Exclude<TagValuePrimitive, undefined>>
+
+type FilterBySchemaName<
+  T extends { schemaName: SchemaNamesUnion },
+  U extends string
+> = Extract<T, { schemaName: U }>
 
 const dataTypeIdSize = 6
 const schemaVersionSize = 2
@@ -138,42 +155,171 @@ function migrateProjectV1ToV2(
   }
 }
 
+/** Function type for converting a protobuf type of any version for a particular
+ * schema name, and returning the most recent JSONSchema type */
+type ConvertFunction<TSchemaName extends SchemaNamesUnion> = (
+  message: Extract<ProtoTypesWithSchemaInfoUnion, { schemaName: TSchemaName }>,
+  versionObj: VersionObj
+) => JsonSchemaTypes[TSchemaName]
+
+const convertProject: ConvertFunction<'project'> = (message, versionObj) => {
+  const { common, schemaVersion, ...rest } = message
+  const jsonSchemaCommon = convertCommon(common, versionObj)
+  return {
+    ...jsonSchemaCommon,
+    ...rest,
+  }
+}
+
+const convertObservation: ConvertFunction<'observation'> = (
+  message,
+  versionObj
+) => {
+  const { common, schemaVersion, ...rest } = message
+  const jsonSchemaCommon = convertCommon(common, versionObj)
+
+  return {
+    ...jsonSchemaCommon,
+    ...rest,
+    refs: message.refs?.map(({ id }) => ({ id: id.toString('hex') })),
+    attachments: message.attachments?.map(({ driveId, name, type }) => {
+      return { driveId: driveId.toString('hex'), name, type }
+    }),
+    tags: convertTags(message.tags),
+  }
+}
+
+type FieldOptions = JsonSchemaTypes['field']['options']
+
+const convertField: ConvertFunction<'field'> = (message, versionObj) => {
+  const { common, schemaVersion, ...rest } = message
+  const jsonSchemaCommon = convertCommon(common, versionObj)
+  if (!message.tagKey) {
+    // We can't do anything with a field without a tag key, so we ignore these
+    throw new Error('Missing tagKey on field')
+  } else {
+    return {
+      ...jsonSchemaCommon,
+      ...rest,
+      type: message.type == 'UNRECOGNIZED' ? 'text' : message.type,
+      tagKey: message.tagKey,
+      label: message.label || message.tagKey,
+      appearance:
+        message.appearance === 'UNRECOGNIZED'
+          ? 'multiline'
+          : message.appearance,
+      options: message.options.reduce<Exclude<FieldOptions, undefined>>(
+        (acc, { label, value }) => {
+          // Filter out any options where value is undefined (this would still be valid protobuf, but not valid for our code)
+          if (!value) return acc
+          const convertedValue = convertTagPrimitive(value)
+          if (typeof convertedValue === 'undefined') return acc
+          acc.push({ label, value: convertedValue })
+          return acc
+        },
+        []
+      ),
+    }
+  }
+}
+
+function convertTags(tags: { [key: string]: TagValue_1 } | undefined): {
+  [key: string]: Exclude<JsonTagValue, undefined>
+} {
+  if (!tags) return {}
+  return Object.keys(tags).reduce<{
+    [key: string]: Exclude<JsonTagValue, undefined>
+  }>((acc, key) => {
+    // Ignore (filter out) undefined entries in an array
+    const convertedValue = tags[key] && convertTagValue(tags[key])
+    if (typeof convertedValue !== 'undefined') {
+      acc[key] = convertedValue
+    }
+    return acc
+  }, {})
+}
+
+function convertTagValue({ kind }: TagValue_1): JsonTagValue {
+  if (!kind) return undefined
+  switch (kind.$case) {
+    case 'list_value':
+      return kind.list_value.list_value.reduce<
+        Exclude<TagValuePrimitive, undefined>[]
+      >((acc, value) => {
+        const convertedValue = convertTagPrimitive(value)
+        if (typeof convertedValue !== 'undefined') {
+          acc.push(convertedValue)
+        }
+        return acc
+      }, [])
+    case 'primitive_value':
+      return convertTagPrimitive(kind.primitive_value)
+    default:
+      const _exhaustiveCheck: never = kind
+      return kind
+  }
+}
+
+function convertTagPrimitive({
+  kind,
+}: TagValue_1_PrimitiveValue): TagValuePrimitive {
+  if (!kind) return undefined
+  switch (kind.$case) {
+    case 'null_value':
+      return null
+    case 'boolean_value':
+      return kind.boolean_value
+    case 'number_value':
+      return kind.number_value
+    case 'string_value':
+      return kind.string_value
+    default:
+      const _exhaustiveCheck: never = kind
+      return _exhaustiveCheck
+  }
+}
+
+type CurrentlyImplemented = 'project' | 'observation' | 'field'
+
 /**
  * Convert a decoded protobuf message to its corresponding JSONSchema type.
  * __Mutates__ the input `message`, for performance reasons.
  */
-function protoToJsonSchema<TProtoType extends ProtoTypesWithSchemaInfoUnion>(
-  message: TProtoType,
+function protoToJsonSchema(
+  message: FilterBySchemaName<
+    ProtoTypesWithSchemaInfoUnion,
+    CurrentlyImplemented
+  >,
   versionObj: VersionObj
-): JsonSchemaTypes[TProtoType['schemaName']] | null {
-  let currentMessage: CurrentProtoTypesWithSchemaInfoUnion
+): FilterBySchemaName<JsonSchemaTypesUnion, CurrentlyImplemented> {
+  switch (message.schemaName) {
+    case 'project':
+      return convertProject(message, versionObj)
+    case 'observation':
+      return convertObservation(message, versionObj)
+    case 'field':
+      return convertField(message, versionObj)
+    default:
+      const _exhaustiveCheck: never = message
+      return message
+  }
+}
 
-  if (message.schemaVersion === 1 && message.schemaName === 'project') {
-    currentMessage = migrateProjectV1ToV2(message)
-  } else {
-    currentMessage = message
+function convertCommon(
+  common: AllProtoTypes['common'],
+  versionObj: VersionObj
+): JsonSchemaCommon {
+  if (!common || !common.id || !common.createdAt || !common.updatedAt) {
+    throw new Error('Missing required common properties')
   }
 
-  const { common } = currentMessage
-  // Don't use currentMessage or message after this, because they are mutated
-  const rest = mutatingOmit(currentMessage, 'common')
-
-  if (!common || !common.id || !common.createdAt || !common.updatedAt)
-    return null
-
-  const jsonSchemaCommon: JsonSchemaCommon = {
+  return {
     id: common.id.toString('hex'),
-    links: common.links.map(versionObjToHexString),
+    version: versionObjToString(versionObj),
+    links: common.links.map(versionObjToString),
     createdAt: common.createdAt,
     updatedAt: common.updatedAt,
   }
-
-  const typed: JsonSchemaTypes[typeof message.schemaName] = {
-    ...jsonSchemaCommon,
-    version: versionObjToHexString(versionObj),
-    ...rest,
-  }
-  return typed
 }
 
 // Below is an example to test the types
@@ -196,7 +342,7 @@ const output = protoToJsonSchema(project, { coreId: Buffer.alloc(0), seq: 1 })
 /**
  * Turn coreId and seq to a version string of ${hex-encoded coreId}/${seq}
  */
-function versionObjToHexString({ coreId, seq }: VersionObj) {
+function versionObjToString({ coreId, seq }: VersionObj) {
   return `${coreId.toString('hex')}/${seq}`
 }
 

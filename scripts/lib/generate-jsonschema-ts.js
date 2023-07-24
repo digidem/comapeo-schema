@@ -15,6 +15,7 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
     // @ts-ignore
     const ts = await compile(jsonSchema, capitalize(schemaName), {
       additionalProperties: false,
+      unknownAny: false,
     })
     typescriptDefs[schemaName] = ts
   }

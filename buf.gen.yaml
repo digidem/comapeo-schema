@@ -13,5 +13,5 @@ plugins:
       # - useOptionals=none
       - stringEnums=true
       - enumsAsLiterals=true
-      - unrecognizedEnum=false # TODO: Implications of this for future-compat?
       - outputIndex=true
+      - oneof=unions
