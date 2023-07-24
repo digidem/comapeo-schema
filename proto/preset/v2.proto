@@ -23,9 +23,9 @@ message Preset_2 {
     relation = 4;
   }
   repeated Geometry geometry = 6;
-  optional Tags_1 tags = 7;
-  optional Tags_1 addTags = 8;
-  optional Tags_1 removeTags = 9;
+  map<string, TagValue_1> tags = 7;
+  map<string, TagValue_1> addTags = 8;
+  map<string, TagValue_1> removeTags = 9;
   repeated bytes fieldIds = 10;
   optional bytes iconId = 11;
   repeated string terms = 12;

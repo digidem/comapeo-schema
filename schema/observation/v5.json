@@ -95,7 +95,10 @@
           "type": {
             "type": "string",
             "description": "string that describes the type of the attachment",
-            "enum": ["photo", "video", "audio"]
+            "meta:enum": {
+              "UNRECOGNIZED": "future attachment type"
+            },
+            "enum": ["photo", "video", "audio", "UNRECOGNIZED"]
           }
         },
         "required": ["driveId", "name", "type"]
@@ -104,12 +107,42 @@
     "tags": {
       "type": "object",
       "description": "User-defined key-value pairs relevant to this observation",
-      "properties": {
-        "fields": {
-          "type": "object"
-        }
-      },
-      "additionalProperties": false
+      "properties": {},
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          },
+          {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        ]
+      }
     },
     "metadata": {
       "description": "Additional metadata associated with the observation (e.g. location precision, altitude, heading)",

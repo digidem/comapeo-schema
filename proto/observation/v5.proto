@@ -2,6 +2,7 @@ syntax = "proto3";
 package mapeo;
 
 import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
 import "tags/v1.proto";
 import "common/v1.proto";
 import "options.proto";
@@ -35,7 +36,7 @@ message Observation_5 {
   repeated Attachment attachments = 8;
 
   // TAGS
-  Tags_1 tags = 9;
+  map<string, TagValue_1> tags = 9;
 
   // METADATA
   message Metadata {

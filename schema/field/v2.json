@@ -70,7 +70,7 @@
             ]
           }
         },
-        "required": ["label"]
+        "required": ["label", "value"]
       }
     },
     "universal": {
