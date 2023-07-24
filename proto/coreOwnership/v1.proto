@@ -2,15 +2,22 @@ syntax = "proto3";
 package mapeo;
 
 import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
 import "common/v1.proto";
+import "options.proto";
 
 message CoreOwnership_1 {
+  // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
+  option (dataTypeId) = "9d4d39390125";
+  option (schemaName) = "coreOwnership";
+
   Common_1 common = 1;
-  string action = 2;
-  string coreId = 3;
-  string projectId = 4;
-  string storeType = 5;
-  string signature = 6;
-  int32 authorIndex = 7;
-  int32 deviceIndex = 8;
+
+  string action = 5;
+  string coreId = 6;
+  string projectId = 7;
+  string storeType = 8;
+  string signature = 9;
+  int32 authorIndex = 10;
+  int32 deviceIndex = 11;
 }

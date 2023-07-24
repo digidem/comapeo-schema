@@ -1,0 +1,40 @@
+syntax = "proto3";
+package mapeo;
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "tags/v1.proto";
+import "common/v1.proto";
+import "options.proto";
+
+message Field_2 {
+  // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
+  option (dataTypeId) = "9c5abfbee243";
+  option (schemaName) = "field";
+
+  Common_1 common = 1;
+
+  string tagKey = 5;
+  enum Type {
+    text = 0;
+    number = 1;
+    selectOne = 2;
+    selectMultiple = 3;
+  }
+  Type type = 6;
+  string label = 7;
+  enum Appearance {
+    multiline = 0;
+    singleline = 1;
+  }
+  Appearance appearance = 8;
+  bool snakeCase = 9;
+  message Option {
+    string label = 1;
+    Tags_1.TagsPrimitive value = 2;
+  }
+  repeated Option options = 10;
+  bool universal = 11;
+  optional string placeholder = 12;
+  optional string helperText = 13;
+}
