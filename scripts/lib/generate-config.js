@@ -32,7 +32,7 @@ export function generateConfig({
   for (const [schemaName, schemaVersions] of Object.entries(knownVersions)) {
     knownVersionsLines.push(`  ${schemaName}: [${schemaVersions.join(', ')}],`)
   }
-  knownVersionsLines.push('} as const')
+  knownVersionsLines.push('}')
 
   return [
     ...idsLines,
