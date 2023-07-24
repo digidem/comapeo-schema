@@ -2,7 +2,7 @@ syntax = "proto3";
 package mapeo;
 
 import "google/protobuf/timestamp.proto";
-
+import "options.proto";
 
 message Common_1 {
   // 32-byte random generated number
