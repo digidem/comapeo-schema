@@ -14,7 +14,7 @@ export function generateProtoTypes({ currentSchemaVersions, protoTypeDefs }) {
     .join('\n')
 
   const allProtoDefs =
-    'export type AllProtoTypes =\n  | ' +
+    'export type ProtoTypes =\n  | ' +
     protoTypeDefs
       .map(({ typeName }) => {
         return `${typeName}`
@@ -22,26 +22,25 @@ export function generateProtoTypes({ currentSchemaVersions, protoTypeDefs }) {
       .join('\n  | ')
 
   const protoTypesWithSchemaInfo =
-    'export type ProtoTypesWithSchemaInfo = {\n' +
+    '/** Union of all Proto Types (including non-current versions) with schemaName and schemaVersion */' +
+    'export type ProtoTypesWithSchemaInfo =\n  | ' +
     protoTypeDefs
       .map(({ schemaName, schemaVersion, typeName }) => {
-        return `  ${typeName}: ${typeName} & { schemaName: '${schemaName}', schemaVersion: ${schemaVersion} }`
+        return `${typeName} & { schemaName: '${schemaName}', schemaVersion: ${schemaVersion} }`
       })
-      .join(',\n') +
-    '\n}'
+      .join('\n  | ')
 
   const currentProtoTypes =
-    'export type CurrentProtoTypes = {\n' +
+    'export type CurrentProtoTypes =\n  | ' +
     protoTypeDefs
       .filter(({ schemaName, schemaVersion }) => {
         return currentSchemaVersions[schemaName] === schemaVersion
       })
       .map(({ schemaName, schemaVersion }) => {
         const typeName = getTypeName(schemaName, schemaVersion)
-        return `  ${schemaName}: ${typeName}`
+        return `${typeName}`
       })
-      .join(',\n') +
-    '\n}'
+      .join('\n  | ')
 
   const protoTypesExports = protoTypeDefs
     .map(({ typeName }) => {

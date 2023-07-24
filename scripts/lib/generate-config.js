@@ -1,7 +1,11 @@
 /**
  * @param {ReturnType<import('./parse-config').parseConfig>} config
  */
-export function generateConfig({ currentSchemaVersions, dataTypeIds }) {
+export function generateConfig({
+  currentSchemaVersions,
+  dataTypeIds,
+  protoTypeDefs,
+}) {
   const idsLines = ['export const dataTypeIds = {']
   for (const [schemaName, dataTypeId] of Object.entries(dataTypeIds)) {
     idsLines.push(`  ${schemaName}: '${dataTypeId}',`)
@@ -16,5 +20,26 @@ export function generateConfig({ currentSchemaVersions, dataTypeIds }) {
   }
   versionsLines.push('} as const')
 
-  return [...idsLines, '', ...versionsLines, ''].join('\n')
+  const knownVersions = {}
+  for (const { schemaName, schemaVersion } of protoTypeDefs) {
+    const existing = knownVersions[schemaName]
+    knownVersions[schemaName] = existing
+      ? [...existing, schemaVersion]
+      : [schemaVersion]
+  }
+
+  const knownVersionsLines = ['export const knownSchemaVersions = {']
+  for (const [schemaName, schemaVersions] of Object.entries(knownVersions)) {
+    knownVersionsLines.push(`  ${schemaName}: [${schemaVersions.join(', ')}],`)
+  }
+  knownVersionsLines.push('} as const')
+
+  return [
+    ...idsLines,
+    '',
+    ...versionsLines,
+    '',
+    ...knownVersionsLines,
+    '',
+  ].join('\n')
 }

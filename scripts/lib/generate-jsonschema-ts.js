@@ -28,14 +28,13 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
   }
 
   indexLines.push('')
-  indexLines.push('export type JsonSchemaTypes = {')
+  indexLines.push('export type JsonSchemaTypes = ')
 
   for (const schemaName of Object.keys(jsonSchemas)) {
     const typeName = capitalize(schemaName)
-    indexLines.push(`  ${schemaName}: ${typeName},`)
+    indexLines.push(` |  ${typeName}`)
   }
 
-  indexLines.push('}')
   indexLines.push('')
 
   for (const schemaName of Object.keys(jsonSchemas)) {

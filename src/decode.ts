@@ -1,297 +1,53 @@
+import { type ProtoTypeNames, ProtoTypes } from '../types/proto/types'
 import {
-  type AllProtoTypes,
+  type JsonSchemaTypes,
   type ProtoTypesWithSchemaInfo,
-  type CurrentProtoTypes,
-  type ProtoTypeNames,
-} from '../types/proto/types'
-import {
-  type TagValue_1,
-  type TagValue_1_PrimitiveValue,
-} from '../types/proto/tags/v1'
-import { type JsonSchemaTypes } from '../types/schema'
+  type VersionObj,
+  type SchemaName,
+  type DataTypeId,
+  type ValidSchemaDef,
+} from './types'
+
 import * as ProtobufEncodeDecode from '../types/proto/index.mapeo'
-import { dataTypeIds } from '../config'
+import { dataTypeIds, knownSchemaVersions } from '../config'
+import {
+  convertProject,
+  convertField,
+  convertObservation,
+} from './lib/decode-conversions'
+// @ts-ignore
 import * as cenc from 'compact-encoding'
-
-// HELPER TYPES
-/**
- * This is a Pick over a union, that keeps it as a distributive type
- * (normal pick will loose the distributive type)
- */
-type PickUnion<T, K extends keyof T> = T extends any ? Pick<T, K> : never
-/** Omit over a union, that keeps it as a distributive type */
-type OmitUnion<T, K extends keyof any> = T extends any ? Omit<T, K> : never
-/** Return a union of object values */
-type Values<T> = T[keyof T]
-
-/** Union of all *current* proto types */
-type CurrentProtoTypesUnion = CurrentProtoTypes[keyof CurrentProtoTypes]
-/** Union of keys from the common prop on Proto types */
-type ProtoTypeCommonKeys = keyof Exclude<
-  CurrentProtoTypesUnion['common'],
-  undefined
->
-/** Union of all Proto Types (including non-current versions) with schemaName and schemaVersion */
-type ProtoTypesWithSchemaInfoUnion = Values<ProtoTypesWithSchemaInfo>
-/** Union of all current Proto Types with schemaName and schemaVersion */
-type CurrentProtoTypesWithSchemaInfoUnion = Extract<
-  ProtoTypesWithSchemaInfoUnion,
-  CurrentProtoTypesUnion
->
-/** Union of all current JSON Schema types */
-type JsonSchemaTypesUnion = Values<JsonSchemaTypes>
-/** Just the common (shared) props from JSON schema types */
-type JsonSchemaCommon = Pick<
-  JsonSchemaTypesUnion,
-  ProtoTypeCommonKeys | 'version'
->
-/** Uniquely identifies a block in a core */
-type VersionObj = { coreId: Buffer; seq: number }
-/** Union of all valid data type ids */
-type DataTypeIdsUnion = Values<typeof dataTypeIds>
-/** Union of all valid schema names */
-type SchemaNamesUnion = keyof typeof dataTypeIds
-/** Union of all valid schemaName and schemaVersion combinations (not just current versions) */
-type SchemaDefUnion = PickUnion<
-  ProtoTypesWithSchemaInfoUnion,
-  'schemaName' | 'schemaVersion'
->
-
-type TagValuePrimitive = number | string | boolean | null | undefined
-type JsonTagValue =
-  | TagValuePrimitive
-  | Array<Exclude<TagValuePrimitive, undefined>>
-
-type FilterBySchemaName<
-  T extends { schemaName: SchemaNamesUnion },
-  U extends string
-> = Extract<T, { schemaName: U }>
 
 const dataTypeIdSize = 6
 const schemaVersionSize = 2
 
 /** Map of dataTypeIds to schema names for quick lookups */
-const dataTypeIdToSchemaName: Record<string, SchemaNamesUnion> = {}
+const dataTypeIdToSchemaName: Record<string, SchemaName> = {}
 for (const [schemaName, dataTypeId] of Object.entries(dataTypeIds) as Array<
-  [SchemaNamesUnion, DataTypeIdsUnion]
+  [SchemaName, DataTypeId]
 >) {
   dataTypeIdToSchemaName[dataTypeId] = schemaName
 }
 
 /**
  * Decode a Buffer as an object validated against the corresponding schema
+ *
  * @param buf Buffer to be decoded
- * @param versionObj CoreId and seq
+ * @param versionObj public key (coreId) of the core where this block is stored, and the index (seq) of the block in the core.
  * */
-export function decode(
-  buf: Buffer,
-  versionObj: VersionObj
-): JsonSchemaTypesUnion | null {
+export function decode(buf: Buffer, versionObj: VersionObj): JsonSchemaTypes {
   const schemaDef = decodeBlockPrefix(buf)
-  if (!schemaDef) return null
-  if (schemaDef.schemaName === 'observation') {
-    schemaDef.schemaVersion
-  }
 
   const encodedMsg = buf.subarray(
     dataTypeIdSize + schemaVersionSize,
     buf.length
   )
-  const protoTypeName = (capitalize(schemaDef.schemaName) +
-    '_' +
-    schemaDef.schemaVersion) as ProtoTypeNames
 
-  const message = ProtobufEncodeDecode[protoTypeName].decode(encodedMsg)
+  const messageWithSchemaInfo =
+    ProtobufEncodeDecode[getProtoTypeName(schemaDef)].decode(encodedMsg)
 
-  const messageWithSchemaInfo = mutatingSetSchemaDef(message, schemaDef)
+  const message = mutatingSetSchemaDef(messageWithSchemaInfo, schemaDef)
 
-  return protoToJsonSchema(messageWithSchemaInfo, versionObj)
-}
-
-/**
- * Adds schemaName and schemaVersion to a decoded prototype message.
- * __MUTATES__ the passed parameter, for performance reasons. Ok because we
- * do not use the passed paramter anywhere else.
- * Not strictly type checked, but the returns strict types which can be trusted
- */
-function mutatingSetSchemaDef<
-  T extends AllProtoTypes,
-  K extends SchemaDefUnion
->(obj: T, props: K): ProtoTypesWithSchemaInfoUnion {
-  for (const prop of Object.keys(props)) {
-    ;(obj as any)[prop] = (props as any)[prop]
-  }
-  return obj as any
-}
-
-/**
- * @private - exported for unit tests
- * Given a buffer, return schemaVersion and schemaName
- */
-export function decodeBlockPrefix(buf: Buffer): SchemaDefUnion | null {
-  const state = cenc.state()
-  // @ts-ignore
-  state.buffer = buf
-  state.start = 0
-  state.end = dataTypeIdSize
-  const dataTypeId = cenc.hex.fixed(dataTypeIdSize).decode(state)
-
-  state.start = dataTypeIdSize
-  state.end = dataTypeIdSize + schemaVersionSize
-  const schemaVersion = cenc.uint16.decode(state)
-  const schemaName = dataTypeIdToSchemaName[dataTypeId]
-
-  if (!schemaName) return null
-
-  return { schemaName, schemaVersion }
-}
-
-function migrateProjectV1ToV2(
-  obj: ProtoTypesWithSchemaInfo['Project_1']
-): ProtoTypesWithSchemaInfo['Project_2'] {
-  return {
-    ...obj,
-    schemaVersion: 2,
-  }
-}
-
-/** Function type for converting a protobuf type of any version for a particular
- * schema name, and returning the most recent JSONSchema type */
-type ConvertFunction<TSchemaName extends SchemaNamesUnion> = (
-  message: Extract<ProtoTypesWithSchemaInfoUnion, { schemaName: TSchemaName }>,
-  versionObj: VersionObj
-) => JsonSchemaTypes[TSchemaName]
-
-const convertProject: ConvertFunction<'project'> = (message, versionObj) => {
-  const { common, schemaVersion, ...rest } = message
-  const jsonSchemaCommon = convertCommon(common, versionObj)
-  return {
-    ...jsonSchemaCommon,
-    ...rest,
-  }
-}
-
-const convertObservation: ConvertFunction<'observation'> = (
-  message,
-  versionObj
-) => {
-  const { common, schemaVersion, ...rest } = message
-  const jsonSchemaCommon = convertCommon(common, versionObj)
-
-  return {
-    ...jsonSchemaCommon,
-    ...rest,
-    refs: message.refs?.map(({ id }) => ({ id: id.toString('hex') })),
-    attachments: message.attachments?.map(({ driveId, name, type }) => {
-      return { driveId: driveId.toString('hex'), name, type }
-    }),
-    tags: convertTags(message.tags),
-  }
-}
-
-type FieldOptions = JsonSchemaTypes['field']['options']
-
-const convertField: ConvertFunction<'field'> = (message, versionObj) => {
-  const { common, schemaVersion, ...rest } = message
-  const jsonSchemaCommon = convertCommon(common, versionObj)
-  if (!message.tagKey) {
-    // We can't do anything with a field without a tag key, so we ignore these
-    throw new Error('Missing tagKey on field')
-  } else {
-    return {
-      ...jsonSchemaCommon,
-      ...rest,
-      type: message.type == 'UNRECOGNIZED' ? 'text' : message.type,
-      tagKey: message.tagKey,
-      label: message.label || message.tagKey,
-      appearance:
-        message.appearance === 'UNRECOGNIZED'
-          ? 'multiline'
-          : message.appearance,
-      options: message.options.reduce<Exclude<FieldOptions, undefined>>(
-        (acc, { label, value }) => {
-          // Filter out any options where value is undefined (this would still be valid protobuf, but not valid for our code)
-          if (!value) return acc
-          const convertedValue = convertTagPrimitive(value)
-          if (typeof convertedValue === 'undefined') return acc
-          acc.push({ label, value: convertedValue })
-          return acc
-        },
-        []
-      ),
-    }
-  }
-}
-
-function convertTags(tags: { [key: string]: TagValue_1 } | undefined): {
-  [key: string]: Exclude<JsonTagValue, undefined>
-} {
-  if (!tags) return {}
-  return Object.keys(tags).reduce<{
-    [key: string]: Exclude<JsonTagValue, undefined>
-  }>((acc, key) => {
-    // Ignore (filter out) undefined entries in an array
-    const convertedValue = tags[key] && convertTagValue(tags[key])
-    if (typeof convertedValue !== 'undefined') {
-      acc[key] = convertedValue
-    }
-    return acc
-  }, {})
-}
-
-function convertTagValue({ kind }: TagValue_1): JsonTagValue {
-  if (!kind) return undefined
-  switch (kind.$case) {
-    case 'list_value':
-      return kind.list_value.list_value.reduce<
-        Exclude<TagValuePrimitive, undefined>[]
-      >((acc, value) => {
-        const convertedValue = convertTagPrimitive(value)
-        if (typeof convertedValue !== 'undefined') {
-          acc.push(convertedValue)
-        }
-        return acc
-      }, [])
-    case 'primitive_value':
-      return convertTagPrimitive(kind.primitive_value)
-    default:
-      const _exhaustiveCheck: never = kind
-      return kind
-  }
-}
-
-function convertTagPrimitive({
-  kind,
-}: TagValue_1_PrimitiveValue): TagValuePrimitive {
-  if (!kind) return undefined
-  switch (kind.$case) {
-    case 'null_value':
-      return null
-    case 'boolean_value':
-      return kind.boolean_value
-    case 'number_value':
-      return kind.number_value
-    case 'string_value':
-      return kind.string_value
-    default:
-      const _exhaustiveCheck: never = kind
-      return _exhaustiveCheck
-  }
-}
-
-type CurrentlyImplemented = 'project' | 'observation' | 'field'
-
-/**
- * Convert a decoded protobuf message to its corresponding JSONSchema type.
- * __Mutates__ the input `message`, for performance reasons.
- */
-function protoToJsonSchema(
-  message: FilterBySchemaName<
-    ProtoTypesWithSchemaInfoUnion,
-    CurrentlyImplemented
-  >,
-  versionObj: VersionObj
-): FilterBySchemaName<JsonSchemaTypesUnion, CurrentlyImplemented> {
   switch (message.schemaName) {
     case 'project':
       return convertProject(message, versionObj)
@@ -305,52 +61,91 @@ function protoToJsonSchema(
   }
 }
 
-function convertCommon(
-  common: AllProtoTypes['common'],
-  versionObj: VersionObj
-): JsonSchemaCommon {
-  if (!common || !common.id || !common.createdAt || !common.updatedAt) {
-    throw new Error('Missing required common properties')
+/**
+ * @private - exported for unit tests
+ * Given a buffer, return a (valid) schemaVersion and schemaName
+ * Will throw if dataTypeId and schema version is unknown
+ */
+export function decodeBlockPrefix(buf: Buffer): ValidSchemaDef {
+  if (buf.length < dataTypeIdSize + schemaVersionSize) {
+    throw new Error('Invalid block prefix - unexpected prefix length')
+  }
+  const state = cenc.state()
+  state.buffer = buf
+  state.start = 0
+  state.end = dataTypeIdSize
+  const dataTypeId = cenc.hex.fixed(dataTypeIdSize).decode(state)
+
+  if (typeof dataTypeId !== 'string') {
+    throw new Error('Invalid block prefix, could not decode dataTypeId')
   }
 
-  return {
-    id: common.id.toString('hex'),
-    version: versionObjToString(versionObj),
-    links: common.links.map(versionObjToString),
-    createdAt: common.createdAt,
-    updatedAt: common.updatedAt,
+  state.start = dataTypeIdSize
+  state.end = dataTypeIdSize + schemaVersionSize
+  const schemaVersion = cenc.uint16.decode(state)
+
+  if (typeof schemaVersion !== 'number') {
+    throw new Error('Invalid block prefix, could not decode schemaVersion')
   }
+
+  const schemaName = dataTypeIdToSchemaName[dataTypeId]
+
+  if (!schemaName) {
+    throw new Error(`Unknown dataTypeId '${dataTypeId}'`)
+  }
+
+  const schemaDef = { schemaName, schemaVersion }
+  assertKnownSchemaDef(schemaDef)
+  return schemaDef
 }
-
-// Below is an example to test the types
-
-const project = {
-  common: {
-    id: Buffer.alloc(1),
-    links: [],
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-  name: 'test',
-  schemaName: 'project' as const,
-  schemaVersion: 1 as const,
-}
-
-// Typed as Project (from JSONSchema types)
-const output = protoToJsonSchema(project, { coreId: Buffer.alloc(0), seq: 1 })
 
 /**
- * Turn coreId and seq to a version string of ${hex-encoded coreId}/${seq}
+ * Adds schemaName and schemaVersion to a decoded prototype message.
+ * __MUTATES__ the passed parameter, for performance reasons. Ok because we
+ * do not use the passed paramter anywhere else.
+ * Not strictly type checked, but the returns strict types which can be trusted
  */
-function versionObjToString({ coreId, seq }: VersionObj) {
-  return `${coreId.toString('hex')}/${seq}`
+function mutatingSetSchemaDef<T extends ProtoTypes, K extends ValidSchemaDef>(
+  obj: T,
+  props: K
+): ProtoTypesWithSchemaInfo {
+  for (const prop of Object.keys(props)) {
+    ;(obj as any)[prop] = (props as any)[prop]
+  }
+  return obj as any
 }
 
-function mutatingOmit<T, K extends keyof any>(obj: T, key: K): OmitUnion<T, K> {
-  delete (obj as any)[key]
-  return obj as any
+/**
+ * Assert that a given schemaName and schemaVersion is "known", e.g. do we know how to process it?
+ * TODO: Accept "future" schema versions, because protobuf decoding should be forward-compatible
+ */
+function assertKnownSchemaDef(schemaDef: {
+  schemaName: SchemaName
+  schemaVersion: number
+}): asserts schemaDef is ValidSchemaDef {
+  const { schemaName, schemaVersion } = schemaDef
+  if (knownSchemaVersions[schemaName].includes(schemaDef.schemaVersion)) {
+    throw new Error(
+      `Unknown schema version '${schemaVersion}' for schema '${schemaName}'`
+    )
+  }
+}
+
+/**
+ * Get the name of the type, e.g. `Observation_5` for schemaName `observation`
+ * and schemaVersion `1`
+ */
+function getProtoTypeName(schemaDef: ValidSchemaDef): ProtoTypeNames {
+  return (capitalize(schemaDef.schemaName) +
+    '_' +
+    schemaDef.schemaVersion) as ProtoTypeNames
 }
 
 function capitalize<T extends string>(str: T): Capitalize<T> {
   return (str.charAt(0).toUpperCase() + str.slice(1)) as any
 }
+
+// function mutatingOmit<T, K extends keyof any>(obj: T, key: K): OmitUnion<T, K> {
+//   delete (obj as any)[key]
+//   return obj as any
+// }
