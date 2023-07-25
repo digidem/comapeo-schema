@@ -21,16 +21,32 @@ type ConvertFunction<TSchemaName extends SchemaName> = (
 ) => CurrentProtoTypes[TSchemaName]
 
 export const convertProject: ConvertFunction<'project'> = (mapeoDoc) => {
-  return mapeoDoc as any
+  return {
+    common: convertCommon(mapeoDoc),
+    name: mapeoDoc.name
+  }
 }
+
 export const convertField: ConvertFunction<'field'> = (mapeoDoc) => {
-  return mapeoDoc as any
+  return {
+    common: convertCommon(mapeoDoc),
+    type: mapeoDoc.type,
+    appearance: mapeoDoc.appearance ? mapeoDoc.appearance : 'UNRECOGNIZED',
+    // I'm setting this to false if undefined, but I dunno...
+    snakeCase: mapeoDoc.snakeCase ? mapeoDoc.snakeCase : false,
+    universal: mapeoDoc.universal ? mapeoDoc.universal : false,
+    options: mapeoDoc.options ? mapeoDoc.options.map((opt) =>{
+      return {
+        label: opt.label,
+        value: convertTagPrimitive(opt.value)
+      }
+    }) : []
+
+  }
 }
 export const convertObservation: ConvertFunction<'observation'> = (
   mapeoDoc
 ) => {
-  // I can name this return with a variable of type of
-  // CurrentProtoTypes['observation']
   return {
     common: convertCommon(mapeoDoc),
     refs: mapeoDoc.refs
@@ -47,8 +63,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
           }
         })
       : [],
-    tags: {},
-    // tags: Object.keys(mapeoDoc.tags).map(k => { })
+    tags: convertTags(mapeoDoc.tags)
   }
 }
 
@@ -61,6 +76,17 @@ function convertCommon(
     updatedAt: common.updatedAt,
     links: common.links.map(hexStringToCoreVersion),
   }
+}
+
+
+function convertTags(tags:{ [key:string]:Exclude<JsonTagValue,undefined>}) : {
+  [key:string]: TagValue_1
+}{
+  return Object.keys(tags).reduce((acc:{[key:string]: TagValue_1},k:string) => {
+    return {
+      [k]: convertTagValue(tags[k])
+    }
+  }, {})
 }
 
 function convertTagValue(tagValue: JsonTagValue): TagValue_1 {
