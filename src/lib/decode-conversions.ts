@@ -10,22 +10,10 @@ import {
   type VersionObj,
   type SchemaName,
   type FilterBySchemaName,
+  type JsonSchemaCommon,
+  type TagValuePrimitive,
+  type JsonTagValue,
 } from '../types'
-
-/** The `tags` field supports only a subset of JSON values - we don't support nested tags, just primitives or arrays of primitives */
-type TagValuePrimitive = number | string | boolean | null | undefined
-type JsonTagValue =
-  | TagValuePrimitive
-  | Array<Exclude<TagValuePrimitive, undefined>>
-
-/** Just the common (shared) props from JSON schema types */
-type JsonSchemaCommon = Pick<JsonSchemaTypes, ProtoTypeCommonKeys | 'version'>
-
-/** Union of keys from the common prop on Proto types */
-type ProtoTypeCommonKeys = keyof Exclude<
-  ProtoTypesWithSchemaInfo['common'],
-  undefined
->
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */

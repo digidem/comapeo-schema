@@ -14,6 +14,24 @@ export type ValidSchemaDef = PickUnion<
   'schemaName' | 'schemaVersion'
 >
 
+/** The `tags` field supports only a subset of JSON values - we don't support nested tags, just primitives or arrays of primitives */
+export type TagValuePrimitive = number | string | boolean | null | undefined
+export type JsonTagValue =
+  | TagValuePrimitive
+  | Array<Exclude<TagValuePrimitive, undefined>>
+
+/** Union of keys from the common prop on Proto types */
+type ProtoTypeCommonKeys = keyof Exclude<
+  ProtoTypesWithSchemaInfo['common'],
+  undefined
+>
+
+/** Just the common (shared) props from JSON schema types */
+export type JsonSchemaCommon = Pick<
+  JsonSchemaTypes,
+  ProtoTypeCommonKeys | 'version'
+>
+
 /** Filter a union of objects to only include those that have a prop `schemaName` that matches U */
 export type FilterBySchemaName<
   T extends { schemaName: string },
