@@ -3,6 +3,47 @@
   "$id": "http://mapeo.world/schemas/preset/v2.json",
   "title": "Preset",
   "description": "Presets define how map entities are displayed to the user. They define the icon used on the map, and the fields / questions shown to the user when they create or edit the entity on the map. The `tags` property of a preset is used to match the preset with observations, nodes, ways and relations. If multiple presets match, the one that matches the most tags is used.",
+  "definitions": {
+    "tags": {
+      "type": "object",
+      "properties": {},
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          },
+          {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
   "type": "object",
   "properties": {
     "schemaName": {
@@ -26,21 +67,15 @@
     },
     "tags": {
       "description": "The tags are used to match the preset to existing map entities. You can match based on multiple tags E.g. if you have existing points with the tags `nature:tree` and `species:oak` then you can add both these tags here in order to match only oak trees.",
-      "type": "object",
-      "properties": {},
-      "additionalProperties": true
+      "$ref": "#/definitions/tags"
     },
     "addTags": {
       "description": "Tags that are added when changing to the preset (default is the same value as 'tags')",
-      "type": "object",
-      "properties": {},
-      "additionalProperties": true
+      "$ref": "#/definitions/tags"
     },
     "removeTags": {
       "description": "Tags that are removed when changing to another preset (default is the same value as 'addTags' which in turn defaults to 'tags')",
-      "type": "object",
-      "properties": {},
-      "additionalProperties": true
+      "$ref": "#/definitions/tags"
     },
     "fields": {
       "description": "hex-encoded string. IDs of fields to displayed to the user when the preset is created or edited",
@@ -61,6 +96,15 @@
       }
     }
   },
-  "required": ["name", "geometry", "tags", "schemaName"],
+  "required": [
+    "name",
+    "geometry",
+    "tags",
+    "addTags",
+    "removeTags",
+    "fields",
+    "schemaName",
+    "terms"
+  ],
   "additionalProperties": false
 }

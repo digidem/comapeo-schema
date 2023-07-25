@@ -4,7 +4,7 @@ import { type JsonSchemaTypes as AllJsonSchemaTypes } from '../types/schema'
 import { dataTypeIds } from '../config'
 
 /** Temporary: once we have completed this module everything should be supported */
-type SupportedSchemaNames = 'project' | 'observation' | 'field'
+type SupportedSchemaNames = 'project' | 'observation' | 'field' | 'preset'
 
 export type SchemaName = Extract<keyof typeof dataTypeIds, SupportedSchemaNames>
 

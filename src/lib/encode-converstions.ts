@@ -1,4 +1,4 @@
-import { CurrentProtoTypes } from '../../types/proto/types'
+import { CurrentProtoTypes, Observation_5 } from '../../types/proto/types'
 import {
   JsonSchemaTypes,
   ProtoTypesWithSchemaInfo,
@@ -6,8 +6,8 @@ import {
   JsonSchemaCommon,
   TagValuePrimitive,
   JsonTagValue,
+  VersionObj,
 } from '../types'
-import { hexStringToCoreVersion } from '../../utils'
 import {
   TagValue_1,
   type TagValue_1_ListValue,
@@ -23,65 +23,63 @@ type ConvertFunction<TSchemaName extends SchemaName> = (
 export const convertProject: ConvertFunction<'project'> = (mapeoDoc) => {
   return {
     common: convertCommon(mapeoDoc),
-    name: mapeoDoc.name
+    ...mapeoDoc,
   }
 }
 
 export const convertField: ConvertFunction<'field'> = (mapeoDoc) => {
   return {
     common: convertCommon(mapeoDoc),
-    type: mapeoDoc.type,
-    appearance: mapeoDoc.appearance ? mapeoDoc.appearance : 'UNRECOGNIZED',
-    // I'm setting this to false if undefined, but I dunno...
-    snakeCase: mapeoDoc.snakeCase ? mapeoDoc.snakeCase : false,
-    universal: mapeoDoc.universal ? mapeoDoc.universal : false,
-    options: mapeoDoc.options ? mapeoDoc.options.map((opt) =>{
-      return {
-        label: opt.label,
-        value: convertTagPrimitive(opt.value)
-      }
-    }) : []
-
+    // Spread to ensure that we do not miss any fields (otherwise optional
+    // fields on the protoObj that exist on mapeoDoc will be missed)
+    ...mapeoDoc,
+    // Set defaults for optional fields
+    appearance: mapeoDoc.appearance || 'multiline',
+    snakeCase: mapeoDoc.snakeCase || false,
+    universal: mapeoDoc.universal || false,
+    options: mapeoDoc.options
+      ? mapeoDoc.options.map((opt) => {
+          return {
+            label: opt.label,
+            value: convertTagPrimitive(opt.value),
+          }
+        })
+      : [],
   }
 }
 
-// export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
-//   return {
-//     common: convertCommon(mapeoDoc),
-//     name: mapeoDoc.name,
-//     geometry: mapeoDoc.geometry,
-//     tags: convertTags(mapeoDoc.tags),
-//     addTags: mapeoDoc.addTags ? convertTags(mapeoDoc.addTags) : {},
-//     removeTags: mapeoDoc.removeTags ? convertTags(mapeoDoc.removeTags) : {},
-//     fieldIds: mapeoDoc.fields
-//       ? mapeoDoc.fields.map((field) => Buffer.from(field,'hex'))
-//       : [],
-//     iconId: mapeoDoc.icon ? Buffer.from(mapeoDoc.icon,'hex') : undefined,
-//     terms: mapeoDoc.terms ? mapeoDoc.terms : []
-
-//   }
-// }
+export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
+  return {
+    common: convertCommon(mapeoDoc),
+    ...mapeoDoc,
+    tags: convertTags(mapeoDoc.tags),
+    addTags: convertTags(mapeoDoc.addTags),
+    removeTags: convertTags(mapeoDoc.removeTags),
+    fieldIds: mapeoDoc.fields.map((field) => Buffer.from(field, 'hex')),
+    iconId: mapeoDoc.icon ? Buffer.from(mapeoDoc.icon, 'hex') : undefined,
+  }
+}
 
 export const convertObservation: ConvertFunction<'observation'> = (
   mapeoDoc
 ) => {
+  const refs = mapeoDoc.refs.map((ref) => {
+    return { id: Buffer.from(ref.id, 'hex') }
+  })
+  const attachments = mapeoDoc.attachments.map((attachment) => {
+    return {
+      driveId: Buffer.from(attachment.driveId, 'hex'),
+      name: attachment.name,
+      type: attachment.type,
+    }
+  })
+
   return {
     common: convertCommon(mapeoDoc),
-    refs: mapeoDoc.refs
-      ? mapeoDoc.refs.map((ref) => {
-          return { id: Buffer.from(ref.id, 'hex') }
-        })
-      : [],
-    attachments: mapeoDoc.attachments
-      ? mapeoDoc.attachments.map((attachment) => {
-          return {
-            driveId: Buffer.from(attachment.driveId, 'hex'),
-            name: attachment.name,
-            type: attachment.type,
-          }
-        })
-      : [],
-    tags: convertTags(mapeoDoc.tags)
+    ...mapeoDoc,
+    refs,
+    attachments,
+    tags: convertTags(mapeoDoc.tags),
   }
 }
 
@@ -92,19 +90,23 @@ function convertCommon(
     id: Buffer.from(common.id, 'hex'),
     createdAt: common.createdAt,
     updatedAt: common.updatedAt,
-    links: common.links.map(hexStringToCoreVersion),
+    links: common.links.map((link) => versionStringToObj(link)),
   }
 }
 
-
-function convertTags(tags:{ [key:string]:Exclude<JsonTagValue,undefined>}) : {
-  [key:string]: TagValue_1
-}{
-  return Object.keys(tags).reduce((acc:{[key:string]: TagValue_1},k:string) => {
-    return {
-      [k]: convertTagValue(tags[k])
-    }
-  }, {})
+function convertTags(tags: {
+  [key: string]: Exclude<JsonTagValue, undefined>
+}): {
+  [key: string]: TagValue_1
+} {
+  return Object.keys(tags).reduce(
+    (acc: { [key: string]: TagValue_1 }, k: string) => {
+      return {
+        [k]: convertTagValue(tags[k]),
+      }
+    },
+    {}
+  )
 }
 
 function convertTagValue(tagValue: JsonTagValue): TagValue_1 {
@@ -163,4 +165,12 @@ function convertTagPrimitive(
       const _exhaustiveCheck: never = tagPrimitive
   }
   return { kind }
+}
+
+/**
+ * Turn a hex-encoded version string to a version objected with the coreId and index (seq)
+ */
+function versionStringToObj(hexStr: string): VersionObj {
+  const [id, seq] = hexStr.split('/')
+  return { coreId: Buffer.from(id, 'hex'), seq: Number(seq) }
 }
