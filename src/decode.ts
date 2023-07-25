@@ -8,7 +8,7 @@ import {
   type ValidSchemaDef,
 } from './types'
 
-import * as ProtobufEncodeDecode from '../types/proto/index.mapeo'
+import { Decode } from '../types/proto/index'
 import { dataTypeIds, knownSchemaVersions } from '../config'
 import {
   convertProject,
@@ -42,10 +42,10 @@ export function decode(buf: Buffer, versionObj: VersionObj): JsonSchemaTypes {
     buf.length
   )
 
-  const messageWithSchemaInfo =
-    ProtobufEncodeDecode[getProtoTypeName(schemaDef)].decode(encodedMsg)
+  const messageWithoutSchemaInfo =
+    Decode[getProtoTypeName(schemaDef)](encodedMsg)
 
-  const message = mutatingSetSchemaDef(messageWithSchemaInfo, schemaDef)
+  const message = mutatingSetSchemaDef(messageWithoutSchemaInfo, schemaDef)
 
   switch (message.schemaName) {
     case 'project':

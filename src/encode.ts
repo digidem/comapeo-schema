@@ -3,8 +3,12 @@ import { currentSchemaVersions, dataTypeIds } from '../config'
 // @ts-ignore
 import * as cenc from 'compact-encoding'
 import { DATA_TYPE_ID_BYTES } from './constants'
-import { getProtoTypeName } from './lib/utils'
-import * as ProtobufEncodeDecode from '../types/proto/index.mapeo'
+import { Encode } from '../types/proto/index'
+import {
+  convertField,
+  convertObservation,
+  convertProject,
+} from './lib/encode-converstions'
 
 /**
  * Encode a an object validated against a schema as a binary protobuf prefixed
@@ -16,32 +20,29 @@ export function encode(mapeoDoc: JsonSchemaTypes): Buffer {
   const schemaDef = { schemaName, schemaVersion }
   assertCurrentSchemaDef(schemaDef)
 
-  const protoTypeName = getProtoTypeName(schemaDef)
-
-  // check if protoTypeName is valid
-  if (!ProtobufEncodeDecode[protoTypeName]) {
-    throw new Error(
-      `Unexpected type: schemaName: '${schemaName}', schemaVersion: ${schemaVersion}`
-    )
-  }
-
   const blockPrefix = encodeBlockPrefix(schemaDef)
 
-  let protobuf: Buffer
+  let protobuf: Uint8Array
 
   switch (mapeoDoc.schemaName) {
-    case 'field':
-      protobuf = Buffer.alloc(0)
+    case 'field': {
+      const message = convertField(mapeoDoc)
+      protobuf = Encode[mapeoDoc.schemaName](message).finish()
       break
-    case 'observation':
-      protobuf = Buffer.alloc(0)
+    }
+    case 'observation': {
+      const message = convertObservation(mapeoDoc)
+      protobuf = Encode[mapeoDoc.schemaName](message).finish()
       break
-    case 'project':
-      protobuf = Buffer.alloc(0)
+    }
+    case 'project': {
+      const message = convertProject(mapeoDoc)
+      protobuf = Encode[mapeoDoc.schemaName](message).finish()
       break
+    }
     default:
       const _exhaustiveCheck: never = mapeoDoc
-      protobuf = Buffer.alloc(0)
+      protobuf = _exhaustiveCheck
   }
 
   return Buffer.concat([blockPrefix, protobuf])

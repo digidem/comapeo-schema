@@ -1,7 +1,5 @@
 // @ts-check
-
-// types/proto/index.d.ts and types/proto/index.js
-import { capitalize } from './utils.js'
+import { getTypeName } from './utils.js'
 
 /**
  * @param {ReturnType<import('./parse-config.js').parseConfig>} config
@@ -22,25 +20,27 @@ export function generateProtoTypes({ currentSchemaVersions, protoTypeDefs }) {
       .join('\n  | ')
 
   const protoTypesWithSchemaInfo =
-    '/** Union of all Proto Types (including non-current versions) with schemaName and schemaVersion */' +
+    '/** Union of all Proto Types (including non-current versions) with schemaName and schemaVersion */\n' +
     'export type ProtoTypesWithSchemaInfo =\n  | ' +
     protoTypeDefs
       .map(({ schemaName, schemaVersion, typeName }) => {
-        return `${typeName} & { schemaName: '${schemaName}', schemaVersion: ${schemaVersion} }`
+        return `(${typeName} & { schemaName: '${schemaName}', schemaVersion: ${schemaVersion} })`
       })
       .join('\n  | ')
 
   const currentProtoTypes =
-    'export type CurrentProtoTypes =\n  | ' +
+    '/** Union of current proto types */\n' +
+    'export type CurrentProtoTypes = {\n' +
     protoTypeDefs
       .filter(({ schemaName, schemaVersion }) => {
         return currentSchemaVersions[schemaName] === schemaVersion
       })
       .map(({ schemaName, schemaVersion }) => {
         const typeName = getTypeName(schemaName, schemaVersion)
-        return `${typeName}`
+        return `  ${schemaName}: ${typeName},`
       })
-      .join('\n  | ')
+      .join('\n') +
+    '}\n'
 
   const protoTypesExports = protoTypeDefs
     .map(({ typeName }) => {
@@ -49,6 +49,7 @@ export function generateProtoTypes({ currentSchemaVersions, protoTypeDefs }) {
     .join('\n')
 
   const protoTypeNames =
+    '/** Union of all valid names of proto types (`${capitalizedSchemaName}_${schemaVersion}`) */\n' +
     'export type ProtoTypeNames =\n  | ' +
     protoTypeDefs.map(({ typeName }) => `'${typeName}'`).join('\n  | ')
 
@@ -66,8 +67,4 @@ export function generateProtoTypes({ currentSchemaVersions, protoTypeDefs }) {
     protoTypeNames +
     '\n'
   )
-}
-
-function getTypeName(schemaName, schemaVersion) {
-  return capitalize(schemaName) + '_' + schemaVersion
 }

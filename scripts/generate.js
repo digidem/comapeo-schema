@@ -12,6 +12,7 @@ import { generateConfig } from './lib/generate-config.js'
 import { readJSONSchema } from './lib/read-json-schema.js'
 import { generateValidations } from './lib/generate-validations.js'
 import { generateJSONSchemaTS } from './lib/generate-jsonschema-ts.js'
+import { generateEncodeDecode } from './lib/generate-encode-decode.js'
 
 const DIST_DIRNAME = path.join(PROJECT_ROOT, 'dist')
 const TYPES_DIRNAME = path.join(PROJECT_ROOT, 'types')
@@ -30,6 +31,12 @@ const protoTypesFile = generateProtoTypes(config)
 fs.writeFileSync(
   path.join(PROJECT_ROOT, 'types/proto/types.ts'),
   protoTypesFile
+)
+
+const encodeDecodeFile = generateEncodeDecode(config)
+fs.writeFileSync(
+  path.join(PROJECT_ROOT, 'types/proto/index.ts'),
+  encodeDecodeFile
 )
 
 const configFile = generateConfig(config)
