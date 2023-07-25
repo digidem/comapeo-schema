@@ -44,6 +44,24 @@ export const convertField: ConvertFunction<'field'> = (mapeoDoc) => {
 
   }
 }
+
+// export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
+//   return {
+//     common: convertCommon(mapeoDoc),
+//     name: mapeoDoc.name,
+//     geometry: mapeoDoc.geometry,
+//     tags: convertTags(mapeoDoc.tags),
+//     addTags: mapeoDoc.addTags ? convertTags(mapeoDoc.addTags) : {},
+//     removeTags: mapeoDoc.removeTags ? convertTags(mapeoDoc.removeTags) : {},
+//     fieldIds: mapeoDoc.fields
+//       ? mapeoDoc.fields.map((field) => Buffer.from(field,'hex'))
+//       : [],
+//     iconId: mapeoDoc.icon ? Buffer.from(mapeoDoc.icon,'hex') : undefined,
+//     terms: mapeoDoc.terms ? mapeoDoc.terms : []
+
+//   }
+// }
+
 export const convertObservation: ConvertFunction<'observation'> = (
   mapeoDoc
 ) => {
