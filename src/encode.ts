@@ -7,6 +7,7 @@ import { Encode } from '../types/proto/index'
 import {
   convertField,
   convertObservation,
+  convertPreset,
   convertProject,
 } from './lib/encode-converstions'
 
@@ -37,6 +38,11 @@ export function encode(mapeoDoc: JsonSchemaTypes): Buffer {
     }
     case 'project': {
       const message = convertProject(mapeoDoc)
+      protobuf = Encode[mapeoDoc.schemaName](message).finish()
+      break
+    }
+    case 'preset': {
+      const message = convertPreset(mapeoDoc)
       protobuf = Encode[mapeoDoc.schemaName](message).finish()
       break
     }

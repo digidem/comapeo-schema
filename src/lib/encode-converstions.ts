@@ -13,6 +13,7 @@ import {
   type TagValue_1_ListValue,
   type TagValue_1_PrimitiveValue,
 } from '../../types/proto/tags/v1'
+import { Observation_5_Metadata } from '../../types/proto/observation/v5'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
@@ -55,7 +56,7 @@ export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
     tags: convertTags(mapeoDoc.tags),
     addTags: convertTags(mapeoDoc.addTags),
     removeTags: convertTags(mapeoDoc.removeTags),
-    fieldIds: mapeoDoc.fields.map((field) => Buffer.from(field, 'hex')),
+    fieldIds: mapeoDoc.fieldIds.map((field) => Buffer.from(field, 'hex')),
     iconId: mapeoDoc.icon ? Buffer.from(mapeoDoc.icon, 'hex') : undefined,
   }
 }
@@ -80,6 +81,9 @@ export const convertObservation: ConvertFunction<'observation'> = (
     refs,
     attachments,
     tags: convertTags(mapeoDoc.tags),
+    metadata:
+      mapeoDoc.metadata &&
+      Observation_5_Metadata.fromPartial(mapeoDoc.metadata),
   }
 }
 

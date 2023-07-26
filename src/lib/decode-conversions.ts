@@ -4,6 +4,7 @@ import {
   type TagValue_1,
   type TagValue_1_PrimitiveValue,
 } from '../../types/proto/tags/v1'
+import { Preset } from '../../types/schema'
 import {
   type JsonSchemaTypes,
   type ProtoTypesWithSchemaInfo,
@@ -83,6 +84,33 @@ export const convertField: ConvertFunction<'field'> = (message, versionObj) => {
         []
       ),
     }
+  }
+}
+
+type JsonSchemaPresetGeomItem = FilterBySchemaName<
+  JsonSchemaTypes,
+  'preset'
+>['geometry'][number]
+
+export const convertPreset: ConvertFunction<'preset'> = (
+  message,
+  versionObj
+) => {
+  const { common, schemaVersion, ...rest } = message
+  const jsonSchemaCommon = convertCommon(common, versionObj)
+  const geometry = rest.geometry.filter(
+    (geomType): geomType is JsonSchemaPresetGeomItem =>
+      geomType !== 'UNRECOGNIZED'
+  )
+
+  return {
+    ...jsonSchemaCommon,
+    ...rest,
+    geometry,
+    tags: convertTags(rest.tags),
+    addTags: convertTags(rest.addTags),
+    removeTags: convertTags(rest.removeTags),
+    fieldIds: rest.fieldIds.map((id) => id.toString('hex')),
   }
 }
 

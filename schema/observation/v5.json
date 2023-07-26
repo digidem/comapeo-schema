@@ -7,6 +7,7 @@
     "position": {
       "description": "Position details",
       "type": "object",
+      "required": ["mocked"],
       "properties": {
         "timestamp": {
           "description": "Timestamp of when the current position was obtained",

@@ -14,6 +14,7 @@ import {
   convertProject,
   convertField,
   convertObservation,
+  convertPreset,
 } from './lib/decode-conversions'
 // @ts-ignore
 import * as cenc from 'compact-encoding'
@@ -54,6 +55,8 @@ export function decode(buf: Buffer, versionObj: VersionObj): JsonSchemaTypes {
       return convertObservation(message, versionObj)
     case 'field':
       return convertField(message, versionObj)
+    case 'preset':
+      return convertPreset(message, versionObj)
     default:
       const _exhaustiveCheck: never = message
       return message
