@@ -1,4 +1,4 @@
-import { ProtoTypes } from '../types/proto/types'
+import { ProtoTypes } from './proto/types.js'
 import {
   type JsonSchemaTypes,
   type ProtoTypesWithSchemaInfo,
@@ -6,20 +6,20 @@ import {
   type SchemaName,
   type DataTypeId,
   type ValidSchemaDef,
-} from './types'
+} from './types.js'
 
-import { Decode } from '../types/proto/index'
-import { dataTypeIds, knownSchemaVersions } from '../config'
+import { Decode } from './proto/index.js'
+import { dataTypeIds, knownSchemaVersions } from './config.js'
 import {
   convertProject,
   convertField,
   convertObservation,
   convertPreset,
-} from './lib/decode-conversions'
+} from './lib/decode-conversions.js'
 // @ts-ignore
 import * as cenc from 'compact-encoding'
-import { DATA_TYPE_ID_BYTES, SCHEMA_VERSION_BYTES } from './constants'
-import { getProtoTypeName } from './lib/utils'
+import { DATA_TYPE_ID_BYTES, SCHEMA_VERSION_BYTES } from './constants.js'
+import { getProtoTypeName } from './lib/utils.js'
 
 /** Map of dataTypeIds to schema names for quick lookups */
 const dataTypeIdToSchemaName: Record<string, SchemaName> = {}

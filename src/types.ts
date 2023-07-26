@@ -1,7 +1,7 @@
 // Shared types
-import { type ProtoTypesWithSchemaInfo as AllProtoTypesWithSchemaInfo } from '../types/proto/types'
-import { type JsonSchemaTypes as AllJsonSchemaTypes } from '../types/schema'
-import { dataTypeIds } from '../config'
+import { type ProtoTypesWithSchemaInfo as AllProtoTypesWithSchemaInfo } from './proto/types.js'
+import { type JsonSchemaTypes as AllJsonSchemaTypes } from './schema/index.js'
+import { dataTypeIds } from './config.js'
 
 /** Temporary: once we have completed this module everything should be supported */
 type SupportedSchemaNames = 'project' | 'observation' | 'field' | 'preset'

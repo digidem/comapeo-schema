@@ -1,3 +1,12 @@
+## Build steps
+
+1. `npm run generate` will generate type definitions and encode/decode functions from `.proto` files, and generate type definitions from json schema files, and place them in `generated`. It will also generate validation functions from json schema files and place that in `dist`.
+2. `rootDirs` is set in `tsconfig.json` so that files in `src` can import from `generated` as if the two folders were merged
+3. `tsc` generates `.js` and `.d.ts` from the files in `src` and `generated` and outputs to `intermediate`
+4. A final copy step is needed to merge `intermediate/generated` and `intermediate/src` into `dist`.
+
+All of these steps can be run with `npm run build`
+
 ## Publishing to [npm](https://www.npmjs.com)
 
 Please publish to npm via Github using the release workflow, rather than publishing from your local machine. This ensures that the artifacts are built and release notes are generated.

@@ -1,15 +1,15 @@
-import { JsonSchemaTypes, SchemaName, ValidSchemaDef } from './types'
-import { currentSchemaVersions, dataTypeIds } from '../config'
+import { JsonSchemaTypes, SchemaName, ValidSchemaDef } from './types.js'
+import { currentSchemaVersions, dataTypeIds } from './config.js'
 // @ts-ignore
 import * as cenc from 'compact-encoding'
-import { DATA_TYPE_ID_BYTES } from './constants'
-import { Encode } from '../types/proto/index'
+import { DATA_TYPE_ID_BYTES } from './constants.js'
+import { Encode } from './proto/index.js'
 import {
   convertField,
   convertObservation,
   convertPreset,
   convertProject,
-} from './lib/encode-converstions'
+} from './lib/encode-converstions.js'
 
 /**
  * Encode a an object validated against a schema as a binary protobuf prefixed
