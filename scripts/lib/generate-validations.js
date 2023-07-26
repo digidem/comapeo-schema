@@ -25,5 +25,5 @@ export function generateValidations(config, jsonSchemas) {
   ajv.addKeyword('meta:enum')
 
   // generate validation code
-  return standaloneCode(ajv, schemaExports)
+  return '// @ts-nocheck\n' + standaloneCode(ajv, schemaExports)
 }

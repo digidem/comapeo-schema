@@ -39,7 +39,7 @@ fs.writeFileSync(path.join(GENERATED_DIRNAME, 'config.ts'), configFile)
 const jsonSchemas = readJSONSchema(config)
 
 const validationCode = generateValidations(config, jsonSchemas)
-fs.writeFileSync(path.join(DIST_DIRNAME, 'schemas.js'), validationCode)
+fs.writeFileSync(path.join(GENERATED_DIRNAME, 'validations.ts'), validationCode)
 
 const jsonSchemaTSDefs = await generateJSONSchemaTS(config, jsonSchemas)
 for (const [filenameBase, ts] of Object.entries(jsonSchemaTSDefs)) {

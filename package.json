@@ -4,11 +4,6 @@
   "description": "JSON schema and flow types for Mapeo",
   "main": "dist/index.js",
   "type": "module",
-  "exports": {
-    "types/": "./types/index.d.ts",
-    "types/schema": "./types/schema/index.d.ts",
-    "types/proto": "./types/proto/index.d.ts"
-  },
   "scripts": {
     "example": "node examples/schema_test.js",
     "build": "npm-run-all build:clean build:generate build:tsc build:copy build:doc",
