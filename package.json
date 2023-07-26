@@ -6,11 +6,11 @@
   "type": "module",
   "scripts": {
     "example": "node examples/schema_test.js",
-    "build": "npm-run-all build:clean build:generate build:tsc build:copy build:doc",
+    "build": "npm-run-all build:clean build:generate build:tsc build:copy",
     "build:clean": "rimraf types dist docs intermediate generated",
     "build:generate": "node scripts/generate.js",
     "build:tsc": "tsc",
-    "build:copy": "cpy \"intermediate/generated/**\" \"intermediate/src/**\" dist/",
+    "build:copy": "cpy 'intermediate/generated/**' 'intermediate/src/**' dist/",
     "build:doc": "typedoc --plugin typedoc-plugin-markdown",
     "prepublishOnly": "npm run build",
     "test": "tape 'test/**/*.js'"
