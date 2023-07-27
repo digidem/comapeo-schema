@@ -12,7 +12,7 @@
     "build:tsc": "tsc",
     "build:copy": "cpy 'intermediate/generated/**' 'intermediate/src/**' dist/",
     "build:doc": "typedoc --plugin typedoc-plugin-markdown",
-    "prepublishOnly": "npm run build",
+    "prepack": "npm run build",
     "test": "tape 'test/**/*.js'"
   },
   "repository": {
@@ -62,5 +62,12 @@
     "glob-promise": "^5.0.0",
     "typedoc": "^0.23.21",
     "typedoc-plugin-markdown": "^3.13.6"
-  }
+  },
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "files": [
+    "dist"
+  ]
 }
