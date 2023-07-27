@@ -1,9 +1,4 @@
-import {
-  JsonSchemaTypes,
-  OmitUnion,
-  SchemaName,
-  ValidSchemaDef,
-} from './types.js'
+import { MapeoDoc, OmitUnion, SchemaName, ValidSchemaDef } from './types.js'
 import { currentSchemaVersions, dataTypeIds } from './config.js'
 // @ts-ignore
 import * as cenc from 'compact-encoding'
@@ -20,9 +15,7 @@ import {
  * Encode a an object validated against a schema as a binary protobuf prefixed
  * with the encoded data type ID and schema version, to send to an hypercore.
  */
-export function encode(
-  mapeoDoc: OmitUnion<JsonSchemaTypes, 'version'>
-): Buffer {
+export function encode(mapeoDoc: OmitUnion<MapeoDoc, 'version'>): Buffer {
   const { schemaName } = mapeoDoc
   const schemaVersion = currentSchemaVersions[schemaName]
   const schemaDef = { schemaName, schemaVersion }

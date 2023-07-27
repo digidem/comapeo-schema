@@ -15,7 +15,7 @@ function readJSON(relativeFilepath) {
  * Returns the most recent version of JSONSchema files in `schema/**` with
  * properties from schema/common/v1.json merged
  *
- * @param {ReturnType<import('./parse-config').parseConfig>} config
+ * @param {ReturnType<import('./parse-config.js').parseConfig>} config
  */
 export function readJSONSchema({ currentSchemaVersions }) {
   const jsonSchemaFiles = glob.sync(`schema/!(common)/*.json`, {
@@ -40,34 +40,32 @@ export function readJSONSchema({ currentSchemaVersions }) {
     return {
       schemaName,
       schemaVersion,
-      jsonSchema: mergeCommon(jsonSchema, common),
+      jsonSchema,
     }
   })
 
   /** @type {Record<string, import('json-schema').JSONSchema7>} schemaName: JSONSchema */
-  const jsonSchemas = {}
+  const merged = {}
+  /** @type {Record<string, import('json-schema').JSONSchema7>} schemaName: JSONSchema */
+  const values = {
+    common,
+  }
 
   for (const { schemaName, schemaVersion, jsonSchema } of jsonSchemaDefs) {
     if (schemaVersion !== currentSchemaVersions[schemaName]) continue
-    jsonSchemas[schemaName] = jsonSchema
+    values[schemaName] = jsonSchema
+    merged[schemaName] = mergeCommon(jsonSchema, common)
   }
 
   for (const schemaName of Object.keys(currentSchemaVersions)) {
-    if (!jsonSchemas[schemaName]) {
+    if (!values[schemaName]) {
       throw new Error(
         `Missing JSON schema def for ${schemaName} v${currentSchemaVersions[schemaName]}`
       )
     }
   }
 
-  return jsonSchemas
-}
-
-function removeDuplicates(arr, elem) {
-  if (!arr.includes(elem)) {
-    arr.push(elem)
-  }
-  return arr
+  return { merged, values }
 }
 
 /**
@@ -77,13 +75,13 @@ function removeDuplicates(arr, elem) {
  * @returns {import('json-schema').JSONSchema7}
  */
 function mergeCommon(schema, common) {
-  const required = [
+  const required = new Set([
     ...(schema.required || []),
     ...(common.required || []),
-  ].reduce(removeDuplicates, [])
+  ])
   return {
     ...schema,
-    required,
+    required: Array.from(required),
     properties: {
       ...common.properties,
       ...schema.properties,
