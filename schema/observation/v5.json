@@ -155,12 +155,10 @@
           "default": false
         },
         "position": {
-          "$ref": "#/definitions/position",
-          "description": "Details of the position recorded for the observation"
+          "$ref": "#/definitions/position"
         },
         "lastSavedPosition": {
-          "$ref": "#/definitions/position",
-          "description": "Details of the last saved position when the observation was recorded - useful if position is not recorded"
+          "$ref": "#/definitions/position"
         },
         "positionProvider": {
           "description": "Details of the location providers that were available on the device when the observation was recorded",
