@@ -13,6 +13,10 @@
       "description": "id (hex-encoded 32-byte buffer) and core sequence number, separated by '/'",
       "type": "string"
     },
+    "schemaName": {
+      "description": "Name of Mapeo data type / schema",
+      "type": "string"
+    },
     "createdAt": {
       "description": "RFC3339-formatted datetime of when the first version of the element was created",
       "type": "string",
@@ -32,5 +36,12 @@
       }
     }
   },
-  "required": ["docId", "createdAt", "updatedAt", "links", "versionId"]
+  "required": [
+    "docId",
+    "createdAt",
+    "schemaName",
+    "updatedAt",
+    "links",
+    "versionId"
+  ]
 }

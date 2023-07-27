@@ -24,6 +24,7 @@ export function readJSONSchema({ currentSchemaVersions }) {
   })
 
   const common = readJSON('./schema/common/v1.json')
+  common.properties.schemaName.enum = []
 
   const jsonSchemaDefs = jsonSchemaFiles.map((filepath) => {
     /** @type {import('json-schema').JSONSchema7} */
@@ -53,6 +54,7 @@ export function readJSONSchema({ currentSchemaVersions }) {
 
   for (const { schemaName, schemaVersion, jsonSchema } of jsonSchemaDefs) {
     if (schemaVersion !== currentSchemaVersions[schemaName]) continue
+    common.properties.schemaName.enum.push(schemaName)
     values[schemaName] = jsonSchema
     merged[schemaName] = mergeCommon(jsonSchema, common)
   }
