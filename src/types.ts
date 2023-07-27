@@ -63,3 +63,18 @@ export type OmitUnion<T, K extends keyof any> = T extends any
   : never
 /** Return a union of object values */
 type Values<T> = T[keyof T]
+
+declare const tag: unique symbol
+
+type Tagged<Token> = {
+  readonly [tag]: Token
+}
+
+/**
+Create an opaque type, which hides its internal details from the public, and can only be created by being used explicitly.
+
+The generic type parameter can be anything. It doesn't have to be an object.
+
+https://github.com/sindresorhus/type-fest/blob/main/source/opaque.d.ts
+*/
+export type Opaque<Type, Token = unknown> = Type & Tagged<Token>

@@ -13,6 +13,7 @@ import {
   type MapeoCommon,
   type TagValuePrimitive,
   type JsonTagValue,
+  type Opaque,
 } from '../types.js'
 
 /** Function type for converting a protobuf type of any version for a particular
@@ -27,7 +28,7 @@ export const convertProject: ConvertFunction<'project'> = (
   versionObj
 ) => {
   const { common, schemaVersion, ...rest } = message
-  const jsonSchemaCommon = convertCommon(common, versionObj)
+  const jsonSchemaCommon = convertCommon<'project'>(common, versionObj)
   return {
     ...jsonSchemaCommon,
     ...rest,
@@ -39,7 +40,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
   versionObj
 ) => {
   const { common, schemaVersion, ...rest } = message
-  const jsonSchemaCommon = convertCommon(common, versionObj)
+  const jsonSchemaCommon = convertCommon<'observation'>(common, versionObj)
 
   return {
     ...jsonSchemaCommon,
@@ -56,7 +57,7 @@ type FieldOptions = FilterBySchemaName<MapeoDoc, 'field'>['options']
 
 export const convertField: ConvertFunction<'field'> = (message, versionObj) => {
   const { common, schemaVersion, ...rest } = message
-  const jsonSchemaCommon = convertCommon(common, versionObj)
+  const jsonSchemaCommon = convertCommon<'field'>(common, versionObj)
   if (!message.tagKey) {
     // We can't do anything with a field without a tag key, so we ignore these
     throw new Error('Missing tagKey on field')
@@ -96,7 +97,7 @@ export const convertPreset: ConvertFunction<'preset'> = (
   versionObj
 ) => {
   const { common, schemaVersion, ...rest } = message
-  const jsonSchemaCommon = convertCommon(common, versionObj)
+  const jsonSchemaCommon = convertCommon<'preset'>(common, versionObj)
   const geometry = rest.geometry.filter(
     (geomType): geomType is JsonSchemaPresetGeomItem =>
       geomType !== 'UNRECOGNIZED'
@@ -169,21 +170,30 @@ function convertTagPrimitive({
   }
 }
 
-function convertCommon(
+function convertCommon<TSchemaName extends SchemaName>(
   common: ProtoTypesWithSchemaInfo['common'],
   versionObj: VersionObj
-): MapeoCommon {
+): Pick<
+  FilterBySchemaName<MapeoDoc, TSchemaName>,
+  Exclude<keyof MapeoCommon, 'schemaName'>
+> {
   if (!common || !common.docId || !common.createdAt || !common.updatedAt) {
     throw new Error('Missing required common properties')
   }
 
-  return {
-    docId: common.docId.toString('hex'),
-    versionId: versionObjToString(versionObj),
+  const mapeoCommon: Omit<MapeoCommon, 'schemaName'> = {
+    docId: common.docId.toString('hex') as Opaque<string>,
+    versionId: versionObjToString(versionObj) as Opaque<string>,
     links: common.links.map(versionObjToString),
     createdAt: common.createdAt,
     updatedAt: common.updatedAt,
   }
+  // Need a type coercion here because of the opaque types, but any errors
+  // should be caught above by typing it as Omit<MapeoCommon, 'schemaName'>
+  return mapeoCommon as Pick<
+    FilterBySchemaName<MapeoDoc, TSchemaName>,
+    Exclude<keyof MapeoCommon, 'schemaName'>
+  >
 }
 
 /**

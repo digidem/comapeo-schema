@@ -32,8 +32,9 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
   }
 
   indexLines.push(
+    "import { type Opaque } from '../types.js'",
     '',
-    'export type MapeoCommon = Simplify<_Common>',
+    'export type MapeoCommon = Simplify<_Common & { docId: Opaque<string>, versionId: Opaque<string> }>',
     '',
     'type Simplify<T> = {[KeyType in keyof T]: T[KeyType]} & {};',
     ''
@@ -44,9 +45,15 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
     const typeName = capitalize(schemaName)
     const interfaceName = '_' + typeName
     const valueName = getValueName(schemaName)
+    indexLines.push(
+      `export type ${typeName}DocId = Opaque<string, '${schemaName}DocId'>`
+    )
+    indexLines.push(
+      `export type ${typeName}VersionId = Opaque<string, '${schemaName}VersionId'>`
+    )
     if (schema.description) indexLines.push(`/** ${schema.description} */`)
     indexLines.push(
-      `export type ${typeName} = Simplify<${interfaceName} & _Common>`
+      `export type ${typeName} = Simplify<${interfaceName} & _Common & { docId: ${typeName}DocId, versionId: ${typeName}VersionId }>`
     )
     if (schema.description) indexLines.push(`/** ${schema.description} */`)
     // Unwrap generated TS, from an interface to a type alias, for improved type
