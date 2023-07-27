@@ -29,7 +29,7 @@ type ProtoTypeCommonKeys = keyof Exclude<
 /** Just the common (shared) props from JSON schema types */
 export type JsonSchemaCommon = Pick<
   JsonSchemaTypes,
-  ProtoTypeCommonKeys | 'version'
+  ProtoTypeCommonKeys | 'versionId'
 >
 
 /** Filter a union of objects to only include those that have a prop `schemaName` that matches U */

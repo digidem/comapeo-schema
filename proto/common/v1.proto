@@ -6,7 +6,7 @@ import "options.proto";
 
 message Common_1 {
   // 32-byte random generated number
-  optional bytes id = 1 [(required) = true];
+  optional bytes docId = 1 [(required) = true];
   message Link {
     bytes coreId = 1;
     int32 seq = 2;

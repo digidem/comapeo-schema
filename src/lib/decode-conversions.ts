@@ -173,13 +173,13 @@ function convertCommon(
   common: ProtoTypesWithSchemaInfo['common'],
   versionObj: VersionObj
 ): JsonSchemaCommon {
-  if (!common || !common.id || !common.createdAt || !common.updatedAt) {
+  if (!common || !common.docId || !common.createdAt || !common.updatedAt) {
     throw new Error('Missing required common properties')
   }
 
   return {
-    id: common.id.toString('hex'),
-    version: versionObjToString(versionObj),
+    docId: common.docId.toString('hex'),
+    versionId: versionObjToString(versionObj),
     links: common.links.map(versionObjToString),
     createdAt: common.createdAt,
     updatedAt: common.updatedAt,

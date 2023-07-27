@@ -91,7 +91,7 @@ function convertCommon(
   common: Omit<JsonSchemaCommon, 'version'>
 ): ProtoTypesWithSchemaInfo['common'] {
   return {
-    id: Buffer.from(common.id, 'hex'),
+    docId: Buffer.from(common.docId, 'hex'),
     createdAt: common.createdAt,
     updatedAt: common.updatedAt,
     links: common.links.map((link) => versionStringToObj(link)),
