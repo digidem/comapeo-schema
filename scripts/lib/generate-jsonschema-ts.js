@@ -24,14 +24,16 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
 
   for (const schemaName of Object.keys(jsonSchemas.values)) {
     const typeName = capitalize(schemaName)
-    const valueName = getValueName(schemaName)
+    const asName = '_' + typeName
 
     indexLines.push(
-      `import { type ${typeName} as ${valueName} } from './${schemaName}.js'`
+      `import { type ${typeName} as ${asName} } from './${schemaName}.js'`
     )
   }
 
   indexLines.push(
+    '',
+    'export type MapeoCommon = Simplify<_Common>',
     '',
     'type Simplify<T> = {[KeyType in keyof T]: T[KeyType]} & {};',
     ''
@@ -40,13 +42,17 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
   for (const [schemaName, schema] of Object.entries(jsonSchemas.values)) {
     if (schemaName === 'common') continue
     const typeName = capitalize(schemaName)
+    const interfaceName = '_' + typeName
     const valueName = getValueName(schemaName)
-    if (schema.description) {
-      indexLines.push(`/** ${schema.description} */`)
-    }
+    if (schema.description) indexLines.push(`/** ${schema.description} */`)
     indexLines.push(
-      `export type ${typeName} = Simplify<${valueName} & MapeoCommon>`
+      `export type ${typeName} = Simplify<${interfaceName} & _Common>`
     )
+    if (schema.description) indexLines.push(`/** ${schema.description} */`)
+    // Unwrap generated TS, from an interface to a type alias, for improved type
+    // hints and to aide assignability see
+    // https://github.com/sindresorhus/type-fest/blob/main/source/simplify.d.ts
+    indexLines.push(`export type ${valueName} = Simplify<${interfaceName}>`)
   }
 
   indexLines.push('', 'export type MapeoDoc = ')
@@ -54,15 +60,18 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
   for (const schemaName of Object.keys(jsonSchemas.values)) {
     if (schemaName === 'common') continue
     const typeName = capitalize(schemaName)
-    indexLines.push(` |  ${typeName}`)
+    indexLines.push(`  | ${typeName}`)
+  }
+
+  indexLines.push('', 'export type MapeoValue = ')
+
+  for (const schemaName of Object.keys(jsonSchemas.values)) {
+    if (schemaName === 'common') continue
+    const typeName = getValueName(schemaName)
+    indexLines.push(`  | ${typeName}`)
   }
 
   indexLines.push('')
-
-  for (const schemaName of Object.keys(jsonSchemas.values)) {
-    const typeName = getValueName(schemaName)
-    indexLines.push(`export { ${typeName} }`)
-  }
 
   typescriptDefs.index = indexLines.join('\n') + '\n'
 

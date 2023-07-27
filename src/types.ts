@@ -1,6 +1,10 @@
 // Shared types
 import { type ProtoTypesWithSchemaInfo as AllProtoTypesWithSchemaInfo } from './proto/types.js'
-import { type MapeoDoc as AllMapeoDocs, MapeoCommon } from './schema/index.js'
+import {
+  type MapeoDoc as AllMapeoDocs,
+  type MapeoValue as AllMapeoValues,
+  type MapeoCommon,
+} from './schema/index.js'
 import { dataTypeIds } from './config.js'
 
 /** Temporary: once we have completed this module everything should be supported */
@@ -39,6 +43,10 @@ export type ProtoTypesWithSchemaInfo = FilterBySchemaName<
 
 /** Only jsonschema types we currently support (whilst in dev) */
 export type MapeoDoc = FilterBySchemaName<AllMapeoDocs, SupportedSchemaNames>
+export type MapeoValue = FilterBySchemaName<
+  AllMapeoValues,
+  SupportedSchemaNames
+>
 
 /** Union of all valid data type ids */
 export type DataTypeId = Values<typeof dataTypeIds>
