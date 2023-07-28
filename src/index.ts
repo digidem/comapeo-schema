@@ -4,3 +4,4 @@ export { currentSchemaVersions } from './config.js'
 export { validate } from './validate.js'
 
 export * from './schema/index.js'
+export * from './schemas.js'
