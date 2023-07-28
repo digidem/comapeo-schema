@@ -172,7 +172,7 @@ function convertTagPrimitive({
 function convertCommon(
   common: ProtoTypesWithSchemaInfo['common'],
   versionObj: VersionObj
-): MapeoCommon {
+): Omit<MapeoCommon, 'schemaName'> {
   if (!common || !common.docId || !common.createdAt || !common.updatedAt) {
     throw new Error('Missing required common properties')
   }
