@@ -53,6 +53,7 @@
     "singleQuote": true
   },
   "dependencies": {
+    "@json-schema-tools/dereferencer": "^1.6.1",
     "@sinclair/typebox": "^0.25.8",
     "ajv": "^8.11.2",
     "ajv-formats": "^2.1.1",

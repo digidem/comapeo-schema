@@ -48,5 +48,5 @@ for (const [filenameBase, ts] of Object.entries(jsonSchemaTSDefs)) {
   fs.writeFileSync(filepath, ts)
 }
 
-const jsonSchemaExports = generateJSONSchemaExports(jsonSchemas)
+const jsonSchemaExports = await generateJSONSchemaExports(jsonSchemas)
 fs.writeFileSync(path.join(GENERATED_DIRNAME, 'schemas.ts'), jsonSchemaExports)

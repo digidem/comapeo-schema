@@ -1,18 +1,32 @@
 // @ts-check
+import { default as _ } from '@json-schema-tools/dereferencer'
+
+// Dereferencer's exports are all wrong for ESM imports
+/** @type {any} */
+const JsonSchemaDereferencer =
+  // @ts-ignore
+  _.default
+
+/** @typedef {import('../../src/types.js').SchemaName} SchemaName */
+/** @typedef {import('json-schema').JSONSchema7} JSONSchema */
 
 /**
  * Returns JSONSchema exports for docs and values
  *
  * @param {ReturnType<import('./read-json-schema.js').readJSONSchema>} jsonSchemas
  */
-export function generateJSONSchemaExports(jsonSchemas) {
-  /** @type {Record<import('../../src/types.js').SchemaName, import('json-schema').JSONSchema7>} */
+export async function generateJSONSchemaExports(jsonSchemas) {
+  /** @type {Record<SchemaName, JSONSchema>} */
+  const dereferencedDocSchemas = {}
+  /** @type {Record<SchemaName, JSONSchema>} */
   const docSchemas = {}
-  /** @type {Record<import('../../src/types.js').SchemaName, import('json-schema').JSONSchema7>} */
+  /** @type {Record<SchemaName, JSONSchema>} */
   const valueSchemas = {}
 
   for (const [schemaName, jsonSchema] of Object.entries(jsonSchemas.merged)) {
     docSchemas[schemaName] = jsonSchema
+    const dereferencer = new JsonSchemaDereferencer(jsonSchema)
+    dereferencedDocSchemas[schemaName] = await dereferencer.resolve()
   }
 
   for (const [schemaName, jsonSchema] of Object.entries(jsonSchemas.values)) {
@@ -31,9 +45,11 @@ declare module 'json-schema' {
 
 type SchemaRecord = Record<SchemaNameAll, JSONSchema7>
 
-export const docSchemas: SchemaRecord = ${printf(docSchemas)}
+export const docSchemas: SchemaRecord = ${printf(docSchemas)} as const
 
-export const valueSchemas: SchemaRecord = ${printf(valueSchemas)}
+export const dereferencedDocSchemas = ${printf(dereferencedDocSchemas)} as const
+
+export const valueSchemas: SchemaRecord = ${printf(valueSchemas)} as const
 `
 }
 
