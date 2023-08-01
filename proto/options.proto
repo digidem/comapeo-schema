@@ -23,5 +23,5 @@ extend google.protobuf.FieldOptions {
   // should be marked as optional in the protobuf definition, because otherwise
   // they are set to the default value and the generated type does not include
   // `undefined`
-  boolean required = 50003 [retention = RETENTION_SOURCE]
+  bool required = 50003 [retention = RETENTION_SOURCE];
 }

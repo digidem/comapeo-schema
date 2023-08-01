@@ -63,3 +63,8 @@ docs/*
 
 # generated code
 dist/*
+
+/config.ts
+*.js
+!/scripts/**
+!index.js

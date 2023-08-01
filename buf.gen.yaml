@@ -9,5 +9,9 @@ plugins:
       - importSuffix=.js
       - env=node
       - snakeToCamel=false
-      - useOptionals=messages
-      # - initializeFieldsAsUndefined=true
+      - useDate=string
+      # - useOptionals=none
+      - stringEnums=true
+      - enumsAsLiterals=true
+      - outputIndex=true
+      - oneof=unions
