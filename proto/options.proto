@@ -1,0 +1,27 @@
+syntax = "proto3";
+import "google/protobuf/descriptor.proto";
+package mapeo;
+
+extend google.protobuf.MessageOptions {
+  // This should be a hex-encoded 48-bit random number, and should never change
+  // for a given message type. Generated with `openssl rand -hex 6`
+  // It is designed to be globally unique, such that Mapeo can parse any
+  // data blocks and ignore data types that it does not recognize.
+  string dataTypeId = 50001 [retention = RETENTION_SOURCE];
+  // This is a unique (within Mapeo) name for the message type.
+  // Should be camelCase.
+  string schemaName = 50002 [retention = RETENTION_SOURCE];
+}
+
+extend google.protobuf.FieldOptions {
+  // proto3 has no concept of "required" fields (all fields are optional by
+  // default), but our code _does_ require some fields to be present. We use
+  // this to annotate the protobuf definitions and (TODO) validate that the
+  // corresponding JSONSchema defines this field as required
+  //
+  // For ts-proto to type this as ` | undefined`` then required primitive fields
+  // should be marked as optional in the protobuf definition, because otherwise
+  // they are set to the default value and the generated type does not include
+  // `undefined`
+  boolean required = 50003 [retention = RETENTION_SOURCE]
+}

@@ -3,29 +3,20 @@
   "$id": "http://mapeo.world/schemas/role/v1.json",
   "title": "Role",
   "type": "object",
-  "allOf":[{"$ref": "../common/v1.json"}],
   "properties": {
-    "schemaType": {
+    "schemaName": {
       "type": "string",
-      "pattern": "^Role$"
+      "enum": ["role"]
     },
     "role": {
-      "type": "string",
-      "enum": [
-        "project-creator",
-        "coordinator",
-        "member",
-        "non-member"
-      ]
+      "type": "string"
     },
     "projectId": {
       "type": "string"
     },
     "action": {
       "type": "string",
-      "enum": [
-        "role:set"
-      ]
+      "enum": ["role:set"]
     },
     "signature": {
       "type": "string"
@@ -36,5 +27,7 @@
     "deviceIndex": {
       "type": "integer"
     }
-  }
+  },
+  "required": ["schemaName"],
+  "additionalProperties": false
 }

@@ -10,7 +10,8 @@
       "properties": {
         "timestamp": {
           "description": "Timestamp of when the current position was obtained",
-          "type": "number"
+          "type": "string",
+          "format": "date-time"
         },
         "mocked": {
           "description": "`true` if the position was mocked",
@@ -21,19 +22,19 @@
           "description": "Position details, should be self explanatory. Units in meters",
           "type": "object",
           "properties": {
+            "latitude": {
+              "type": "number"
+            },
+            "longitude": {
+              "type": "number"
+            },
             "altitude": {
               "type": "number"
             },
             "heading": {
               "type": "number"
             },
-            "longitude": {
-              "type": "number"
-            },
             "speed": {
-              "type": "number"
-            },
-            "latitude": {
               "type": "number"
             },
             "accuracy": {
@@ -41,23 +42,15 @@
             }
           }
         }
-
       }
     }
   },
   "type": "object",
-  "allOf":[{"$ref": "../common/v1.json"}],
   "properties": {
-    "schemaType": {
-      "description": "Must be `Observation`",
+    "schemaName": {
+      "description": "Must be `observation`",
       "type": "string",
-      "enum": ["Observation"]
-    },
-    "schemaVersion": {
-      "description": "Version of this schema. Should increment for breaking changes to the schema",
-      "type": "number",
-      "minimum": 1,
-      "enum": [5]
+      "enum": ["observation"]
     },
     "lat": {
       "description": "latitude of the observation",
@@ -71,10 +64,95 @@
       "minimum": -180,
       "maximum": 180
     },
+    "refs": {
+      "type": "array",
+      "description": "References to any nodes or ways that this observation is related to.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "hex-encoded id of the element that this observation references",
+            "type": "string"
+          }
+        },
+        "required": ["id"]
+      }
+    },
+    "attachments": {
+      "type": "array",
+      "description": "media or other data that are attached to this observation",
+      "items": {
+        "type": "object",
+        "properties": {
+          "driveId": {
+            "type": "string",
+            "description": ""
+          },
+          "name": {
+            "type": "string",
+            "description": "name of the attachment"
+          },
+          "type": {
+            "type": "string",
+            "description": "string that describes the type of the attachment",
+            "meta:enum": {
+              "UNRECOGNIZED": "future attachment type"
+            },
+            "enum": ["photo", "video", "audio", "UNRECOGNIZED"]
+          }
+        },
+        "required": ["driveId", "name", "type"]
+      }
+    },
+    "tags": {
+      "type": "object",
+      "description": "User-defined key-value pairs relevant to this observation",
+      "properties": {},
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          },
+          {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
     "metadata": {
       "description": "Additional metadata associated with the observation (e.g. location precision, altitude, heading)",
       "type": "object",
       "properties": {
+        "manualLocation": {
+          "description": "Whether location has been set manually",
+          "type": "boolean",
+          "default": false
+        },
         "position": {
           "$ref": "#/definitions/position",
           "description": "Details of the position recorded for the observation"
@@ -104,53 +182,11 @@
               "type": "boolean"
             }
           }
-        },
-        "manualLocation": {
-          "description": "Whether location has been set manually",
-          "type": "boolean",
-          "default": false
         }
       },
-      "additionalProperties": true
-    },
-    "refs": {
-      "type": "array",
-      "description": "References to any nodes or ways that this observation is related to.",
-      "items": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "ID of the element that this observation references",
-            "type": "string"
-          }
-        },
-        "required": ["id"]
-      }
-    },
-    "attachments": {
-      "type": "array",
-      "description": "media or other data that are attached to this observation",
-      "items": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "description": "unique ID that identifies the attachment"
-          },
-          "type": {
-            "type": "string",
-            "description": "string that describes the type of the attachment"
-          }
-        },
-        "required": ["id"]
-      }
-    },
-    "tags": {
-      "type": "object",
-      "description": "User-defined key-value pairs relevant to this observation",
-      "properties": {},
-      "additionalProperties": true
+      "additionalProperties": false
     }
   },
-  "required": ["id", "version", "created_at", "schemaType", "schemaVersion"]
+  "required": ["schemaName", "tags"],
+  "additionalProperties": false
 }

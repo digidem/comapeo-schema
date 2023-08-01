@@ -1,25 +1,72 @@
 syntax = "proto3";
 package mapeo;
 
+import "google/protobuf/timestamp.proto";
 import "google/protobuf/struct.proto";
+import "tags/v1.proto";
 import "common/v1.proto";
+import "options.proto";
 
 message Observation_5 {
+  // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
+  option (dataTypeId) = "31d090df2e16";
+  option (schemaName) = "observation";
+
   Common_1 common = 1;
 
-  optional float lat = 2;
-  optional float lon = 3;
-  repeated google.protobuf.Struct refs = 4;
-  repeated google.protobuf.Struct attachments = 5;
-  optional google.protobuf.Struct tags = 6;
+  optional float lat = 5;
+  optional float lon = 6;
 
-  message Metadata {
-    message Location {
-      optional float precision = 1;
-      optional int32 altitude = 2;
-    }
-    optional Location location = 1;
-    optional bool manual_location = 2;
+  message Ref {
+    bytes id = 1;
   }
-  optional Metadata metadata = 7;
+  repeated Ref refs = 7;
+
+  // ATTACHMENT
+  enum AttachmentType {
+    photo = 0;
+    video = 1;
+    audio = 2;
+  }
+  message Attachment {
+    bytes driveId = 1;
+    string name = 2;
+    AttachmentType type = 3;
+  }
+  repeated Attachment attachments = 8;
+
+  // TAGS
+  map<string, TagValue_1> tags = 9;
+
+  // METADATA
+  message Metadata {
+    optional bool manualLocation = 1;
+
+    message Position {
+      google.protobuf.Timestamp timestamp = 1;
+      bool mocked = 2;
+
+      message Coords {
+        float latitude = 1;
+        float longitude = 2;
+        float altitude = 3;
+        float heading = 4;
+        float speed = 5;
+        float acurracy = 6;
+      }
+      optional Coords coords = 3;
+    }
+
+    message PositionProvider {
+      bool gpsAvailable = 1;
+      bool passiveAvailable = 2;
+      bool locationServicesEnabled = 3;
+      bool networkAvailable = 4;
+    }
+
+    optional Position position = 3;
+    optional Position lastSavedPosition = 4;
+    optional PositionProvider positionProvider = 5;
+  }
+  optional Metadata metadata = 10;
 }

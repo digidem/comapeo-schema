@@ -1,0 +1,22 @@
+syntax = "proto3";
+package mapeo;
+
+import "google/protobuf/struct.proto";
+
+message TagValue_1 {
+  message PrimitiveValue {
+    oneof kind {
+      google.protobuf.NullValue null_value = 1;
+      double number_value = 2;
+      string string_value = 3;
+      bool boolean_value = 4;
+    }
+  }
+  message ListValue {
+    repeated PrimitiveValue list_value = 5;
+  }
+  oneof kind {
+    PrimitiveValue primitive_value = 1;
+    ListValue list_value = 2;
+  }
+}

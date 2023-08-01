@@ -2,14 +2,21 @@ syntax = "proto3";
 package mapeo;
 
 import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
 import "common/v1.proto";
+import "options.proto";
 
 message Device_1 {
+  // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
+  option (dataTypeId) = "e96e6c68fcc0";
+  option (schemaName) = "device";
+
   Common_1 common = 1;
-  string action = 2;
-  string authorId = 3;
-  string projectId = 4;
-  string signature = 5;
-  int32 authorIndex = 6;
-  int32 deviceIndex = 7;
+
+  string action = 5;
+  string authorId = 6;
+  string projectId = 7;
+  string signature = 8;
+  int32 authorIndex = 9;
+  int32 deviceIndex = 10;
 }

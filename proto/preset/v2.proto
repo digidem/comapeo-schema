@@ -1,0 +1,32 @@
+syntax = "proto3";
+package mapeo;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "tags/v1.proto";
+import "common/v1.proto";
+import "options.proto";
+
+message Preset_2 {
+  // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
+  option (dataTypeId) = "d6aa854b7a99";
+  option (schemaName) = "preset";
+
+  Common_1 common = 1;
+
+  string name = 5;
+  enum Geometry {
+    point = 0;
+    vertex = 1;
+    line = 2;
+    area = 3;
+    relation = 4;
+  }
+  repeated Geometry geometry = 6;
+  map<string, TagValue_1> tags = 7;
+  map<string, TagValue_1> addTags = 8;
+  map<string, TagValue_1> removeTags = 9;
+  repeated bytes fieldIds = 10;
+  optional bytes iconId = 11;
+  repeated string terms = 12;
+}

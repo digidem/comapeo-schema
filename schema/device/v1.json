@@ -3,19 +3,13 @@
   "$id": "http://mapeo.world/schemas/device/v1.json",
   "title": "Device",
   "type": "object",
-  "allOf":[{"$ref": "../common/v1.json"}],
   "properties": {
-    "schemaType": {
+    "schemaName": {
       "type": "string",
-      "pattern": "^Device$"
+      "enum": ["device"]
     },
     "action": {
-      "type": "string",
-      "enum": [
-        "device:add",
-        "device:remove",
-        "device:restore"
-      ]
+      "type": "string"
     },
     "authorId": {
       "type": "string"
@@ -32,5 +26,7 @@
     "deviceIndex": {
       "type": "integer"
     }
-  }
+  },
+  "required": ["schemaName"],
+  "additionalProperties": false
 }
