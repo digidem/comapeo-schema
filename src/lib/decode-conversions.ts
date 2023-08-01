@@ -5,12 +5,12 @@ import {
   type TagValue_1_PrimitiveValue,
 } from '../proto/tags/v1.js'
 import {
-  type JsonSchemaTypes,
+  type MapeoDoc,
   type ProtoTypesWithSchemaInfo,
   type VersionObj,
   type SchemaName,
   type FilterBySchemaName,
-  type JsonSchemaCommon,
+  type MapeoCommon,
   type TagValuePrimitive,
   type JsonTagValue,
 } from '../types.js'
@@ -20,7 +20,7 @@ import {
 type ConvertFunction<TSchemaName extends SchemaName> = (
   message: Extract<ProtoTypesWithSchemaInfo, { schemaName: TSchemaName }>,
   versionObj: VersionObj
-) => FilterBySchemaName<JsonSchemaTypes, TSchemaName>
+) => FilterBySchemaName<MapeoDoc, TSchemaName>
 
 export const convertProject: ConvertFunction<'project'> = (
   message,
@@ -52,7 +52,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
   }
 }
 
-type FieldOptions = FilterBySchemaName<JsonSchemaTypes, 'field'>['options']
+type FieldOptions = FilterBySchemaName<MapeoDoc, 'field'>['options']
 
 export const convertField: ConvertFunction<'field'> = (message, versionObj) => {
   const { common, schemaVersion, ...rest } = message
@@ -87,7 +87,7 @@ export const convertField: ConvertFunction<'field'> = (message, versionObj) => {
 }
 
 type JsonSchemaPresetGeomItem = FilterBySchemaName<
-  JsonSchemaTypes,
+  MapeoDoc,
   'preset'
 >['geometry'][number]
 
@@ -172,14 +172,14 @@ function convertTagPrimitive({
 function convertCommon(
   common: ProtoTypesWithSchemaInfo['common'],
   versionObj: VersionObj
-): JsonSchemaCommon {
-  if (!common || !common.id || !common.createdAt || !common.updatedAt) {
+): Omit<MapeoCommon, 'schemaName'> {
+  if (!common || !common.docId || !common.createdAt || !common.updatedAt) {
     throw new Error('Missing required common properties')
   }
 
   return {
-    id: common.id.toString('hex'),
-    version: versionObjToString(versionObj),
+    docId: common.docId.toString('hex'),
+    versionId: versionObjToString(versionObj),
     links: common.links.map(versionObjToString),
     createdAt: common.createdAt,
     updatedAt: common.updatedAt,

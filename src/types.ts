@@ -1,6 +1,10 @@
 // Shared types
 import { type ProtoTypesWithSchemaInfo as AllProtoTypesWithSchemaInfo } from './proto/types.js'
-import { type JsonSchemaTypes as AllJsonSchemaTypes } from './schema/index.js'
+import {
+  type MapeoDoc as AllMapeoDocs,
+  type MapeoValue as AllMapeoValues,
+  type MapeoCommon,
+} from './schema/index.js'
 import { dataTypeIds } from './config.js'
 
 /** Temporary: once we have completed this module everything should be supported */
@@ -20,17 +24,7 @@ export type JsonTagValue =
   | TagValuePrimitive
   | Array<Exclude<TagValuePrimitive, undefined>>
 
-/** Union of keys from the common prop on Proto types */
-type ProtoTypeCommonKeys = keyof Exclude<
-  ProtoTypesWithSchemaInfo['common'],
-  undefined
->
-
-/** Just the common (shared) props from JSON schema types */
-export type JsonSchemaCommon = Pick<
-  JsonSchemaTypes,
-  ProtoTypeCommonKeys | 'version'
->
+export { MapeoCommon }
 
 /** Filter a union of objects to only include those that have a prop `schemaName` that matches U */
 export type FilterBySchemaName<
@@ -48,8 +42,9 @@ export type ProtoTypesWithSchemaInfo = FilterBySchemaName<
 >
 
 /** Only jsonschema types we currently support (whilst in dev) */
-export type JsonSchemaTypes = FilterBySchemaName<
-  AllJsonSchemaTypes,
+export type MapeoDoc = FilterBySchemaName<AllMapeoDocs, SupportedSchemaNames>
+export type MapeoValue = FilterBySchemaName<
+  AllMapeoValues,
   SupportedSchemaNames
 >
 
