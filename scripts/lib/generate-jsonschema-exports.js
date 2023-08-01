@@ -36,6 +36,7 @@ export async function generateJSONSchemaExports(jsonSchemas) {
 
   return `import { type JSONSchema7 } from 'json-schema'
 import { type SchemaNameAll } from './types.js'
+import { type ReadonlyDeep } from 'type-fest'
 
 declare module 'json-schema' {
   interface JSONSchema7 {
@@ -43,13 +44,17 @@ declare module 'json-schema' {
   }
 }
 
-type SchemaRecord = Record<SchemaNameAll, JSONSchema7>
+type SchemaRecord = Record<SchemaNameAll, ReadonlyDeep<JSONSchema7>>
 
-export const docSchemas: SchemaRecord = ${printf(docSchemas)} as const
+export const docSchemas = ${printf(docSchemas)} as const satisfies SchemaRecord
 
-export const dereferencedDocSchemas = ${printf(dereferencedDocSchemas)} as const
+export const dereferencedDocSchemas = ${printf(
+    dereferencedDocSchemas
+  )} as const satisfies SchemaRecord
 
-export const valueSchemas: SchemaRecord = ${printf(valueSchemas)} as const
+export const valueSchemas = ${printf(
+    valueSchemas
+  )} as const satisfies SchemaRecord
 `
 }
 
