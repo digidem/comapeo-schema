@@ -11,6 +11,7 @@ import { dataTypeIds } from './config.js'
 type SupportedSchemaNames = 'project' | 'observation' | 'field' | 'preset'
 
 export type SchemaName = Extract<keyof typeof dataTypeIds, SupportedSchemaNames>
+export type SchemaNameAll = keyof typeof dataTypeIds
 
 /** Union of all valid schemaName and schemaVersion combinations (not just current versions) */
 export type ValidSchemaDef = PickUnion<

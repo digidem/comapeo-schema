@@ -12,6 +12,7 @@ import { readJSONSchema } from './lib/read-json-schema.js'
 import { generateValidations } from './lib/generate-validations.js'
 import { generateJSONSchemaTS } from './lib/generate-jsonschema-ts.js'
 import { generateEncodeDecode } from './lib/generate-encode-decode.js'
+import { generateJSONSchemaExports } from './lib/generate-jsonschema-exports.js'
 
 const DIST_DIRNAME = path.join(PROJECT_ROOT, 'dist')
 const GENERATED_DIRNAME = path.join(PROJECT_ROOT, 'generated')
@@ -46,3 +47,6 @@ for (const [filenameBase, ts] of Object.entries(jsonSchemaTSDefs)) {
   const filepath = path.join(GENERATED_DIRNAME, 'schema', filenameBase + '.ts')
   fs.writeFileSync(filepath, ts)
 }
+
+const jsonSchemaExports = await generateJSONSchemaExports(jsonSchemas)
+fs.writeFileSync(path.join(GENERATED_DIRNAME, 'schemas.ts'), jsonSchemaExports)
