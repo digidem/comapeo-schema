@@ -13,5 +13,5 @@ plugins:
       # - useOptionals=none
       - stringEnums=true
       - enumsAsLiterals=true
-      - outputIndex=true
+      # - outputIndex=true
       - oneof=unions

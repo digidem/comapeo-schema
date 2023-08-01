@@ -1,4 +1,4 @@
-import { type ProtoTypeNames, ProtoTypes } from '../types/proto/types'
+import { ProtoTypes } from '../types/proto/types'
 import {
   type JsonSchemaTypes,
   type ProtoTypesWithSchemaInfo,
@@ -8,18 +8,18 @@ import {
   type ValidSchemaDef,
 } from './types'
 
-import * as ProtobufEncodeDecode from '../types/proto/index.mapeo'
+import { Decode } from '../types/proto/index'
 import { dataTypeIds, knownSchemaVersions } from '../config'
 import {
   convertProject,
   convertField,
   convertObservation,
+  convertPreset,
 } from './lib/decode-conversions'
 // @ts-ignore
 import * as cenc from 'compact-encoding'
-
-const dataTypeIdSize = 6
-const schemaVersionSize = 2
+import { DATA_TYPE_ID_BYTES, SCHEMA_VERSION_BYTES } from './constants'
+import { getProtoTypeName } from './lib/utils'
 
 /** Map of dataTypeIds to schema names for quick lookups */
 const dataTypeIdToSchemaName: Record<string, SchemaName> = {}
@@ -39,14 +39,14 @@ export function decode(buf: Buffer, versionObj: VersionObj): JsonSchemaTypes {
   const schemaDef = decodeBlockPrefix(buf)
 
   const encodedMsg = buf.subarray(
-    dataTypeIdSize + schemaVersionSize,
+    DATA_TYPE_ID_BYTES + SCHEMA_VERSION_BYTES,
     buf.length
   )
 
-  const messageWithSchemaInfo =
-    ProtobufEncodeDecode[getProtoTypeName(schemaDef)].decode(encodedMsg)
+  const messageWithoutSchemaInfo =
+    Decode[getProtoTypeName(schemaDef)](encodedMsg)
 
-  const message = mutatingSetSchemaDef(messageWithSchemaInfo, schemaDef)
+  const message = mutatingSetSchemaDef(messageWithoutSchemaInfo, schemaDef)
 
   switch (message.schemaName) {
     case 'project':
@@ -55,6 +55,8 @@ export function decode(buf: Buffer, versionObj: VersionObj): JsonSchemaTypes {
       return convertObservation(message, versionObj)
     case 'field':
       return convertField(message, versionObj)
+    case 'preset':
+      return convertPreset(message, versionObj)
     default:
       const _exhaustiveCheck: never = message
       return message
@@ -67,21 +69,21 @@ export function decode(buf: Buffer, versionObj: VersionObj): JsonSchemaTypes {
  * Will throw if dataTypeId and schema version is unknown
  */
 export function decodeBlockPrefix(buf: Buffer): ValidSchemaDef {
-  if (buf.length < dataTypeIdSize + schemaVersionSize) {
+  if (buf.length < DATA_TYPE_ID_BYTES + SCHEMA_VERSION_BYTES) {
     throw new Error('Invalid block prefix - unexpected prefix length')
   }
   const state = cenc.state()
   state.buffer = buf
   state.start = 0
-  state.end = dataTypeIdSize
-  const dataTypeId = cenc.hex.fixed(dataTypeIdSize).decode(state)
+  state.end = DATA_TYPE_ID_BYTES
+  const dataTypeId = cenc.hex.fixed(DATA_TYPE_ID_BYTES).decode(state)
 
   if (typeof dataTypeId !== 'string') {
     throw new Error('Invalid block prefix, could not decode dataTypeId')
   }
 
-  state.start = dataTypeIdSize
-  state.end = dataTypeIdSize + schemaVersionSize
+  state.start = DATA_TYPE_ID_BYTES
+  state.end = DATA_TYPE_ID_BYTES + SCHEMA_VERSION_BYTES
   const schemaVersion = cenc.uint16.decode(state)
 
   if (typeof schemaVersion !== 'number') {
@@ -129,20 +131,6 @@ function assertKnownSchemaDef(schemaDef: {
       `Unknown schema version '${schemaVersion}' for schema '${schemaName}'`
     )
   }
-}
-
-/**
- * Get the name of the type, e.g. `Observation_5` for schemaName `observation`
- * and schemaVersion `1`
- */
-function getProtoTypeName(schemaDef: ValidSchemaDef): ProtoTypeNames {
-  return (capitalize(schemaDef.schemaName) +
-    '_' +
-    schemaDef.schemaVersion) as ProtoTypeNames
-}
-
-function capitalize<T extends string>(str: T): Capitalize<T> {
-  return (str.charAt(0).toUpperCase() + str.slice(1)) as any
 }
 
 // function mutatingOmit<T, K extends keyof any>(obj: T, key: K): OmitUnion<T, K> {

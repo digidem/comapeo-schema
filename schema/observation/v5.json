@@ -7,6 +7,7 @@
     "position": {
       "description": "Position details",
       "type": "object",
+      "required": ["mocked"],
       "properties": {
         "timestamp": {
           "description": "Timestamp of when the current position was obtained",
@@ -54,13 +55,13 @@
     },
     "lat": {
       "description": "latitude of the observation",
-      "type": ["number", "null"],
+      "type": "number",
       "minimum": -90,
       "maximum": 90
     },
     "lon": {
       "description": "longitude of the observation",
-      "type": ["number", "null"],
+      "type": "number",
       "minimum": -180,
       "maximum": 180
     },
@@ -187,6 +188,6 @@
       "additionalProperties": false
     }
   },
-  "required": ["schemaName", "tags"],
+  "required": ["schemaName", "tags", "refs", "attachments"],
   "additionalProperties": false
 }

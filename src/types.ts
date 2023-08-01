@@ -4,7 +4,7 @@ import { type JsonSchemaTypes as AllJsonSchemaTypes } from '../types/schema'
 import { dataTypeIds } from '../config'
 
 /** Temporary: once we have completed this module everything should be supported */
-type SupportedSchemaNames = 'project' | 'observation' | 'field'
+type SupportedSchemaNames = 'project' | 'observation' | 'field' | 'preset'
 
 export type SchemaName = Extract<keyof typeof dataTypeIds, SupportedSchemaNames>
 
@@ -12,6 +12,24 @@ export type SchemaName = Extract<keyof typeof dataTypeIds, SupportedSchemaNames>
 export type ValidSchemaDef = PickUnion<
   ProtoTypesWithSchemaInfo,
   'schemaName' | 'schemaVersion'
+>
+
+/** The `tags` field supports only a subset of JSON values - we don't support nested tags, just primitives or arrays of primitives */
+export type TagValuePrimitive = number | string | boolean | null | undefined
+export type JsonTagValue =
+  | TagValuePrimitive
+  | Array<Exclude<TagValuePrimitive, undefined>>
+
+/** Union of keys from the common prop on Proto types */
+type ProtoTypeCommonKeys = keyof Exclude<
+  ProtoTypesWithSchemaInfo['common'],
+  undefined
+>
+
+/** Just the common (shared) props from JSON schema types */
+export type JsonSchemaCommon = Pick<
+  JsonSchemaTypes,
+  ProtoTypeCommonKeys | 'version'
 >
 
 /** Filter a union of objects to only include those that have a prop `schemaName` that matches U */
