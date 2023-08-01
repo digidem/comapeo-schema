@@ -5,7 +5,7 @@
 export function generateEncodeDecode({ currentSchemaVersions, protoTypeDefs }) {
   const typeImports = protoTypeDefs.map(
     ({ schemaName, schemaVersion, typeName }) => {
-      return `import { ${typeName} } from './${schemaName}/v${schemaVersion}'`
+      return `import { ${typeName} } from './${schemaName}/v${schemaVersion}.js'`
     }
   )
 

@@ -1,7 +1,7 @@
 // Shared types
-import { type ProtoTypesWithSchemaInfo as AllProtoTypesWithSchemaInfo } from '../types/proto/types'
-import { type JsonSchemaTypes as AllJsonSchemaTypes } from '../types/schema'
-import { dataTypeIds } from '../config'
+import { type ProtoTypesWithSchemaInfo as AllProtoTypesWithSchemaInfo } from './proto/types.js'
+import { type JsonSchemaTypes as AllJsonSchemaTypes } from './schema/index.js'
+import { dataTypeIds } from './config.js'
 
 /** Temporary: once we have completed this module everything should be supported */
 type SupportedSchemaNames = 'project' | 'observation' | 'field' | 'preset'
@@ -63,6 +63,8 @@ export type DataTypeId = Values<typeof dataTypeIds>
  */
 type PickUnion<T, K extends keyof T> = T extends any ? Pick<T, K> : never
 /** Omit over a union, that keeps it as a distributive type */
-type OmitUnion<T, K extends keyof any> = T extends any ? Omit<T, K> : never
+export type OmitUnion<T, K extends keyof any> = T extends any
+  ? Omit<T, K>
+  : never
 /** Return a union of object values */
 type Values<T> = T[keyof T]

@@ -6,20 +6,21 @@
     "strictNullChecks": true,
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
-    "module": "es2022",
-    "moduleResolution": "node",
+    "module": "Node16",
+    "moduleResolution": "Node16",
     "allowJs": false,
     "checkJs": false,
     "emitDeclarationOnly": false,
     "esModuleInterop": true,
     "declaration": true,
-    "declarationMap": false
+    "declarationMap": false,
+    "rootDirs": ["src", "generated"],
+    "outDir": "intermediate"
   },
-  "include": [
-    "types/proto/*.ts",
-    "types/schema/*.ts",
-    "src/**/*.ts",
-    "index.js"
-  ],
-  "exclude": ["node_modules"]
+  "include": ["src/**/*.ts", "generated/**/*.ts"],
+  "exclude": [
+    "node_modules",
+    "generated/proto/options.ts",
+    "generated/proto/google/protobuf/descriptor.ts"
+  ]
 }

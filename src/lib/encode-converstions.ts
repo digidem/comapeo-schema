@@ -1,4 +1,4 @@
-import { CurrentProtoTypes, Observation_5 } from '../../types/proto/types'
+import { CurrentProtoTypes } from '../proto/types.js'
 import {
   JsonSchemaTypes,
   ProtoTypesWithSchemaInfo,
@@ -7,18 +7,18 @@ import {
   TagValuePrimitive,
   JsonTagValue,
   VersionObj,
-} from '../types'
-import {
-  TagValue_1,
-  type TagValue_1_ListValue,
-  type TagValue_1_PrimitiveValue,
-} from '../../types/proto/tags/v1'
-import { Observation_5_Metadata } from '../../types/proto/observation/v5'
+  OmitUnion,
+} from '../types.js'
+import { TagValue_1, type TagValue_1_PrimitiveValue } from '../proto/tags/v1.js'
+import { Observation_5_Metadata } from '../proto/observation/v5.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
 type ConvertFunction<TSchemaName extends SchemaName> = (
-  mapeoDoc: Extract<JsonSchemaTypes, { schemaName: TSchemaName }>
+  mapeoDoc: Extract<
+    OmitUnion<JsonSchemaTypes, 'version'>,
+    { schemaName: TSchemaName }
+  >
 ) => CurrentProtoTypes[TSchemaName]
 
 export const convertProject: ConvertFunction<'project'> = (mapeoDoc) => {
@@ -88,7 +88,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
 }
 
 function convertCommon(
-  common: JsonSchemaCommon
+  common: Omit<JsonSchemaCommon, 'version'>
 ): ProtoTypesWithSchemaInfo['common'] {
   return {
     id: Buffer.from(common.id, 'hex'),

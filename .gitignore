@@ -36,12 +36,8 @@ build/Release
 node_modules/
 jspm_packages/
 
-# TypeScript v1 declaration files
-types/*
-*.d.ts
-
 # typedoc documentation
-docs/*
+/docs
 
 # Optional npm cache directory
 .npm
@@ -62,9 +58,6 @@ docs/*
 .env
 
 # generated code
-dist/*
-
-/config.ts
-*.js
-!/scripts/**
-!index.js
+/dist
+/intermediate
+/generated

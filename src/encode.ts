@@ -1,21 +1,28 @@
-import { JsonSchemaTypes, SchemaName, ValidSchemaDef } from './types'
-import { currentSchemaVersions, dataTypeIds } from '../config'
+import {
+  JsonSchemaTypes,
+  OmitUnion,
+  SchemaName,
+  ValidSchemaDef,
+} from './types.js'
+import { currentSchemaVersions, dataTypeIds } from './config.js'
 // @ts-ignore
 import * as cenc from 'compact-encoding'
-import { DATA_TYPE_ID_BYTES } from './constants'
-import { Encode } from '../types/proto/index'
+import { DATA_TYPE_ID_BYTES } from './constants.js'
+import { Encode } from './proto/index.js'
 import {
   convertField,
   convertObservation,
   convertPreset,
   convertProject,
-} from './lib/encode-converstions'
+} from './lib/encode-converstions.js'
 
 /**
  * Encode a an object validated against a schema as a binary protobuf prefixed
  * with the encoded data type ID and schema version, to send to an hypercore.
  */
-export function encode(mapeoDoc: JsonSchemaTypes): Buffer {
+export function encode(
+  mapeoDoc: OmitUnion<JsonSchemaTypes, 'version'>
+): Buffer {
   const { schemaName } = mapeoDoc
   const schemaVersion = currentSchemaVersions[schemaName]
   const schemaDef = { schemaName, schemaVersion }

@@ -1,5 +1,5 @@
-import { type ProtoTypeNames } from '../../types/proto/types'
-import { type ValidSchemaDef } from '../types'
+import { type ProtoTypeNames } from '../proto/types.js'
+import { type ValidSchemaDef } from '../types.js'
 
 /**
  * Get the name of the type, e.g. `Observation_5` for schemaName `observation`

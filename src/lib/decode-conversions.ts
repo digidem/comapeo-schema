@@ -3,8 +3,7 @@
 import {
   type TagValue_1,
   type TagValue_1_PrimitiveValue,
-} from '../../types/proto/tags/v1'
-import { Preset } from '../../types/schema'
+} from '../proto/tags/v1.js'
 import {
   type JsonSchemaTypes,
   type ProtoTypesWithSchemaInfo,
@@ -14,7 +13,7 @@ import {
   type JsonSchemaCommon,
   type TagValuePrimitive,
   type JsonTagValue,
-} from '../types'
+} from '../types.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */

@@ -7,10 +7,10 @@ extend google.protobuf.MessageOptions {
   // for a given message type. Generated with `openssl rand -hex 6`
   // It is designed to be globally unique, such that Mapeo can parse any
   // data blocks and ignore data types that it does not recognize.
-  string dataTypeId = 50001 [retention = RETENTION_SOURCE];
+  string dataTypeId = 50001;
   // This is a unique (within Mapeo) name for the message type.
   // Should be camelCase.
-  string schemaName = 50002 [retention = RETENTION_SOURCE];
+  string schemaName = 50002;
 }
 
 extend google.protobuf.FieldOptions {
@@ -23,5 +23,5 @@ extend google.protobuf.FieldOptions {
   // should be marked as optional in the protobuf definition, because otherwise
   // they are set to the default value and the generated type does not include
   // `undefined`
-  bool required = 50003 [retention = RETENTION_SOURCE];
+  bool required = 50003;
 }
