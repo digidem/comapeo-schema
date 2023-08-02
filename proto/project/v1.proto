@@ -12,19 +12,12 @@ message Project_1 {
 
   Common_1 common = 1;
 
+  message DefaultPresets {
+    repeated string point = 1;
+    repeated string area = 2;
+  };
+
+  DefaultPresets defaultPresets = 2;
+
   string name = 5;
-  /*
-  // You can't use an enum as a key in a map in protobufs :(
-  enum DefaultPresetsKey {
-    point = 0;
-    vertex = 1;
-    line = 2;
-    area = 3;
-    relation = 4;
-  };
-  message DefaultPresetsValue {
-    repeated string defaultPresetsValue = 1;
-  };
-  map<DefaultPresetsKey,DefaultPresetsValue> defaultPresetsValue= 6;
-  */
 }

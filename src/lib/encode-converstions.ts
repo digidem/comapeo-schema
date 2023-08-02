@@ -22,6 +22,10 @@ export const convertProject: ConvertFunction<'project'> = (mapeoDoc) => {
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
+    defaultPresets: {
+      point: mapeoDoc.defaultPresets?.point || [],
+      area: mapeoDoc.defaultPresets?.area || []
+    } || {}
   }
 }
 

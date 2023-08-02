@@ -12,8 +12,15 @@
     "name": {
       "description": "name of the project",
       "type": "string"
+    },
+    "defaultPresets":{
+      "type": "object",
+      "properties": {
+        "point": { "type": "array", "items":{"type":"string"}},
+        "area": { "type": "array", "items":{"type":"string"}}
+      }
     }
   },
-  "required": ["schemaName", "name"],
+  "required": ["schemaName", "name", "defaultPresets"],
   "additionalProperties": false
 }

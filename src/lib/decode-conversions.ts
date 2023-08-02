@@ -31,6 +31,7 @@ export const convertProject: ConvertFunction<'project'> = (
   return {
     ...jsonSchemaCommon,
     ...rest,
+    defaultPresets: message.defaultPresets || {}
   }
 }
 

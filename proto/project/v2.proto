@@ -14,5 +14,12 @@ message Project_2 {
 
   Common_1 common = 1;
 
+  message DefaultPresets {
+    repeated string point = 1;
+    repeated string area = 2;
+  };
+
+  DefaultPresets defaultPresets = 2;
+
   string name = 5;
 }
