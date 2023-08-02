@@ -6,7 +6,7 @@
   "properties": {
     "schemaName": {
       "type": "string",
-      "enum": ["role"]
+      "const": "role"
     },
     "role": {
       "type": "string"

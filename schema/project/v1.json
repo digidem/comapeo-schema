@@ -7,7 +7,7 @@
     "schemaName": {
       "description": "Must be `project`",
       "type": "string",
-      "enum": ["project"]
+      "const": "project"
     },
     "name": {
       "description": "name of the project",

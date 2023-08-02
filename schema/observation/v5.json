@@ -51,7 +51,7 @@
     "schemaName": {
       "description": "Must be `observation`",
       "type": "string",
-      "enum": ["observation"]
+      "const": "observation"
     },
     "lat": {
       "description": "latitude of the observation",

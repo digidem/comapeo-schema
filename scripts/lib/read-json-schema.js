@@ -31,8 +31,10 @@ export function readJSONSchema({ currentSchemaVersions }) {
     const jsonSchema = readJSON(filepath)
     const { dir, name } = path.parse(filepath)
     const folderName = path.basename(dir)
-    // @ts-ignore - enum not defined on JSONSchema v7
-    const schemaName = jsonSchema.properties?.schemaName?.enum[0]
+    const schemaName =
+      typeof jsonSchema.properties?.schemaName !== 'boolean'
+        ? jsonSchema.properties?.schemaName.const
+        : undefined
     if (folderName !== schemaName) {
       throw new Error(`Unexpected schemaName '${schemaName}' in ${filepath}`)
     }

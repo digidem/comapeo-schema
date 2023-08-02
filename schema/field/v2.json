@@ -8,7 +8,7 @@
     "schemaName": {
       "description": "Must be `field`",
       "type": "string",
-      "enum": ["field"]
+      "const": "field"
     },
     "tagKey": {
       "description": "They key in a tags object that this field applies to",
