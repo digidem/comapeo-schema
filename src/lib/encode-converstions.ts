@@ -90,6 +90,7 @@ export const convertRole: ConvertFunction<'role'> = (
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
+    projectId: Buffer.from(mapeoDoc.projectId,'hex'),
     authorId: Buffer.from(mapeoDoc.authorId,'hex')
 
   }
@@ -100,7 +101,9 @@ export const convertDevice: ConvertFunction<'device'> = (
 ) => {
   return {
     common: convertCommon(mapeoDoc),
-    ...mapeoDoc
+    ...mapeoDoc,
+    authorId: Buffer.from(mapeoDoc.authorId, 'hex'),
+    projectId: Buffer.from(mapeoDoc.projectId, 'hex')
   }
 }
 
@@ -110,6 +113,8 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
+    coreId: Buffer.from(mapeoDoc.coreId, 'hex'),
+    projectId: Buffer.from(mapeoDoc.projectId, 'hex'),
     authorId: Buffer.from(mapeoDoc.authorId,'hex')
   }
 }

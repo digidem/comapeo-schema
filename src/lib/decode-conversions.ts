@@ -125,6 +125,7 @@ versionObj
       ...rest,
     role: rest.role,
     action: message.action == 'UNRECOGNIZED' ? 'role_set' : message.action,
+    projectId: message.projectId.toString('hex'),
     authorId: message.authorId.toString('hex')
     }
 }
@@ -137,7 +138,9 @@ export const convertDevice: ConvertFunction<'device'> = (
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
-    ...rest
+    ...rest,
+    authorId: message.authorId.toString('hex'),
+    projectId: message.projectId.toString('hex')
   }
 }
 
@@ -150,6 +153,8 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
   return {
     ...jsonSchemaCommon,
     ...rest,
+    coreId: message.coreId.toString('hex'),
+    projectId: message.projectId.toString('hex'),
     authorId: message.authorId.toString('hex')
   }
 
