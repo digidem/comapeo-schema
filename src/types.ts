@@ -59,8 +59,6 @@ export type DataTypeId = Values<typeof dataTypeIds>
  */
 type PickUnion<T, K extends keyof T> = T extends any ? Pick<T, K> : never
 /** Omit over a union, that keeps it as a distributive type */
-export type OmitUnion<T, K extends keyof any> = T extends any
-  ? Omit<T, K>
-  : never
+export type OmitUnion<T, K extends keyof T> = T extends any ? Omit<T, K> : never
 /** Return a union of object values */
 type Values<T> = T[keyof T]
