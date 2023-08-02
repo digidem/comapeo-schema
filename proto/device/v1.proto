@@ -19,4 +19,5 @@ message Device_1 {
   string signature = 8;
   int32 authorIndex = 9;
   int32 deviceIndex = 10;
+  string capabilityType = 11;
 }
