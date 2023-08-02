@@ -186,6 +186,6 @@
       "additionalProperties": false
     }
   },
-  "required": ["schemaName", "tags", "refs", "attachments"],
+  "required": ["schemaName", "tags", "refs", "attachments", "metadata"],
   "additionalProperties": false
 }
