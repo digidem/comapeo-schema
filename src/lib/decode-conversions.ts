@@ -124,7 +124,6 @@ versionObj
       ...jsonSchemaCommon,
       ...rest,
     role: rest.role,
-    action: message.action == 'UNRECOGNIZED' ? 'role_set' : message.action,
     projectId: message.projectId.toString('hex'),
     authorId: message.authorId.toString('hex')
     }

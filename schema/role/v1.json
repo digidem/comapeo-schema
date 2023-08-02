@@ -16,7 +16,7 @@
     },
     "action": {
       "type": "string",
-      "enum": ["role_set", "role_unset"]
+      "enum": ["role_set", "role_unset", "UNRECOGNIZED"]
     },
     "signature": {
       "type": "string"
