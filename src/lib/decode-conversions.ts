@@ -114,6 +114,21 @@ export const convertPreset: ConvertFunction<'preset'> = (
   }
 }
 
+export const convertRole: ConvertFunction<'role'> = (
+message,
+versionObj
+) => {
+    const { common, schemaVersion, ...rest } = message
+    const jsonSchemaCommon = convertCommon(common, versionObj)
+    return {
+      ...jsonSchemaCommon,
+      ...rest,
+    role: rest.role,
+    action: message.action == 'UNRECOGNIZED' ? 'role_set' : message.action,
+    authorId: message.authorId.toString('hex')
+    }
+}
+
 function convertTags(tags: { [key: string]: TagValue_1 } | undefined): {
   [key: string]: Exclude<JsonTagValue, undefined>
 } {

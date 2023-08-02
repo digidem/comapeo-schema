@@ -84,6 +84,17 @@ export const convertObservation: ConvertFunction<'observation'> = (
   }
 }
 
+export const convertRole: ConvertFunction<'role'> = (
+  mapeoDoc
+) => {
+  return {
+    common: convertCommon(mapeoDoc),
+    ...mapeoDoc,
+    authorId: Buffer.from(mapeoDoc.authorId,'hex')
+
+  }
+}
+
 function convertCommon(
   common: Omit<MapeoCommon, 'version'>
 ): ProtoTypesWithSchemaInfo['common'] {

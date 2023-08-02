@@ -15,6 +15,7 @@ import {
   convertField,
   convertObservation,
   convertPreset,
+  convertRole
 } from './lib/decode-conversions.js'
 // @ts-ignore
 import * as cenc from 'compact-encoding'
@@ -57,6 +58,8 @@ export function decode(buf: Buffer, versionObj: VersionObj): MapeoDoc {
       return convertField(message, versionObj)
     case 'preset':
       return convertPreset(message, versionObj)
+    case 'role':
+      return convertRole(message,versionObj)
     default:
       const _exhaustiveCheck: never = message
       return message
