@@ -6,7 +6,7 @@
   "properties": {
     "schemaName": {
       "type": "string",
-      "enum": ["coreOwnership"]
+      "const": "coreOwnership"
     },
     "action": {
       "type": "string"

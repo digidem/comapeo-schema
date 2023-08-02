@@ -49,7 +49,7 @@
     "schemaName": {
       "description": "Must be `preset`",
       "type": "string",
-      "enum": ["preset"]
+      "const": "preset"
     },
     "name": {
       "description": "Name for the feature in default language.",

@@ -6,7 +6,7 @@
   "properties": {
     "schemaName": {
       "type": "string",
-      "enum": ["device"]
+      "const": "device"
     },
     "action": {
       "type": "string"
