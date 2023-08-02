@@ -141,6 +141,20 @@ export const convertDevice: ConvertFunction<'device'> = (
   }
 }
 
+export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
+  message,
+  versionObj
+) => {
+  const { common, schemaVersion, ...rest } = message
+  const jsonSchemaCommon = convertCommon(common, versionObj)
+  return {
+    ...jsonSchemaCommon,
+    ...rest,
+    authorId: message.authorId.toString('hex')
+  }
+
+}
+
 function convertTags(tags: { [key: string]: TagValue_1 } | undefined): {
   [key: string]: Exclude<JsonTagValue, undefined>
 } {

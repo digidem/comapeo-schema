@@ -104,6 +104,16 @@ export const convertDevice: ConvertFunction<'device'> = (
   }
 }
 
+export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
+  mapeoDoc
+) => {
+  return {
+    common: convertCommon(mapeoDoc),
+    ...mapeoDoc,
+    authorId: Buffer.from(mapeoDoc.authorId,'hex')
+  }
+}
+
 function convertCommon(
   common: Omit<MapeoCommon, 'version'>
 ): ProtoTypesWithSchemaInfo['common'] {

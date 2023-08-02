@@ -17,7 +17,8 @@
     "signature": { "type": "string" },
     "authorIndex": { "type": "integer" },
     "deviceIndex": { "type": "integer" },
-    "authorId": {"type": "string"}
+    "authorId": {"type": "string"},
+    "capabilityType": {"type": "string"}
   },
-  "required": ["schemaName"]
+  "required": ["schemaName", "action", "coreId", "projectId", "storeType", "signature", "authorIndex", "deviceIndex", "authorId", "capabilityType"]
 }
