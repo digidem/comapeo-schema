@@ -30,7 +30,7 @@ export { MapeoCommon }
 /** Filter a union of objects to only include those that have a prop `schemaName` that matches U */
 export type FilterBySchemaName<
   T extends { schemaName: string },
-  U extends string
+  U extends string,
 > = Extract<T, { schemaName: U }>
 
 /** Uniquely identifies a block in a core */

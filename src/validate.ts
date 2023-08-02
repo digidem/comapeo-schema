@@ -2,7 +2,7 @@ import { MapeoValue, FilterBySchemaName, SchemaName } from './types.js'
 import * as validations from './validations.js'
 
 export function validate<
-  TSchemaName extends Extract<keyof typeof validations, SchemaName>
+  TSchemaName extends Extract<keyof typeof validations, SchemaName>,
 >(
   schemaName: TSchemaName,
   obj: unknown

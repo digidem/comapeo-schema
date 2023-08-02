@@ -2,7 +2,7 @@
 
 import fs from 'node:fs'
 import path from 'path'
-import glob from 'glob-promise'
+import { globSync } from 'glob'
 import { PROJECT_ROOT } from './utils.js'
 
 /** @param {string} relativeFilepath filepath relative to project root */
@@ -18,7 +18,7 @@ function readJSON(relativeFilepath) {
  * @param {ReturnType<import('./parse-config.js').parseConfig>} config
  */
 export function readJSONSchema({ currentSchemaVersions }) {
-  const jsonSchemaFiles = glob.sync(`schema/!(common)/*.json`, {
+  const jsonSchemaFiles = globSync(`schema/!(common)/*.json`, {
     cwd: PROJECT_ROOT,
     absolute: true,
   })

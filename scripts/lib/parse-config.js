@@ -1,7 +1,7 @@
 // @ts-check
 import path from 'path'
 import fs from 'fs'
-import glob from 'glob-promise'
+import { globSync } from 'glob'
 import schema from 'protocol-buffers-schema'
 import { capitalize, PROJECT_ROOT } from './utils.js'
 
@@ -19,7 +19,7 @@ const EMBEDDED_MESSAGES = ['tags', 'common']
  * and map of schemaName to current schemaVersion
  */
 export function parseConfig() {
-  const protobufFiles = glob.sync(
+  const protobufFiles = globSync(
     `proto/!(${EMBEDDED_MESSAGES.join('|')})/*.proto`,
     {
       cwd: PROJECT_ROOT,
