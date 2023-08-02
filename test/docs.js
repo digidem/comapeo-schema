@@ -98,7 +98,7 @@ export const docs = {
       createdAt: new Date().toJSON(),
       updatedAt: new Date().toJSON(),
       name: 'My Project',
-      links:[]
+      links: [],
     },
   },
 }
