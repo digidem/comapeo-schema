@@ -9,9 +9,3 @@ export function validate<
 ): obj is FilterBySchemaName<MapeoValue, TSchemaName> {
   return validations[schemaName](obj)
 }
-
-let obj = JSON.parse('')
-
-if (validate('observation', obj)) {
-  obj.attachments
-}
