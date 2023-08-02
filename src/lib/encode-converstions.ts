@@ -95,6 +95,15 @@ export const convertRole: ConvertFunction<'role'> = (
   }
 }
 
+export const convertDevice: ConvertFunction<'device'> = (
+  mapeoDoc
+) => {
+  return {
+    common: convertCommon(mapeoDoc),
+    ...mapeoDoc
+  }
+}
+
 function convertCommon(
   common: Omit<MapeoCommon, 'version'>
 ): ProtoTypesWithSchemaInfo['common'] {

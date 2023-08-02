@@ -129,6 +129,18 @@ versionObj
     }
 }
 
+export const convertDevice: ConvertFunction<'device'> = (
+  message,
+  versionObj
+) => {
+  const { common, schemaVersion, ...rest } = message
+  const jsonSchemaCommon = convertCommon(common, versionObj)
+  return {
+    ...jsonSchemaCommon,
+    ...rest
+  }
+}
+
 function convertTags(tags: { [key: string]: TagValue_1 } | undefined): {
   [key: string]: Exclude<JsonTagValue, undefined>
 } {

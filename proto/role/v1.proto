@@ -19,7 +19,7 @@ message Role_1 {
     role_set = 0;
     role_unset = 1;
   };
-  Action action = 7 [(required) = true];
+  Action action = 7;
   string signature = 8;
   int32 authorIndex = 9;
   int32 deviceIndex = 10;
