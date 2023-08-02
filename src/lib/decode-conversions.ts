@@ -49,6 +49,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
       return { driveId: driveId.toString('hex'), name, type }
     }),
     tags: convertTags(message.tags),
+    metadata: message.metadata || {},
   }
 }
 
