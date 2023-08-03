@@ -26,6 +26,12 @@
     },
     "deviceIndex": {
       "type": "integer"
+    },
+    "authorId": {
+      "type": "string"
+    },
+    "capabilityType": {
+      "type": "string"
     }
   },
   "required": ["schemaName"],

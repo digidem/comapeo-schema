@@ -20,4 +20,6 @@ message CoreOwnership_1 {
   string signature = 9;
   int32 authorIndex = 10;
   int32 deviceIndex = 11;
+  bytes authorId = 12;
+  string capabilityType = 13;
 }

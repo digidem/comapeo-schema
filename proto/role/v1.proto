@@ -19,4 +19,6 @@ message Role_1 {
   string signature = 8;
   int32 authorIndex = 9;
   int32 deviceIndex = 10;
+  bytes authorId = 11;
+  string capabilityType = 12;
 }

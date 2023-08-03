@@ -16,7 +16,8 @@
     "storeType": { "type": "string" },
     "signature": { "type": "string" },
     "authorIndex": { "type": "integer" },
-    "deviceIndex": { "type": "integer" }
+    "deviceIndex": { "type": "integer" },
+    "authorId": {"type": "string"}
   },
   "required": ["schemaName"]
 }
