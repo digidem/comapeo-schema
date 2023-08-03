@@ -125,7 +125,7 @@ function assertKnownSchemaDef(schemaDef: {
   schemaVersion: number
 }): asserts schemaDef is ValidSchemaDef {
   const { schemaName, schemaVersion } = schemaDef
-  if (knownSchemaVersions[schemaName].includes(schemaDef.schemaVersion)) {
+  if (!knownSchemaVersions[schemaName].includes(schemaDef.schemaVersion)) {
     throw new Error(
       `Unknown schema version '${schemaVersion}' for schema '${schemaName}'`
     )
