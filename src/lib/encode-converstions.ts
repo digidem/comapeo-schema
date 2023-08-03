@@ -15,7 +15,10 @@ import { Observation_5_Metadata } from '../proto/observation/v5.js'
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
 type ConvertFunction<TSchemaName extends SchemaName> = (
-  mapeoDoc: Extract<OmitUnion<MapeoDoc, 'version'>, { schemaName: TSchemaName }>
+  mapeoDoc: Extract<
+    OmitUnion<MapeoDoc, 'versionId'>,
+    { schemaName: TSchemaName }
+  >
 ) => CurrentProtoTypes[TSchemaName]
 
 export const convertProject: ConvertFunction<'project'> = (mapeoDoc) => {
@@ -85,7 +88,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
 }
 
 function convertCommon(
-  common: Omit<MapeoCommon, 'version'>
+  common: Omit<MapeoCommon, 'versionId'>
 ): ProtoTypesWithSchemaInfo['common'] {
   return {
     docId: Buffer.from(common.docId, 'hex'),
