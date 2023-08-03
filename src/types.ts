@@ -8,7 +8,7 @@ import {
 import { dataTypeIds } from './config.js'
 
 /** Temporary: once we have completed this module everything should be supported */
-type SupportedSchemaNames = 'project' | 'observation' | 'field' | 'preset'
+type SupportedSchemaNames = 'project' | 'observation' | 'field' | 'preset' | 'role' | 'device' | 'coreOwnership'
 
 export type SchemaName = Extract<keyof typeof dataTypeIds, SupportedSchemaNames>
 export type SchemaNameAll = keyof typeof dataTypeIds

@@ -16,7 +16,7 @@
     },
     "action": {
       "type": "string",
-      "enum": ["role:set"]
+      "enum": ["role_set", "role_unset", "UNRECOGNIZED"]
     },
     "signature": {
       "type": "string"
@@ -34,6 +34,6 @@
       "type": "string"
     }
   },
-  "required": ["schemaName"],
+  "required": ["schemaName", "role", "projectId", "action", "signature", "authorIndex", "deviceIndex", "authorId", "capabilityType"],
   "additionalProperties": false
 }

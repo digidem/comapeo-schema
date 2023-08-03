@@ -30,6 +30,6 @@
       "type": "string"
     }
   },
-  "required": ["schemaName"],
+  "required": ["schemaName", "action", "authorId", "projectId", "signature", "authorIndex", "deviceIndex", "capabilityType"],
   "additionalProperties": false
 }

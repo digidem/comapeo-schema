@@ -87,6 +87,41 @@ export const convertObservation: ConvertFunction<'observation'> = (
   }
 }
 
+export const convertRole: ConvertFunction<'role'> = (
+  mapeoDoc
+) => {
+  return {
+    common: convertCommon(mapeoDoc),
+    ...mapeoDoc,
+    projectId: Buffer.from(mapeoDoc.projectId,'hex'),
+    authorId: Buffer.from(mapeoDoc.authorId,'hex')
+
+  }
+}
+
+export const convertDevice: ConvertFunction<'device'> = (
+  mapeoDoc
+) => {
+  return {
+    common: convertCommon(mapeoDoc),
+    ...mapeoDoc,
+    authorId: Buffer.from(mapeoDoc.authorId, 'hex'),
+    projectId: Buffer.from(mapeoDoc.projectId, 'hex')
+  }
+}
+
+export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
+  mapeoDoc
+) => {
+  return {
+    common: convertCommon(mapeoDoc),
+    ...mapeoDoc,
+    coreId: Buffer.from(mapeoDoc.coreId, 'hex'),
+    projectId: Buffer.from(mapeoDoc.projectId, 'hex'),
+    authorId: Buffer.from(mapeoDoc.authorId,'hex')
+  }
+}
+
 function convertCommon(
   common: Omit<MapeoCommon, 'versionId'>
 ): ProtoTypesWithSchemaInfo['common'] {

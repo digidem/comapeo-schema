@@ -14,8 +14,8 @@ message CoreOwnership_1 {
   Common_1 common = 1;
 
   string action = 5;
-  string coreId = 6;
-  string projectId = 7;
+  bytes coreId = 6;
+  bytes projectId = 7;
   string storeType = 8;
   string signature = 9;
   int32 authorIndex = 10;

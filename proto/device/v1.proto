@@ -14,8 +14,8 @@ message Device_1 {
   Common_1 common = 1;
 
   string action = 5;
-  string authorId = 6;
-  string projectId = 7;
+  bytes authorId = 6;
+  bytes projectId = 7;
   string signature = 8;
   int32 authorIndex = 9;
   int32 deviceIndex = 10;
