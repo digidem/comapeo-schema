@@ -17,7 +17,10 @@
       "type": "object",
       "properties": {
         "point": { "type": "array", "items":{"type":"string"}},
-        "area": { "type": "array", "items":{"type":"string"}}
+        "area": { "type": "array", "items":{"type":"string"}},
+        "vertex": { "type": "array", "items":{"type":"string"}},
+        "line": { "type": "array", "items":{"type":"string"}},
+        "relation": { "type": "array", "items":{"type":"string"}}
       }
     }
   },

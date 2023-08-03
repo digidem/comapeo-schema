@@ -23,9 +23,12 @@ export const convertProject: ConvertFunction<'project'> = (mapeoDoc) => {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
     defaultPresets: {
-      point: mapeoDoc.defaultPresets?.point || [],
-      area: mapeoDoc.defaultPresets?.area || []
-    } || {}
+      point: (mapeoDoc.defaultPresets.point || []).map(p => Buffer.from(p,'hex')),
+      area: (mapeoDoc.defaultPresets.area || []).map(a => Buffer.from(a,'hex')),
+      vertex: (mapeoDoc.defaultPresets.area || []).map(v => Buffer.from(v,'hex')),
+      line: (mapeoDoc.defaultPresets.area || []).map(l => Buffer.from(l, 'hex')),
+      relation: (mapeoDoc.defaultPresets.area || []).map(r => Buffer.from(r, 'hex'))
+    }
   }
 }
 

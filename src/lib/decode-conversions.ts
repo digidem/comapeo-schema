@@ -31,7 +31,13 @@ export const convertProject: ConvertFunction<'project'> = (
   return {
     ...jsonSchemaCommon,
     ...rest,
-    defaultPresets: message.defaultPresets || {}
+    defaultPresets: {
+      point: message.defaultPresets?.point.map(p => p.toString('hex')),
+      area: message.defaultPresets?.area.map(a => a.toString('hex')),
+      vertex: message.defaultPresets?.vertex.map(v => v.toString('hex')),
+      line: message.defaultPresets?.line.map(l => l.toString('hex')),
+      relation: message.defaultPresets?.relation.map(r => r.toString('hex')),
+    } || {}
   }
 }
 
