@@ -33,9 +33,6 @@ export type FilterBySchemaName<
   U extends string,
 > = Extract<T, { schemaName: U }>
 
-/** Uniquely identifies a block in a core */
-export type VersionObj = { coreId: Buffer; seq: number }
-
 /** Only proto types we currently support (whilst in dev) */
 export type ProtoTypesWithSchemaInfo = FilterBySchemaName<
   AllProtoTypesWithSchemaInfo,

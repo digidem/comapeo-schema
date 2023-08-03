@@ -2,7 +2,6 @@ import { ProtoTypes } from './proto/types.js'
 import {
   type MapeoDoc,
   type ProtoTypesWithSchemaInfo,
-  type VersionObj,
   type SchemaName,
   type DataTypeId,
   type ValidSchemaDef,
@@ -19,7 +18,7 @@ import {
 // @ts-ignore
 import * as cenc from 'compact-encoding'
 import { DATA_TYPE_ID_BYTES, SCHEMA_VERSION_BYTES } from './constants.js'
-import { getProtoTypeName } from './lib/utils.js'
+import { VersionIdObject, getProtoTypeName } from './lib/utils.js'
 
 /** Map of dataTypeIds to schema names for quick lookups */
 const dataTypeIdToSchemaName: Record<string, SchemaName> = {}
@@ -33,9 +32,9 @@ for (const [schemaName, dataTypeId] of Object.entries(dataTypeIds) as Array<
  * Decode a Buffer as an object validated against the corresponding schema
  *
  * @param buf Buffer to be decoded
- * @param versionObj public key (coreId) of the core where this block is stored, and the index (seq) of the block in the core.
+ * @param versionObj public key (coreKey) of the core where this block is stored, and the index of the block in the core.
  * */
-export function decode(buf: Buffer, versionObj: VersionObj): MapeoDoc {
+export function decode(buf: Buffer, versionObj: VersionIdObject): MapeoDoc {
   const schemaDef = decodeBlockPrefix(buf)
 
   const encodedMsg = buf.subarray(

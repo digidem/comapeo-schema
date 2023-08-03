@@ -8,8 +8,8 @@ message Common_1 {
   // 32-byte random generated number
   optional bytes docId = 1 [(required) = true];
   message Link {
-    bytes coreId = 1;
-    int32 seq = 2;
+    bytes coreKey = 1;
+    int32 index = 2;
   }
   repeated Link links = 2;
   google.protobuf.Timestamp createdAt = 3 [(required) = true];
@@ -19,5 +19,5 @@ message Common_1 {
  * id is a byte buffer here and a string in jsonSchema
  * schemaVersion is encoded on the blockPrefix
  * dataTypeId is encoded on the blockPrefix
- * version is the core seq number so wen can avoid it here
+ * version is the core key and index number so we can avoid it here
  */

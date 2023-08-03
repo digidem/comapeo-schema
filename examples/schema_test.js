@@ -20,7 +20,7 @@ async function test(key) {
     const index = 0
     const data = await core.get(index)
     console.log(`trying ${k}`)
-    const decodedData = decode(data, { coreId: core.key, seq: index })
+    const decodedData = decode(data, { coreKey: core.key, index })
     console.log('data', decodedData)
     console.log(`VALID? `, validate(decodedData), '\n')
     if (Buffer.compare(data, record) !== 0) {

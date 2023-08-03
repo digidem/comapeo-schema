@@ -41,8 +41,8 @@ test('test validation of record', async (t) => {
   goodDocs.forEach((k) => {
     const doc = docs.good[k]
     const record = decode(encode(doc), {
-      coreId: randomBytes(32),
-      seq: 0,
+      coreKey: randomBytes(32),
+      index: 0,
     })
     t.doesNotThrow(() => {
       // field has a type which is different from the rest :|
@@ -56,8 +56,8 @@ test('test encoding, decoding of record and comparing the two versions', async (
   goodDocs.forEach((k) => {
     const doc = docs.good[k]
     const record = decode(encode(doc), {
-      coreId: randomBytes(32),
-      seq: 0,
+      coreKey: randomBytes(32),
+      index: 0,
     })
     const fields = Object.keys(doc)
     // t.plan(goodDocs.length * fields.length * 2)
