@@ -18,7 +18,7 @@ import {
  * Encode a an object validated against a schema as a binary protobuf prefixed
  * with the encoded data type ID and schema version, to send to an hypercore.
  */
-export function encode(mapeoDoc: OmitUnion<MapeoDoc, 'version'>): Buffer {
+export function encode(mapeoDoc: OmitUnion<MapeoDoc, 'versionId'>): Buffer {
   const { schemaName } = mapeoDoc
   const schemaVersion = currentSchemaVersions[schemaName]
   const schemaDef = { schemaName, schemaVersion }
