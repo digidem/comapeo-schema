@@ -37,7 +37,7 @@ export const convertProject: ConvertFunction<'project'> = (
       vertex: message.defaultPresets?.vertex.map(v => v.toString('hex')),
       line: message.defaultPresets?.line.map(l => l.toString('hex')),
       relation: message.defaultPresets?.relation.map(r => r.toString('hex')),
-    } || {}
+    }
   }
 }
 
