@@ -10,7 +10,7 @@
       "type": "string"
     },
     "versionId": {
-      "description": "id (hex-encoded 32-byte buffer) and core sequence number, separated by '/'",
+      "description": "core id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
       "type": "string"
     },
     "schemaName": {
@@ -28,7 +28,7 @@
       "format": "date-time"
     },
     "links": {
-      "description": "Version ids of the previous document versions this one is replacing. Each link is id (hex-encoded 32 byte buffer) and sequence number, separated by '/'",
+      "description": "Version ids of the previous document versions this one is replacing. Each link is id (hex-encoded 32 byte buffer) and index number, separated by '/'",
       "type": "array",
       "uniqueItems": true,
       "items": {

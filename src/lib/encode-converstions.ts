@@ -6,11 +6,11 @@ import {
   MapeoCommon,
   TagValuePrimitive,
   JsonTagValue,
-  VersionObj,
   OmitUnion,
 } from '../types.js'
 import { TagValue_1, type TagValue_1_PrimitiveValue } from '../proto/tags/v1.js'
 import { Observation_5_Metadata } from '../proto/observation/v5.js'
+import { parseVersionId } from './utils.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
@@ -94,7 +94,7 @@ function convertCommon(
     docId: Buffer.from(common.docId, 'hex'),
     createdAt: common.createdAt,
     updatedAt: common.updatedAt,
-    links: common.links.map((link) => versionStringToObj(link)),
+    links: common.links.map((link) => parseVersionId(link)),
   }
 }
 
@@ -169,12 +169,4 @@ function convertTagPrimitive(
       const _exhaustiveCheck: never = tagPrimitive
   }
   return { kind }
-}
-
-/**
- * Turn a hex-encoded version string to a version objected with the coreId and index (seq)
- */
-function versionStringToObj(hexStr: string): VersionObj {
-  const [id, seq] = hexStr.split('/')
-  return { coreId: Buffer.from(id, 'hex'), seq: Number(seq) }
 }

@@ -7,19 +7,19 @@ import {
 import {
   type MapeoDoc,
   type ProtoTypesWithSchemaInfo,
-  type VersionObj,
   type SchemaName,
   type FilterBySchemaName,
   type MapeoCommon,
   type TagValuePrimitive,
   type JsonTagValue,
 } from '../types.js'
+import { VersionIdObject, getVersionId } from './utils.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
 type ConvertFunction<TSchemaName extends SchemaName> = (
   message: Extract<ProtoTypesWithSchemaInfo, { schemaName: TSchemaName }>,
-  versionObj: VersionObj
+  versionObj: VersionIdObject
 ) => FilterBySchemaName<MapeoDoc, TSchemaName>
 
 export const convertProject: ConvertFunction<'project'> = (
@@ -172,7 +172,7 @@ function convertTagPrimitive({
 
 function convertCommon(
   common: ProtoTypesWithSchemaInfo['common'],
-  versionObj: VersionObj
+  versionObj: VersionIdObject
 ): Omit<MapeoCommon, 'schemaName'> {
   if (!common || !common.docId || !common.createdAt || !common.updatedAt) {
     throw new Error('Missing required common properties')
@@ -180,16 +180,9 @@ function convertCommon(
 
   return {
     docId: common.docId.toString('hex'),
-    versionId: versionObjToString(versionObj),
-    links: common.links.map(versionObjToString),
+    versionId: getVersionId(versionObj),
+    links: common.links.map((link) => getVersionId(link)),
     createdAt: common.createdAt,
     updatedAt: common.updatedAt,
   }
-}
-
-/**
- * Turn coreId and seq to a version string of ${hex-encoded coreId}/${seq}
- */
-function versionObjToString({ coreId, seq }: VersionObj) {
-  return `${coreId.toString('hex')}/${seq}`
 }
