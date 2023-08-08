@@ -72,7 +72,7 @@ export const convertField: ConvertFunction<'field'> = (message, versionObj) => {
     return {
       ...jsonSchemaCommon,
       ...rest,
-      type: message.type == 'UNRECOGNIZED' ? 'text' : message.type,
+      type: message.type,
       tagKey: message.tagKey,
       label: message.label || message.tagKey,
       appearance:
