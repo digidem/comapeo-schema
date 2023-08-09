@@ -15,6 +15,7 @@ import { and } from 'ajv/dist/compile/codegen/index.js'
     })
   })
 }
+
 {
   const {text,plan, doc} = fixtures.badDocName
   test(text,async(t) => {
@@ -24,49 +25,51 @@ import { and } from 'ajv/dist/compile/codegen/index.js'
     })
   })
 }
-{
-  test('testing rightfully encoding of doc',async(t) => {
-    fixtures.goodDocs.forEach(
-      /** @param {import('../dist/types').MapeoDoc} doc */
-      (doc) => {
-      t.doesNotThrow(() =>  {
-        encode(doc)
-      }, `testing ${doc.schemaName}`)
-    })
-  })
-}
-{
-  test('testing encoding of doc, then decoding and comparing the two objects',async(t) => {
-    fixtures.goodDocs.forEach(
-      /** @param {import('../dist/types').MapeoDoc} doc */
-      (doc) => {
-        t.doesNotThrow(() =>  {
-          const buf = encode(doc)
-          const decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
 
-          Object.keys(doc).forEach(k => {
-            // go deeper to the object if its nested (is this necessary?)
-            if(typeof doc[k] === 'object'){
+test('testing rightfully encoding of doc',async(t) => {
+  fixtures.goodDocs.forEach(
+    /** @param {import('../dist/types').MapeoDoc} doc */
+    (doc) => {
+    t.doesNotThrow(() =>  {
+      encode(doc)
+    }, `testing ${doc.schemaName}`)
+  })
+})
+
+test('testing encoding of doc, then decoding and comparing the two objects',async(t) => {
+  fixtures.goodDocs.forEach(
+    /** @param {import('../dist/types').MapeoDoc} doc */
+    (doc) => {
+      t.doesNotThrow(() =>  {
+        const buf = encode(doc)
+        const decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
+        Object.keys(doc).forEach(k => {
+          const field = doc[k]
+          switch(typeof field){
+            case 'object': {
+              // go deeper if field is an object
               Object.keys(doc[k]).forEach(inObjKey => {
                 const docField = doc[k][inObjKey]
                 const decDocField = doc[k][inObjKey]
                 t.deepEqual(docField, decDocField)
               })
-              // check for decimals in float.
-              // we strip unnecessary decimal points we get from the decoded value
-            }else if(typeof doc[k] === 'number'){
-              const nDecimals = countDecimals(doc[k])
-              const fixedDecValue = Number(decodedDoc[k].toFixed(nDecimals))
-              t.deepEqual(doc[k],fixedDecValue, ` - equal? ${k}`)
-            }else{
-              t.deepEqual(doc[k],decodedDoc[k], ` - equal? ${k}`)
             }
-          })
+              break
+            case 'number':{
+              // strip unecessary decimals we get from decoding and then compare
+              let nDecimals = countDecimals(doc[k])
+              let fixedDecValue = Number(decodedDoc[k].toFixed(nDecimals))
+              t.deepEqual(doc[k],fixedDecValue, ` - equal? ${k}`)
+              break
+            }
+            default:
+              t.deepEqual(doc[k],decodedDoc[k], ` - equal? ${k}`)
+          }
+        })
 
-        }, `tested ${doc.schemaName}`)
-      })
-  })
-}
+      }, `tested ${doc.schemaName}`)
+    })
+})
 
 // test('test encoding of rightfully formated record', async (t) => {
 //   const goodDocs = Object.keys(docs.good)
