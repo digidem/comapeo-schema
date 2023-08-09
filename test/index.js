@@ -2,7 +2,6 @@ import test from 'tape'
 import { fixtures } from './fixture.js'
 import { encode } from '../dist/encode.js'
 import { decode } from '../dist/decode.js'
-import { validate } from '../dist/validate.js'
 import { parseVersionId } from '../dist/lib/utils.js'
 // import { randomBytes } from 'node:crypto'
 
@@ -25,18 +24,37 @@ import { parseVersionId } from '../dist/lib/utils.js'
   })
 }
 {
-  const {text,docs} = fixtures.goodDocs
-  test({text},async(t) => {
-    t.plan(Object.keys(docs).length)
-    Object.keys(docs).forEach((docName) => {
-      const doc = docs[docName]
+  test('testing rightfully encoding of doc',async(t) => {
+    fixtures.goodDocs.forEach(
+      /** @param {import('../dist/types').MapeoDoc} doc */
+      (doc) => {
       t.doesNotThrow(() =>  {
-        const buf = encode(doc)
-        console.log(decode(buf, parseVersionId(doc.versionId)))
-      }, `testing ${docName}`)
+        encode(doc)
+      }, `testing ${doc.schemaName}`)
     })
   })
+}
+{
+  test('testing encoding of doc, then decoding and comparing the two objects',async(t) => {
+    fixtures.goodDocs.forEach(
+      /** @param {import('../dist/types').MapeoDoc} doc */
+      (doc) => {
+        t.doesNotThrow(() =>  {
+          const buf = encode(doc)
+          const decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
 
+          Object.keys(doc).forEach(k => {
+            if(k === 'defaultPresets') {
+              console.log(doc[k])
+              console.log(decodedDoc[k])
+            }
+            t.deepEqual(doc[k],decodedDoc[k], ` - equal? ${k}`)
+          })
+
+
+        }, `tested ${doc.schemaName}`)
+      })
+  })
 }
 
 // test('test encoding of rightfully formated record', async (t) => {
@@ -101,3 +119,7 @@ import { parseVersionId } from '../dist/lib/utils.js'
 //     }, `testing ${key}`)
 //   })
 // })
+
+function stripUndef(obj) {
+  return JSON.parse(JSON.stringify(obj))
+}
