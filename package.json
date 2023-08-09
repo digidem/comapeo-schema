@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "example": "node examples/schema_test.js",
-    "build": "npm-run-all build:clean build:generate build:tsc build:copy",
+    "build": "npm-run-all build:clean build:protobuf build:generate build:tsc build:copy",
     "build:clean": "rimraf types dist docs intermediate generated",
+    "build:protobuf": "buf --version",
     "build:generate": "node scripts/generate.js",
     "build:tsc": "tsc",
     "build:copy": "cpy 'intermediate/generated/**' 'intermediate/src/**' dist/",
@@ -48,6 +49,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "@bufbuild/buf": "^1.26.1",
     "@json-schema-tools/dereferencer": "^1.6.1",
     "ajv": "^8.12.0",
     "ajv-formats": "^2.1.1",
