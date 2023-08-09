@@ -44,14 +44,6 @@ test('testing encoding of doc, then decoding and comparing the two objects', asy
         const buf = encode(doc)
         const decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
         t.deepEqual(doc,decodedDoc)
-        // Object.keys(decodedDoc).forEach(k => {
-        //   if(doc.schemaName === 'field'){
-        //     if(!doc.hasOwnProperty(k)){
-        //       console.log('missing', k)
-        //     }
-        //   }
-        // })
-
       }, `tested ${doc.schemaName}`)
     })
 })

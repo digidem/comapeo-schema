@@ -64,7 +64,11 @@ export const fixtures = {
       links: [],
       tagKey: "myTagKey",
       type: "text",
-      label: "myLabel"
+      label: "myLabel",
+      universal: true,
+      options: [],
+      appearance: 'multiline',
+      snakeCase: true
     },
     {
       docId: randomBytes(32).toString('hex'),
