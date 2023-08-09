@@ -3,6 +3,7 @@ import { fixtures } from './fixture.js'
 import { encode } from '../dist/encode.js'
 import { decode } from '../dist/decode.js'
 import { parseVersionId } from '../dist/lib/utils.js'
+import { and } from 'ajv/dist/compile/codegen/index.js'
 // import { randomBytes } from 'node:crypto'
 
 {
@@ -44,13 +45,23 @@ import { parseVersionId } from '../dist/lib/utils.js'
           const decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
 
           Object.keys(doc).forEach(k => {
-            if(k === 'defaultPresets') {
-              console.log(doc[k])
-              console.log(decodedDoc[k])
+            // go deeper to the object if its nested (is this necessary?)
+            if(typeof doc[k] === 'object'){
+              Object.keys(doc[k]).forEach(inObjKey => {
+                const docField = doc[k][inObjKey]
+                const decDocField = doc[k][inObjKey]
+                t.deepEqual(docField, decDocField)
+              })
+              // check for decimals in float.
+              // we strip unnecessary decimal points we get from the decoded value
+            }else if(typeof doc[k] === 'number'){
+              const nDecimals = countDecimals(doc[k])
+              const fixedDecValue = Number(decodedDoc[k].toFixed(nDecimals))
+              t.deepEqual(doc[k],fixedDecValue, ` - equal? ${k}`)
+            }else{
+              t.deepEqual(doc[k],decodedDoc[k], ` - equal? ${k}`)
             }
-            t.deepEqual(doc[k],decodedDoc[k], ` - equal? ${k}`)
           })
-
 
         }, `tested ${doc.schemaName}`)
       })
@@ -122,4 +133,12 @@ import { parseVersionId } from '../dist/lib/utils.js'
 
 function stripUndef(obj) {
   return JSON.parse(JSON.stringify(obj))
+}
+
+/** @param {Number} value
+ * @returns Number */
+function countDecimals(value) {
+  return ((value % 1) != 0)
+    ? Number(value.toString().split(".")[1].length)
+    : 0;
 }
