@@ -36,7 +36,7 @@ test('testing rightfully encoding of doc',async(t) => {
   })
 })
 
-test('testing encoding of doc, then decoding and comparing the two objects',async(t) => {
+test('testing encoding of doc, then decoding and comparing the two objects', async(t) => {
   fixtures.goodDocs.forEach(
     /** @param {import('../dist/types').MapeoDoc} doc */
     (doc) => {
@@ -45,25 +45,12 @@ test('testing encoding of doc, then decoding and comparing the two objects',asyn
         const decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
         Object.keys(doc).forEach(k => {
           const field = doc[k]
-          switch(typeof field){
-            case 'object': {
-              // go deeper if field is an object
-              Object.keys(doc[k]).forEach(inObjKey => {
-                const docField = doc[k][inObjKey]
-                const decDocField = doc[k][inObjKey]
-                t.deepEqual(docField, decDocField)
-              })
-            }
-              break
-            case 'number':{
-              // strip unecessary decimals we get from decoding and then compare
-              let nDecimals = countDecimals(doc[k])
-              let fixedDecValue = Number(decodedDoc[k].toFixed(nDecimals))
-              t.deepEqual(doc[k],fixedDecValue, ` - equal? ${k}`)
-              break
-            }
-            default:
-              t.deepEqual(doc[k],decodedDoc[k], ` - equal? ${k}`)
+          if(typeof doc[k] === 'number'){
+            const nDecimals = countDecimals(field)
+            const fixedDecValue = Number(decodedDoc[k].toFixed(nDecimals))
+            t.deepEqual(field,fixedDecValue, ` - equal? ${k}`)
+          }else{
+            t.deepEqual(doc[k],decodedDoc[k], ` - equal? ${k}`)
           }
         })
 
@@ -134,12 +121,16 @@ test('testing encoding of doc, then decoding and comparing the two objects',asyn
 //   })
 // })
 
+/**
+ * @param {object} obj
+ * @return {object}
+ * */
 function stripUndef(obj) {
   return JSON.parse(JSON.stringify(obj))
 }
 
 /** @param {Number} value
- * @returns Number */
+ * @return Number */
 function countDecimals(value) {
   return ((value % 1) != 0)
     ? Number(value.toString().split(".")[1].length)
