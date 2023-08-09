@@ -14,8 +14,8 @@ message Observation_5 {
 
   Common_1 common = 1;
 
-  optional float lat = 5;
-  optional float lon = 6;
+  optional double lat = 5;
+  optional double lon = 6;
 
   message Ref {
     bytes id = 1;

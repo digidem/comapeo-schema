@@ -43,16 +43,14 @@ test('testing encoding of doc, then decoding and comparing the two objects', asy
       t.doesNotThrow(() =>  {
         const buf = encode(doc)
         const decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
-        Object.keys(doc).forEach(k => {
-          const field = doc[k]
-          if(typeof doc[k] === 'number'){
-            const nDecimals = countDecimals(field)
-            const fixedDecValue = Number(decodedDoc[k].toFixed(nDecimals))
-            t.deepEqual(field,fixedDecValue, ` - equal? ${k}`)
-          }else{
-            t.deepEqual(doc[k],decodedDoc[k], ` - equal? ${k}`)
-          }
-        })
+        t.deepEqual(doc,decodedDoc)
+        // Object.keys(decodedDoc).forEach(k => {
+        //   if(doc.schemaName === 'field'){
+        //     if(!doc.hasOwnProperty(k)){
+        //       console.log('missing', k)
+        //     }
+        //   }
+        // })
 
       }, `tested ${doc.schemaName}`)
     })
