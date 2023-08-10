@@ -25,7 +25,11 @@ export async function generateJSONSchemaExports(jsonSchemas) {
 
   for (const [schemaName, jsonSchema] of Object.entries(jsonSchemas.merged)) {
     docSchemas[schemaName] = jsonSchema
-    const dereferencer = new JsonSchemaDereferencer(jsonSchema)
+    const dereferencer = new JsonSchemaDereferencer(
+      // Need to create a deep clone to avoid issue described in https://github.com/digidem/mapeo-schema/issues/109
+      JSON.parse(JSON.stringify(jsonSchema)),
+      { mutate: false }
+    )
     dereferencedDocSchemas[schemaName] = await dereferencer.resolve()
   }
 
