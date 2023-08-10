@@ -119,7 +119,7 @@ export const fixtures = {
         updatedAt: cachedValues.updatedAt,
         links: [],
         tagKey: "myTagKey",
-        type: "text",
+        type: "UNRECOGNIZED",
         label: "myTagKey", // see src/lib/decode-conversions.js:77
         appearance: 'multiline',
         snakeCase: false,
