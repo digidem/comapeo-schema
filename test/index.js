@@ -26,27 +26,34 @@ import { and } from 'ajv/dist/compile/codegen/index.js'
   })
 }
 
-test('testing rightfully encoding of doc',async(t) => {
-  fixtures.goodDocs.forEach(
-    /** @param {import('../dist/types').MapeoDoc} doc */
-    (doc) => {
-    t.doesNotThrow(() =>  {
-      encode(doc)
-    }, `testing ${doc.schemaName}`)
-  })
+test(`testing encoding of doc with minimal required values,
+  then decoding and comparing the two objects`, async(t) => {
+    for(let {doc,expected} of fixtures.goodDocsMinimal){
+      let buf
+      t.doesNotThrow(() =>  {
+        buf = encode(doc)
+      }, `tested encoding of ${doc.schemaName}`)
+      let decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
+      t.deepEqual(decodedDoc,expected, `tested deep equal of ${doc.schemaName}`)
+    }
 })
 
-test('testing encoding of doc, then decoding and comparing the two objects', async(t) => {
-  fixtures.goodDocs.forEach(
-    /** @param {import('../dist/types').MapeoDoc} doc */
-    (doc) => {
+test(`testing encoding of doc with additional optional values,
+  then decoding and comparing the two objects`, async(t) => {
+    for(let {doc,expected} of fixtures.goodDocsCompleted){
+      let buf
       t.doesNotThrow(() =>  {
-        const buf = encode(doc)
-        const decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
-        t.deepEqual(doc,decodedDoc)
-      }, `tested ${doc.schemaName}`)
-    })
+        buf = encode(doc)
+      }, `tested encoding of ${doc.schemaName}`)
+      let decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
+      if(doc.schemaName === 'preset'){
+        console.log(expected)
+        console.log(decodedDoc)
+      }
+      t.deepEqual(decodedDoc,expected, `tested deep equal of ${doc.schemaName}`)
+    }
 })
+
 
 // test('test encoding of rightfully formated record', async (t) => {
 //   const goodDocs = Object.keys(docs.good)

@@ -114,6 +114,7 @@ export const convertPreset: ConvertFunction<'preset'> = (
     ...jsonSchemaCommon,
     ...rest,
     geometry,
+    iconId: rest.iconId ? rest.iconId.toString('hex') : undefined,
     tags: convertTags(rest.tags),
     addTags: convertTags(rest.addTags),
     removeTags: convertTags(rest.removeTags),

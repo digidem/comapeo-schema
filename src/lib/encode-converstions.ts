@@ -64,7 +64,7 @@ export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
     addTags: convertTags(mapeoDoc.addTags),
     removeTags: convertTags(mapeoDoc.removeTags),
     fieldIds: mapeoDoc.fieldIds.map((field) => Buffer.from(field, 'hex')),
-    iconId: mapeoDoc.icon ? Buffer.from(mapeoDoc.icon, 'hex') : undefined,
+    iconId: mapeoDoc.iconId ? Buffer.from(mapeoDoc.iconId, 'hex') : undefined,
   }
 }
 

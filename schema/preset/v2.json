@@ -83,7 +83,7 @@
         "type": "string"
       }
     },
-    "icon": {
+    "iconId": {
       "description": "hex-encoded string. ID of preset icon which represents this preset",
       "type": "string"
     },

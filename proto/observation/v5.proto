@@ -47,12 +47,12 @@ message Observation_5 {
       bool mocked = 2;
 
       message Coords {
-        float latitude = 1;
-        float longitude = 2;
-        float altitude = 3;
-        float heading = 4;
-        float speed = 5;
-        float acurracy = 6;
+        double latitude = 1;
+        double longitude = 2;
+        double altitude = 3;
+        double heading = 4;
+        double speed = 5;
+        double acurracy = 6;
       }
       optional Coords coords = 3;
     }
