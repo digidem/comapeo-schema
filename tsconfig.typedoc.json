@@ -1,0 +1,29 @@
+{
+"compilerOptions": {
+    "target": "es2019",
+    "lib": ["es2020"],
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "allowJs": false,
+    "checkJs": false,
+    "emitDeclarationOnly": false,
+    "esModuleInterop": true,
+    "declaration": true,
+    "declarationMap": false,
+    "rootDirs": ["src", "generated"],
+    "outDir": "intermediate"
+},
+  "files": ["src/index.ts"],
+  "exclude": [
+    "node_modules",
+    "examples",
+    "generated/proto/options.ts",
+    "generated/proto/google/protobuf/descriptor.ts",
+    "test",
+    "scripts"
+  ]
+}

@@ -11,7 +11,7 @@
     "build:generate": "node scripts/generate.js",
     "build:tsc": "tsc",
     "build:copy": "cpy 'intermediate/generated/**' 'intermediate/src/**' dist/",
-    "build:doc": "typedoc --plugin typedoc-plugin-markdown",
+    "build:doc": "typedoc src/index.ts --tsconfig tsconfig.typedoc.json --plugin typedoc-plugin-markdown",
     "prepack": "npm run build",
     "test": "tape 'test/**/*.js'"
   },
