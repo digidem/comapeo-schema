@@ -21,8 +21,6 @@ mkdirp.sync(DIST_DIRNAME)
 mkdirp.sync(path.join(GENERATED_DIRNAME, 'proto'))
 mkdirp.sync(path.join(GENERATED_DIRNAME, 'schema'))
 
-execSync('buf generate ./proto', { cwd: PROJECT_ROOT })
-
 const config = parseConfig()
 
 const protoTypesFile = generateProtoTypes(config)

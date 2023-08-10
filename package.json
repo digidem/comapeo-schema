@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "example": "node examples/schema_test.js",
-    "build": "npm-run-all build:clean build:generate build:tsc build:copy",
+    "build": "npm-run-all build:clean build:protobuf build:generate build:tsc build:copy",
     "build:clean": "rimraf types dist docs intermediate generated",
+    "build:protobuf": "buf generate ./proto",
     "build:generate": "node scripts/generate.js",
     "build:tsc": "tsc",
     "build:copy": "cpy 'intermediate/generated/**' 'intermediate/src/**' dist/",
@@ -30,6 +31,7 @@
   },
   "homepage": "https://github.com/digidem/mapeo-schema#readme",
   "devDependencies": {
+    "@bufbuild/buf": "^1.26.1",
     "@types/json-schema": "^7.0.12",
     "@types/tape": "^5.6.0",
     "c8": "^8.0.1",
