@@ -490,7 +490,10 @@ export const fixtures = {
         links: [],
         role:"author",
         projectId: cachedValues.projectId,
+        action: 'role_set',
         signature:"signature",
+        authorIndex:8,
+        deviceIndex:7,
         authorId: cachedValues.authorId,
         capabilityType:"capability"
       },
@@ -503,10 +506,10 @@ export const fixtures = {
         links: [],
         role:"author",
         projectId: cachedValues.projectId,
-        action: 'UNRECOGNIZED',
+        action: 'role_set',
         signature:"signature",
-        authorIndex:0,
-        deviceIndex:0,
+        authorIndex:8,
+        deviceIndex:7,
         authorId:cachedValues.authorId,
         capabilityType:"capability"
       }
@@ -523,6 +526,8 @@ export const fixtures = {
         authorId: cachedValues.authorId,
         projectId: cachedValues.projectId,
         signature:"mySignature",
+        authorIndex:1,
+        deviceIndex:10,
         capabilityType:"someCapability",
       },
       expected:{
@@ -536,8 +541,8 @@ export const fixtures = {
         authorId: cachedValues.authorId,
         projectId: cachedValues.projectId,
         signature:"mySignature",
-        authorIndex:0,
-        deviceIndex:0,
+        authorIndex:1,
+        deviceIndex:10,
         capabilityType:"someCapability",
       }
     },
@@ -554,6 +559,8 @@ export const fixtures = {
         projectId: cachedValues.projectId,
         storeType:"blob",
         signature:"mySig",
+        authorIndex: 100,
+        deviceIndex: 2,
         authorId: cachedValues.authorId,
         capabilityType: "someCapability"
       },
@@ -569,8 +576,8 @@ export const fixtures = {
         projectId: cachedValues.projectId,
         storeType:"blob",
         signature:"mySig",
-        authorIndex: 0,
-        deviceIndex: 0,
+        authorIndex: 100,
+        deviceIndex: 2,
         authorId: cachedValues.authorId,
         capabilityType: "someCapability"
       }

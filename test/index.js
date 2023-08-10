@@ -46,10 +46,6 @@ test(`testing encoding of doc with additional optional values,
         buf = encode(doc)
       }, `tested encoding of ${doc.schemaName}`)
       let decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
-      if(doc.schemaName === 'preset'){
-        console.log(expected)
-        console.log(decodedDoc)
-      }
       t.deepEqual(decodedDoc,expected, `tested deep equal of ${doc.schemaName}`)
     }
 })
