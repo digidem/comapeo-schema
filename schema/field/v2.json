@@ -23,7 +23,7 @@
         "selectOne": "Select one item from a list of pre-defined options",
         "selectMultiple": "Select any number of items from a list of pre-defined options"
       },
-      "enum": ["text", "number", "selectOne", "selectMultiple"]
+      "enum": ["text", "number", "selectOne", "selectMultiple", "UNRECOGNIZED"]
     },
     "label": {
       "description": "Default language label for the form field label",
