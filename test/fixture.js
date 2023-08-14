@@ -273,7 +273,7 @@ export const fixtures = {
         }],
         tags: {
           someKeyForSingleVal: 'someVal',
-          // someKeyForArrVal: ['arr', 'of', 'strings']
+          someKeyForArrVal: ['arr', 'of', 'strings']
         },
         metadata: {
           manualLocation: true,
@@ -326,7 +326,7 @@ export const fixtures = {
         }],
         tags: {
           someKeyForSingleVal: 'someVal',
-          // someKeyForArrVal: ['arr', 'of', 'strings']
+          someKeyForArrVal: ['arr', 'of', 'strings']
         },
         metadata: {
           manualLocation: true,
@@ -448,7 +448,8 @@ export const fixtures = {
           someKeyForArrVal: ['arr', 'of', 'strings']
         },
         addTags:{
-          heyAddThisTag: 'pleease'
+          heyAddThisTag: 'pleease',
+          orMaybeThis: ['right?', '', 'that was empty']
         },
         removeTags:{
           deleteInmeditaly: ['this list', 'of things']
@@ -470,7 +471,8 @@ export const fixtures = {
           someKeyForArrVal: ['arr', 'of', 'strings']
         },
         addTags:{
-          heyAddThisTag: 'pleease'
+          heyAddThisTag: 'pleease',
+          orMaybeThis: ['right?', '', 'that was empty']
         },
         removeTags:{
           deleteInmeditaly: ['this list', 'of things']

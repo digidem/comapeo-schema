@@ -145,11 +145,10 @@ function convertTags(tags: {
 }): {
   [key: string]: TagValue_1
 } {
-  return Object.keys(tags).reduce(
-    (acc: { [key: string]: TagValue_1 }, k: string) => {
-      return {
-        [k]: convertTagValue(tags[k]),
-      }
+  return Object.keys(tags).reduce<{ [key: string]: TagValue_1}>(
+    (acc,k) => {
+      acc[k] = convertTagValue(tags[k])
+      return acc
     },
     {}
   )
