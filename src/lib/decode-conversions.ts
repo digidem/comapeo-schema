@@ -32,12 +32,12 @@ export const convertProject: ConvertFunction<'project'> = (
     ...jsonSchemaCommon,
     ...rest,
     defaultPresets: {
-      point: message.defaultPresets?.point.map(p => p.toString('hex')),
-      area: message.defaultPresets?.area.map(a => a.toString('hex')),
-      vertex: message.defaultPresets?.vertex.map(v => v.toString('hex')),
-      line: message.defaultPresets?.line.map(l => l.toString('hex')),
-      relation: message.defaultPresets?.relation.map(r => r.toString('hex')),
-    }
+      point: message.defaultPresets?.point.map((p) => p.toString('hex')),
+      area: message.defaultPresets?.area.map((a) => a.toString('hex')),
+      vertex: message.defaultPresets?.vertex.map((v) => v.toString('hex')),
+      line: message.defaultPresets?.line.map((l) => l.toString('hex')),
+      relation: message.defaultPresets?.relation.map((r) => r.toString('hex')),
+    },
   }
 }
 
@@ -121,19 +121,16 @@ export const convertPreset: ConvertFunction<'preset'> = (
   }
 }
 
-export const convertRole: ConvertFunction<'role'> = (
-message,
-versionObj
-) => {
-    const { common, schemaVersion, ...rest } = message
-    const jsonSchemaCommon = convertCommon(common, versionObj)
-    return {
-      ...jsonSchemaCommon,
-      ...rest,
+export const convertRole: ConvertFunction<'role'> = (message, versionObj) => {
+  const { common, schemaVersion, ...rest } = message
+  const jsonSchemaCommon = convertCommon(common, versionObj)
+  return {
+    ...jsonSchemaCommon,
+    ...rest,
     role: rest.role,
     projectId: message.projectId.toString('hex'),
-    authorId: message.authorId.toString('hex')
-    }
+    authorId: message.authorId.toString('hex'),
+  }
 }
 
 export const convertDevice: ConvertFunction<'device'> = (
@@ -146,7 +143,7 @@ export const convertDevice: ConvertFunction<'device'> = (
     ...jsonSchemaCommon,
     ...rest,
     authorId: message.authorId.toString('hex'),
-    projectId: message.projectId.toString('hex')
+    projectId: message.projectId.toString('hex'),
   }
 }
 
@@ -161,9 +158,8 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
     ...rest,
     coreId: message.coreId.toString('hex'),
     projectId: message.projectId.toString('hex'),
-    authorId: message.authorId.toString('hex')
+    authorId: message.authorId.toString('hex'),
   }
-
 }
 
 function convertTags(tags: { [key: string]: TagValue_1 } | undefined): {
