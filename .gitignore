@@ -58,3 +58,6 @@ jspm_packages/
 /dist
 /intermediate
 /generated
+
+# ignore docs directory for now
+/docs
