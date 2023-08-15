@@ -20,9 +20,9 @@ test('Bad docs throw when encoding', (t) => {
 
 test(`testing encoding of doc with minimal required values,
   then decoding and comparing the two objects`, async (t) => {
-  for (let { doc, expected } of goodDocsMinimal) {
+  for (const { doc, expected } of goodDocsMinimal) {
     const buf = encode(doc)
-    let decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
+    const decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
     t.deepEqual(
       decodedDoc,
       { ...doc, ...expected },
@@ -33,9 +33,9 @@ test(`testing encoding of doc with minimal required values,
 
 test(`testing encoding of doc with additional optional values,
   then decoding and comparing the two objects`, async (t) => {
-  for (let { doc, expected } of goodDocsCompleted) {
+  for (const { doc, expected } of goodDocsCompleted) {
     const buf = encode(doc)
-    let decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
+    const decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
     t.deepEqual(
       decodedDoc,
       { ...doc, ...expected },
@@ -46,13 +46,13 @@ test(`testing encoding of doc with additional optional values,
 
 test(`testing encoding of doc with additional extra values,
 then decoding and comparing the two objects - extra values shouldn't be present`, async (t) => {
-  for (let { doc, expected } of goodDocsCompleted) {
+  for (const { doc, expected } of goodDocsCompleted) {
     const buf = encode({
       ...doc,
       // @ts-expect-error
       extraFieldNotInSchema: 'whatever',
     })
-    let decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
+    const decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
     t.deepEqual(
       decodedDoc,
       { ...doc, ...expected },
