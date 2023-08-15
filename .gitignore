@@ -36,9 +36,6 @@ build/Release
 node_modules/
 jspm_packages/
 
-# typedoc documentation
-/docs
-
 # Optional npm cache directory
 .npm
 
@@ -61,3 +58,6 @@ jspm_packages/
 /dist
 /intermediate
 /generated
+
+# ignore docs directory for now
+/docs

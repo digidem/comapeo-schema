@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "files": ["src/index.ts"],
+  "exclude": [
+    "node_modules",
+    "examples",
+    "generated/proto/options.ts",
+    "generated/proto/google/protobuf/descriptor.ts",
+    "test",
+    "scripts"
+  ]
+}
