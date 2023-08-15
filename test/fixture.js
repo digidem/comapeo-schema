@@ -1,5 +1,4 @@
 import { randomBytes } from 'node:crypto'
-import { cachedDataVersionTag } from 'node:v8'
 
 // For stuff like dates or generated random Ids, so I can compare with an expected doc
 const date = new Date().toJSON()
