@@ -5,7 +5,6 @@ import { parseVersionId } from '../dist/index.js'
 import {
   goodDocsMinimal,
   goodDocsCompleted,
-  goodDocsWithExtraFields,
   badDocs,
 } from './fixtures/index.js'
 
@@ -53,10 +52,14 @@ test(`testing encoding of doc with additional optional values,
 
 test(`testing encoding of doc with additional extra values,
 then decoding and comparing the two objects - extra values shouldn't be present`, async (t) => {
-  for (let { doc, expected } of goodDocsWithExtraFields) {
+  for (let { doc, expected } of goodDocsCompleted) {
     let buf
     t.doesNotThrow(() => {
-      buf = encode(doc)
+      buf = encode({
+        ...doc,
+        // @ts-expect-error
+        extraFieldNotInSchema: 'whatever',
+      })
     }, `tested encoding of ${doc.schemaName}`)
     let decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
     t.deepEqual(
