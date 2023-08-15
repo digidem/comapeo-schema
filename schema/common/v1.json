@@ -34,6 +34,10 @@
       "items": {
         "type": "string"
       }
+    },
+    "deleted": {
+      "description": "",
+      "type": "boolean"
     }
   },
   "required": [
