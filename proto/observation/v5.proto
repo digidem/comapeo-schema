@@ -52,7 +52,7 @@ message Observation_5 {
         double altitude = 3;
         double heading = 4;
         double speed = 5;
-        double acurracy = 6;
+        double accuracy = 6;
       }
       optional Coords coords = 3;
     }
