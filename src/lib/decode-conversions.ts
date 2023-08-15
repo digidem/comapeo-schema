@@ -75,20 +75,21 @@ export const convertField: ConvertFunction<'field'> = (message, versionObj) => {
       tagKey: message.tagKey,
       label: message.label || message.tagKey,
       appearance:
-        message.appearance === 'UNRECOGNIZED'
-          ? 'multiline'
-          : message.appearance,
-      options: message.options.reduce<Exclude<FieldOptions, undefined>>(
-        (acc, { label, value }) => {
-          // Filter out any options where value is undefined (this would still be valid protobuf, but not valid for our code)
-          if (!value) return acc
-          const convertedValue = convertTagPrimitive(value)
-          if (typeof convertedValue === 'undefined') return acc
-          acc.push({ label, value: convertedValue })
-          return acc
-        },
-        []
-      ),
+        message.appearance === 'UNRECOGNIZED' ? undefined : message.appearance,
+      options:
+        message.options.length > 0
+          ? message.options.reduce<Exclude<FieldOptions, undefined>>(
+              (acc, { label, value }) => {
+                // Filter out any options where value is undefined (this would still be valid protobuf, but not valid for our code)
+                if (!value) return acc
+                const convertedValue = convertTagPrimitive(value)
+                if (typeof convertedValue === 'undefined') return acc
+                acc.push({ label, value: convertedValue })
+                return acc
+              },
+              []
+            )
+          : undefined,
     }
   }
 }

@@ -59,12 +59,7 @@ export const goodDocsMinimal = [
       label: 'my label',
       type: 'text',
     },
-    expected: {
-      appearance: 'multiline',
-      snakeCase: false,
-      options: [],
-      universal: false,
-    },
+    expected: {},
   },
   {
     doc: {
