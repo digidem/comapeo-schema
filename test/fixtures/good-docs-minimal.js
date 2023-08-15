@@ -2,8 +2,11 @@
 import { cachedValues } from './cached.js'
 
 /**
+ * The `expected` is a partial doc of the extra fields that we expect to be set
+ * by the encode/decode round-trip
+ *
  * @type {Array<{
- *   expected: import('../../dist/types').MapeoDoc,
+ *   expected: Partial<import('../../dist/types').MapeoDoc>,
  *   doc: import('../../dist/types').MapeoDoc
  * }>}
  */
@@ -21,18 +24,7 @@ export const goodDocsMinimal = [
       tags: {},
       metadata: {},
     },
-    expected: {
-      docId: cachedValues.docId,
-      versionId: cachedValues.versionId,
-      schemaName: 'observation',
-      createdAt: cachedValues.createdAt,
-      updatedAt: cachedValues.updatedAt,
-      links: [],
-      refs: [],
-      attachments: [],
-      tags: {},
-      metadata: {},
-    },
+    expected: {},
   },
   {
     doc: {
@@ -46,12 +38,6 @@ export const goodDocsMinimal = [
       name: 'myProject',
     },
     expected: {
-      docId: cachedValues.docId,
-      versionId: cachedValues.versionId,
-      schemaName: 'project',
-      createdAt: cachedValues.createdAt,
-      updatedAt: cachedValues.updatedAt,
-      links: [],
       defaultPresets: {
         point: [],
         area: [],
@@ -59,7 +45,6 @@ export const goodDocsMinimal = [
         line: [],
         relation: [],
       },
-      name: 'myProject',
     },
   },
   {
@@ -75,15 +60,6 @@ export const goodDocsMinimal = [
       type: 'text',
     },
     expected: {
-      docId: cachedValues.docId,
-      versionId: cachedValues.versionId,
-      schemaName: 'field',
-      createdAt: cachedValues.createdAt,
-      updatedAt: cachedValues.updatedAt,
-      links: [],
-      tagKey: 'myTagKey',
-      type: 'text',
-      label: 'my label', // see src/lib/decode-conversions.js:77
       appearance: 'multiline',
       snakeCase: false,
       options: [],
@@ -106,21 +82,7 @@ export const goodDocsMinimal = [
       fieldIds: [],
       terms: [],
     },
-    expected: {
-      docId: cachedValues.docId,
-      versionId: cachedValues.versionId,
-      schemaName: 'preset',
-      createdAt: cachedValues.createdAt,
-      updatedAt: cachedValues.updatedAt,
-      links: [],
-      name: 'myPreset',
-      geometry: ['point'],
-      tags: {},
-      addTags: {},
-      removeTags: {},
-      fieldIds: [],
-      terms: [],
-    },
+    expected: {},
   },
   {
     doc: {
@@ -139,22 +101,7 @@ export const goodDocsMinimal = [
       deviceIndex: 0,
       action: 'UNRECOGNIZED',
     },
-    expected: {
-      docId: cachedValues.docId,
-      versionId: cachedValues.versionId,
-      schemaName: 'role',
-      createdAt: cachedValues.createdAt,
-      updatedAt: cachedValues.updatedAt,
-      links: [],
-      role: 'author',
-      projectId: cachedValues.projectId,
-      action: 'UNRECOGNIZED',
-      signature: 'signature',
-      authorIndex: 0,
-      deviceIndex: 0,
-      authorId: cachedValues.authorId,
-      capabilityType: 'capability',
-    },
+    expected: {},
   },
   {
     doc: {
@@ -172,21 +119,7 @@ export const goodDocsMinimal = [
       authorIndex: 0,
       deviceIndex: 0,
     },
-    expected: {
-      docId: cachedValues.docId,
-      versionId: cachedValues.versionId,
-      schemaName: 'device',
-      createdAt: cachedValues.createdAt,
-      updatedAt: cachedValues.updatedAt,
-      links: [],
-      action: 'ban',
-      authorId: cachedValues.authorId,
-      projectId: cachedValues.projectId,
-      signature: 'mySignature',
-      authorIndex: 0,
-      deviceIndex: 0,
-      capabilityType: 'someCapability',
-    },
+    expected: {},
   },
   {
     doc: {
@@ -206,22 +139,6 @@ export const goodDocsMinimal = [
       authorIndex: 0,
       deviceIndex: 0,
     },
-    expected: {
-      docId: cachedValues.docId,
-      versionId: cachedValues.versionId,
-      schemaName: 'coreOwnership',
-      createdAt: cachedValues.createdAt,
-      updatedAt: cachedValues.updatedAt,
-      links: [],
-      action: 'remove',
-      coreId: cachedValues.coreId,
-      projectId: cachedValues.projectId,
-      storeType: 'blob',
-      signature: 'mySig',
-      authorIndex: 0,
-      deviceIndex: 0,
-      authorId: cachedValues.authorId,
-      capabilityType: 'someCapability',
-    },
+    expected: {},
   },
 ]

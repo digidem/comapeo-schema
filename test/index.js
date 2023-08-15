@@ -25,7 +25,7 @@ test(`testing encoding of doc with minimal required values,
     let decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
     t.deepEqual(
       decodedDoc,
-      expected,
+      { ...doc, ...expected },
       `tested deep equal of ${doc.schemaName} with only required values`
     )
   }
@@ -38,7 +38,7 @@ test(`testing encoding of doc with additional optional values,
     let decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
     t.deepEqual(
       decodedDoc,
-      expected,
+      { ...doc, ...expected },
       `tested deep equal of ${doc.schemaName} with additional values`
     )
   }
@@ -55,7 +55,7 @@ then decoding and comparing the two objects - extra values shouldn't be present`
     let decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
     t.deepEqual(
       decodedDoc,
-      expected,
+      { ...doc, ...expected },
       `tested deep equal of ${doc.schemaName} with extra - non valid - values`
     )
   }
