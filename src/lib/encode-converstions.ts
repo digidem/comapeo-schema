@@ -52,9 +52,6 @@ export const convertField: ConvertFunction<'field'> = (mapeoDoc) => {
     // fields on the protoObj that exist on mapeoDoc will be missed)
     ...mapeoDoc,
     // Set defaults for optional fields
-    appearance: mapeoDoc.appearance || 'multiline',
-    snakeCase: mapeoDoc.snakeCase || false,
-    universal: mapeoDoc.universal || false,
     options: mapeoDoc.options
       ? mapeoDoc.options.map((opt) => {
           return {

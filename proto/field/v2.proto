@@ -27,14 +27,14 @@ message Field_2 {
     multiline = 0;
     singleline = 1;
   }
-  Appearance appearance = 8;
-  bool snakeCase = 9;
+  optional Appearance appearance = 8;
+  optional bool snakeCase = 9;
   message Option {
     string label = 1;
     TagValue_1.PrimitiveValue value = 2;
   }
   repeated Option options = 10;
-  bool universal = 11;
+  optional bool universal = 11;
   optional string placeholder = 12;
   optional string helperText = 13;
 }

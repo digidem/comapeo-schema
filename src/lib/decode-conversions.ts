@@ -75,9 +75,7 @@ export const convertField: ConvertFunction<'field'> = (message, versionObj) => {
       tagKey: message.tagKey,
       label: message.label || message.tagKey,
       appearance:
-        message.appearance === 'UNRECOGNIZED'
-          ? 'multiline'
-          : message.appearance,
+        message.appearance === 'UNRECOGNIZED' ? undefined : message.appearance,
       options: message.options.reduce<Exclude<FieldOptions, undefined>>(
         (acc, { label, value }) => {
           // Filter out any options where value is undefined (this would still be valid protobuf, but not valid for our code)

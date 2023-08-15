@@ -60,10 +60,7 @@ export const goodDocsMinimal = [
       type: 'text',
     },
     expected: {
-      appearance: 'multiline',
-      snakeCase: false,
       options: [],
-      universal: false,
     },
   },
   {
