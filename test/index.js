@@ -3,28 +3,15 @@ import { fixtures } from './fixture.js'
 import { encode } from '../dist/encode.js'
 import { decode } from '../dist/decode.js'
 import { parseVersionId } from '../dist/lib/utils.js'
-import { and } from 'ajv/dist/compile/codegen/index.js'
-// import { randomBytes } from 'node:crypto'
 
-{
-  const { text, plan, doc } = fixtures.onlyId
-  test(text, async (t) => {
-    t.plan(plan)
+test('Bad docs throw when encoding', (t) => {
+  for (const { text, doc } of fixtures.badDocs) {
     t.throws(() => {
       encode(doc)
-    })
-  })
-}
-
-{
-  const { text, plan, doc } = fixtures.badDocName
-  test(text, async (t) => {
-    t.plan(plan)
-    t.throws(() => {
-      encode(doc)
-    })
-  })
-}
+    }, text)
+  }
+  t.end()
+})
 
 test(`testing encoding of doc with minimal required values,
   then decoding and comparing the two objects`, async (t) => {

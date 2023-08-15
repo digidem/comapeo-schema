@@ -28,26 +28,26 @@ const cachedValues = {
 }
 
 export const fixtures = {
-  onlyId: {
-    text: 'test encoding of record with missing fields',
-    plan: 1,
-    doc: { docId: randomBytes(32).toString('hex') },
-  },
-  badDocName: {
-    text: 'test encoding of wrong record type',
-    plan: 1,
-    doc: {
-      docId: cachedValues.docId,
-      versionId: cachedValues.versionId,
-      schemaName: 'observOtion',
-      createdAt: cachedValues.createdAt,
-      updatedAt: cachedValues.updatedAt,
-      links: [],
-      refs: [],
-      attachments: [],
-      tags: {},
+  badDocs: [
+    {
+      text: 'test encoding of record with missing fields',
+      doc: { docId: randomBytes(32).toString('hex') },
     },
-  },
+    {
+      text: 'test encoding of wrong record type',
+      doc: {
+        docId: cachedValues.docId,
+        versionId: cachedValues.versionId,
+        schemaName: 'observOtion',
+        createdAt: cachedValues.createdAt,
+        updatedAt: cachedValues.updatedAt,
+        links: [],
+        refs: [],
+        attachments: [],
+        tags: {},
+      },
+    },
+  ],
   /** @type {Array<{
    * expected:import('../dist/types').MapeoDoc,
    * doc: import('../dist/types').MapeoDoc}>
