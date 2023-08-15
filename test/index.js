@@ -1,12 +1,18 @@
+// @ts-check
 import test from 'tape'
-import { fixtures } from './fixture.js'
-import { encode } from '../dist/encode.js'
-import { decode } from '../dist/decode.js'
-import { parseVersionId } from '../dist/lib/utils.js'
+import { encode, decode } from '../dist/index.js'
+import { parseVersionId } from '../dist/index.js'
+import {
+  goodDocsMinimal,
+  goodDocsCompleted,
+  goodDocsWithExtraFields,
+  badDocs,
+} from './fixtures/index.js'
 
 test('Bad docs throw when encoding', (t) => {
-  for (const { text, doc } of fixtures.badDocs) {
+  for (const { text, doc } of badDocs) {
     t.throws(() => {
+      // @ts-expect-error
       encode(doc)
     }, text)
   }
@@ -15,7 +21,7 @@ test('Bad docs throw when encoding', (t) => {
 
 test(`testing encoding of doc with minimal required values,
   then decoding and comparing the two objects`, async (t) => {
-  for (let { doc, expected } of fixtures.goodDocsMinimal) {
+  for (let { doc, expected } of goodDocsMinimal) {
     let buf
     t.doesNotThrow(() => {
       buf = encode(doc)
@@ -31,7 +37,7 @@ test(`testing encoding of doc with minimal required values,
 
 test(`testing encoding of doc with additional optional values,
   then decoding and comparing the two objects`, async (t) => {
-  for (let { doc, expected } of fixtures.goodDocsCompleted) {
+  for (let { doc, expected } of goodDocsCompleted) {
     let buf
     t.doesNotThrow(() => {
       buf = encode(doc)
@@ -47,7 +53,7 @@ test(`testing encoding of doc with additional optional values,
 
 test(`testing encoding of doc with additional extra values,
 then decoding and comparing the two objects - extra values shouldn't be present`, async (t) => {
-  for (let { doc, expected } of fixtures.goodDocsWithExtraFields) {
+  for (let { doc, expected } of goodDocsWithExtraFields) {
     let buf
     t.doesNotThrow(() => {
       buf = encode(doc)
