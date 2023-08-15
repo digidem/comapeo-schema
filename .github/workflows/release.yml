@@ -32,9 +32,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
-      - name: Install buf cli
-        uses: bufbuild/buf-setup-action@v1.9.0
-      - run: buf --version
       - uses: nearform-actions/optic-release-automation-action@v4
         with:
           commit-message: "Release {version}"
