@@ -26,12 +26,22 @@ export const convertProject: ConvertFunction<'project'> = (mapeoDoc) => {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
     defaultPresets: {
-      point: (mapeoDoc.defaultPresets.point || []).map(p => Buffer.from(p,'hex')),
-      area: (mapeoDoc.defaultPresets.area || []).map(a => Buffer.from(a,'hex')),
-      vertex: (mapeoDoc.defaultPresets.area || []).map(v => Buffer.from(v,'hex')),
-      line: (mapeoDoc.defaultPresets.area || []).map(l => Buffer.from(l, 'hex')),
-      relation: (mapeoDoc.defaultPresets.area || []).map(r => Buffer.from(r, 'hex'))
-    }
+      point: (mapeoDoc.defaultPresets.point || []).map((p) =>
+        Buffer.from(p, 'hex')
+      ),
+      area: (mapeoDoc.defaultPresets.area || []).map((a) =>
+        Buffer.from(a, 'hex')
+      ),
+      vertex: (mapeoDoc.defaultPresets.vertex || []).map((v) =>
+        Buffer.from(v, 'hex')
+      ),
+      line: (mapeoDoc.defaultPresets.line || []).map((l) =>
+        Buffer.from(l, 'hex')
+      ),
+      relation: (mapeoDoc.defaultPresets.relation || []).map((r) =>
+        Buffer.from(r, 'hex')
+      ),
+    },
   }
 }
 
@@ -64,7 +74,7 @@ export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
     addTags: convertTags(mapeoDoc.addTags),
     removeTags: convertTags(mapeoDoc.removeTags),
     fieldIds: mapeoDoc.fieldIds.map((field) => Buffer.from(field, 'hex')),
-    iconId: mapeoDoc.icon ? Buffer.from(mapeoDoc.icon, 'hex') : undefined,
+    iconId: mapeoDoc.iconId ? Buffer.from(mapeoDoc.iconId, 'hex') : undefined,
   }
 }
 
@@ -94,26 +104,21 @@ export const convertObservation: ConvertFunction<'observation'> = (
   }
 }
 
-export const convertRole: ConvertFunction<'role'> = (
-  mapeoDoc
-) => {
+export const convertRole: ConvertFunction<'role'> = (mapeoDoc) => {
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
-    projectId: Buffer.from(mapeoDoc.projectId,'hex'),
-    authorId: Buffer.from(mapeoDoc.authorId,'hex')
-
+    projectId: Buffer.from(mapeoDoc.projectId, 'hex'),
+    authorId: Buffer.from(mapeoDoc.authorId, 'hex'),
   }
 }
 
-export const convertDevice: ConvertFunction<'device'> = (
-  mapeoDoc
-) => {
+export const convertDevice: ConvertFunction<'device'> = (mapeoDoc) => {
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
     authorId: Buffer.from(mapeoDoc.authorId, 'hex'),
-    projectId: Buffer.from(mapeoDoc.projectId, 'hex')
+    projectId: Buffer.from(mapeoDoc.projectId, 'hex'),
   }
 }
 
@@ -125,7 +130,7 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
     ...mapeoDoc,
     coreId: Buffer.from(mapeoDoc.coreId, 'hex'),
     projectId: Buffer.from(mapeoDoc.projectId, 'hex'),
-    authorId: Buffer.from(mapeoDoc.authorId,'hex')
+    authorId: Buffer.from(mapeoDoc.authorId, 'hex'),
   }
 }
 
@@ -145,14 +150,10 @@ function convertTags(tags: {
 }): {
   [key: string]: TagValue_1
 } {
-  return Object.keys(tags).reduce(
-    (acc: { [key: string]: TagValue_1 }, k: string) => {
-      return {
-        [k]: convertTagValue(tags[k]),
-      }
-    },
-    {}
-  )
+  return Object.keys(tags).reduce<{ [key: string]: TagValue_1 }>((acc, k) => {
+    acc[k] = convertTagValue(tags[k])
+    return acc
+  }, {})
 }
 
 function convertTagValue(tagValue: JsonTagValue): TagValue_1 {
