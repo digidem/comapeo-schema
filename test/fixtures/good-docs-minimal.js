@@ -1,5 +1,5 @@
 // @ts-check
-import { cachedValues } from './cached.js';
+import { cachedValues } from './cached.js'
 
 /**
  * @type {Array<{
@@ -19,6 +19,7 @@ export const goodDocsMinimal = [
       refs: [],
       attachments: [],
       tags: {},
+      metadata: {},
     },
     expected: {
       docId: cachedValues.docId,
@@ -70,6 +71,8 @@ export const goodDocsMinimal = [
       updatedAt: cachedValues.updatedAt,
       links: [],
       tagKey: 'myTagKey',
+      label: 'my label',
+      type: 'text',
     },
     expected: {
       docId: cachedValues.docId,
@@ -79,8 +82,8 @@ export const goodDocsMinimal = [
       updatedAt: cachedValues.updatedAt,
       links: [],
       tagKey: 'myTagKey',
-      type: 'UNRECOGNIZED',
-      label: 'myTagKey', // see src/lib/decode-conversions.js:77
+      type: 'text',
+      label: 'my label', // see src/lib/decode-conversions.js:77
       appearance: 'multiline',
       snakeCase: false,
       options: [],
@@ -132,6 +135,9 @@ export const goodDocsMinimal = [
       signature: 'signature',
       authorId: cachedValues.authorId,
       capabilityType: 'capability',
+      authorIndex: 0,
+      deviceIndex: 0,
+      action: 'UNRECOGNIZED',
     },
     expected: {
       docId: cachedValues.docId,
@@ -163,6 +169,8 @@ export const goodDocsMinimal = [
       projectId: cachedValues.projectId,
       signature: 'mySignature',
       capabilityType: 'someCapability',
+      authorIndex: 0,
+      deviceIndex: 0,
     },
     expected: {
       docId: cachedValues.docId,
@@ -195,6 +203,8 @@ export const goodDocsMinimal = [
       signature: 'mySig',
       authorId: cachedValues.authorId,
       capabilityType: 'someCapability',
+      authorIndex: 0,
+      deviceIndex: 0,
     },
     expected: {
       docId: cachedValues.docId,
@@ -214,4 +224,4 @@ export const goodDocsMinimal = [
       capabilityType: 'someCapability',
     },
   },
-],
+]

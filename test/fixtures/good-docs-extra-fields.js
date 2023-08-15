@@ -43,7 +43,7 @@ export const goodDocsWithExtraFields = [
             altitude: 0.8,
             heading: 1.2,
             speed: 0.7,
-            acurracy: 1.3,
+            accuracy: 1.3,
             OTHeRValue: 'Am I a Number?',
           },
         },
@@ -56,7 +56,7 @@ export const goodDocsWithExtraFields = [
             altitude: 1000.1,
             heading: 0.2,
             speed: 0.1,
-            acurracy: 8.3,
+            accuracy: 8.3,
           },
         },
         positionProvider: {
@@ -99,7 +99,7 @@ export const goodDocsWithExtraFields = [
             altitude: 0.8,
             heading: 1.2,
             speed: 0.7,
-            acurracy: 1.3,
+            accuracy: 1.3,
           },
         },
         lastSavedPosition: {
@@ -111,7 +111,7 @@ export const goodDocsWithExtraFields = [
             altitude: 1000.1,
             heading: 0.2,
             speed: 0.1,
-            acurracy: 8.3,
+            accuracy: 8.3,
           },
         },
         positionProvider: {
