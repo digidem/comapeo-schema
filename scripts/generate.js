@@ -2,13 +2,13 @@
 import fs from 'fs'
 import path from 'path'
 import { mkdirp } from 'mkdirp'
-import { execSync } from 'child_process'
 
 import { parseConfig } from './lib/parse-config.js'
 import { generateProtoTypes } from './lib/generate-proto-types.js'
 import { PROJECT_ROOT } from './lib/utils.js'
 import { generateConfig } from './lib/generate-config.js'
 import { readJSONSchema } from './lib/read-json-schema.js'
+import { validateJsonSchema } from './lib/validate-json-schema.js'
 import { generateValidations } from './lib/generate-validations.js'
 import { generateJSONSchemaTS } from './lib/generate-jsonschema-ts.js'
 import { generateEncodeDecode } from './lib/generate-encode-decode.js'
@@ -36,6 +36,11 @@ const configFile = generateConfig(config)
 fs.writeFileSync(path.join(GENERATED_DIRNAME, 'config.ts'), configFile)
 
 const jsonSchemas = readJSONSchema(config)
+
+// Check the schemas meet our specific criteria - currently no top-level null
+for (const schema of Object.values(jsonSchemas.merged)) {
+  validateJsonSchema(schema)
+}
 
 const validationCode = generateValidations(config, jsonSchemas)
 fs.writeFileSync(path.join(GENERATED_DIRNAME, 'validations.ts'), validationCode)
