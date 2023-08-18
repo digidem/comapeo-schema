@@ -23,4 +23,18 @@ export const badDocs = [
       metadata: {},
     },
   },
+  {
+    text: 'role doc with empty roleId',
+    /** @type {import('../../dist/index.js').Role} */
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      schemaName: 'role',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      links: [],
+      roleId: '',
+      fromIndex: 4,
+    },
+  },
 ]

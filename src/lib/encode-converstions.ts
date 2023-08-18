@@ -102,6 +102,10 @@ export const convertObservation: ConvertFunction<'observation'> = (
 }
 
 export const convertRole: ConvertFunction<'role'> = (mapeoDoc) => {
+  const roleId = Buffer.from(mapeoDoc.roleId, 'hex')
+  if (roleId.length === 0) {
+    throw new Error('Invalid roleId')
+  }
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
