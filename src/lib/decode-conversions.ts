@@ -135,7 +135,7 @@ export const convertRole: ConvertFunction<'role'> = (message, versionObj) => {
   }
 }
 
-export const convertDevice: ConvertFunction<'device'> = (
+export const convertDeviceInfo: ConvertFunction<'deviceInfo'> = (
   message,
   versionObj
 ) => {
@@ -144,8 +144,6 @@ export const convertDevice: ConvertFunction<'device'> = (
   return {
     ...jsonSchemaCommon,
     ...rest,
-    authorId: message.authorId.toString('hex'),
-    projectId: message.projectId.toString('hex'),
   }
 }
 

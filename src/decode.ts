@@ -15,8 +15,8 @@ import {
   convertObservation,
   convertPreset,
   convertRole,
-  convertDevice,
-  convertCoreOwnership
+  convertDeviceInfo,
+  convertCoreOwnership,
 } from './lib/decode-conversions.js'
 // @ts-ignore
 import * as cenc from 'compact-encoding'
@@ -60,11 +60,11 @@ export function decode(buf: Buffer, versionObj: VersionIdObject): MapeoDoc {
     case 'preset':
       return convertPreset(message, versionObj)
     case 'role':
-      return convertRole(message,versionObj)
-    case 'device':
-      return convertDevice(message,versionObj)
+      return convertRole(message, versionObj)
+    case 'deviceInfo':
+      return convertDeviceInfo(message, versionObj)
     case 'coreOwnership':
-      return convertCoreOwnership(message,versionObj)
+      return convertCoreOwnership(message, versionObj)
     default:
       const _exhaustiveCheck: never = message
       return message
