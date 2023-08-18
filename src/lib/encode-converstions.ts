@@ -105,8 +105,7 @@ export const convertRole: ConvertFunction<'role'> = (mapeoDoc) => {
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
-    projectId: Buffer.from(mapeoDoc.projectId, 'hex'),
-    authorId: Buffer.from(mapeoDoc.authorId, 'hex'),
+    roleId: Buffer.from(mapeoDoc.roleId, 'hex'),
   }
 }
 

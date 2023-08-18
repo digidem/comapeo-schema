@@ -123,14 +123,15 @@ export const convertPreset: ConvertFunction<'preset'> = (
 }
 
 export const convertRole: ConvertFunction<'role'> = (message, versionObj) => {
+  if (message.roleId.length === 0) {
+    throw new Error('Invalid roleId')
+  }
   const { common, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
     ...rest,
-    role: rest.role,
-    projectId: message.projectId.toString('hex'),
-    authorId: message.authorId.toString('hex'),
+    roleId: message.roleId.toString('hex'),
   }
 }
 
