@@ -1,4 +1,9 @@
-import { MapeoDoc, OmitUnion, SchemaName, ValidSchemaDef } from './types.js'
+import {
+  type MapeoDocInternal,
+  type OmitUnion,
+  type SchemaName,
+  type ValidSchemaDef,
+} from './types.js'
 import { currentSchemaVersions, dataTypeIds } from './config.js'
 // @ts-ignore
 import * as cenc from 'compact-encoding'
@@ -13,12 +18,15 @@ import {
   convertDeviceInfo,
   convertCoreOwnership,
 } from './lib/encode-converstions.js'
+import { CoreOwnership } from './index.js'
 
 /**
  * Encode a an object validated against a schema as a binary protobuf prefixed
  * with the encoded data type ID and schema version, to send to an hypercore.
  */
-export function encode(mapeoDoc: OmitUnion<MapeoDoc, 'versionId'>): Buffer {
+export function encode(
+  mapeoDoc: OmitUnion<MapeoDocInternal, 'versionId'>
+): Buffer {
   const { schemaName } = mapeoDoc
   const schemaVersion = currentSchemaVersions[schemaName]
   const schemaDef = { schemaName, schemaVersion }

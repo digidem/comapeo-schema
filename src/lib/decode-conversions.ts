@@ -12,6 +12,7 @@ import {
   type MapeoCommon,
   type TagValuePrimitive,
   type JsonTagValue,
+  type MapeoDocInternal,
 } from '../types.js'
 import { VersionIdObject, getVersionId } from './utils.js'
 
@@ -20,7 +21,7 @@ import { VersionIdObject, getVersionId } from './utils.js'
 type ConvertFunction<TSchemaName extends SchemaName> = (
   message: Extract<ProtoTypesWithSchemaInfo, { schemaName: TSchemaName }>,
   versionObj: VersionIdObject
-) => FilterBySchemaName<MapeoDoc, TSchemaName>
+) => FilterBySchemaName<MapeoDocInternal, TSchemaName>
 
 export const convertProject: ConvertFunction<'project'> = (
   message,
@@ -151,14 +152,29 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion, ...rest } = message
+  if (!message.coreSignatures) {
+    throw new Error('Invalid message: missing core signatures')
+  }
+  const {
+    common,
+    schemaVersion,
+    authCoreId,
+    configCoreId,
+    dataCoreId,
+    blobCoreId,
+    blobIndexCoreId,
+    ...rest
+  } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
     ...rest,
-    coreId: message.coreId.toString('hex'),
-    projectId: message.projectId.toString('hex'),
-    authorId: message.authorId.toString('hex'),
+    authCoreId: authCoreId.toString('hex'),
+    configCoreId: configCoreId.toString('hex'),
+    dataCoreId: dataCoreId.toString('hex'),
+    blobCoreId: blobCoreId.toString('hex'),
+    blobIndexCoreId: blobIndexCoreId.toString('hex'),
+    coreSignatures: message.coreSignatures,
   }
 }
 
