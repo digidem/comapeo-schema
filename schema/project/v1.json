@@ -24,6 +24,6 @@
       }
     }
   },
-  "required": ["schemaName", "name", "defaultPresets"],
+  "required": ["schemaName"],
   "additionalProperties": false
 }
