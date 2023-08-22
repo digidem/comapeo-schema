@@ -16,7 +16,7 @@ import {
   convertPreset,
   convertRole,
   convertDevice,
-  convertCoreOwnership
+  convertCoreOwnership,
 } from './lib/decode-conversions.js'
 // @ts-ignore
 import * as cenc from 'compact-encoding'
@@ -60,11 +60,11 @@ export function decode(buf: Buffer, versionObj: VersionIdObject): MapeoDoc {
     case 'preset':
       return convertPreset(message, versionObj)
     case 'role':
-      return convertRole(message,versionObj)
+      return convertRole(message, versionObj)
     case 'device':
-      return convertDevice(message,versionObj)
+      return convertDevice(message, versionObj)
     case 'coreOwnership':
-      return convertCoreOwnership(message,versionObj)
+      return convertCoreOwnership(message, versionObj)
     default:
       const _exhaustiveCheck: never = message
       return message
@@ -72,7 +72,6 @@ export function decode(buf: Buffer, versionObj: VersionIdObject): MapeoDoc {
 }
 
 /**
- * @private - exported for unit tests
  * Given a buffer, return a (valid) schemaVersion and schemaName
  * Will throw if dataTypeId and schema version is unknown
  */
