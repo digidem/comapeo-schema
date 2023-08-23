@@ -34,18 +34,8 @@ export const goodDocsMinimal = [
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
       links: [],
-      defaultPresets: {},
-      name: 'myProject',
     },
-    expected: {
-      defaultPresets: {
-        point: [],
-        area: [],
-        vertex: [],
-        line: [],
-        relation: [],
-      },
-    },
+    expected: {},
   },
   {
     doc: {

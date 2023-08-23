@@ -26,18 +26,20 @@ export const convertProject: ConvertFunction<'project'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion, ...rest } = message
+  const { common, schemaVersion, defaultPresets, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
     ...rest,
-    defaultPresets: {
-      point: message.defaultPresets?.point.map((p) => p.toString('hex')),
-      area: message.defaultPresets?.area.map((a) => a.toString('hex')),
-      vertex: message.defaultPresets?.vertex.map((v) => v.toString('hex')),
-      line: message.defaultPresets?.line.map((l) => l.toString('hex')),
-      relation: message.defaultPresets?.relation.map((r) => r.toString('hex')),
-    },
+    defaultPresets: defaultPresets
+      ? {
+          point: defaultPresets.point.map((p) => p.toString('hex')),
+          area: defaultPresets.area.map((a) => a.toString('hex')),
+          vertex: defaultPresets.vertex.map((v) => v.toString('hex')),
+          line: defaultPresets.line.map((l) => l.toString('hex')),
+          relation: defaultPresets.relation.map((r) => r.toString('hex')),
+        }
+      : undefined,
   }
 }
 
@@ -235,3 +237,12 @@ function convertCommon(
     updatedAt: common.updatedAt,
   }
 }
+
+/**
+ * Unsafe type for Object.entries - you must be sure that the object does not
+   have additional properties that are not defined in the type, e.g. when using
+   a const value
+ */
+export type Entries<T> = {
+  [K in keyof T]: [K, T[K]]
+}[keyof T][]

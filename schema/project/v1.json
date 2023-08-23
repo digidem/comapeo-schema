@@ -13,15 +13,17 @@
       "description": "name of the project",
       "type": "string"
     },
-    "defaultPresets":{
+    "defaultPresets": {
       "type": "object",
       "properties": {
-        "point": { "type": "array", "items":{"type":"string"}},
-        "area": { "type": "array", "items":{"type":"string"}},
-        "vertex": { "type": "array", "items":{"type":"string"}},
-        "line": { "type": "array", "items":{"type":"string"}},
-        "relation": { "type": "array", "items":{"type":"string"}}
-      }
+        "point": { "type": "array", "items": { "type": "string" } },
+        "area": { "type": "array", "items": { "type": "string" } },
+        "vertex": { "type": "array", "items": { "type": "string" } },
+        "line": { "type": "array", "items": { "type": "string" } },
+        "relation": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["point", "area", "vertex", "line", "relation"],
+      "additionalProperties": false
     }
   },
   "required": ["schemaName"],
