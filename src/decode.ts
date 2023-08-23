@@ -72,7 +72,6 @@ export function decode(buf: Buffer, versionObj: VersionIdObject): MapeoDoc {
 }
 
 /**
- * @private - exported for unit tests
  * Given a buffer, return a (valid) schemaVersion and schemaName
  * Will throw if dataTypeId and schema version is unknown
  */
