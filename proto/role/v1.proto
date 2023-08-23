@@ -13,16 +13,6 @@ message Role_1 {
 
   Common_1 common = 1;
 
-  string role = 5;
-  bytes projectId = 6;
-  enum Action {
-    role_set = 0;
-    role_unset = 1;
-  };
-  Action action = 7;
-  string signature = 8;
-  int32 authorIndex = 9;
-  int32 deviceIndex = 10;
-  bytes authorId = 11;
-  string capabilityType = 12;
+  bytes roleId = 5;
+  int32 fromIndex = 6;
 }

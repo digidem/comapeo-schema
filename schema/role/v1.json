@@ -8,32 +8,15 @@
       "type": "string",
       "const": "role"
     },
-    "role": {
-      "type": "string"
-    },
-    "projectId": {
-      "type": "string"
-    },
-    "action": {
+    "roleId": {
       "type": "string",
-      "enum": ["role_set", "role_unset", "UNRECOGNIZED"]
+      "description": "Unique identifier for role assigned to device with auth core ID equal to `docId` of this record"
     },
-    "signature": {
-      "type": "string"
-    },
-    "authorIndex": {
-      "type": "integer"
-    },
-    "deviceIndex": {
-      "type": "integer"
-    },
-    "authorId": {
-      "type": "string"
-    },
-    "capabilityType": {
-      "type": "string"
+    "fromIndex": {
+      "type": "number",
+      "description": "This is the index of the auth core that this role applies to (identified by the `docId`) to apply this role from. E.g. documents in the auth core assigned this role from this index will be evaluated according to this role."
     }
   },
-  "required": ["schemaName", "role", "projectId", "action", "signature", "authorIndex", "deviceIndex", "authorId", "capabilityType"],
+  "required": ["schemaName", "roleId", "fromIndex"],
   "additionalProperties": false
 }
