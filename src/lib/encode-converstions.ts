@@ -22,26 +22,17 @@ type ConvertFunction<TSchemaName extends SchemaName> = (
 ) => CurrentProtoTypes[TSchemaName]
 
 export const convertProject: ConvertFunction<'project'> = (mapeoDoc) => {
+  const { defaultPresets } = mapeoDoc
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
-    defaultPresets: mapeoDoc.defaultPresets
+    defaultPresets: defaultPresets
       ? {
-          point: (mapeoDoc.defaultPresets.point || []).map((p) =>
-            Buffer.from(p, 'hex')
-          ),
-          area: (mapeoDoc.defaultPresets.area || []).map((a) =>
-            Buffer.from(a, 'hex')
-          ),
-          vertex: (mapeoDoc.defaultPresets.vertex || []).map((v) =>
-            Buffer.from(v, 'hex')
-          ),
-          line: (mapeoDoc.defaultPresets.line || []).map((l) =>
-            Buffer.from(l, 'hex')
-          ),
-          relation: (mapeoDoc.defaultPresets.relation || []).map((r) =>
-            Buffer.from(r, 'hex')
-          ),
+          point: defaultPresets.point.map((p) => Buffer.from(p, 'hex')),
+          area: defaultPresets.area.map((a) => Buffer.from(a, 'hex')),
+          vertex: defaultPresets.vertex.map((v) => Buffer.from(v, 'hex')),
+          line: defaultPresets.line.map((l) => Buffer.from(l, 'hex')),
+          relation: defaultPresets.relation.map((r) => Buffer.from(r, 'hex')),
         }
       : undefined,
   }
