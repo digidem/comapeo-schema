@@ -21,28 +21,29 @@ type ConvertFunction<TSchemaName extends SchemaName> = (
   >
 ) => CurrentProtoTypes[TSchemaName]
 
-/* @ts-ignore TODO: resolve "not assignable to type 'ConvertFunction<"project">" */
 export const convertProject: ConvertFunction<'project'> = (mapeoDoc) => {
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
-    defaultPresets: {
-      point: (mapeoDoc.defaultPresets?.point || []).map((p) =>
-        Buffer.from(p, 'hex')
-      ),
-      area: (mapeoDoc.defaultPresets?.area || []).map((a) =>
-        Buffer.from(a, 'hex')
-      ),
-      vertex: (mapeoDoc.defaultPresets?.vertex || []).map((v) =>
-        Buffer.from(v, 'hex')
-      ),
-      line: (mapeoDoc.defaultPresets?.line || []).map((l) =>
-        Buffer.from(l, 'hex')
-      ),
-      relation: (mapeoDoc.defaultPresets?.relation || []).map((r) =>
-        Buffer.from(r, 'hex')
-      ),
-    },
+    defaultPresets: mapeoDoc.defaultPresets
+      ? {
+          point: (mapeoDoc.defaultPresets.point || []).map((p) =>
+            Buffer.from(p, 'hex')
+          ),
+          area: (mapeoDoc.defaultPresets.area || []).map((a) =>
+            Buffer.from(a, 'hex')
+          ),
+          vertex: (mapeoDoc.defaultPresets.vertex || []).map((v) =>
+            Buffer.from(v, 'hex')
+          ),
+          line: (mapeoDoc.defaultPresets.line || []).map((l) =>
+            Buffer.from(l, 'hex')
+          ),
+          relation: (mapeoDoc.defaultPresets.relation || []).map((r) =>
+            Buffer.from(r, 'hex')
+          ),
+        }
+      : undefined,
   }
 }
 

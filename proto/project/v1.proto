@@ -20,7 +20,7 @@ message Project_1 {
     repeated bytes relation = 5;
   };
 
-  DefaultPresets defaultPresets = 2;
+  optional DefaultPresets defaultPresets = 2;
 
-  string name = 5;
+  optional string name = 5;
 }
