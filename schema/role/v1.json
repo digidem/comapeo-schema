@@ -14,7 +14,7 @@
     },
     "fromIndex": {
       "type": "number",
-      "description": "From what index of the core that this role applies to (identified by the `docId`) does this roleId apply?"
+      "description": "This is the index of the auth core that this role applies to (identified by the `docId`) to apply this role from. E.g. documents in the auth core assigned this role from this index will be evaluated according to this role."
     }
   },
   "required": ["schemaName", "roleId", "fromIndex"],
