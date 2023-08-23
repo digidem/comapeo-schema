@@ -1,10 +1,10 @@
 import { ProtoTypes } from './proto/types.js'
 import {
-  type MapeoDoc,
   type ProtoTypesWithSchemaInfo,
   type SchemaName,
   type DataTypeId,
   type ValidSchemaDef,
+  type MapeoDocInternal,
 } from './types.js'
 
 import { Decode } from './proto/index.js'
@@ -37,7 +37,10 @@ for (const [schemaName, dataTypeId] of Object.entries(dataTypeIds) as Array<
  * @param buf Buffer to be decoded
  * @param versionObj public key (coreKey) of the core where this block is stored, and the index of the block in the core.
  * */
-export function decode(buf: Buffer, versionObj: VersionIdObject): MapeoDoc {
+export function decode(
+  buf: Buffer,
+  versionObj: VersionIdObject
+): MapeoDocInternal {
   const schemaDef = decodeBlockPrefix(buf)
 
   const encodedMsg = buf.subarray(

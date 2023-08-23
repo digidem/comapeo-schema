@@ -5,7 +5,7 @@ import { cachedValues } from './cached.js'
 /**
  * @type {Array<{
  *   expected: Partial<import('../../dist/types').MapeoDoc>,
- *   doc: import('../../dist/types').MapeoDoc
+ *   doc: import('../../dist/types').MapeoDocInternal
  * }>}
  */
 export const goodDocsCompleted = [
@@ -168,15 +168,19 @@ export const goodDocsCompleted = [
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
       links: [],
-      action: 'remove',
-      coreId: cachedValues.coreId,
-      projectId: cachedValues.projectId,
-      storeType: 'blob',
-      signature: 'mySig',
-      authorIndex: 100,
-      deviceIndex: 2,
-      authorId: cachedValues.authorId,
-      capabilityType: 'someCapability',
+      authCoreId: Buffer.from('authCoreId').toString('hex'),
+      configCoreId: Buffer.from('configCoreId').toString('hex'),
+      dataCoreId: Buffer.from('dataCoreId').toString('hex'),
+      blobCoreId: Buffer.from('blobCoreId').toString('hex'),
+      blobIndexCoreId: Buffer.from('blobIndexCoreId').toString('hex'),
+      coreSignatures: {
+        auth: Buffer.from('auth'),
+        config: Buffer.from('config'),
+        data: Buffer.from('data'),
+        blob: Buffer.from('blob'),
+        blobIndex: Buffer.from('blobIndex'),
+      },
+      identitySignature: Buffer.from('identity'),
     },
     expected: {},
   },

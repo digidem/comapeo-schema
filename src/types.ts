@@ -1,6 +1,7 @@
 // Shared types
 import { type ProtoTypesWithSchemaInfo as AllProtoTypesWithSchemaInfo } from './proto/types.js'
 import {
+  CoreOwnership,
   type MapeoDoc as AllMapeoDocs,
   type MapeoValue as AllMapeoValues,
   type MapeoCommon,
@@ -52,9 +53,22 @@ export type MapeoValue = FilterBySchemaName<
   AllMapeoValues,
   SupportedSchemaNames
 >
+/** The decode and encode functions expect core ownership signatures as buffers,
+ * but these are not included in the JSON schema definitions because they are
+ * stripped before they are indexed */
+export type MapeoDocInternal =
+  | Exclude<MapeoDoc, CoreOwnership>
+  | (CoreOwnership & CoreOwnershipSignatures)
 
 /** Union of all valid data type ids */
 export type DataTypeId = Values<typeof dataTypeIds>
+
+type Namespace = 'auth' | 'config' | 'data' | 'blob' | 'blobIndex'
+
+export type CoreOwnershipSignatures = {
+  coreSignatures: Record<Namespace, Buffer>
+  identitySignature: Buffer
+}
 
 // HELPER TYPES
 /**

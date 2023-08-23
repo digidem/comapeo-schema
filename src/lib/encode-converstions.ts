@@ -1,22 +1,24 @@
 import { CurrentProtoTypes } from '../proto/types.js'
 import {
-  MapeoDoc,
   ProtoTypesWithSchemaInfo,
   SchemaName,
   MapeoCommon,
   TagValuePrimitive,
   JsonTagValue,
   OmitUnion,
+  CoreOwnershipSignatures,
+  MapeoDocInternal,
 } from '../types.js'
 import { TagValue_1, type TagValue_1_PrimitiveValue } from '../proto/tags/v1.js'
 import { Observation_5_Metadata } from '../proto/observation/v5.js'
 import { parseVersionId } from './utils.js'
+import { CoreOwnership } from '../index.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
 type ConvertFunction<TSchemaName extends SchemaName> = (
   mapeoDoc: Extract<
-    OmitUnion<MapeoDoc, 'versionId'>,
+    OmitUnion<MapeoDocInternal, 'versionId'>,
     { schemaName: TSchemaName }
   >
 ) => CurrentProtoTypes[TSchemaName]
@@ -120,15 +122,17 @@ export const convertDeviceInfo: ConvertFunction<'deviceInfo'> = (mapeoDoc) => {
   }
 }
 
-export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
-  mapeoDoc
-) => {
+export const convertCoreOwnership = (
+  mapeoDoc: Omit<CoreOwnership, 'versionId'> & CoreOwnershipSignatures
+): CurrentProtoTypes['coreOwnership'] => {
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
-    coreId: Buffer.from(mapeoDoc.coreId, 'hex'),
-    projectId: Buffer.from(mapeoDoc.projectId, 'hex'),
-    authorId: Buffer.from(mapeoDoc.authorId, 'hex'),
+    authCoreId: Buffer.from(mapeoDoc.authCoreId, 'hex'),
+    configCoreId: Buffer.from(mapeoDoc.configCoreId, 'hex'),
+    dataCoreId: Buffer.from(mapeoDoc.dataCoreId, 'hex'),
+    blobCoreId: Buffer.from(mapeoDoc.blobCoreId, 'hex'),
+    blobIndexCoreId: Buffer.from(mapeoDoc.blobIndexCoreId, 'hex'),
   }
 }
 
