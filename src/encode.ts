@@ -10,7 +10,7 @@ import {
   convertPreset,
   convertProject,
   convertRole,
-  convertDevice,
+  convertDeviceInfo,
   convertCoreOwnership,
 } from './lib/encode-converstions.js'
 
@@ -54,8 +54,8 @@ export function encode(mapeoDoc: OmitUnion<MapeoDoc, 'versionId'>): Buffer {
       protobuf = Encode[mapeoDoc.schemaName](message).finish()
       break
     }
-    case 'device': {
-      const message = convertDevice(mapeoDoc)
+    case 'deviceInfo': {
+      const message = convertDeviceInfo(mapeoDoc)
       protobuf = Encode[mapeoDoc.schemaName](message).finish()
       break
     }

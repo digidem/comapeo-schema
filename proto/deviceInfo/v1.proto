@@ -6,18 +6,12 @@ import "google/protobuf/timestamp.proto";
 import "common/v1.proto";
 import "options.proto";
 
-message Device_1 {
+message DeviceInfo_1 {
   // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
   option (dataTypeId) = "e96e6c68fcc0";
-  option (schemaName) = "device";
+  option (schemaName) = "deviceInfo";
 
   Common_1 common = 1;
 
-  string action = 5;
-  bytes authorId = 6;
-  bytes projectId = 7;
-  string signature = 8;
-  int32 authorIndex = 9;
-  int32 deviceIndex = 10;
-  string capabilityType = 11;
+  string name = 5;
 }

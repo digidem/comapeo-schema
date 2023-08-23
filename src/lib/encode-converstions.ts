@@ -113,12 +113,10 @@ export const convertRole: ConvertFunction<'role'> = (mapeoDoc) => {
   }
 }
 
-export const convertDevice: ConvertFunction<'device'> = (mapeoDoc) => {
+export const convertDeviceInfo: ConvertFunction<'deviceInfo'> = (mapeoDoc) => {
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
-    authorId: Buffer.from(mapeoDoc.authorId, 'hex'),
-    projectId: Buffer.from(mapeoDoc.projectId, 'hex'),
   }
 }
 

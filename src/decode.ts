@@ -15,7 +15,7 @@ import {
   convertObservation,
   convertPreset,
   convertRole,
-  convertDevice,
+  convertDeviceInfo,
   convertCoreOwnership,
 } from './lib/decode-conversions.js'
 // @ts-ignore
@@ -61,8 +61,8 @@ export function decode(buf: Buffer, versionObj: VersionIdObject): MapeoDoc {
       return convertPreset(message, versionObj)
     case 'role':
       return convertRole(message, versionObj)
-    case 'device':
-      return convertDevice(message, versionObj)
+    case 'deviceInfo':
+      return convertDeviceInfo(message, versionObj)
     case 'coreOwnership':
       return convertCoreOwnership(message, versionObj)
     default:
