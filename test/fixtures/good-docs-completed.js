@@ -71,7 +71,7 @@ export const goodDocsCompleted = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
-      schemaName: 'project',
+      schemaName: 'projectSettings',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
       links: [],

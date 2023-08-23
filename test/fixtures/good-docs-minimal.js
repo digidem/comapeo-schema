@@ -30,7 +30,7 @@ export const goodDocsMinimal = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
-      schemaName: 'project',
+      schemaName: 'projectSettings',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
       links: [],

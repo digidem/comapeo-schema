@@ -7,10 +7,10 @@ import "options.proto";
 
 // Same as v1, created to test forward compatibility
 
-message Project_2 {
+message ProjectSettings_2 {
   // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
   option (dataTypeId) = "626b45fe2942";
-  option (schemaName) = "project";
+  option (schemaName) = "projectSettings";
 
   Common_1 common = 1;
 

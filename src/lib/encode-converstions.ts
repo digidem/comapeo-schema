@@ -23,7 +23,9 @@ type ConvertFunction<TSchemaName extends SchemaName> = (
   >
 ) => CurrentProtoTypes[TSchemaName]
 
-export const convertProject: ConvertFunction<'project'> = (mapeoDoc) => {
+export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
+  mapeoDoc
+) => {
   const { defaultPresets } = mapeoDoc
   return {
     common: convertCommon(mapeoDoc),
