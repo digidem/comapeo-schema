@@ -10,3 +10,4 @@ export {
 
 export * from './schema/index.js'
 export * from './schemas.js'
+export { type MapeoDocInternal } from './types.js'
