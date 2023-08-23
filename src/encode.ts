@@ -13,7 +13,7 @@ import {
   convertField,
   convertObservation,
   convertPreset,
-  convertProject,
+  convertProjectSettings,
   convertRole,
   convertDeviceInfo,
   convertCoreOwnership,
@@ -47,8 +47,8 @@ export function encode(
       protobuf = Encode[mapeoDoc.schemaName](message).finish()
       break
     }
-    case 'project': {
-      const message = convertProject(mapeoDoc)
+    case 'projectSettings': {
+      const message = convertProjectSettings(mapeoDoc)
       protobuf = Encode[mapeoDoc.schemaName](message).finish()
       break
     }

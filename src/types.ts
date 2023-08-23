@@ -10,7 +10,7 @@ import { dataTypeIds } from './config.js'
 
 /** Temporary: once we have completed this module everything should be supported */
 type SupportedSchemaNames =
-  | 'project'
+  | 'projectSettings'
   | 'observation'
   | 'field'
   | 'preset'

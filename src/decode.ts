@@ -10,7 +10,7 @@ import {
 import { Decode } from './proto/index.js'
 import { dataTypeIds, knownSchemaVersions } from './config.js'
 import {
-  convertProject,
+  convertProjectSettings,
   convertField,
   convertObservation,
   convertPreset,
@@ -54,8 +54,8 @@ export function decode(
   const message = mutatingSetSchemaDef(messageWithoutSchemaInfo, schemaDef)
 
   switch (message.schemaName) {
-    case 'project':
-      return convertProject(message, versionObj)
+    case 'projectSettings':
+      return convertProjectSettings(message, versionObj)
     case 'observation':
       return convertObservation(message, versionObj)
     case 'field':

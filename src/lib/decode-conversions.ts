@@ -23,7 +23,7 @@ type ConvertFunction<TSchemaName extends SchemaName> = (
   versionObj: VersionIdObject
 ) => FilterBySchemaName<MapeoDocInternal, TSchemaName>
 
-export const convertProject: ConvertFunction<'project'> = (
+export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
   message,
   versionObj
 ) => {
