@@ -1,22 +1,22 @@
 import { ProtoTypes } from './proto/types.js'
 import {
-  type MapeoDoc,
   type ProtoTypesWithSchemaInfo,
   type SchemaName,
   type DataTypeId,
   type ValidSchemaDef,
+  type MapeoDocInternal,
 } from './types.js'
 
 import { Decode } from './proto/index.js'
 import { dataTypeIds, knownSchemaVersions } from './config.js'
 import {
-  convertProject,
+  convertProjectSettings,
   convertField,
   convertObservation,
   convertPreset,
   convertRole,
-  convertDevice,
-  convertCoreOwnership
+  convertDeviceInfo,
+  convertCoreOwnership,
 } from './lib/decode-conversions.js'
 // @ts-ignore
 import * as cenc from 'compact-encoding'
@@ -37,7 +37,10 @@ for (const [schemaName, dataTypeId] of Object.entries(dataTypeIds) as Array<
  * @param buf Buffer to be decoded
  * @param versionObj public key (coreKey) of the core where this block is stored, and the index of the block in the core.
  * */
-export function decode(buf: Buffer, versionObj: VersionIdObject): MapeoDoc {
+export function decode(
+  buf: Buffer,
+  versionObj: VersionIdObject
+): MapeoDocInternal {
   const schemaDef = decodeBlockPrefix(buf)
 
   const encodedMsg = buf.subarray(
@@ -51,8 +54,8 @@ export function decode(buf: Buffer, versionObj: VersionIdObject): MapeoDoc {
   const message = mutatingSetSchemaDef(messageWithoutSchemaInfo, schemaDef)
 
   switch (message.schemaName) {
-    case 'project':
-      return convertProject(message, versionObj)
+    case 'projectSettings':
+      return convertProjectSettings(message, versionObj)
     case 'observation':
       return convertObservation(message, versionObj)
     case 'field':
@@ -60,11 +63,11 @@ export function decode(buf: Buffer, versionObj: VersionIdObject): MapeoDoc {
     case 'preset':
       return convertPreset(message, versionObj)
     case 'role':
-      return convertRole(message,versionObj)
-    case 'device':
-      return convertDevice(message,versionObj)
+      return convertRole(message, versionObj)
+    case 'deviceInfo':
+      return convertDeviceInfo(message, versionObj)
     case 'coreOwnership':
-      return convertCoreOwnership(message,versionObj)
+      return convertCoreOwnership(message, versionObj)
     default:
       const _exhaustiveCheck: never = message
       return message
@@ -72,7 +75,6 @@ export function decode(buf: Buffer, versionObj: VersionIdObject): MapeoDoc {
 }
 
 /**
- * @private - exported for unit tests
  * Given a buffer, return a (valid) schemaVersion and schemaName
  * Will throw if dataTypeId and schema version is unknown
  */

@@ -2,23 +2,40 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "http://mapeo.world/schemas/coreOwnership/v1.json",
   "title": "CoreOwnership",
+  "description": "Which cores belong to which identity key?",
   "type": "object",
   "properties": {
     "schemaName": {
       "type": "string",
       "const": "coreOwnership"
     },
-    "action": {
-      "type": "string"
+    "authCoreId": {
+      "type": "string",
+      "description": "Hex-encoded key of auth store writer core"
     },
-    "coreId": { "type": "string" },
-    "projectId": { "type": "string" },
-    "storeType": { "type": "string" },
-    "signature": { "type": "string" },
-    "authorIndex": { "type": "integer" },
-    "deviceIndex": { "type": "integer" },
-    "authorId": {"type": "string"},
-    "capabilityType": {"type": "string"}
+    "configCoreId": {
+      "type": "string",
+      "description": "Hex-encoded key of config store writer core"
+    },
+    "dataCoreId": {
+      "type": "string",
+      "description": "Hex-encoded key of data store writer core"
+    },
+    "blobCoreId": {
+      "type": "string",
+      "description": "Hex-encoded key of blob store writer core"
+    },
+    "blobIndexCoreId": {
+      "type": "string",
+      "description": "Hex-encoded key of blobIndex store writer core"
+    }
   },
-  "required": ["schemaName", "action", "coreId", "projectId", "storeType", "signature", "authorIndex", "deviceIndex", "authorId", "capabilityType"]
+  "required": [
+    "schemaName",
+    "authCoreId",
+    "configCoreId",
+    "dataCoreId",
+    "blobCoreId",
+    "blobIndexCoreId"
+  ]
 }

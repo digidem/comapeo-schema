@@ -62,9 +62,17 @@ then decoding and comparing the two objects - extra values shouldn't be present`
 })
 
 /**
+ * Remove undefined properties (deeply) from an object, by round-tripping to
+ * JSON. Also handles Buffers via JSON.parse reviver
+ *
  * @param {object} obj
  * @return {object}
  * */
 function stripUndef(obj) {
-  return JSON.parse(JSON.stringify(obj))
+  return JSON.parse(JSON.stringify(obj), (key, value) => {
+    if (value.type === 'Buffer') {
+      return Buffer.from(value.data)
+    }
+    return value
+  })
 }

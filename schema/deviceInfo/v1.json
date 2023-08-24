@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://mapeo.world/schemas/device/v1.json",
+  "title": "Device Info",
+  "type": "object",
+  "properties": {
+    "schemaName": {
+      "type": "string",
+      "const": "deviceInfo"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the device"
+    }
+  },
+  "required": ["schemaName", "name"],
+  "additionalProperties": false
+}

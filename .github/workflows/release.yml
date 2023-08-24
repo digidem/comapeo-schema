@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       semver:
-        description: "The semver to use"
+        description: 'The semver to use'
         required: true
-        default: "patch"
+        default: 'patch'
         type: choice
         options:
           - auto
@@ -34,16 +34,16 @@ jobs:
           node-version: 18
       - uses: nearform-actions/optic-release-automation-action@v4
         with:
-          commit-message: "Release {version}"
+          commit-message: 'Release {version}'
           sync-semver-tags: true
-          access: "public"
+          access: 'public'
           # This prefix is added before the prerelease number, e.g. `v3.0.0-next.0`
-          prerelease-prefix: "next"
+          prerelease-prefix: 'next'
           semver: ${{ github.event.inputs.semver }}
           # Prereleases are published under the `next` npm dist-tag
           npm-tag: ${{ startsWith(github.event.inputs.semver, 'pre') && 'next' || 'latest' }}
-          # Don't notify linked issues for pre-releases
-          notify-linked-issues: ${{ !startsWith(github.event.inputs.semver, 'pre') }}
+          # Don't notify linked issues
+          notify-linked-issues: false
           # optional: set this secret in your repo config for publishing to NPM
           npm-token: ${{ secrets.NPM_TOKEN }}
           build-command: |

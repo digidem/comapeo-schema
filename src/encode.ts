@@ -1,4 +1,9 @@
-import { MapeoDoc, OmitUnion, SchemaName, ValidSchemaDef } from './types.js'
+import {
+  type MapeoDocInternal,
+  type OmitUnion,
+  type SchemaName,
+  type ValidSchemaDef,
+} from './types.js'
 import { currentSchemaVersions, dataTypeIds } from './config.js'
 // @ts-ignore
 import * as cenc from 'compact-encoding'
@@ -8,17 +13,20 @@ import {
   convertField,
   convertObservation,
   convertPreset,
-  convertProject,
+  convertProjectSettings,
   convertRole,
-  convertDevice,
+  convertDeviceInfo,
   convertCoreOwnership,
 } from './lib/encode-converstions.js'
+import { CoreOwnership } from './index.js'
 
 /**
  * Encode a an object validated against a schema as a binary protobuf prefixed
  * with the encoded data type ID and schema version, to send to an hypercore.
  */
-export function encode(mapeoDoc: OmitUnion<MapeoDoc, 'versionId'>): Buffer {
+export function encode(
+  mapeoDoc: OmitUnion<MapeoDocInternal, 'versionId'>
+): Buffer {
   const { schemaName } = mapeoDoc
   const schemaVersion = currentSchemaVersions[schemaName]
   const schemaDef = { schemaName, schemaVersion }
@@ -39,8 +47,8 @@ export function encode(mapeoDoc: OmitUnion<MapeoDoc, 'versionId'>): Buffer {
       protobuf = Encode[mapeoDoc.schemaName](message).finish()
       break
     }
-    case 'project': {
-      const message = convertProject(mapeoDoc)
+    case 'projectSettings': {
+      const message = convertProjectSettings(mapeoDoc)
       protobuf = Encode[mapeoDoc.schemaName](message).finish()
       break
     }
@@ -54,8 +62,8 @@ export function encode(mapeoDoc: OmitUnion<MapeoDoc, 'versionId'>): Buffer {
       protobuf = Encode[mapeoDoc.schemaName](message).finish()
       break
     }
-    case 'device': {
-      const message = convertDevice(mapeoDoc)
+    case 'deviceInfo': {
+      const message = convertDeviceInfo(mapeoDoc)
       protobuf = Encode[mapeoDoc.schemaName](message).finish()
       break
     }

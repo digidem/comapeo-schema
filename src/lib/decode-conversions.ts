@@ -12,6 +12,7 @@ import {
   type MapeoCommon,
   type TagValuePrimitive,
   type JsonTagValue,
+  type MapeoDocInternal,
 } from '../types.js'
 import { VersionIdObject, getVersionId } from './utils.js'
 
@@ -20,24 +21,26 @@ import { VersionIdObject, getVersionId } from './utils.js'
 type ConvertFunction<TSchemaName extends SchemaName> = (
   message: Extract<ProtoTypesWithSchemaInfo, { schemaName: TSchemaName }>,
   versionObj: VersionIdObject
-) => FilterBySchemaName<MapeoDoc, TSchemaName>
+) => FilterBySchemaName<MapeoDocInternal, TSchemaName>
 
-export const convertProject: ConvertFunction<'project'> = (
+export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion, ...rest } = message
+  const { common, schemaVersion, defaultPresets, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
     ...rest,
-    defaultPresets: {
-      point: message.defaultPresets?.point.map((p) => p.toString('hex')),
-      area: message.defaultPresets?.area.map((a) => a.toString('hex')),
-      vertex: message.defaultPresets?.vertex.map((v) => v.toString('hex')),
-      line: message.defaultPresets?.line.map((l) => l.toString('hex')),
-      relation: message.defaultPresets?.relation.map((r) => r.toString('hex')),
-    },
+    defaultPresets: defaultPresets
+      ? {
+          point: defaultPresets.point.map((p) => p.toString('hex')),
+          area: defaultPresets.area.map((a) => a.toString('hex')),
+          vertex: defaultPresets.vertex.map((v) => v.toString('hex')),
+          line: defaultPresets.line.map((l) => l.toString('hex')),
+          relation: defaultPresets.relation.map((r) => r.toString('hex')),
+        }
+      : undefined,
   }
 }
 
@@ -123,18 +126,19 @@ export const convertPreset: ConvertFunction<'preset'> = (
 }
 
 export const convertRole: ConvertFunction<'role'> = (message, versionObj) => {
+  if (message.roleId.length === 0) {
+    throw new Error('Invalid roleId')
+  }
   const { common, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
     ...rest,
-    role: rest.role,
-    projectId: message.projectId.toString('hex'),
-    authorId: message.authorId.toString('hex'),
+    roleId: message.roleId.toString('hex'),
   }
 }
 
-export const convertDevice: ConvertFunction<'device'> = (
+export const convertDeviceInfo: ConvertFunction<'deviceInfo'> = (
   message,
   versionObj
 ) => {
@@ -143,8 +147,6 @@ export const convertDevice: ConvertFunction<'device'> = (
   return {
     ...jsonSchemaCommon,
     ...rest,
-    authorId: message.authorId.toString('hex'),
-    projectId: message.projectId.toString('hex'),
   }
 }
 
@@ -152,14 +154,29 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion, ...rest } = message
+  if (!message.coreSignatures) {
+    throw new Error('Invalid message: missing core signatures')
+  }
+  const {
+    common,
+    schemaVersion,
+    authCoreId,
+    configCoreId,
+    dataCoreId,
+    blobCoreId,
+    blobIndexCoreId,
+    ...rest
+  } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
     ...rest,
-    coreId: message.coreId.toString('hex'),
-    projectId: message.projectId.toString('hex'),
-    authorId: message.authorId.toString('hex'),
+    authCoreId: authCoreId.toString('hex'),
+    configCoreId: configCoreId.toString('hex'),
+    dataCoreId: dataCoreId.toString('hex'),
+    blobCoreId: blobCoreId.toString('hex'),
+    blobIndexCoreId: blobIndexCoreId.toString('hex'),
+    coreSignatures: message.coreSignatures,
   }
 }
 

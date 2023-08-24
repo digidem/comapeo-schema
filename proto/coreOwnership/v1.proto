@@ -13,13 +13,19 @@ message CoreOwnership_1 {
 
   Common_1 common = 1;
 
-  string action = 5;
-  bytes coreId = 6;
-  bytes projectId = 7;
-  string storeType = 8;
-  string signature = 9;
-  int32 authorIndex = 10;
-  int32 deviceIndex = 11;
-  bytes authorId = 12;
-  string capabilityType = 13;
+  bytes authCoreId = 5;
+  bytes configCoreId = 6;
+  bytes dataCoreId = 7;
+  bytes blobCoreId = 8;
+  bytes blobIndexCoreId = 9;
+  CoreSignatures coreSignatures = 10;
+  bytes identitySignature = 11;
+
+  message CoreSignatures {
+    bytes auth = 1;
+    bytes config = 2;
+    bytes data = 3;
+    bytes blob = 4;
+    bytes blobIndex = 5;
+  }
 }
