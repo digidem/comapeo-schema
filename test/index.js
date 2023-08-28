@@ -1,7 +1,14 @@
 // @ts-check
 import test from 'tape'
-import { encode, decode } from '../dist/index.js'
-import { parseVersionId } from '../dist/index.js'
+import {
+  encode,
+  decode,
+  encodeBlockPrefix,
+  parseVersionId,
+} from '../dist/index.js'
+import { dataTypeIds, currentSchemaVersions } from '../dist/config.js'
+import { DATA_TYPE_ID_BYTES, SCHEMA_VERSION_BYTES } from '../dist/constants.js'
+import * as cenc from 'compact-encoding'
 import {
   goodDocsMinimal,
   goodDocsCompleted,
@@ -58,6 +65,55 @@ then decoding and comparing the two objects - extra values shouldn't be present`
       { ...doc, ...expected },
       `tested deep equal of ${doc.schemaName} with extra - non valid - values`
     )
+  }
+})
+
+test(`testing decoding of header that should match the dataTypeId and version`, async (t) => {
+  for (const { doc } of goodDocsCompleted) {
+    /** @type { import('../src/types.js').ValidSchemaDef } */
+    const obj = {
+      schemaName: doc.schemaName,
+      schemaVersion: currentSchemaVersions[doc.schemaName],
+    }
+    const prefix = encodeBlockPrefix(obj)
+    const expectedDataTypeId = dataTypeIds[doc.schemaName]
+    const expectedVersion = currentSchemaVersions[doc.schemaName]
+
+    const state = cenc.state()
+    state.buffer = prefix
+
+    state.start = 0
+    state.end = DATA_TYPE_ID_BYTES
+    const dataTypeId = cenc.hex.fixed(DATA_TYPE_ID_BYTES).decode(state)
+
+    state.start = DATA_TYPE_ID_BYTES
+    state.end = DATA_TYPE_ID_BYTES + SCHEMA_VERSION_BYTES
+    const version = cenc.uint16.decode(state)
+
+    t.equal(
+      version,
+      expectedVersion,
+      `testing matching version of ${doc.schemaName}`
+    )
+    t.equal(
+      dataTypeId,
+      expectedDataTypeId,
+      `testing matching dataTypeId of ${doc.schemaName}`
+    )
+  }
+})
+
+test(`test failing of decoding when scrambling the header`, async (t) => {
+  for (const { doc } of goodDocsCompleted) {
+    const buffer = encode(doc)
+    /** @type {Buffer} */
+    const newBuf = buffer.map(() => {
+      const newIdx = Math.floor(Math.random() * buffer.length)
+      return buffer[newIdx]
+    })
+    t.throws(() => {
+      decode(newBuf, parseVersionId(doc.versionId))
+    }, `failing on decoding ${doc.schemaName}`)
   }
 })
 
