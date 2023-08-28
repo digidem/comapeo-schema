@@ -105,14 +105,10 @@ test(`testing decoding of header that should match the dataTypeId and version`, 
 
 test(`test failing of decoding when scrambling the header`, async (t) => {
   for (const { doc } of goodDocsCompleted) {
-    const buffer = encode(doc)
+    const buffer = encode(doc).sort(() => 0.5 - Math.random())
     /** @type {Buffer} */
-    const newBuf = buffer.map(() => {
-      const newIdx = Math.floor(Math.random() * buffer.length)
-      return buffer[newIdx]
-    })
     t.throws(() => {
-      decode(newBuf, parseVersionId(doc.versionId))
+      decode(buffer, parseVersionId(doc.versionId))
     }, `failing on decoding ${doc.schemaName}`)
   }
 })
