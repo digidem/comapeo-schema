@@ -15,7 +15,6 @@ import {
   goodDocsCompleted,
   badDocs,
 } from './fixtures/index.js'
-import { throws } from 'node:assert'
 
 test('Bad docs throw when encoding', (t) => {
   for (const { text, doc } of badDocs) {
@@ -156,7 +155,7 @@ test(`test encoding of wrongly formatted header`, async (t) => {
   // hardcoded since there's a slim chance we produce a correct header
   const unknownDataTypeId = Buffer.from('7a79b8b773b2', 'hex')
   unknownDataTypeId.copy(buf)
-  throws(() => {
+  t.throws(() => {
     decodeBlockPrefix(buf)
   })
 })
