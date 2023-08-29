@@ -10,7 +10,6 @@ import {
 import { encodeBlockPrefix } from '../dist/encode.js'
 import { dataTypeIds, currentSchemaVersions } from '../dist/config.js'
 import { DATA_TYPE_ID_BYTES, SCHEMA_VERSION_BYTES } from '../dist/constants.js'
-import * as cenc from 'compact-encoding'
 import {
   goodDocsMinimal,
   goodDocsCompleted,
