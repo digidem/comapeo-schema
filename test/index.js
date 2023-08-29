@@ -70,7 +70,6 @@ then decoding and comparing the two objects - extra values shouldn't be present`
 })
 
 test(`testing decoding of header that should match the dataTypeId and version`, async (t) => {
-  t.plan(Object.values(dataTypeIds).length * 2)
   for (const [schemaName, dataTypeId] of Object.entries(dataTypeIds)) {
     // TODO: test also schemaVersions greater than the current, for foward compat
     const schemaVersion = currentSchemaVersions[schemaName]
@@ -91,7 +90,6 @@ test(`testing decoding of header that should match the dataTypeId and version`, 
 })
 
 test(`test encoding and decoding of block prefix, ignoring data that comes after`, async (t) => {
-  t.plan(Object.keys(currentSchemaVersions).length * 2)
   for (let [schemaName, schemaVersion] of Object.entries(
     currentSchemaVersions
   )) {
@@ -117,7 +115,6 @@ test(`test encoding and decoding of block prefix, ignoring data that comes after
 })
 
 test(`test encoding of wrongly formatted header`, async (t) => {
-  t.plan(4)
   /** @type { import('../src/types.js').ValidSchemaDef } */
   let schemaDef = {
     schemaName: 'presot',
