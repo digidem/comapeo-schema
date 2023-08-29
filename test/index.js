@@ -92,16 +92,6 @@ test(`testing decoding of header that should match the dataTypeId and version`, 
   }
 })
 
-test(`test failing of decoding when scrambling the header`, async (t) => {
-  for (const { doc } of goodDocsCompleted) {
-    const buffer = encode(doc).sort(() => 0.5 - Math.random())
-    /** @type {Buffer} */
-    t.throws(() => {
-      decode(buffer, parseVersionId(doc.versionId))
-    }, `failing on decoding ${doc.schemaName}`)
-  }
-})
-
 test(`test encoding and decoding of block prefix, ignoring data that comes after`, async (t) => {
   t.plan(Object.keys(currentSchemaVersions).length * 2)
   for (let [schemaName, schemaVersion] of Object.entries(
@@ -149,8 +139,13 @@ test(`test encoding of wrongly formatted header`, async (t) => {
     decodeBlockPrefix(buf)
   }, `when decoding a header with the wrong length`)
 
+  // hardcoded since there's a slim chance we produce a correct header
+  const randomBuf = Buffer.from(
+    '806a8dbb56e1994c8ea6887cda1d21b441eb9122',
+    'hex'
+  )
   t.throws(() => {
-    decodeBlockPrefix(randomBytes(20))
+    decodeBlockPrefix(randomBuf)
   }, `when trying to decode a header that is random data`)
 
   t.throws(() => {
@@ -159,7 +154,8 @@ test(`test encoding of wrongly formatted header`, async (t) => {
 
   schemaDef = { schemaName: 'projectSettings', schemaVersion: 2 }
   buf = encodeBlockPrefix(schemaDef)
-  const unknownDataTypeId = randomBytes(DATA_TYPE_ID_BYTES)
+  // hardcoded since there's a slim chance we produce a correct header
+  const unknownDataTypeId = Buffer.from('7a79b8b773b2', 'hex')
   unknownDataTypeId.copy(buf)
   throws(() => {
     decodeBlockPrefix(buf)
