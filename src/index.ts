@@ -1,4 +1,4 @@
-export { encode, encodeBlockPrefix } from './encode.js'
+export { encode } from './encode.js'
 export { decode, decodeBlockPrefix } from './decode.js'
 export { currentSchemaVersions } from './config.js'
 export { validate } from './validate.js'

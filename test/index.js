@@ -1,11 +1,13 @@
 // @ts-check
 import test from 'tape'
+import { randomBytes } from 'node:crypto'
 import {
   encode,
   decode,
-  encodeBlockPrefix,
+  decodeBlockPrefix,
   parseVersionId,
 } from '../dist/index.js'
+import { encodeBlockPrefix } from '../dist/encode.js'
 import { dataTypeIds, currentSchemaVersions } from '../dist/config.js'
 import { DATA_TYPE_ID_BYTES, SCHEMA_VERSION_BYTES } from '../dist/constants.js'
 import * as cenc from 'compact-encoding'
@@ -14,6 +16,7 @@ import {
   goodDocsCompleted,
   badDocs,
 } from './fixtures/index.js'
+import { throws } from 'node:assert'
 
 test('Bad docs throw when encoding', (t) => {
   for (const { text, doc } of badDocs) {
@@ -69,36 +72,22 @@ then decoding and comparing the two objects - extra values shouldn't be present`
 })
 
 test(`testing decoding of header that should match the dataTypeId and version`, async (t) => {
-  for (const { doc } of goodDocsCompleted) {
+  t.plan(Object.values(dataTypeIds).length * 2)
+  for (const [schemaName, dataTypeId] of Object.entries(dataTypeIds)) {
+    // TODO: test also schemaVersions greater than the current, for foward compat
+    const schemaVersion = currentSchemaVersions[schemaName]
     /** @type { import('../src/types.js').ValidSchemaDef } */
-    const obj = {
-      schemaName: doc.schemaName,
-      schemaVersion: currentSchemaVersions[doc.schemaName],
-    }
-    const prefix = encodeBlockPrefix(obj)
-    const expectedDataTypeId = dataTypeIds[doc.schemaName]
-    const expectedVersion = currentSchemaVersions[doc.schemaName]
-
-    const state = cenc.state()
-    state.buffer = prefix
-
-    state.start = 0
-    state.end = DATA_TYPE_ID_BYTES
-    const dataTypeId = cenc.hex.fixed(DATA_TYPE_ID_BYTES).decode(state)
-
-    state.start = DATA_TYPE_ID_BYTES
-    state.end = DATA_TYPE_ID_BYTES + SCHEMA_VERSION_BYTES
-    const version = cenc.uint16.decode(state)
-
-    t.equal(
-      version,
-      expectedVersion,
-      `testing matching version of ${doc.schemaName}`
+    const schemaDef = { schemaName, schemaVersion }
+    const buf = encodeBlockPrefix(schemaDef)
+    t.deepEqual(
+      decodeBlockPrefix(buf),
+      schemaDef,
+      `test equality of schema definition with the decoded block prefix for ${schemaName}`
     )
     t.equal(
+      buf.subarray(0, DATA_TYPE_ID_BYTES).toString('hex'),
       dataTypeId,
-      expectedDataTypeId,
-      `testing matching dataTypeId of ${doc.schemaName}`
+      `test equality of dataTypeId for ${schemaName}`
     )
   }
 })
@@ -111,6 +100,70 @@ test(`test failing of decoding when scrambling the header`, async (t) => {
       decode(buffer, parseVersionId(doc.versionId))
     }, `failing on decoding ${doc.schemaName}`)
   }
+})
+
+test(`test encoding and decoding of block prefix, ignoring data that comes after`, async (t) => {
+  t.plan(Object.keys(currentSchemaVersions).length * 2)
+  for (let [schemaName, schemaVersion] of Object.entries(
+    currentSchemaVersions
+  )) {
+    /** @type { import('../src/types.js').ValidSchemaDef } */
+    const schemaDef = {
+      schemaName,
+      schemaVersion,
+    }
+    const blockPrefix = encodeBlockPrefix(schemaDef)
+    const prefixLength = DATA_TYPE_ID_BYTES + SCHEMA_VERSION_BYTES
+    const buf = Buffer.concat([blockPrefix, randomBytes(50)])
+    t.equals(
+      blockPrefix.length,
+      prefixLength,
+      `test proper length of block prefix`
+    )
+    t.deepEqual(
+      decodeBlockPrefix(buf),
+      schemaDef,
+      `test equality of schema definition for ${schemaName}`
+    )
+  }
+})
+
+test(`test encoding of wrongly formatted header`, async (t) => {
+  t.plan(4)
+  /** @type { import('../src/types.js').ValidSchemaDef } */
+  let schemaDef = {
+    schemaName: 'presot',
+    schemaVersion: 2,
+  }
+  t.throws(() => {
+    encodeBlockPrefix(schemaDef)
+  }, `when encoding a prefix with wrong schema name`)
+
+  /** @type { import('../src/types.js').ValidSchemaDef } */
+  schemaDef = {
+    schemaName: 'observation',
+    schemaVersion: 5,
+  }
+  let buf = encodeBlockPrefix(schemaDef).subarray(0, 7)
+  t.throws(() => {
+    decodeBlockPrefix(buf)
+  }, `when decoding a header with the wrong length`)
+
+  t.throws(() => {
+    decodeBlockPrefix(randomBytes(20))
+  }, `when trying to decode a header that is random data`)
+
+  t.throws(() => {
+    decodeBlockPrefix(Buffer.alloc(50))
+  }, `when trying to decode a header that is empty`)
+
+  schemaDef = { schemaName: 'projectSettings', schemaVersion: 2 }
+  buf = encodeBlockPrefix(schemaDef)
+  const unknownDataTypeId = randomBytes(DATA_TYPE_ID_BYTES)
+  unknownDataTypeId.copy(buf)
+  throws(() => {
+    decodeBlockPrefix(buf)
+  })
 })
 
 /**
