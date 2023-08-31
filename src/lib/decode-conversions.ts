@@ -55,8 +55,8 @@ export const convertObservation: ConvertFunction<'observation'> = (
     ...jsonSchemaCommon,
     ...rest,
     refs: message.refs?.map(({ id }) => ({ id: id.toString('hex') })),
-    attachments: message.attachments?.map(({ driveId, name, type }) => {
-      return { driveId: driveId.toString('hex'), name, type }
+    attachments: message.attachments?.map(({ driveId, name, type, hash }) => {
+      return { driveId: driveId.toString('hex'), name, type, hash }
     }),
     tags: convertTags(message.tags),
     metadata: message.metadata || {},

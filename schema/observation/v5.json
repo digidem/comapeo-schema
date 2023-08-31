@@ -106,7 +106,7 @@
             "description": "SHA256 hash of the attachment"
           }
         },
-        "required": ["driveId", "name", "type"]
+        "required": ["driveId", "name", "type", "hash"]
       }
     },
     "tags": {
