@@ -22,6 +22,10 @@
       "type": "string",
       "format": "date-time"
     },
+    "createdBy": {
+      "description": "id (hex-encoded 32-byte buffer) of the discovery key for the core that created the first version of this element",
+      "type": "string"
+    },
     "updatedAt": {
       "description": "RFC3339-formatted datetime of when this version of the element was created",
       "type": "string",
@@ -42,6 +46,7 @@
     "schemaName",
     "updatedAt",
     "links",
-    "versionId"
+    "versionId",
+    "createdBy"
   ]
 }

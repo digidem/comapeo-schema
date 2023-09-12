@@ -138,6 +138,7 @@ function convertCommon(
     docId: Buffer.from(common.docId, 'hex'),
     createdAt: common.createdAt,
     updatedAt: common.updatedAt,
+    createdBy: Buffer.from(common.createdBy, 'hex'),
     links: common.links.map((link) => parseVersionId(link)),
   }
 }
