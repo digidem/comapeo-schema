@@ -17,7 +17,7 @@ import {
   convertRole,
   convertDeviceInfo,
   convertCoreOwnership,
-} from './lib/encode-converstions.js'
+} from './lib/encode-conversions.js'
 import { CoreOwnership } from './index.js'
 
 /**
