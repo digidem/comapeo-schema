@@ -10,7 +10,10 @@ export const cachedValues = {
   coreId: randomBytes(32).toString('hex'),
   createdAt: date,
   updatedAt: date,
-  attachments: { driveId: randomBytes(32).toString('hex') },
+  attachments: {
+    driveId: randomBytes(32).toString('hex'),
+    hash: randomBytes(32).toString('hex'),
+  },
   metadata: {
     position: {
       timestamp: date,
