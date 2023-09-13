@@ -23,7 +23,7 @@
       "format": "date-time"
     },
     "createdBy": {
-      "description": "id (hex-encoded 32-byte buffer) of the discovery key for the core that created the first version of this element",
+      "description": "discovery id (hex-encoded 32-byte buffer) of the hypercore where the first version of this document is written",
       "type": "string"
     },
     "updatedAt": {
