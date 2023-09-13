@@ -83,6 +83,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
       driveId: Buffer.from(attachment.driveId, 'hex'),
       name: attachment.name,
       type: attachment.type,
+      hash: Buffer.from(attachment.hash, 'hex'),
     }
   })
 

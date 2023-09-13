@@ -100,9 +100,13 @@
               "UNRECOGNIZED": "future attachment type"
             },
             "enum": ["photo", "video", "audio", "UNRECOGNIZED"]
+          },
+          "hash": {
+            "type": "string",
+            "description": "SHA256 hash of the attachment"
           }
         },
-        "required": ["driveId", "name", "type"]
+        "required": ["driveId", "name", "type", "hash"]
       }
     },
     "tags": {

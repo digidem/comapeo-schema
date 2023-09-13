@@ -32,6 +32,7 @@ message Observation_5 {
     bytes driveId = 1;
     string name = 2;
     AttachmentType type = 3;
+    bytes hash = 4;
   }
   repeated Attachment attachments = 8;
 
