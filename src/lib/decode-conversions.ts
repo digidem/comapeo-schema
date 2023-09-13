@@ -250,5 +250,6 @@ function convertCommon(
     links: common.links.map((link) => getVersionId(link)),
     createdAt: common.createdAt,
     updatedAt: common.updatedAt,
+    createdBy: common.createdBy.toString('hex'),
   }
 }

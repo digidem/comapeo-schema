@@ -14,6 +14,8 @@ message Common_1 {
   repeated Link links = 2;
   google.protobuf.Timestamp createdAt = 3 [(required) = true];
   google.protobuf.Timestamp updatedAt = 4 [(required) = true];
+  // 32-byte hash of the discovery key of a core
+  bytes createdBy = 5 [(required) = true];
 }
 /* ignored fields and differences from common.json jsonSchema
  * id is a byte buffer here and a string in jsonSchema

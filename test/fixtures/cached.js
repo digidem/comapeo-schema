@@ -8,6 +8,7 @@ export const cachedValues = {
   projectId: randomBytes(32).toString('hex'),
   authorId: randomBytes(32).toString('hex'),
   coreId: randomBytes(32).toString('hex'),
+  createdBy: randomBytes(32).toString('hex'),
   createdAt: date,
   updatedAt: date,
   attachments: {
