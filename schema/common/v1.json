@@ -10,7 +10,7 @@
       "type": "string"
     },
     "versionId": {
-      "description": "core id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
+      "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
       "type": "string"
     },
     "schemaName": {

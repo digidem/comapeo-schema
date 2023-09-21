@@ -16,7 +16,7 @@ function capitalize<T extends string>(str: T): Capitalize<T> {
 }
 
 export type VersionIdObject = {
-  coreKey: Buffer
+  coreDiscoveryKey: Buffer
   index: number
 }
 
@@ -27,8 +27,8 @@ export type VersionIdObject = {
  * @param versionIdObject
  * @returns versionId string
  */
-export function getVersionId({ coreKey, index }: VersionIdObject) {
-  return coreKey.toString('hex') + '/' + index
+export function getVersionId({ coreDiscoveryKey, index }: VersionIdObject) {
+  return coreDiscoveryKey.toString('hex') + '/' + index
 }
 
 /**
@@ -41,9 +41,9 @@ export function getVersionId({ coreKey, index }: VersionIdObject) {
 export function parseVersionId(versionId: string): VersionIdObject {
   const items = versionId.split('/')
   if (!items[0] || !items[1]) throw new Error('Invalid versionId')
-  const coreKey = Buffer.from(items[0], 'hex')
-  if (coreKey.length !== 32) throw new Error('Invalid versionId')
+  const coreDiscoveryKey = Buffer.from(items[0], 'hex')
+  if (coreDiscoveryKey.length !== 32) throw new Error('Invalid versionId')
   const index = Number.parseInt(items[1])
   if (isNaN(index)) throw new Error('Invalid versionId')
-  return { coreKey, index }
+  return { coreDiscoveryKey, index }
 }
