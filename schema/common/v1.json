@@ -36,8 +36,9 @@
       }
     },
     "deleted": {
-      "description": "",
-      "type": "boolean"
+      "description": "Indicates whether the document has been deleted",
+      "type": "boolean",
+      "const": true
     }
   },
   "required": [
