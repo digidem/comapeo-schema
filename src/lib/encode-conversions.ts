@@ -141,6 +141,7 @@ function convertCommon(
     updatedAt: common.updatedAt,
     createdBy: Buffer.from(common.createdBy, 'hex'),
     links: common.links.map((link) => parseVersionId(link)),
+    deleted: common.deleted,
   }
 }
 

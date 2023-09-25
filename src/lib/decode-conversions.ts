@@ -56,7 +56,12 @@ export const convertObservation: ConvertFunction<'observation'> = (
     ...rest,
     refs: message.refs?.map(({ id }) => ({ id: id.toString('hex') })),
     attachments: message.attachments?.map(({ driveId, name, type, hash }) => {
-      return { driveId: driveId.toString('hex'), name, type, hash: hash.toString('hex') }
+      return {
+        driveId: driveId.toString('hex'),
+        name,
+        type,
+        hash: hash.toString('hex'),
+      }
     }),
     tags: convertTags(message.tags),
     metadata: message.metadata || {},
@@ -251,5 +256,6 @@ function convertCommon(
     createdAt: common.createdAt,
     updatedAt: common.updatedAt,
     createdBy: common.createdBy.toString('hex'),
+    deleted: common.deleted || undefined,
   }
 }
