@@ -41,8 +41,7 @@
     },
     "deleted": {
       "description": "Indicates whether the document has been deleted",
-      "type": "boolean",
-      "const": true
+      "type": "boolean"
     }
   },
   "required": [
@@ -52,6 +51,7 @@
     "updatedAt",
     "links",
     "versionId",
-    "createdBy"
+    "createdBy",
+    "deleted"
   ]
 }

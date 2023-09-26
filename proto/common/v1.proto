@@ -16,7 +16,7 @@ message Common_1 {
   google.protobuf.Timestamp updatedAt = 4 [(required) = true];
   // 32-byte hash of the discovery key of a core
   bytes createdBy = 5 [(required) = true];
-  optional bool deleted = 6;
+  bool deleted = 6;
 }
 /* ignored fields and differences from common.json jsonSchema
  * id is a byte buffer here and a string in jsonSchema

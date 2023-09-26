@@ -256,6 +256,6 @@ function convertCommon(
     createdAt: common.createdAt,
     updatedAt: common.updatedAt,
     createdBy: common.createdBy.toString('hex'),
-    deleted: common.deleted || undefined,
+    deleted: common.deleted,
   }
 }
