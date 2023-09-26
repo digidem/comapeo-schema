@@ -128,7 +128,7 @@ export const goodDocsMinimal = [
         blobIndex: Buffer.from('blobIndex'),
       },
       identitySignature: Buffer.from('identity'),
-      deleted: false,
+      deleted: true,
     },
     expected: {},
   },
