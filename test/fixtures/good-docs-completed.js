@@ -25,7 +25,7 @@ export const goodDocsCompleted = [
         {
           name: 'myFile',
           type: 'photo',
-          driveId: cachedValues.attachments.driveId,
+          driveDiscoveryId: cachedValues.attachments.driveDiscoveryId,
           hash: cachedValues.attachments.hash,
         },
       ],

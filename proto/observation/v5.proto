@@ -29,7 +29,7 @@ message Observation_5 {
     audio = 2;
   }
   message Attachment {
-    bytes driveId = 1;
+    bytes driveDiscoveryId = 1;
     string name = 2;
     AttachmentType type = 3;
     bytes hash = 4;

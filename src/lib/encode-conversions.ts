@@ -80,7 +80,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
   })
   const attachments = mapeoDoc.attachments.map((attachment) => {
     return {
-      driveId: Buffer.from(attachment.driveId, 'hex'),
+      driveDiscoveryId: Buffer.from(attachment.driveDiscoveryId, 'hex'),
       name: attachment.name,
       type: attachment.type,
       hash: Buffer.from(attachment.hash, 'hex'),
