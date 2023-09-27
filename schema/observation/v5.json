@@ -85,9 +85,9 @@
       "items": {
         "type": "object",
         "properties": {
-          "driveId": {
+          "driveDiscoveryId": {
             "type": "string",
-            "description": ""
+            "description": "core discovery id for the drive that the attachment belongs to"
           },
           "name": {
             "type": "string",
@@ -106,7 +106,7 @@
             "description": "SHA256 hash of the attachment"
           }
         },
-        "required": ["driveId", "name", "type", "hash"]
+        "required": ["driveDiscoveryId", "name", "type", "hash"]
       }
     },
     "tags": {

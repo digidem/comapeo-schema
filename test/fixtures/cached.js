@@ -12,7 +12,7 @@ export const cachedValues = {
   createdAt: date,
   updatedAt: date,
   attachments: {
-    driveId: randomBytes(32).toString('hex'),
+    driveDiscoveryId: randomBytes(32).toString('hex'),
     hash: randomBytes(32).toString('hex'),
   },
   metadata: {

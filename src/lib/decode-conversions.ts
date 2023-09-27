@@ -55,14 +55,16 @@ export const convertObservation: ConvertFunction<'observation'> = (
     ...jsonSchemaCommon,
     ...rest,
     refs: message.refs?.map(({ id }) => ({ id: id.toString('hex') })),
-    attachments: message.attachments?.map(({ driveId, name, type, hash }) => {
-      return {
-        driveId: driveId.toString('hex'),
-        name,
-        type,
-        hash: hash.toString('hex'),
+    attachments: message.attachments?.map(
+      ({ driveDiscoveryId, name, type, hash }) => {
+        return {
+          driveDiscoveryId: driveDiscoveryId.toString('hex'),
+          name,
+          type,
+          hash: hash.toString('hex'),
+        }
       }
-    }),
+    ),
     tags: convertTags(message.tags),
     metadata: message.metadata || {},
   }
