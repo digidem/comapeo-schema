@@ -15,6 +15,7 @@ type SupportedSchemaNames =
   | 'field'
   | 'preset'
   | 'role'
+  | 'icon'
   | 'deviceInfo'
   | 'coreOwnership'
 

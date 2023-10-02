@@ -17,6 +17,7 @@ import {
   convertRole,
   convertDeviceInfo,
   convertCoreOwnership,
+  convertIcon,
 } from './lib/decode-conversions.js'
 // @ts-ignore
 import * as cenc from 'compact-encoding'
@@ -68,6 +69,8 @@ export function decode(
       return convertDeviceInfo(message, versionObj)
     case 'coreOwnership':
       return convertCoreOwnership(message, versionObj)
+    case 'icon':
+      return convertIcon(message, versionObj)
     default:
       const _exhaustiveCheck: never = message
       return message
