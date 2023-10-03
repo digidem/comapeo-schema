@@ -209,7 +209,7 @@ function convertIconVariant(variant: Icon_1_IconVariant) {
   return {
     blobVersionId: blobVersionId.toString('hex'),
     mimeType: convertIconMimeType(mimeType) as ValidMimeTypes,
-    size: size === 'UNRECOGNIZED' ? 'small' : size,
+    size: size === 'UNRECOGNIZED' ? 'medium' : size,
     pixelDensity: convertIconPixelDensity(pixelDensity),
   }
 }
