@@ -4,6 +4,13 @@ import {
   type TagValue_1,
   type TagValue_1_PrimitiveValue,
 } from '../proto/tags/v1.js'
+
+import {
+  type Icon_1_IconVariant,
+  Icon_1_IconVariant_MimeType,
+  Icon_1_IconVariant_PixelDensity,
+} from '../proto/icon/v1.js'
+
 import {
   type MapeoDoc,
   type ProtoTypesWithSchemaInfo,
@@ -184,6 +191,55 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
     blobCoreId: blobCoreId.toString('hex'),
     blobIndexCoreId: blobIndexCoreId.toString('hex'),
     coreSignatures: message.coreSignatures,
+  }
+}
+
+export const convertIcon: ConvertFunction<'icon'> = (message, versionObj) => {
+  const { common, schemaVersion, ...rest } = message
+  const jsonSchemaCommon = convertCommon(common, versionObj)
+  return {
+    ...jsonSchemaCommon,
+    ...rest,
+    variants: message.variants.map((variant) => convertIconVariant(variant)),
+  }
+}
+
+function convertIconVariant(variant: Icon_1_IconVariant) {
+  const { blobVersionId, mimeType, size, pixelDensity } = variant
+  return {
+    blobVersionId: blobVersionId.toString('hex'),
+    mimeType: convertIconMimeType(mimeType),
+    size: size === 'UNRECOGNIZED' ? 'medium' : size,
+    pixelDensity: convertIconPixelDensity(pixelDensity),
+  }
+}
+
+function convertIconPixelDensity(
+  pixelDensity: Icon_1_IconVariant_PixelDensity
+): 1 | 2 | 3 {
+  switch (pixelDensity) {
+    case 'x1':
+      return 1
+    case 'x2':
+      return 2
+    case 'x3':
+      return 3
+    default:
+      return 1
+  }
+}
+
+type ValidMimeTypes = 'image/svg+xml' | 'image/png'
+function convertIconMimeType(
+  mimeType: Icon_1_IconVariant_MimeType
+): ValidMimeTypes {
+  switch (mimeType) {
+    case 'svg':
+      return 'image/svg+xml'
+    case 'png':
+      return 'image/png'
+    default:
+      return 'image/svg+xml'
   }
 }
 

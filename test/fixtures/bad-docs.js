@@ -41,4 +41,25 @@ export const badDocs = [
       deleted: false,
     },
   },
+  {
+    text: 'icon without name',
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      schemaName: 'icon',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      createdBy: cachedValues.createdBy,
+      links: [],
+      deleted: false,
+      variants: [
+        {
+          size: 'large',
+          pixelDensity: 3,
+          mimeType: 'image/png',
+          blobVersionId: 'someRandomString',
+        },
+      ],
+    },
+  },
 ]

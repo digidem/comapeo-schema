@@ -10,6 +10,8 @@ import {
   MapeoDocInternal,
 } from '../types.js'
 import { TagValue_1, type TagValue_1_PrimitiveValue } from '../proto/tags/v1.js'
+import { Icon } from '../schema/icon.js'
+import { type Icon_1_IconVariant } from '../proto/icon/v1.js'
 import { Observation_5_Metadata } from '../proto/observation/v5.js'
 import { parseVersionId } from './utils.js'
 import { CoreOwnership } from '../index.js'
@@ -129,6 +131,48 @@ export const convertCoreOwnership = (
     dataCoreId: Buffer.from(mapeoDoc.dataCoreId, 'hex'),
     blobCoreId: Buffer.from(mapeoDoc.blobCoreId, 'hex'),
     blobIndexCoreId: Buffer.from(mapeoDoc.blobIndexCoreId, 'hex'),
+  }
+}
+
+export const convertIcon: ConvertFunction<'icon'> = (mapeoDoc) => {
+  const { variants, ...rest } = mapeoDoc
+  return {
+    common: convertCommon(mapeoDoc),
+    ...rest,
+    variants: convertIconVariants(variants),
+  }
+}
+
+function convertIconVariants(variants: Icon['variants']): Icon_1_IconVariant[] {
+  return variants.map((variant) => {
+    const { blobVersionId, mimeType, size, pixelDensity } = variant
+    return {
+      blobVersionId: Buffer.from(blobVersionId, 'hex'),
+      mimeType: convertIconMimeType(mimeType),
+      size,
+      pixelDensity: convertIconPixelDensity(pixelDensity),
+    }
+  })
+}
+function convertIconMimeType(mimeType: 'image/svg+xml' | 'image/png') {
+  switch (mimeType) {
+    case 'image/svg+xml':
+      return 'svg'
+    case 'image/png':
+      return 'png'
+    default:
+      return 'svg'
+  }
+}
+
+function convertIconPixelDensity(pixelDensity: 1 | 2 | 3) {
+  switch (pixelDensity) {
+    case 1:
+      return 'x1'
+    case 2:
+      return 'x2'
+    case 3:
+      return 'x3'
   }
 }
 

@@ -1,6 +1,7 @@
 // @ts-check
 
 import { cachedValues } from './cached.js'
+import { randomBytes } from 'node:crypto'
 
 /**
  * @type {Array<{
@@ -196,6 +197,34 @@ export const goodDocsCompleted = [
       },
       identitySignature: Buffer.from('identity'),
       deleted: true,
+    },
+    expected: {},
+  },
+  {
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      schemaName: 'icon',
+      name: 'tree',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      createdBy: cachedValues.createdBy,
+      links: [],
+      deleted: false,
+      variants: [
+        {
+          size: 'small',
+          pixelDensity: 1,
+          blobVersionId: randomBytes(32).toString('hex'),
+          mimeType: 'image/png',
+        },
+        {
+          size: 'large',
+          pixelDensity: 3,
+          blobVersionId: randomBytes(32).toString('hex'),
+          mimeType: 'image/svg+xml',
+        },
+      ],
     },
     expected: {},
   },
