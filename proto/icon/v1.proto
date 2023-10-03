@@ -21,9 +21,9 @@ message Icon_1 {
     }
 
     enum PixelDensity {
-      one = 1;
-      two = 2;
-      three = 3;
+      one = 0;
+      two = 1;
+      three = 2;
     }
 
     enum MimeType {
