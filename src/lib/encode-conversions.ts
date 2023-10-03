@@ -168,11 +168,11 @@ function convertIconMimeType(mimeType: 'image/svg+xml' | 'image/png') {
 function convertIconPixelDensity(pixelDensity: 1 | 2 | 3) {
   switch (pixelDensity) {
     case 1:
-      return 'one'
+      return 'x1'
     case 2:
-      return 'two'
+      return 'x2'
     case 3:
-      return 'three'
+      return 'x3'
   }
 }
 

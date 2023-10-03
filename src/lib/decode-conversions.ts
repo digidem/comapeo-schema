@@ -218,11 +218,11 @@ function convertIconPixelDensity(
   pixelDensity: Icon_1_IconVariant_PixelDensity
 ): 1 | 2 | 3 {
   switch (pixelDensity) {
-    case 'one':
+    case 'x1':
       return 1
-    case 'two':
+    case 'x2':
       return 2
-    case 'three':
+    case 'x3':
       return 3
     default:
       return 1
