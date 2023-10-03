@@ -208,7 +208,7 @@ function convertIconVariant(variant: Icon_1_IconVariant) {
   const { blobVersionId, mimeType, size, pixelDensity } = variant
   return {
     blobVersionId: blobVersionId.toString('hex'),
-    mimeType: convertIconMimeType(mimeType) as ValidMimeTypes,
+    mimeType: convertIconMimeType(mimeType),
     size: size === 'UNRECOGNIZED' ? 'medium' : size,
     pixelDensity: convertIconPixelDensity(pixelDensity),
   }
