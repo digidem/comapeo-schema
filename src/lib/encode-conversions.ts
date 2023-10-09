@@ -147,7 +147,7 @@ function convertIconVariants(variants: Icon['variants']): Icon_1_IconVariant[] {
   return variants.map((variant) => {
     const { blobVersionId, mimeType, size, pixelDensity } = variant
     return {
-      blobVersionId: Buffer.from(blobVersionId, 'hex'),
+      blobVersionId: Buffer.from(blobVersionId, 'utf-8'),
       mimeType: convertIconMimeType(mimeType),
       size,
       pixelDensity: convertIconPixelDensity(pixelDensity),

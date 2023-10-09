@@ -148,7 +148,7 @@ export const goodDocsMinimal = [
         {
           size: 'small',
           pixelDensity: 1,
-          blobVersionId: randomBytes(32).toString('hex'),
+          blobVersionId: randomBytes(32).toString('hex') + '/0',
           mimeType: 'image/png',
         },
       ],
