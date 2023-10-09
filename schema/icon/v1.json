@@ -27,6 +27,7 @@
             "enum": [1,2,3]
           },
           "blobVersionId": {
+      "description": "Version id of the icon blob. Each id is id (hex-encoded 32 byte buffer) and index number, separated by '/'",
             "type": "string"
           },
           "mimeType": {
