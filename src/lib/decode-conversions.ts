@@ -207,11 +207,7 @@ export const convertIcon: ConvertFunction<'icon'> = (message, versionObj) => {
 function convertIconVariant(variant: Icon_1_IconVariant) {
   const { blobVersionId, mimeType, size, pixelDensity } = variant
   return {
-<<<<<<< HEAD
     blobVersionId: blobVersionId.toString('utf-8'),
-=======
-    blobVersionId: blobVersionId.toString('hex'),
->>>>>>> c0d7b6f2589a128dd223fa7fa407b5b407f3f892
     mimeType: convertIconMimeType(mimeType),
     size: size === 'UNRECOGNIZED' ? 'medium' : size,
     pixelDensity: convertIconPixelDensity(pixelDensity),
