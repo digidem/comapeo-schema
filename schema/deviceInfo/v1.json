@@ -11,6 +11,11 @@
     "name": {
       "type": "string",
       "description": "Name of the device"
+    },
+    "deviceType": {
+      "type": "string",
+      "enum": ["mobile", "tablet", "desktop", "UNRECOGNIZED"],
+      "description": "Type of device"
     }
   },
   "required": ["schemaName", "name"],

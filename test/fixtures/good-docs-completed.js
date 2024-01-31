@@ -170,9 +170,28 @@ export const goodDocsCompleted = [
       createdBy: cachedValues.createdBy,
       links: [],
       name: 'my device name',
+      deviceType: 'desktop',
       deleted: true,
     },
     expected: {},
+  },
+  {
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      schemaName: 'deviceInfo',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      createdBy: cachedValues.createdBy,
+      links: [],
+      name: 'my device name',
+      // @ts-expect-error
+      deviceType: 'motorbike',
+      deleted: true,
+    },
+    expected: {
+      deviceType: 'UNRECOGNIZED',
+    },
   },
   {
     doc: {

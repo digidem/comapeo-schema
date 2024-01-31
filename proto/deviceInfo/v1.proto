@@ -13,5 +13,12 @@ message DeviceInfo_1 {
 
   Common_1 common = 1;
 
+  enum DeviceType {
+    mobile = 0;
+    tablet = 1;
+    desktop = 2;
+  }
+
   string name = 5;
+  optional DeviceType deviceType = 6;
 }
