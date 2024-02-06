@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://mapeo.world/schemas/translation/v1.json",
+  "description": "A translation is a value for a string - field, preset, tag - that is translated at runtime",
+  "title": "translation",
+  "type": "object",
+  "properties":{
+    "schemaName":{
+      "type":"string",
+      "const": "translation"
+    },
+    "recordType": {
+      "type": "string",
+      "description": "type of record related to the field being translated"
+    },
+    "recordId": {
+      "type": "string",
+      "description": "the id that points to the record we want to get a translation for"
+    },
+    "fieldRef": {
+      "type": "array",
+      "items": {"type":"string"},
+      "description": "the field from that record that we want to translate"
+    },
+    "languageCode": {
+      "type": "string",
+      "description": "code that identifies the language we are translated for (for now BCP-47)"
+    },
+    "message": {
+      "type": "string",
+      "description": "the translated string"
+    }
+  },
+  "required": ["schemaName", "recordType", "recordId", "fieldRef", "languageCode", "message"],
+  "additionalProperties": false
+}

@@ -18,6 +18,7 @@ import {
   convertDeviceInfo,
   convertCoreOwnership,
   convertIcon,
+  convertTranslation,
 } from './lib/encode-conversions.js'
 import { CoreOwnership } from './index.js'
 
@@ -75,6 +76,11 @@ export function encode(
     }
     case 'icon': {
       const message = convertIcon(mapeoDoc)
+      protobuf = Encode[mapeoDoc.schemaName](message).finish()
+      break
+    }
+    case 'translation': {
+      const message = convertTranslation(mapeoDoc)
       protobuf = Encode[mapeoDoc.schemaName](message).finish()
       break
     }

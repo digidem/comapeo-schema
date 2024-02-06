@@ -204,6 +204,19 @@ export const convertIcon: ConvertFunction<'icon'> = (message, versionObj) => {
   }
 }
 
+export const convertTranslation: ConvertFunction<'translation'> = (
+  message,
+  versionObj
+) => {
+  const { common, schemaVersion, ...rest } = message
+  const jsonSchemaCommon = convertCommon(common, versionObj)
+  return {
+    ...jsonSchemaCommon,
+    ...rest,
+    recordId: message.recordId.toString('hex'),
+  }
+}
+
 function convertIconVariant(variant: Icon_1_IconVariant) {
   const { blobVersionId, mimeType, size, pixelDensity } = variant
   if (!blobVersionId) {
