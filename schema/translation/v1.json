@@ -18,8 +18,7 @@
       "description": "the id that points to the record we want to get a translation for"
     },
     "fieldRef": {
-      "type": "array",
-      "items": {"type":"string"},
+      "type": "string",
       "description": "the field from that record that we want to translate"
     },
     "languageCode": {

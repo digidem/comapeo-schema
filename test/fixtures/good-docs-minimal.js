@@ -167,7 +167,7 @@ export const goodDocsMinimal = [
       deleted: false,
       recordType: 'field',
       recordId: cachedValues.recordId,
-      fieldRef: ['label'],
+      fieldRef: 'label',
       languageCode: 'qu',
       message: `sach'a`,
     },

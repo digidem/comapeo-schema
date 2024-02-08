@@ -15,8 +15,6 @@ import { type Icon_1_IconVariant } from '../proto/icon/v1.js'
 import { Observation_5_Metadata } from '../proto/observation/v5.js'
 import { parseVersionId } from './utils.js'
 import { CoreOwnership } from '../index.js'
-import { valueSchemas } from '../schemas.js'
-import { isLangCode } from 'is-language-code'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
@@ -148,34 +146,11 @@ export const convertIcon: ConvertFunction<'icon'> = (mapeoDoc) => {
 export const convertTranslation: ConvertFunction<'translation'> = (
   mapeoDoc
 ) => {
-  const { recordType, fieldRef, languageCode } = mapeoDoc
-  if (!isLangCode(languageCode).res) {
-    throw new Error(`invalid language code ${languageCode}`)
-  }
-  if (!Object.keys(valueSchemas).includes(recordType)) {
-    throw new Error(`unsupported record type ${recordType}`)
-  }
-  if (!isValidTranslationFieldRef(recordType, fieldRef)) {
-    throw new Error(`invalid field ref ${fieldRef}`)
-  }
-
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
     recordId: Buffer.from(mapeoDoc.recordId, 'hex'),
   }
-}
-
-function isValidTranslationFieldRef(
-  recordType: string,
-  fieldRef: string[]
-): boolean {
-  /* @ts-ignore */
-  let obj = valueSchemas[recordType].properties
-  for (let key of fieldRef) {
-    obj = obj[key]
-  }
-  return obj !== undefined
 }
 
 function convertIconVariants(variants: Icon['variants']): Icon_1_IconVariant[] {

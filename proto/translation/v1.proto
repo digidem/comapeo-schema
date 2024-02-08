@@ -13,7 +13,7 @@ message Translation_1 {
 
   string recordType = 2;
   bytes recordId = 3;
-  repeated string fieldRef = 4;
+  string fieldRef = 4;
   string languageCode = 5;
   string message = 6;
 
