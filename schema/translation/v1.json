@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "http://mapeo.world/schemas/translation/v1.json",
-  "description": "A translation is a value for a string - field, preset, tag - that is translated at runtime",
+  "description": "A translation is a translated message in a single language for a string property/field of any Mapeo record type",
   "title": "translation",
   "type": "object",
   "properties":{
@@ -11,20 +11,24 @@
     },
     "recordType": {
       "type": "string",
-      "description": "type of record related to the field being translated"
+      "description": "schema name of record related to the field being translated"
     },
     "recordId": {
       "type": "string",
-      "description": "the id that points to the record we want to get a translation for"
+      "description": "the docId of the record that this field is translated for"
     },
     "fieldRef": {
       "type": "string",
-      "description": "the field from that record that we want to translate"
+      "description": "identifier for translated field/property in dot-prop notation"
     },
     "languageCode": {
       "type": "string",
-      "description": "code that identifies the language we are translated for (for now BCP-47)"
+      "description": "three-letter ISO 169-3 language code"
     },
+    "regionCode": {
+        "type": "string",
+        "description": "two-letter country code from ISO 3166-1 alpha-2 or a three-digit code from UN M.49 for geographical regions"
+},
     "message": {
       "type": "string",
       "description": "the translated string"
