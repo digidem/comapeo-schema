@@ -169,7 +169,7 @@ export const goodDocsMinimal = [
       docIdRef: cachedValues.docIdRef,
       fieldRef: 'label',
       languageCode: 'qu',
-      regionCode: 'pe',
+      regionCode: 'PE',
       message: `sach'a`,
     },
     expected: {},

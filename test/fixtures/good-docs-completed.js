@@ -242,7 +242,7 @@ export const goodDocsCompleted = [
       docIdRef: cachedValues.docIdRef,
       fieldRef: 'terms[0]',
       languageCode: 'es',
-      regionCode: 'ar',
+      regionCode: 'AR',
       message: 'agroforestación',
     },
     expected: {},
