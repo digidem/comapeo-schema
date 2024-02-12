@@ -29,5 +29,5 @@ export const cachedValues = {
   },
   fieldIds: [randomBytes(32).toString('hex')],
   iconId: randomBytes(32).toString('hex'),
-  recordId: randomBytes(32).toString('hex'),
+  docIdRef: randomBytes(32).toString('hex'),
 }

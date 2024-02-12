@@ -213,7 +213,7 @@ export const convertTranslation: ConvertFunction<'translation'> = (
   return {
     ...jsonSchemaCommon,
     ...rest,
-    recordId: message.recordId.toString('hex'),
+    docIdRef: message.docIdRef.toString('hex'),
   }
 }
 

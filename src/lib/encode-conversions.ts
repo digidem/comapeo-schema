@@ -149,7 +149,7 @@ export const convertTranslation: ConvertFunction<'translation'> = (
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
-    recordId: Buffer.from(mapeoDoc.recordId, 'hex'),
+    docIdRef: Buffer.from(mapeoDoc.docIdRef, 'hex'),
   }
 }
 

@@ -9,11 +9,11 @@
       "type":"string",
       "const": "translation"
     },
-    "recordType": {
+    "schemaNameRef": {
       "type": "string",
       "description": "schema name of record related to the field being translated"
     },
-    "recordId": {
+    "docIdRef": {
       "type": "string",
       "description": "the docId of the record that this field is translated for"
     },
@@ -34,6 +34,6 @@
       "description": "the translated string"
     }
   },
-  "required": ["schemaName", "recordType", "recordId", "fieldRef", "languageCode", "message"],
+  "required": ["schemaName", "schemaNameRef", "docIdRef", "fieldRef", "languageCode", "regionCode", "message"],
   "additionalProperties": false
 }
