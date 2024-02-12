@@ -247,4 +247,23 @@ export const goodDocsCompleted = [
     },
     expected: {},
   },
+  {
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      schemaName: 'translation',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      createdBy: cachedValues.createdBy,
+      links: [],
+      deleted: false,
+      schemaNameRef: 'preset',
+      docIdRef: cachedValues.docIdRef,
+      fieldRef: 'terms[0]',
+      languageCode: 'es',
+      regionCode: 'AR',
+      message: 'agroforestación',
+    },
+    expected: {},
+  },
 ]

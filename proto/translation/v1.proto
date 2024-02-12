@@ -1,0 +1,21 @@
+syntax = "proto3";
+package mapeo;
+
+import "common/v1.proto";
+import "options.proto";
+
+message Translation_1 {
+  // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
+  option (dataTypeId) = "cb2327c9a27f";
+  option (schemaName) = "translation";
+
+  Common_1 common = 1;
+
+  string schemaNameRef = 2;
+  bytes docIdRef = 3;
+  string fieldRef = 4;
+  string languageCode = 5;
+  string regionCode = 6;
+  string message = 7;
+
+}

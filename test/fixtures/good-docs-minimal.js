@@ -155,4 +155,23 @@ export const goodDocsMinimal = [
     },
     expected: {},
   },
+  {
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      schemaName: 'translation',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      createdBy: cachedValues.createdBy,
+      links: [],
+      deleted: false,
+      schemaNameRef: 'field',
+      docIdRef: cachedValues.docIdRef,
+      fieldRef: 'label',
+      languageCode: 'qu',
+      regionCode: 'PE',
+      message: `sach'a`,
+    },
+    expected: {},
+  },
 ]

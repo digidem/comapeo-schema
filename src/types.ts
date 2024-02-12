@@ -18,6 +18,7 @@ type SupportedSchemaNames =
   | 'icon'
   | 'deviceInfo'
   | 'coreOwnership'
+  | 'translation'
 
 export type SchemaName = Extract<keyof typeof dataTypeIds, SupportedSchemaNames>
 export type SchemaNameAll = keyof typeof dataTypeIds

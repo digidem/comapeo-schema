@@ -143,6 +143,16 @@ export const convertIcon: ConvertFunction<'icon'> = (mapeoDoc) => {
   }
 }
 
+export const convertTranslation: ConvertFunction<'translation'> = (
+  mapeoDoc
+) => {
+  return {
+    common: convertCommon(mapeoDoc),
+    ...mapeoDoc,
+    docIdRef: Buffer.from(mapeoDoc.docIdRef, 'hex'),
+  }
+}
+
 function convertIconVariants(variants: Icon['variants']): Icon_1_IconVariant[] {
   return variants.map((variant) => {
     const { blobVersionId, mimeType, size, pixelDensity } = variant
