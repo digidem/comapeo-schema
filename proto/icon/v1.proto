@@ -1,0 +1,64 @@
+syntax = "proto3";
+package mapeo;
+
+import "common/v1.proto";
+import "options.proto";
+
+message Icon_1 {
+  // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
+  option (dataTypeId) = "97e8cd9f0854";
+  option (schemaName) = "icon";
+
+  Common_1 common = 1;
+  string name = 2 [(required) = true];
+
+  message IconVariantSvg {
+
+    enum Size {
+      small = 0;
+      medium = 1;
+      large = 2;
+    }
+
+    message BlobVersionId {
+      bytes coreDiscoveryKey = 1;
+      int32 index = 2;
+    }
+
+    Size size = 1 [(required) = true];
+    BlobVersionId blobVersionId = 3 [(required) = true];
+  }
+
+  message IconVariantPng {
+
+    enum Size {
+      small = 0;
+      medium = 1;
+      large = 2;
+    }
+
+    enum PixelDensity {
+      x1 = 0;
+      x2 = 1;
+      x3 = 2;
+    }
+
+    message BlobVersionId {
+      bytes coreDiscoveryKey = 1;
+      int32 index = 2;
+    }
+
+    Size size = 1 [(required) = true];
+    PixelDensity pixelDensity = 2 [(required) = true];
+    BlobVersionId blobVersionId = 3 [(required) = true];
+
+  }
+  message IconVariant {
+    oneof variant {
+      IconVariantSvg svgIcon = 3;
+      IconVariantPng pngIcon = 4;
+    }
+  }
+  repeated IconVariant variants = 5;
+
+}

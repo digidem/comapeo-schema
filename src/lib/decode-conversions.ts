@@ -4,6 +4,17 @@ import {
   type TagValue_1,
   type TagValue_1_PrimitiveValue,
 } from '../proto/tags/v1.js'
+<<<<<<< HEAD
+=======
+
+import {
+  type Icon_1_IconVariant,
+  Icon_1_IconVariantPng_PixelDensity,
+  Icon_1_IconVariantPng,
+  Icon_1_IconVariantSvg,
+} from '../proto/icon/v1.js'
+
+>>>>>>> 20234da (differenciate two icon types (png and svg), fix tests)
 import {
   type MapeoDoc,
   type ProtoTypesWithSchemaInfo,
@@ -164,6 +175,70 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
     authorId: message.authorId.toString('hex')
   }
 
+<<<<<<< HEAD
+=======
+export const convertTranslation: ConvertFunction<'translation'> = (
+  message,
+  versionObj
+) => {
+  const { common, schemaVersion, ...rest } = message
+  const jsonSchemaCommon = convertCommon(common, versionObj)
+  return {
+    ...jsonSchemaCommon,
+    ...rest,
+    docIdRef: message.docIdRef.toString('hex'),
+  }
+}
+
+function convertIconVariant(variant: Icon_1_IconVariant) {
+  if (variant.variant?.$case === 'pngIcon') {
+    return convertIconVariantPng(variant.variant.pngIcon)
+  } else if (variant.variant?.$case === 'svgIcon') {
+    return convertIconVariantSvg(variant.variant.svgIcon)
+  } else {
+    throw new Error('invalid icon variant type')
+  }
+}
+
+function convertIconVariantPng(variant: Icon_1_IconVariantPng) {
+  const { blobVersionId, size, pixelDensity } = variant
+  if (!blobVersionId) {
+    throw new Error('Missing required property `blobVersionId`')
+  }
+  return {
+    blobVersionId: getVersionId(blobVersionId),
+    mimeType: 'image/png' as const,
+    size: size === 'UNRECOGNIZED' ? 'medium' : size,
+    pixelDensity: convertIconPixelDensity(pixelDensity),
+  }
+}
+
+function convertIconVariantSvg(variant: Icon_1_IconVariantSvg) {
+  const { blobVersionId, size } = variant
+  if (!blobVersionId) {
+    throw new Error('Missing required property `blobVersionId`')
+  }
+  return {
+    blobVersionId: getVersionId(blobVersionId),
+    mimeType: 'image/svg+xml' as const,
+    size: size === 'UNRECOGNIZED' ? 'medium' : size,
+  }
+}
+
+function convertIconPixelDensity(
+  pixelDensity: Icon_1_IconVariantPng_PixelDensity
+): 1 | 2 | 3 {
+  switch (pixelDensity) {
+    case 'x1':
+      return 1
+    case 'x2':
+      return 2
+    case 'x3':
+      return 3
+    default:
+      return 1
+  }
+>>>>>>> 20234da (differenciate two icon types (png and svg), fix tests)
 }
 
 function convertTags(tags: { [key: string]: TagValue_1 } | undefined): {

@@ -1,0 +1,64 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://mapeo.world/schemas/icon/v2.json",
+  "title": "Icon",
+  "description": "An Icon represents metadata to retrieve an Icon blob",
+  "type": "object",
+  "properties": {
+    "schemaName": {
+      "description": "Must be `icon`",
+      "type": "string",
+      "const": "icon"
+    },
+    "name": {
+      "type": "string"
+    },
+    "variants" :{
+      "type": "array",
+      "items": {
+        "type": "object",
+        "oneOf":[{
+          "type": "object",
+          "properties": {
+            "mimeType":{
+              "type": "string",
+              "const": "image/png"
+            },
+            "size": {
+              "type": "string",
+              "enum": ["small", "medium", "large"]
+            },
+            "pixelDensity": {
+              "type": "number",
+              "enum": [1,2,3]
+            },
+            "blobVersionId": {
+              "description": "Version id of the icon blob. Each id is id (hex-encoded 32 byte buffer) and index number, separated by '/'",
+              "type": "string"
+            }
+          },
+          "required": ["size", "pixelDensity", "blobVersionId", "mimeType"]
+        },{
+          "type": "object",
+          "properties": {
+            "size": {
+              "type": "string",
+              "enum": ["small", "medium", "large"]
+            },
+            "mimeType":{
+              "type": "string",
+              "const": "image/svg+xml"
+            },
+            "blobVersionId": {
+              "description": "Version id of the icon blob. Each id is id (hex-encoded 32 byte buffer) and index number, separated by '/'",
+              "type": "string"
+            }
+          },
+            "required": ["size", "blobVersionId", "mimeType"]
+        }]
+      }
+    }
+  },
+  "required": ["schemaName", "name", "variants"],
+  "additionalProperties": false
+}

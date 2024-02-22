@@ -9,6 +9,15 @@ import {
   OmitUnion,
 } from '../types.js'
 import { TagValue_1, type TagValue_1_PrimitiveValue } from '../proto/tags/v1.js'
+<<<<<<< HEAD:src/lib/encode-converstions.ts
+=======
+import { Icon } from '../schema/icon.js'
+import {
+  type Icon_1_IconVariant,
+  type Icon_1_IconVariantPng,
+  type Icon_1_IconVariantSvg,
+} from '../proto/icon/v1.js'
+>>>>>>> 20234da (differenciate two icon types (png and svg), fix tests):src/lib/encode-conversions.ts
 import { Observation_5_Metadata } from '../proto/observation/v5.js'
 import { parseVersionId } from './utils.js'
 
@@ -106,6 +115,7 @@ export const convertRole: ConvertFunction<'role'> = (
   }
 }
 
+<<<<<<< HEAD:src/lib/encode-converstions.ts
 export const convertDevice: ConvertFunction<'device'> = (
   mapeoDoc
 ) => {
@@ -115,6 +125,35 @@ export const convertDevice: ConvertFunction<'device'> = (
     authorId: Buffer.from(mapeoDoc.authorId, 'hex'),
     projectId: Buffer.from(mapeoDoc.projectId, 'hex')
   }
+=======
+function convertIconVariants(variants: Icon['variants']): Icon_1_IconVariant[] {
+  return variants.map((variant) => {
+    if (variant.mimeType === 'image/png') {
+      const { blobVersionId, size, pixelDensity } = variant
+      return {
+        variant: {
+          $case: 'pngIcon',
+          pngIcon: {
+            blobVersionId: parseVersionId(blobVersionId),
+            size,
+            pixelDensity: convertIconPixelDensity(pixelDensity),
+          },
+        },
+      }
+    } else {
+      const { blobVersionId, size } = variant
+      return {
+        variant: {
+          $case: 'svgIcon',
+          svgIcon: {
+            blobVersionId: parseVersionId(blobVersionId),
+            size,
+          },
+        },
+      }
+    }
+  })
+>>>>>>> 20234da (differenciate two icon types (png and svg), fix tests):src/lib/encode-conversions.ts
 }
 
 export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
