@@ -7,8 +7,9 @@ import {
 
 import {
   type Icon_1_IconVariant,
-  Icon_1_IconVariant_MimeType,
-  Icon_1_IconVariant_PixelDensity,
+  Icon_1_IconVariantPng_PixelDensity,
+  Icon_1_IconVariantPng,
+  Icon_1_IconVariantSvg,
 } from '../proto/icon/v1.js'
 
 import {
@@ -205,20 +206,42 @@ export const convertIcon: ConvertFunction<'icon'> = (message, versionObj) => {
 }
 
 function convertIconVariant(variant: Icon_1_IconVariant) {
-  const { blobVersionId, mimeType, size, pixelDensity } = variant
+  if (variant.variant?.$case === 'pngIcon') {
+    return convertIconVariantPng(variant.variant.pngIcon)
+  } else if (variant.variant?.$case === 'svgIcon') {
+    return convertIconVariantSvg(variant.variant.svgIcon)
+  } else {
+    throw new Error('invalid icon variant type')
+  }
+}
+
+function convertIconVariantPng(variant: Icon_1_IconVariantPng) {
+  const { blobVersionId, size, pixelDensity } = variant
   if (!blobVersionId) {
     throw new Error('Missing required property `blobVersionId`')
   }
   return {
     blobVersionId: getVersionId(blobVersionId),
-    mimeType: convertIconMimeType(mimeType),
+    mimeType: 'image/png' as const,
     size: size === 'UNRECOGNIZED' ? 'medium' : size,
     pixelDensity: convertIconPixelDensity(pixelDensity),
   }
 }
 
+function convertIconVariantSvg(variant: Icon_1_IconVariantSvg) {
+  const { blobVersionId, size } = variant
+  if (!blobVersionId) {
+    throw new Error('Missing required property `blobVersionId`')
+  }
+  return {
+    blobVersionId: getVersionId(blobVersionId),
+    mimeType: 'image/svg+xml' as const,
+    size: size === 'UNRECOGNIZED' ? 'medium' : size,
+  }
+}
+
 function convertIconPixelDensity(
-  pixelDensity: Icon_1_IconVariant_PixelDensity
+  pixelDensity: Icon_1_IconVariantPng_PixelDensity
 ): 1 | 2 | 3 {
   switch (pixelDensity) {
     case 'x1':
@@ -229,20 +252,6 @@ function convertIconPixelDensity(
       return 3
     default:
       return 1
-  }
-}
-
-type ValidMimeTypes = 'image/svg+xml' | 'image/png'
-function convertIconMimeType(
-  mimeType: Icon_1_IconVariant_MimeType
-): ValidMimeTypes {
-  switch (mimeType) {
-    case 'svg':
-      return 'image/svg+xml'
-    case 'png':
-      return 'image/png'
-    default:
-      return 'image/svg+xml'
   }
 }
 

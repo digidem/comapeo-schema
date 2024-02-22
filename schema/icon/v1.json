@@ -17,25 +17,45 @@
       "type": "array",
       "items": {
         "type": "object",
-        "properties": {
-          "size": {
-            "type": "string",
-            "enum": ["small", "medium", "large"]
+        "oneOf":[{
+          "type": "object",
+          "properties": {
+            "mimeType":{
+              "type": "string",
+              "const": "image/png"
+            },
+            "size": {
+              "type": "string",
+              "enum": ["small", "medium", "large"]
+            },
+            "pixelDensity": {
+              "type": "number",
+              "enum": [1,2,3]
+            },
+            "blobVersionId": {
+              "description": "Version id of the icon blob. Each id is id (hex-encoded 32 byte buffer) and index number, separated by '/'",
+              "type": "string"
+            }
           },
-          "pixelDensity": {
-            "type": "number",
-            "enum": [1,2,3]
+          "required": ["size", "pixelDensity", "blobVersionId", "mimeType"]
+        },{
+          "type": "object",
+          "properties": {
+            "size": {
+              "type": "string",
+              "enum": ["small", "medium", "large"]
+            },
+            "mimeType":{
+              "type": "string",
+              "const": "image/svg+xml"
+            },
+            "blobVersionId": {
+              "description": "Version id of the icon blob. Each id is id (hex-encoded 32 byte buffer) and index number, separated by '/'",
+              "type": "string"
+            }
           },
-          "blobVersionId": {
-      "description": "Version id of the icon blob. Each id is id (hex-encoded 32 byte buffer) and index number, separated by '/'",
-            "type": "string"
-          },
-          "mimeType": {
-            "type": "string",
-            "enum": ["image/svg+xml", "image/png"]
-          }
-        },
-        "required": ["size", "pixelDensity", "blobVersionId", "mimeType"]
+            "required": ["size", "blobVersionId", "mimeType"]
+        }]
       }
     }
   },

@@ -220,7 +220,6 @@ export const goodDocsCompleted = [
         },
         {
           size: 'large',
-          pixelDensity: 3,
           blobVersionId: randomBytes(32).toString('hex') + '/0',
           mimeType: 'image/svg+xml',
         },
