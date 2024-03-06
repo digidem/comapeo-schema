@@ -8,8 +8,6 @@ import {
 import {
   type Icon_1_IconVariant,
   Icon_1_IconVariantPng_PixelDensity,
-  Icon_1_IconVariantPng,
-  Icon_1_IconVariantSvg,
 } from '../proto/icon/v1.js'
 
 import {
@@ -207,16 +205,23 @@ export const convertIcon: ConvertFunction<'icon'> = (message, versionObj) => {
 
 function convertIconVariant(variant: Icon_1_IconVariant) {
   if (variant.variant?.$case === 'pngIcon') {
-    return convertIconVariantPng(variant.variant.pngIcon)
+    const { pixelDensity } = variant.variant.pngIcon
+    return convertIconVariantPng({ ...variant, pixelDensity })
   } else if (variant.variant?.$case === 'svgIcon') {
-    return convertIconVariantSvg(variant.variant.svgIcon)
+    return convertIconVariantSvg(variant)
   } else {
     throw new Error('invalid icon variant type')
   }
 }
 
-function convertIconVariantPng(variant: Icon_1_IconVariantPng) {
+function convertIconVariantPng(
+  variant: Icon_1_IconVariant & {
+    pixelDensity: Icon_1_IconVariantPng_PixelDensity
+  }
+) {
   const { blobVersionId, size, pixelDensity } = variant
+  if (variant.variant?.$case === 'pngIcon') {
+  }
   if (!blobVersionId) {
     throw new Error('Missing required property `blobVersionId`')
   }
@@ -228,7 +233,7 @@ function convertIconVariantPng(variant: Icon_1_IconVariantPng) {
   }
 }
 
-function convertIconVariantSvg(variant: Icon_1_IconVariantSvg) {
+function convertIconVariantSvg(variant: Icon_1_IconVariant) {
   const { blobVersionId, size } = variant
   if (!blobVersionId) {
     throw new Error('Missing required property `blobVersionId`')

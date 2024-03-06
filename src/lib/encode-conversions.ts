@@ -146,35 +146,61 @@ export const convertIcon: ConvertFunction<'icon'> = (mapeoDoc) => {
     variants: convertIconVariants(variants),
   }
 }
-
 function convertIconVariants(variants: Icon['variants']): Icon_1_IconVariant[] {
   return variants.map((variant) => {
+    const { size, blobVersionId } = variant
     if (variant.mimeType === 'image/png') {
-      const { blobVersionId, size, pixelDensity } = variant
       return {
         variant: {
           $case: 'pngIcon',
           pngIcon: {
-            blobVersionId: parseVersionId(blobVersionId),
-            size,
-            pixelDensity: convertIconPixelDensity(pixelDensity),
+            pixelDensity: convertIconPixelDensity(variant.pixelDensity),
           },
         },
+        size,
+        blobVersionId: parseVersionId(blobVersionId),
       }
     } else {
-      const { blobVersionId, size } = variant
       return {
         variant: {
           $case: 'svgIcon',
-          svgIcon: {
-            blobVersionId: parseVersionId(blobVersionId),
-            size,
-          },
+          svgIcon: {},
         },
+        size,
+        blobVersionId: parseVersionId(blobVersionId),
       }
     }
   })
 }
+
+// function convertIconVariants(variants: Icon['variants']): Icon_1_IconVariant[] {
+//   return variants.map((variant) => {
+//     if (variant.mimeType === 'image/png') {
+//       const { blobVersionId, size, pixelDensity } = variant
+//       return {
+//         variant: {
+//           $case: 'pngIcon',
+//           pngIcon: {
+//             blobVersionId: parseVersionId(blobVersionId),
+//             size,
+//             pixelDensity: convertIconPixelDensity(pixelDensity),
+//           },
+//         },
+//       }
+//     } else {
+//       const { blobVersionId, size } = variant
+//       return {
+//         variant: {
+//           $case: 'svgIcon',
+//           svgIcon: {
+//             blobVersionId: parseVersionId(blobVersionId),
+//             size,
+//           },
+//         },
+//       }
+//     }
+//   })
+// }
 
 function convertIconPixelDensity(pixelDensity: 1 | 2 | 3) {
   switch (pixelDensity) {

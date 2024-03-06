@@ -4,6 +4,16 @@
   "title": "Icon",
   "description": "An Icon represents metadata to retrieve an Icon blob",
   "type": "object",
+  "definitions": {
+    "size": {
+      "type": "string",
+      "enum": ["small", "medium", "large"]
+    },
+    "blobVersionId":{
+      "description": "Version id of the icon blob. Each id is id (hex-encoded 32 byte buffer) and index number, separated by '/'",
+      "type": "string"
+    }
+  },
   "properties": {
     "schemaName": {
       "description": "Must be `icon`",
@@ -24,35 +34,23 @@
               "type": "string",
               "const": "image/png"
             },
-            "size": {
-              "type": "string",
-              "enum": ["small", "medium", "large"]
-            },
+            "size": { "$ref": "#/definitions/size" },
             "pixelDensity": {
               "type": "number",
               "enum": [1,2,3]
             },
-            "blobVersionId": {
-              "description": "Version id of the icon blob. Each id is id (hex-encoded 32 byte buffer) and index number, separated by '/'",
-              "type": "string"
-            }
+            "blobVersionId": { "$ref": "#/definitions/blobVersionId" }
           },
           "required": ["size", "pixelDensity", "blobVersionId", "mimeType"]
         },{
           "type": "object",
           "properties": {
-            "size": {
-              "type": "string",
-              "enum": ["small", "medium", "large"]
-            },
+            "size": { "$ref": "#/definitions/size" },
             "mimeType":{
               "type": "string",
               "const": "image/svg+xml"
             },
-            "blobVersionId": {
-              "description": "Version id of the icon blob. Each id is id (hex-encoded 32 byte buffer) and index number, separated by '/'",
-              "type": "string"
-            }
+            "blobVersionId": { "$ref": "#/definitions/blobVersionId" }
           },
             "required": ["size", "blobVersionId", "mimeType"]
         }]

@@ -12,53 +12,39 @@ message Icon_1 {
   Common_1 common = 1;
   string name = 2 [(required) = true];
 
-  message IconVariantSvg {
-
-    enum Size {
-      small = 0;
-      medium = 1;
-      large = 2;
-    }
-
-    message BlobVersionId {
-      bytes coreDiscoveryKey = 1;
-      int32 index = 2;
-    }
-
-    Size size = 1 [(required) = true];
-    BlobVersionId blobVersionId = 3 [(required) = true];
-  }
+  message IconVariantSvg {}
 
   message IconVariantPng {
-
-    enum Size {
-      small = 0;
-      medium = 1;
-      large = 2;
-    }
-
     enum PixelDensity {
       x1 = 0;
       x2 = 1;
       x3 = 2;
     }
 
+    PixelDensity pixelDensity = 1 [(required) = true];
+  }
+
+
+  message IconVariant {
+    oneof variant {
+      IconVariantSvg svgIcon = 1;
+      IconVariantPng pngIcon = 2;
+    }
+
+    enum Size {
+      small = 0;
+      medium = 1;
+      large = 2;
+    }
+
     message BlobVersionId {
       bytes coreDiscoveryKey = 1;
       int32 index = 2;
     }
 
-    Size size = 1 [(required) = true];
-    PixelDensity pixelDensity = 2 [(required) = true];
-    BlobVersionId blobVersionId = 3 [(required) = true];
-
+    Size size = 3 [(required) = true];
+    BlobVersionId blobVersionId = 4 [(required) = true];
   }
-  message IconVariant {
-    oneof variant {
-      IconVariantSvg svgIcon = 3;
-      IconVariantPng pngIcon = 4;
-    }
-  }
-  repeated IconVariant variants = 5;
+  repeated IconVariant variants = 3;
 
 }
