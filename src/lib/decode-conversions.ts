@@ -203,6 +203,19 @@ export const convertIcon: ConvertFunction<'icon'> = (message, versionObj) => {
   }
 }
 
+export const convertTranslation: ConvertFunction<'translation'> = (
+  message,
+  versionObj
+) => {
+  const { common, schemaVersion, ...rest } = message
+  const jsonSchemaCommon = convertCommon(common, versionObj)
+  return {
+    ...jsonSchemaCommon,
+    ...rest,
+    docIdRef: message.docIdRef.toString('hex'),
+  }
+}
+
 function convertIconVariant(variant: Icon_1_IconVariant) {
   if (variant.variant?.$case === 'pngIcon') {
     const { pixelDensity } = variant.variant.pngIcon

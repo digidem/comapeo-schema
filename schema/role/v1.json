@@ -13,7 +13,8 @@
       "description": "Unique identifier for role assigned to device with auth core ID equal to `docId` of this record"
     },
     "fromIndex": {
-      "type": "number",
+      "type": "integer",
+      "minimum": 0,
       "description": "This is the index of the auth core that this role applies to (identified by the `docId`) to apply this role from. E.g. documents in the auth core assigned this role from this index will be evaluated according to this role."
     }
   },

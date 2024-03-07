@@ -142,6 +142,7 @@ export const convertIcon: ConvertFunction<'icon'> = (mapeoDoc) => {
     variants: convertIconVariants(variants),
   }
 }
+
 function convertIconVariants(variants: Icon['variants']): Icon_1_IconVariant[] {
   return variants.map((variant) => {
     const { size, blobVersionId } = variant
@@ -179,6 +180,16 @@ function convertIconPixelDensity(pixelDensity: 1 | 2 | 3) {
       return 'x2'
     case 3:
       return 'x3'
+  }
+}
+
+export const convertTranslation: ConvertFunction<'translation'> = (
+  mapeoDoc
+) => {
+  return {
+    common: convertCommon(mapeoDoc),
+    ...mapeoDoc,
+    docIdRef: Buffer.from(mapeoDoc.docIdRef, 'hex'),
   }
 }
 
