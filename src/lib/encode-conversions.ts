@@ -165,6 +165,8 @@ function convertIconVariants(variants: Icon['variants']): Icon_1_IconVariant[] {
         size,
         blobVersionId: parseVersionId(blobVersionId),
       }
+    } else {
+      throw new Error(`invalid mimeType`)
     }
   })
 }
