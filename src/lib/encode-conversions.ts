@@ -11,11 +11,7 @@ import {
 } from '../types.js'
 import { TagValue_1, type TagValue_1_PrimitiveValue } from '../proto/tags/v1.js'
 import { Icon } from '../schema/icon.js'
-import {
-  type Icon_1_IconVariant,
-  type Icon_1_IconVariantPng,
-  type Icon_1_IconVariantSvg,
-} from '../proto/icon/v1.js'
+import { type Icon_1_IconVariant } from '../proto/icon/v1.js'
 import { Observation_5_Metadata } from '../proto/observation/v5.js'
 import { parseVersionId } from './utils.js'
 import { CoreOwnership } from '../index.js'
@@ -160,7 +156,7 @@ function convertIconVariants(variants: Icon['variants']): Icon_1_IconVariant[] {
         size,
         blobVersionId: parseVersionId(blobVersionId),
       }
-    } else {
+    } else if (variant.mimeType === 'image/svg+xml') {
       return {
         variant: {
           $case: 'svgIcon',
@@ -172,35 +168,6 @@ function convertIconVariants(variants: Icon['variants']): Icon_1_IconVariant[] {
     }
   })
 }
-
-// function convertIconVariants(variants: Icon['variants']): Icon_1_IconVariant[] {
-//   return variants.map((variant) => {
-//     if (variant.mimeType === 'image/png') {
-//       const { blobVersionId, size, pixelDensity } = variant
-//       return {
-//         variant: {
-//           $case: 'pngIcon',
-//           pngIcon: {
-//             blobVersionId: parseVersionId(blobVersionId),
-//             size,
-//             pixelDensity: convertIconPixelDensity(pixelDensity),
-//           },
-//         },
-//       }
-//     } else {
-//       const { blobVersionId, size } = variant
-//       return {
-//         variant: {
-//           $case: 'svgIcon',
-//           svgIcon: {
-//             blobVersionId: parseVersionId(blobVersionId),
-//             size,
-//           },
-//         },
-//       }
-//     }
-//   })
-// }
 
 function convertIconPixelDensity(pixelDensity: 1 | 2 | 3) {
   switch (pixelDensity) {

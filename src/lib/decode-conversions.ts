@@ -220,8 +220,6 @@ function convertIconVariantPng(
   }
 ) {
   const { blobVersionId, size, pixelDensity } = variant
-  if (variant.variant?.$case === 'pngIcon') {
-  }
   if (!blobVersionId) {
     throw new Error('Missing required property `blobVersionId`')
   }
