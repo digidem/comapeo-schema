@@ -1,6 +1,12 @@
 import { type ProtoTypeNames } from '../proto/types.js'
 import { type ValidSchemaDef } from '../types.js'
 
+export class ExhaustivenessError extends Error {
+  constructor(value: never) {
+    super(`Exhaustiveness check failed. ${value} should be impossible`)
+  }
+}
+
 /**
  * Get the name of the type, e.g. `Observation_5` for schemaName `observation`
  * and schemaVersion `1`
