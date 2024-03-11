@@ -20,7 +20,7 @@ import {
   type JsonTagValue,
   type MapeoDocInternal,
 } from '../types.js'
-import { VersionIdObject, getVersionId } from './utils.js'
+import { ExhaustivenessError, VersionIdObject, getVersionId } from './utils.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
@@ -303,8 +303,7 @@ function convertTagValue({ kind }: TagValue_1): JsonTagValue {
     case 'primitive_value':
       return convertTagPrimitive(kind.primitive_value)
     default:
-      const _exhaustiveCheck: never = kind
-      return kind
+      throw new ExhaustivenessError(kind)
   }
 }
 
@@ -322,8 +321,7 @@ function convertTagPrimitive({
     case 'string_value':
       return kind.string_value
     default:
-      const _exhaustiveCheck: never = kind
-      return _exhaustiveCheck
+      throw new ExhaustivenessError(kind)
   }
 }
 

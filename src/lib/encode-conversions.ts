@@ -13,7 +13,7 @@ import { TagValue_1, type TagValue_1_PrimitiveValue } from '../proto/tags/v1.js'
 import { Icon } from '../schema/icon.js'
 import { type Icon_1_IconVariant } from '../proto/icon/v1.js'
 import { Observation_5_Metadata } from '../proto/observation/v5.js'
-import { parseVersionId } from './utils.js'
+import { ExhaustivenessError, parseVersionId } from './utils.js'
 import { CoreOwnership } from '../index.js'
 
 /** Function type for converting a protobuf type of any version for a particular
@@ -146,28 +146,29 @@ export const convertIcon: ConvertFunction<'icon'> = (mapeoDoc) => {
 function convertIconVariants(variants: Icon['variants']): Icon_1_IconVariant[] {
   return variants.map((variant) => {
     const { size, blobVersionId } = variant
-    if (variant.mimeType === 'image/png') {
-      return {
-        variant: {
-          $case: 'pngIcon',
-          pngIcon: {
-            pixelDensity: convertIconPixelDensity(variant.pixelDensity),
+    switch (variant.mimeType) {
+      case 'image/png':
+        return {
+          variant: {
+            $case: 'pngIcon',
+            pngIcon: {
+              pixelDensity: convertIconPixelDensity(variant.pixelDensity),
+            },
           },
-        },
-        size,
-        blobVersionId: parseVersionId(blobVersionId),
-      }
-    } else if (variant.mimeType === 'image/svg+xml') {
-      return {
-        variant: {
-          $case: 'svgIcon',
-          svgIcon: {},
-        },
-        size,
-        blobVersionId: parseVersionId(blobVersionId),
-      }
-    } else {
-      throw new Error(`invalid mimeType`)
+          size,
+          blobVersionId: parseVersionId(blobVersionId),
+        }
+      case 'image/svg+xml':
+        return {
+          variant: {
+            $case: 'svgIcon',
+            svgIcon: {},
+          },
+          size,
+          blobVersionId: parseVersionId(blobVersionId),
+        }
+      default:
+        throw new ExhaustivenessError(variant)
     }
   })
 }
@@ -270,7 +271,7 @@ function convertTagPrimitive(
       }
       break
     default:
-      const _exhaustiveCheck: never = tagPrimitive
+      throw new ExhaustivenessError(tagPrimitive)
   }
   return { kind }
 }
