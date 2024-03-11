@@ -23,7 +23,7 @@ import {
 // @ts-ignore
 import * as cenc from 'compact-encoding'
 import { DATA_TYPE_ID_BYTES, SCHEMA_VERSION_BYTES } from './constants.js'
-import { VersionIdObject, getProtoTypeName } from './lib/utils.js'
+import { ExhaustivenessError, VersionIdObject, getProtoTypeName } from './lib/utils.js'
 
 /** Map of dataTypeIds to schema names for quick lookups */
 const dataTypeIdToSchemaName: Record<string, SchemaName> = {}
@@ -75,8 +75,7 @@ export function decode(
     case 'translation':
       return convertTranslation(message, versionObj)
     default:
-      const _exhaustiveCheck: never = message
-      return message
+      throw new ExhaustivenessError(message)
   }
 }
 

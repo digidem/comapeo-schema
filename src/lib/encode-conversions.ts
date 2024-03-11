@@ -13,7 +13,7 @@ import { TagValue_1, type TagValue_1_PrimitiveValue } from '../proto/tags/v1.js'
 import { Icon } from '../schema/icon.js'
 import { type Icon_1_IconVariant } from '../proto/icon/v1.js'
 import { Observation_5_Metadata } from '../proto/observation/v5.js'
-import { parseVersionId } from './utils.js'
+import { ExhaustivenessError, parseVersionId } from './utils.js'
 import { CoreOwnership } from '../index.js'
 
 /** Function type for converting a protobuf type of any version for a particular
@@ -143,36 +143,34 @@ export const convertIcon: ConvertFunction<'icon'> = (mapeoDoc) => {
   }
 }
 
-export const convertTranslation: ConvertFunction<'translation'> = (
-  mapeoDoc
-) => {
-  return {
-    common: convertCommon(mapeoDoc),
-    ...mapeoDoc,
-    docIdRef: Buffer.from(mapeoDoc.docIdRef, 'hex'),
-  }
-}
-
 function convertIconVariants(variants: Icon['variants']): Icon_1_IconVariant[] {
   return variants.map((variant) => {
-    const { blobVersionId, mimeType, size, pixelDensity } = variant
-    return {
-      blobVersionId: parseVersionId(blobVersionId),
-      mimeType: convertIconMimeType(mimeType),
-      size,
-      pixelDensity: convertIconPixelDensity(pixelDensity),
+    const { size, blobVersionId } = variant
+    switch (variant.mimeType) {
+      case 'image/png':
+        return {
+          variant: {
+            $case: 'pngIcon',
+            pngIcon: {
+              pixelDensity: convertIconPixelDensity(variant.pixelDensity),
+            },
+          },
+          size,
+          blobVersionId: parseVersionId(blobVersionId),
+        }
+      case 'image/svg+xml':
+        return {
+          variant: {
+            $case: 'svgIcon',
+            svgIcon: {},
+          },
+          size,
+          blobVersionId: parseVersionId(blobVersionId),
+        }
+      default:
+        throw new ExhaustivenessError(variant)
     }
   })
-}
-function convertIconMimeType(mimeType: 'image/svg+xml' | 'image/png') {
-  switch (mimeType) {
-    case 'image/svg+xml':
-      return 'svg'
-    case 'image/png':
-      return 'png'
-    default:
-      return 'svg'
-  }
 }
 
 function convertIconPixelDensity(pixelDensity: 1 | 2 | 3) {
@@ -183,6 +181,16 @@ function convertIconPixelDensity(pixelDensity: 1 | 2 | 3) {
       return 'x2'
     case 3:
       return 'x3'
+  }
+}
+
+export const convertTranslation: ConvertFunction<'translation'> = (
+  mapeoDoc
+) => {
+  return {
+    common: convertCommon(mapeoDoc),
+    ...mapeoDoc,
+    docIdRef: Buffer.from(mapeoDoc.docIdRef, 'hex'),
   }
 }
 
@@ -263,7 +271,7 @@ function convertTagPrimitive(
       }
       break
     default:
-      const _exhaustiveCheck: never = tagPrimitive
+      throw new ExhaustivenessError(tagPrimitive)
   }
   return { kind }
 }
