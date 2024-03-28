@@ -1,5 +1,6 @@
 // @ts-check
-import test from 'tape'
+import test from 'node:test'
+import assert from 'node:assert/strict'
 import { validateJsonSchema } from '../scripts/lib/validate-json-schema.js'
 
 /** @type {import('json-schema').JSONSchema7Definition[]} */
@@ -50,15 +51,14 @@ const fixtures = [
   false,
 ]
 
-test('throws for schemas with null at top level', (t) => {
+test('throws for schemas with null at top level', () => {
   for (const def of fixtures) {
-    t.throws(() =>
+    assert.throws(() =>
       validateJsonSchema({
         type: 'object',
         properties: { foo: def },
       })
     )
   }
-  t.throws(() => validateJsonSchema({ type: 'string' }))
-  t.end()
+  assert.throws(() => validateJsonSchema({ type: 'string' }))
 })
