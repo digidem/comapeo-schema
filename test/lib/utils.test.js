@@ -1,8 +1,8 @@
 // @ts-check
-import test from 'tape'
+import test from 'node:test'
 import { ExhaustivenessError } from '../../dist/lib/utils.js'
 
-test('ExhaustivenessError', (t) => {
+test('ExhaustivenessError', () => {
   // These should not throw.
   const bools = [true, false]
   bools.forEach((bool) => {
@@ -14,6 +14,4 @@ test('ExhaustivenessError', (t) => {
         throw new ExhaustivenessError(bool)
     }
   })
-
-  t.end()
 })
