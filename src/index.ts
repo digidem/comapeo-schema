@@ -5,6 +5,7 @@ export { validate } from './validate.js'
 export {
   getVersionId,
   parseVersionId,
+  valueOf,
   type VersionIdObject,
 } from './lib/utils.js'
 

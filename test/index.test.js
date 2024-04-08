@@ -7,7 +7,10 @@ import {
   decode,
   decodeBlockPrefix,
   parseVersionId,
+  validate,
+  valueOf,
 } from '../dist/index.js'
+
 import { encodeBlockPrefix } from '../dist/encode.js'
 import { dataTypeIds, currentSchemaVersions } from '../dist/config.js'
 import { DATA_TYPE_ID_BYTES, SCHEMA_VERSION_BYTES } from '../dist/constants.js'
@@ -23,6 +26,37 @@ test('Bad docs throw when encoding', () => {
       // @ts-expect-error
       encode(doc)
     }, text)
+  }
+})
+
+test('validate bad docs', () => {
+  for (const schemaName of Object.keys(currentSchemaVersions)) {
+    assert(
+      // @ts-ignore
+      !validate(schemaName, {}),
+      `${schemaName} with missing properties should not validate`
+    )
+    assert(
+      Array.isArray(validate.errors),
+      'validate.errors should be an array after failed validation'
+    )
+    assert.equal(
+      validate.errors.length,
+      1,
+      'validate.errors should have one error'
+    )
+  }
+})
+
+test('validate good docs', () => {
+  for (const { doc, expected } of [...goodDocsMinimal, ...goodDocsCompleted]) {
+    // skip docs with UNRECOGNIZED values - these are used for testing encoding/decoding and will not validate (the decoded versions should validate)
+    if (Object.values(expected).includes('UNRECOGNIZED')) continue
+    assert(
+      // @ts-ignore
+      validate(doc.schemaName, valueOf(doc)),
+      `${doc.schemaName} with all required properties should validate`
+    )
   }
 })
 
