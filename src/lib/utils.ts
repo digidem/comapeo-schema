@@ -1,5 +1,10 @@
 import { type ProtoTypeNames } from '../proto/types.js'
-import { type ValidSchemaDef } from '../types.js'
+import {
+  type ValidSchemaDef,
+  type MapeoDoc,
+  type MapeoValue,
+  type FilterBySchemaName,
+} from '../types.js'
 
 export class ExhaustivenessError extends Error {
   constructor(value: never) {
@@ -52,4 +57,28 @@ export function parseVersionId(versionId: string): VersionIdObject {
   const index = Number.parseInt(items[1])
   if (isNaN(index)) throw new Error('Invalid versionId')
   return { coreDiscoveryKey, index }
+}
+
+/**
+ * @template {import('@mapeo/schema').MapeoDoc & { forks?: string[] }} T
+ * @param {T} doc
+ * @returns {Omit<T, 'docId' | 'versionId' | 'links' | 'forks' | 'createdAt' | 'updatedAt' | 'createdBy' | 'deleted'>}
+ */
+export function valueOf<TDoc extends MapeoDoc>(
+  doc: TDoc & { forks?: string[] }
+): FilterBySchemaName<MapeoValue, TDoc['schemaName']> {
+  /* eslint-disable no-unused-vars */
+  const {
+    docId,
+    versionId,
+    links,
+    forks,
+    createdAt,
+    updatedAt,
+    createdBy,
+    deleted,
+    ...rest
+  } = doc
+  /* eslint-enable no-unused-vars */
+  return rest as any
 }
