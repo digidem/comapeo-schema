@@ -7,8 +7,7 @@ import {
 
 import {
   type Icon_1_IconVariant,
-  Icon_1_IconVariant_MimeType,
-  Icon_1_IconVariant_PixelDensity,
+  Icon_1_IconVariantPng_PixelDensity,
 } from '../proto/icon/v1.js'
 
 import {
@@ -21,7 +20,7 @@ import {
   type JsonTagValue,
   type MapeoDocInternal,
 } from '../types.js'
-import { VersionIdObject, getVersionId } from './utils.js'
+import { ExhaustivenessError, VersionIdObject, getVersionId } from './utils.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
@@ -221,20 +220,47 @@ export const convertTranslation: ConvertFunction<'translation'> = (
 }
 
 function convertIconVariant(variant: Icon_1_IconVariant) {
-  const { blobVersionId, mimeType, size, pixelDensity } = variant
+  if (variant.variant?.$case === 'pngIcon') {
+    const { pixelDensity } = variant.variant.pngIcon
+    return convertIconVariantPng({ ...variant, pixelDensity })
+  } else if (variant.variant?.$case === 'svgIcon') {
+    return convertIconVariantSvg(variant)
+  } else {
+    throw new Error('invalid icon variant type')
+  }
+}
+
+function convertIconVariantPng(
+  variant: Icon_1_IconVariant & {
+    pixelDensity: Icon_1_IconVariantPng_PixelDensity
+  }
+) {
+  const { blobVersionId, size, pixelDensity } = variant
   if (!blobVersionId) {
     throw new Error('Missing required property `blobVersionId`')
   }
   return {
     blobVersionId: getVersionId(blobVersionId),
-    mimeType: convertIconMimeType(mimeType),
+    mimeType: 'image/png' as const,
     size: size === 'UNRECOGNIZED' ? 'medium' : size,
     pixelDensity: convertIconPixelDensity(pixelDensity),
   }
 }
 
+function convertIconVariantSvg(variant: Icon_1_IconVariant) {
+  const { blobVersionId, size } = variant
+  if (!blobVersionId) {
+    throw new Error('Missing required property `blobVersionId`')
+  }
+  return {
+    blobVersionId: getVersionId(blobVersionId),
+    mimeType: 'image/svg+xml' as const,
+    size: size === 'UNRECOGNIZED' ? 'medium' : size,
+  }
+}
+
 function convertIconPixelDensity(
-  pixelDensity: Icon_1_IconVariant_PixelDensity
+  pixelDensity: Icon_1_IconVariantPng_PixelDensity
 ): 1 | 2 | 3 {
   switch (pixelDensity) {
     case 'x1':
@@ -245,20 +271,6 @@ function convertIconPixelDensity(
       return 3
     default:
       return 1
-  }
-}
-
-type ValidMimeTypes = 'image/svg+xml' | 'image/png'
-function convertIconMimeType(
-  mimeType: Icon_1_IconVariant_MimeType
-): ValidMimeTypes {
-  switch (mimeType) {
-    case 'svg':
-      return 'image/svg+xml'
-    case 'png':
-      return 'image/png'
-    default:
-      return 'image/svg+xml'
   }
 }
 
@@ -294,8 +306,7 @@ function convertTagValue({ kind }: TagValue_1): JsonTagValue {
     case 'primitive_value':
       return convertTagPrimitive(kind.primitive_value)
     default:
-      const _exhaustiveCheck: never = kind
-      return kind
+      throw new ExhaustivenessError(kind)
   }
 }
 
@@ -313,8 +324,7 @@ function convertTagPrimitive({
     case 'string_value':
       return kind.string_value
     default:
-      const _exhaustiveCheck: never = kind
-      return _exhaustiveCheck
+      throw new ExhaustivenessError(kind)
   }
 }
 

@@ -1,5 +1,6 @@
 // @ts-check
-import test from 'tape'
+import test from 'node:test'
+import assert from 'node:assert/strict'
 import { randomBytes } from 'node:crypto'
 import {
   encode,
@@ -16,22 +17,21 @@ import {
   badDocs,
 } from './fixtures/index.js'
 
-test('Bad docs throw when encoding', (t) => {
+test('Bad docs throw when encoding', () => {
   for (const { text, doc } of badDocs) {
-    t.throws(() => {
+    assert.throws(() => {
       // @ts-expect-error
       encode(doc)
     }, text)
   }
-  t.end()
 })
 
 test(`testing encoding of doc with minimal required values,
-  then decoding and comparing the two objects`, async (t) => {
+  then decoding and comparing the two objects`, async () => {
   for (const { doc, expected } of goodDocsMinimal) {
     const buf = encode(doc)
     const decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
-    t.deepEqual(
+    assert.deepEqual(
       decodedDoc,
       { ...doc, ...expected },
       `tested deep equal of ${doc.schemaName} with only required values`
@@ -40,11 +40,11 @@ test(`testing encoding of doc with minimal required values,
 })
 
 test(`testing encoding of doc with additional optional values,
-  then decoding and comparing the two objects`, async (t) => {
+  then decoding and comparing the two objects`, async () => {
   for (const { doc, expected } of goodDocsCompleted) {
     const buf = encode(doc)
     const decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
-    t.deepEqual(
+    assert.deepEqual(
       decodedDoc,
       { ...doc, ...expected },
       `tested deep equal of ${doc.schemaName} with additional values`
@@ -53,7 +53,7 @@ test(`testing encoding of doc with additional optional values,
 })
 
 test(`testing encoding of doc with additional extra values,
-then decoding and comparing the two objects - extra values shouldn't be present`, async (t) => {
+then decoding and comparing the two objects - extra values shouldn't be present`, async () => {
   for (const { doc, expected } of goodDocsCompleted) {
     const buf = encode({
       ...doc,
@@ -61,7 +61,7 @@ then decoding and comparing the two objects - extra values shouldn't be present`
       extraFieldNotInSchema: 'whatever',
     })
     const decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
-    t.deepEqual(
+    assert.deepEqual(
       decodedDoc,
       { ...doc, ...expected },
       `tested deep equal of ${doc.schemaName} with extra - non valid - values`
@@ -69,19 +69,19 @@ then decoding and comparing the two objects - extra values shouldn't be present`
   }
 })
 
-test(`testing decoding of header that should match the dataTypeId and version`, async (t) => {
+test(`testing decoding of header that should match the dataTypeId and version`, async () => {
   for (const [schemaName, dataTypeId] of Object.entries(dataTypeIds)) {
     // TODO: test also schemaVersions greater than the current, for foward compat
     const schemaVersion = currentSchemaVersions[schemaName]
     /** @type { import('../src/types.js').ValidSchemaDef } */
     const schemaDef = { schemaName, schemaVersion }
     const buf = encodeBlockPrefix(schemaDef)
-    t.deepEqual(
+    assert.deepEqual(
       decodeBlockPrefix(buf),
       schemaDef,
       `test equality of schema definition with the decoded block prefix for ${schemaName}`
     )
-    t.equal(
+    assert.equal(
       buf.subarray(0, DATA_TYPE_ID_BYTES).toString('hex'),
       dataTypeId,
       `test equality of dataTypeId for ${schemaName}`
@@ -89,7 +89,7 @@ test(`testing decoding of header that should match the dataTypeId and version`, 
   }
 })
 
-test(`test encoding and decoding of block prefix, ignoring data that comes after`, async (t) => {
+test(`test encoding and decoding of block prefix, ignoring data that comes after`, async () => {
   for (let [schemaName, schemaVersion] of Object.entries(
     currentSchemaVersions
   )) {
@@ -101,12 +101,12 @@ test(`test encoding and decoding of block prefix, ignoring data that comes after
     const blockPrefix = encodeBlockPrefix(schemaDef)
     const prefixLength = DATA_TYPE_ID_BYTES + SCHEMA_VERSION_BYTES
     const buf = Buffer.concat([blockPrefix, randomBytes(50)])
-    t.equals(
+    assert.equal(
       blockPrefix.length,
       prefixLength,
       `test proper length of block prefix`
     )
-    t.deepEqual(
+    assert.deepEqual(
       decodeBlockPrefix(buf),
       schemaDef,
       `test equality of schema definition for ${schemaName}`
@@ -114,13 +114,13 @@ test(`test encoding and decoding of block prefix, ignoring data that comes after
   }
 })
 
-test(`test encoding of wrongly formatted header`, async (t) => {
+test(`test encoding of wrongly formatted header`, async () => {
   /** @type { import('../src/types.js').ValidSchemaDef } */
   let schemaDef = {
     schemaName: 'presot',
     schemaVersion: 2,
   }
-  t.throws(() => {
+  assert.throws(() => {
     encodeBlockPrefix(schemaDef)
   }, `when encoding a prefix with wrong schema name`)
 
@@ -130,7 +130,7 @@ test(`test encoding of wrongly formatted header`, async (t) => {
     schemaVersion: 5,
   }
   let buf = encodeBlockPrefix(schemaDef).subarray(0, 7)
-  t.throws(() => {
+  assert.throws(() => {
     decodeBlockPrefix(buf)
   }, `when decoding a header with the wrong length`)
 
@@ -139,11 +139,11 @@ test(`test encoding of wrongly formatted header`, async (t) => {
     '806a8dbb56e1994c8ea6887cda1d21b441eb9122',
     'hex'
   )
-  t.throws(() => {
+  assert.throws(() => {
     decodeBlockPrefix(randomBuf)
   }, `when trying to decode a header that is random data`)
 
-  t.throws(() => {
+  assert.throws(() => {
     decodeBlockPrefix(Buffer.alloc(50))
   }, `when trying to decode a header that is empty`)
 
@@ -152,7 +152,7 @@ test(`test encoding of wrongly formatted header`, async (t) => {
   // hardcoded since there's a slim chance we produce a correct header
   const unknownDataTypeId = Buffer.from('7a79b8b773b2', 'hex')
   unknownDataTypeId.copy(buf)
-  t.throws(() => {
+  assert.throws(() => {
     decodeBlockPrefix(buf)
   })
 })

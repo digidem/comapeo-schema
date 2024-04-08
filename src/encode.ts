@@ -21,6 +21,7 @@ import {
   convertTranslation,
 } from './lib/encode-conversions.js'
 import { CoreOwnership } from './index.js'
+import { ExhaustivenessError } from './lib/utils.js'
 
 /**
  * Encode a an object validated against a schema as a binary protobuf prefixed
@@ -85,8 +86,7 @@ export function encode(
       break
     }
     default:
-      const _exhaustiveCheck: never = mapeoDoc
-      protobuf = _exhaustiveCheck
+      throw new ExhaustivenessError(mapeoDoc)
   }
 
   return Buffer.concat([blockPrefix, protobuf])
