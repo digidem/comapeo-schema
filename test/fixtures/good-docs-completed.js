@@ -265,4 +265,57 @@ export const goodDocsCompleted = [
     },
     expected: {},
   },
+  {
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      schemaName: 'track',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      createdBy: cachedValues.createdBy,
+      links: [],
+      deleted: false,
+      locations: [
+        {
+          timestamp: cachedValues.metadata.position.timestamp,
+          mocked: false,
+          coords: { latitude: 12, longitude: 34 },
+        },
+        {
+          timestamp: cachedValues.metadata.position.timestamp,
+          mocked: true,
+          coords: {
+            latitude: 12,
+            longitude: 34,
+            altitude: 123,
+            heading: 123,
+            speed: 0.123,
+            accuracy: 123,
+          },
+        },
+      ],
+      refs: [
+        {
+          id: randomBytes(32).toString('hex'),
+          type: 'observation',
+        },
+        {
+          id: randomBytes(32).toString('hex'),
+          type: 'observation',
+        },
+      ],
+      attachments: [
+        {
+          name: 'myFile',
+          type: 'photo',
+          driveDiscoveryId: cachedValues.attachments.driveDiscoveryId,
+          hash: cachedValues.attachments.hash,
+        },
+      ],
+      tags: {
+        someKeyForArrVal: ['arr', 'of', 'strings'],
+      },
+    },
+    expected: {},
+  },
 ]

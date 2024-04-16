@@ -174,4 +174,21 @@ export const goodDocsMinimal = [
     },
     expected: {},
   },
+  {
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      schemaName: 'track',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      createdBy: cachedValues.createdBy,
+      links: [],
+      deleted: false,
+      locations: [],
+      refs: [],
+      attachments: [],
+      tags: {},
+    },
+    expected: {},
+  },
 ]
