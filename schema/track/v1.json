@@ -85,7 +85,7 @@
     },
     "attachments": {
       "type": "array",
-      "description": "media or other data that are attached to this observation",
+      "description": "media or other data that are attached to this track",
       "items": {
         "type": "object",
         "properties": {
