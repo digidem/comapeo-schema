@@ -380,9 +380,6 @@ function convertTrackPosition(
   if (!position.coords) {
     throw new Error('Missing required property `coords`')
   }
-  if (!position.timestamp) {
-    throw new Error('Missing required property `timestamp`')
-  }
   return {
     ...position,
     coords: position.coords,
