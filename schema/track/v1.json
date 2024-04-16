@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://mapeo.world/schemas/track/v1.json",
+  "title": "Track",
+  "description": "A track is a recording of positions over time, with associated tags and attachments, similar to an observation",
+  "definitions": {
+    "position": {
+      "description": "Position details",
+      "type": "object",
+      "required": ["timestamp", "mocked", "coords"],
+      "properties": {
+        "timestamp": {
+          "description": "Timestamp (milliseconds since UNIX epoch) of when the current position was obtained",
+          "type": "number"
+        },
+        "mocked": {
+          "description": "`true` if the position was mocked",
+          "type": "boolean",
+          "default": false
+        },
+        "coords": {
+          "description": "Position details, should be self explanatory. Units in meters",
+          "type": "object",
+          "required": ["latitude", "longitude"],
+          "properties": {
+            "latitude": {
+              "type": "number"
+            },
+            "longitude": {
+              "type": "number"
+            },
+            "altitude": {
+              "type": "number"
+            },
+            "heading": {
+              "type": "number"
+            },
+            "speed": {
+              "type": "number"
+            },
+            "accuracy": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    }
+  },
+  "type": "object",
+  "properties": {
+    "schemaName": {
+      "description": "Must be `track`",
+      "type": "string",
+      "const": "track"
+    },
+    "locations": {
+      "type": "array",
+      "description": "Array of positions along the track",
+      "items": {
+        "$ref": "#/definitions/position"
+      }
+    },
+    "refs": {
+      "type": "array",
+      "description": "References to any observations that this track is related to.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "hex-encoded id of the element that this track references",
+            "type": "string"
+          },
+          "type": {
+            "description": "type of the element that this track references",
+            "type": "string",
+            "enum": ["observation", "UNRECOGNIZED"],
+            "meta:enum": {
+              "UNRECOGNIZED": "future reference type"
+            }
+          }
+        },
+        "required": ["id", "type"]
+      }
+    },
+    "attachments": {
+      "type": "array",
+      "description": "media or other data that are attached to this observation",
+      "items": {
+        "type": "object",
+        "properties": {
+          "driveDiscoveryId": {
+            "type": "string",
+            "description": "core discovery id for the drive that the attachment belongs to"
+          },
+          "name": {
+            "type": "string",
+            "description": "name of the attachment"
+          },
+          "type": {
+            "type": "string",
+            "description": "string that describes the type of the attachment",
+            "meta:enum": {
+              "UNRECOGNIZED": "future attachment type"
+            },
+            "enum": ["photo", "video", "audio", "UNRECOGNIZED"]
+          },
+          "hash": {
+            "type": "string",
+            "description": "SHA256 hash of the attachment"
+          }
+        },
+        "required": ["driveDiscoveryId", "name", "type", "hash"]
+      }
+    },
+    "tags": {
+      "type": "object",
+      "description": "User-defined key-value pairs relevant to this track",
+      "properties": {},
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          },
+          {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "required": ["schemaName", "locations", "tags", "refs", "attachments"],
+  "additionalProperties": false
+}

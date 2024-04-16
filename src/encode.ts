@@ -19,6 +19,7 @@ import {
   convertCoreOwnership,
   convertIcon,
   convertTranslation,
+  convertTrack,
 } from './lib/encode-conversions.js'
 import { CoreOwnership } from './index.js'
 import { ExhaustivenessError } from './lib/utils.js'
@@ -82,6 +83,11 @@ export function encode(
     }
     case 'translation': {
       const message = convertTranslation(mapeoDoc)
+      protobuf = Encode[mapeoDoc.schemaName](message).finish()
+      break
+    }
+    case 'track': {
+      const message = convertTrack(mapeoDoc)
       protobuf = Encode[mapeoDoc.schemaName](message).finish()
       break
     }
