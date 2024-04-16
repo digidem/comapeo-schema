@@ -21,6 +21,9 @@ import {
   type MapeoDocInternal,
 } from '../types.js'
 import { ExhaustivenessError, VersionIdObject, getVersionId } from './utils.js'
+import type { Observation, Track } from '../index.js'
+import type { Observation_5_Attachment } from '../proto/observation/v5.js'
+import type { Track_1_Position } from '../proto/track/v1.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
@@ -57,23 +60,15 @@ export const convertObservation: ConvertFunction<'observation'> = (
   const { common, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
 
-  return {
+  const obs: Observation = {
     ...jsonSchemaCommon,
     ...rest,
     refs: message.refs?.map(({ id }) => ({ id: id.toString('hex') })),
-    attachments: message.attachments?.map(
-      ({ driveDiscoveryId, name, type, hash }) => {
-        return {
-          driveDiscoveryId: driveDiscoveryId.toString('hex'),
-          name,
-          type,
-          hash: hash.toString('hex'),
-        }
-      }
-    ),
+    attachments: message.attachments.map(convertAttachment),
     tags: convertTags(message.tags),
     metadata: message.metadata || {},
   }
+  return obs
 }
 
 type FieldOptions = FilterBySchemaName<MapeoDoc, 'field'>['options']
@@ -216,6 +211,24 @@ export const convertTranslation: ConvertFunction<'translation'> = (
   }
 }
 
+export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
+  const { common, schemaVersion, ...rest } = message
+  const jsonSchemaCommon = convertCommon(common, versionObj)
+  const locations = message.locations.map(convertTrackPosition)
+  const refs = message.refs.map(({ id, type }) => ({
+    id: id.toString('hex'),
+    type,
+  }))
+  return {
+    ...jsonSchemaCommon,
+    ...rest,
+    refs,
+    locations,
+    attachments: message.attachments.map(convertAttachment),
+    tags: convertTags(message.tags),
+  }
+}
+
 function convertIconVariant(variant: Icon_1_IconVariant) {
   if (variant.variant?.$case === 'pngIcon') {
     const { pixelDensity } = variant.variant.pngIcon
@@ -341,5 +354,35 @@ function convertCommon(
     updatedAt: common.updatedAt,
     createdBy: common.createdBy.toString('hex'),
     deleted: common.deleted,
+  }
+}
+
+function convertAttachment({
+  driveDiscoveryId,
+  name,
+  type,
+  hash,
+}: Observation_5_Attachment): Observation['attachments'][number] {
+  return {
+    driveDiscoveryId: driveDiscoveryId.toString('hex'),
+    name,
+    type,
+    hash: hash.toString('hex'),
+  }
+}
+
+function convertTrackPosition(
+  position: Track_1_Position
+): Track['locations'][number] {
+  if (!position.timestamp) {
+    throw new Error('Missing required property `timestamp`')
+  }
+  if (!position.coords) {
+    throw new Error('Missing required property `coords`')
+  }
+  return {
+    ...position,
+    coords: position.coords,
+    timestamp: position.timestamp,
   }
 }

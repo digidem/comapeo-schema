@@ -12,9 +12,12 @@ import {
 import { TagValue_1, type TagValue_1_PrimitiveValue } from '../proto/tags/v1.js'
 import { Icon } from '../schema/icon.js'
 import { type Icon_1_IconVariant } from '../proto/icon/v1.js'
-import { Observation_5_Metadata } from '../proto/observation/v5.js'
+import {
+  Observation_5_Metadata,
+  type Observation_5_Attachment,
+} from '../proto/observation/v5.js'
 import { ExhaustivenessError, parseVersionId } from './utils.js'
-import { CoreOwnership } from '../index.js'
+import { CoreOwnership, type Observation, type Track } from '../index.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
@@ -80,14 +83,10 @@ export const convertObservation: ConvertFunction<'observation'> = (
   const refs = mapeoDoc.refs.map((ref) => {
     return { id: Buffer.from(ref.id, 'hex') }
   })
-  const attachments = mapeoDoc.attachments.map((attachment) => {
-    return {
-      driveDiscoveryId: Buffer.from(attachment.driveDiscoveryId, 'hex'),
-      name: attachment.name,
-      type: attachment.type,
-      hash: Buffer.from(attachment.hash, 'hex'),
-    }
-  })
+  const attachments = mapeoDoc.attachments.map(convertAttachment)
+  const metadata: Observation_5_Metadata = mapeoDoc.metadata && {
+    ...Observation_5_Metadata.fromPartial(mapeoDoc.metadata),
+  }
 
   return {
     common: convertCommon(mapeoDoc),
@@ -95,9 +94,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
     refs,
     attachments,
     tags: convertTags(mapeoDoc.tags),
-    metadata:
-      mapeoDoc.metadata &&
-      Observation_5_Metadata.fromPartial(mapeoDoc.metadata),
+    metadata,
   }
 }
 
@@ -194,6 +191,23 @@ export const convertTranslation: ConvertFunction<'translation'> = (
   }
 }
 
+export const convertTrack: ConvertFunction<'track'> = (mapeoDoc) => {
+  const refs = mapeoDoc.refs.map((ref) => {
+    return { id: Buffer.from(ref.id, 'hex'), type: ref.type }
+  })
+  const attachments = mapeoDoc.attachments.map(convertAttachment)
+
+  const track: CurrentProtoTypes['track'] = {
+    common: convertCommon(mapeoDoc),
+    ...mapeoDoc,
+    refs,
+    attachments,
+    tags: convertTags(mapeoDoc.tags),
+    locations: mapeoDoc.locations,
+  }
+  return track
+}
+
 function convertCommon(
   common: Omit<MapeoCommon, 'versionId'>
 ): ProtoTypesWithSchemaInfo['common'] {
@@ -274,4 +288,15 @@ function convertTagPrimitive(
       throw new ExhaustivenessError(tagPrimitive)
   }
   return { kind }
+}
+
+function convertAttachment(
+  attachment: Observation['attachments'][number]
+): Observation_5_Attachment {
+  return {
+    driveDiscoveryId: Buffer.from(attachment.driveDiscoveryId, 'hex'),
+    name: attachment.name,
+    type: attachment.type,
+    hash: Buffer.from(attachment.hash, 'hex'),
+  }
 }

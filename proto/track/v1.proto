@@ -1,0 +1,56 @@
+syntax = "proto3";
+package mapeo;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+import "tags/v1.proto";
+import "common/v1.proto";
+import "options.proto";
+
+message Track_1 {
+  // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
+  option (dataTypeId) = "1e353f7ba641";
+  option (schemaName) = "track";
+
+  Common_1 common = 1;
+  repeated Position locations = 2;
+  repeated Ref refs = 3;
+  repeated Attachment attachments = 4;
+  map<string, TagValue_1> tags = 5;
+
+  enum RefType {
+    observation = 0;
+  }
+  message Ref {
+    bytes id = 1;
+    RefType type = 2;
+  }
+
+  enum AttachmentType {
+    photo = 0;
+    video = 1;
+    audio = 2;
+  }
+  message Attachment {
+    bytes driveDiscoveryId = 1;
+    string name = 2;
+    AttachmentType type = 3;
+    bytes hash = 4;
+  }
+
+  message Position {
+    google.protobuf.Timestamp timestamp = 1;
+    bool mocked = 2;
+
+    message Coords {
+      double latitude = 1;
+      double longitude = 2;
+      optional double altitude = 3;
+      optional double heading = 4;
+      optional double speed = 5;
+      optional double accuracy = 6;
+    }
+
+    Coords coords = 3;
+  }
+}

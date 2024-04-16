@@ -19,11 +19,16 @@ import {
   convertCoreOwnership,
   convertIcon,
   convertTranslation,
+  convertTrack,
 } from './lib/decode-conversions.js'
 // @ts-ignore
 import * as cenc from 'compact-encoding'
 import { DATA_TYPE_ID_BYTES, SCHEMA_VERSION_BYTES } from './constants.js'
-import { ExhaustivenessError, VersionIdObject, getProtoTypeName } from './lib/utils.js'
+import {
+  ExhaustivenessError,
+  VersionIdObject,
+  getProtoTypeName,
+} from './lib/utils.js'
 
 /** Map of dataTypeIds to schema names for quick lookups */
 const dataTypeIdToSchemaName: Record<string, SchemaName> = {}
@@ -74,6 +79,8 @@ export function decode(
       return convertIcon(message, versionObj)
     case 'translation':
       return convertTranslation(message, versionObj)
+    case 'track':
+      return convertTrack(message, versionObj)
     default:
       throw new ExhaustivenessError(message)
   }
