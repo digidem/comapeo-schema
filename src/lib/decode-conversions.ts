@@ -21,12 +21,8 @@ import {
   type MapeoDocInternal,
 } from '../types.js'
 import { ExhaustivenessError, VersionIdObject, getVersionId } from './utils.js'
-import type { Timestamp } from '../proto/google/protobuf/timestamp.js'
 import type { Observation, Track } from '../index.js'
-import type {
-  Observation_5_Attachment,
-  Observation_5_Metadata_Position,
-} from '../proto/observation/v5.js'
+import type { Observation_5_Attachment } from '../proto/observation/v5.js'
 import type { Track_1_Position } from '../proto/track/v1.js'
 
 /** Function type for converting a protobuf type of any version for a particular
@@ -70,15 +66,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
     refs: message.refs?.map(({ id }) => ({ id: id.toString('hex') })),
     attachments: message.attachments.map(convertAttachment),
     tags: convertTags(message.tags),
-    metadata: {
-      ...message.metadata,
-      position:
-        message.metadata?.position &&
-        convertObservationPosition(message.metadata.position),
-      lastSavedPosition:
-        message.metadata?.lastSavedPosition &&
-        convertObservationPosition(message.metadata.lastSavedPosition),
-    },
+    metadata: message.metadata || {},
   }
   return obs
 }
@@ -362,8 +350,8 @@ function convertCommon(
     docId: common.docId.toString('hex'),
     versionId: getVersionId(versionObj),
     links: common.links.map((link) => getVersionId(link)),
-    createdAt: toDateStr(common.createdAt),
-    updatedAt: toDateStr(common.updatedAt),
+    createdAt: common.createdAt,
+    updatedAt: common.updatedAt,
     createdBy: common.createdBy.toString('hex'),
     deleted: common.deleted,
   }
@@ -392,29 +380,12 @@ function convertTrackPosition(
   if (!position.coords) {
     throw new Error('Missing required property `coords`')
   }
+  if (!position.timestamp) {
+    throw new Error('Missing required property `timestamp`')
+  }
   return {
     ...position,
     coords: position.coords,
-    timestamp: toDateMs(position.timestamp),
+    timestamp: position.timestamp,
   }
-}
-
-function convertObservationPosition(
-  position: Observation_5_Metadata_Position
-): Observation['metadata']['position'] {
-  return {
-    ...position,
-    timestamp: position.timestamp && toDateStr(position.timestamp),
-  }
-}
-
-function toDateMs(t: Timestamp): number {
-  if (!t.seconds) throw new Error('Missing required property `seconds`')
-  let millis = (t.seconds || 0) * 1_000
-  millis += (t.nanos || 0) / 1_000_000
-  return millis
-}
-
-function toDateStr(t: Timestamp): string {
-  return new Date(toDateMs(t)).toISOString()
 }

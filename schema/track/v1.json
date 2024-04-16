@@ -10,8 +10,9 @@
       "required": ["timestamp", "mocked", "coords"],
       "properties": {
         "timestamp": {
-          "description": "Timestamp (milliseconds since UNIX epoch) of when the current position was obtained",
-          "type": "number"
+          "description": "Timestamp (ISO date string) of when the current position was obtained",
+          "type": "string",
+          "format": "date-time"
         },
         "mocked": {
           "description": "`true` if the position was mocked",

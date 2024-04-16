@@ -14,14 +14,10 @@ import { Icon } from '../schema/icon.js'
 import { type Icon_1_IconVariant } from '../proto/icon/v1.js'
 import {
   Observation_5_Metadata,
-  Observation_5_Metadata_Position_Coords,
   type Observation_5_Attachment,
-  type Observation_5_Metadata_Position,
 } from '../proto/observation/v5.js'
 import { ExhaustivenessError, parseVersionId } from './utils.js'
 import { CoreOwnership, type Observation, type Track } from '../index.js'
-import type { Timestamp } from '../proto/google/protobuf/timestamp.js'
-import type { Track_1_Position } from '../proto/track/v1.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
@@ -90,15 +86,6 @@ export const convertObservation: ConvertFunction<'observation'> = (
   const attachments = mapeoDoc.attachments.map(convertAttachment)
   const metadata: Observation_5_Metadata = mapeoDoc.metadata && {
     ...Observation_5_Metadata.fromPartial(mapeoDoc.metadata),
-  }
-
-  if (mapeoDoc.metadata?.position) {
-    metadata.position = convertObservationPosition(mapeoDoc.metadata.position)
-  }
-  if (mapeoDoc.metadata?.lastSavedPosition) {
-    metadata.lastSavedPosition = convertObservationPosition(
-      mapeoDoc.metadata.lastSavedPosition
-    )
   }
 
   return {
@@ -216,7 +203,7 @@ export const convertTrack: ConvertFunction<'track'> = (mapeoDoc) => {
     refs,
     attachments,
     tags: convertTags(mapeoDoc.tags),
-    locations: mapeoDoc.locations.map(convertTrackPosition),
+    locations: mapeoDoc.locations,
   }
   return track
 }
@@ -226,8 +213,8 @@ function convertCommon(
 ): ProtoTypesWithSchemaInfo['common'] {
   return {
     docId: Buffer.from(common.docId, 'hex'),
-    createdAt: toTimestamp(common.createdAt),
-    updatedAt: toTimestamp(common.updatedAt),
+    createdAt: common.createdAt,
+    updatedAt: common.updatedAt,
     createdBy: Buffer.from(common.createdBy, 'hex'),
     links: common.links.map((link) => parseVersionId(link)),
     deleted: common.deleted,
@@ -303,29 +290,6 @@ function convertTagPrimitive(
   return { kind }
 }
 
-function convertTrackPosition(
-  position: Track['locations'][number]
-): Track_1_Position {
-  return {
-    ...position,
-    timestamp: toTimestamp(position.timestamp),
-  }
-}
-
-function convertObservationPosition(
-  position: Observation['metadata']['position']
-): Observation_5_Metadata_Position {
-  return {
-    coords:
-      position?.coords &&
-      Observation_5_Metadata_Position_Coords.fromPartial(position.coords),
-    mocked: !!position?.mocked,
-    timestamp: position?.timestamp
-      ? toTimestamp(position.timestamp)
-      : undefined,
-  }
-}
-
 function convertAttachment(
   attachment: Observation['attachments'][number]
 ): Observation_5_Attachment {
@@ -335,14 +299,4 @@ function convertAttachment(
     type: attachment.type,
     hash: Buffer.from(attachment.hash, 'hex'),
   }
-}
-
-function toTimestamp(dateStrOrMs: string | number): Timestamp {
-  const timeMs =
-    typeof dateStrOrMs === 'number'
-      ? dateStrOrMs
-      : new Date(dateStrOrMs).getTime()
-  const seconds = Math.trunc(timeMs / 1_000)
-  const nanos = (timeMs % 1_000) * 1_000_000
-  return { seconds, nanos }
 }
