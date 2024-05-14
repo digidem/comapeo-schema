@@ -97,7 +97,7 @@
     "color": {
       "description": "string representation of a color in 24 bit (#rrggbb)",
       "type": "string",
-      "pattern": "^#([a-fA-F0-9]{6})$"
+      "pattern": "^#[a-fA-F0-9]{6}$"
     }
 },
 "required": [
