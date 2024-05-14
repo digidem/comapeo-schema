@@ -140,6 +140,7 @@ export const goodDocsCompleted = [
       },
       fieldIds: cachedValues.fieldIds,
       iconId: cachedValues.iconId,
+      color: '#ff00ff',
       terms: ['imastring'],
       deleted: false,
     },

@@ -93,17 +93,22 @@
       "items": {
         "type": "string"
       }
-    }
-  },
-  "required": [
-    "name",
-    "geometry",
-    "tags",
-    "addTags",
-    "removeTags",
-    "fieldIds",
-    "schemaName",
-    "terms"
-  ],
-  "additionalProperties": false
+    },
+    "color": {
+    "description": "string representation of a color in 24 bit (#rrggbb)",
+    "type": "string"
+  }
+},
+"required": [
+  "name",
+  "geometry",
+  "tags",
+  "addTags",
+  "removeTags",
+  "fieldIds",
+  "schemaName",
+  "terms",
+  "color"
+],
+"additionalProperties": false
 }
