@@ -17,8 +17,12 @@ import {
   type Observation_5_Attachment,
 } from '../proto/observation/v5.js'
 import { ExhaustivenessError, parseVersionId } from './utils.js'
-import { CoreOwnership, type Observation, type Track } from '../index.js'
-import validateColor from 'validate-color'
+import {
+  CoreOwnership,
+  valueSchemas,
+  type Observation,
+  type Track,
+} from '../index.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
@@ -67,7 +71,8 @@ export const convertField: ConvertFunction<'field'> = (mapeoDoc) => {
 }
 
 export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
-  if (!validateColor.validateHTMLColorHex(mapeoDoc.color)) {
+  const colorRegex = valueSchemas.preset.properties.color.pattern
+  if (!mapeoDoc.color.match(colorRegex)) {
     throw new Error(`invalid color string ${mapeoDoc.color}`)
   }
   return {
