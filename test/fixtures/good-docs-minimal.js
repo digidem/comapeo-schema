@@ -75,6 +75,7 @@ export const goodDocsMinimal = [
       fieldIds: [],
       terms: [],
       deleted: false,
+      color: '#ff00ff',
     },
     expected: {},
   },

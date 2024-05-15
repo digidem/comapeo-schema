@@ -29,4 +29,5 @@ message Preset_2 {
   repeated bytes fieldIds = 10;
   optional bytes iconId = 11;
   repeated string terms = 12;
+  string color = 13;
 }

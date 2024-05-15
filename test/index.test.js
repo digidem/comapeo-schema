@@ -29,6 +29,15 @@ test('Bad docs throw when encoding', () => {
   }
 })
 
+test(`Bad docs won't validate`, () => {
+  for (const { text, doc } of badDocs) {
+    assert.throws(() => {
+      // @ts-expect-error
+      validate(doc)
+    }, text)
+  }
+})
+
 test('validate bad docs', () => {
   for (const schemaName of Object.keys(currentSchemaVersions)) {
     assert(
