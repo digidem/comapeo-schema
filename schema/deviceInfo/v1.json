@@ -19,6 +19,7 @@
         "mobile",
         "tablet",
         "desktop",
+        "selfHostedServer",
         "UNRECOGNIZED"
       ],
       "description": "Type of device"
