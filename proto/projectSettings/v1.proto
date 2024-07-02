@@ -5,8 +5,6 @@ import "google/protobuf/timestamp.proto";
 import "common/v1.proto";
 import "options.proto";
 
-// Same as v1, created to test forward compatibility
-
 message ProjectSettings_1 {
   // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
   option (dataTypeId) = "626b45fe2942";
