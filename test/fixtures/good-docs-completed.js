@@ -14,10 +14,10 @@ export const goodDocsCompleted = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.originalVersionId,
       schemaName: 'observation',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
-      createdBy: cachedValues.createdBy,
       links: [],
       lat: 24.0424,
       lon: 21.0214,
@@ -75,10 +75,10 @@ export const goodDocsCompleted = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.originalVersionId,
       schemaName: 'projectSettings',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
-      createdBy: cachedValues.createdBy,
       links: [],
       defaultPresets: {
         point: cachedValues.defaultPresets.point,
@@ -96,10 +96,10 @@ export const goodDocsCompleted = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.originalVersionId,
       schemaName: 'field',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
-      createdBy: cachedValues.createdBy,
       links: [],
       tagKey: 'otherTagKey',
       type: 'number',
@@ -121,10 +121,10 @@ export const goodDocsCompleted = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.originalVersionId,
       schemaName: 'preset',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
-      createdBy: cachedValues.createdBy,
       links: [],
       name: 'myPreset',
       geometry: ['point', 'vertex', 'line'],
@@ -150,10 +150,10 @@ export const goodDocsCompleted = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.originalVersionId,
       schemaName: 'role',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
-      createdBy: cachedValues.createdBy,
       links: [],
       roleId: '6fd029a78243',
       fromIndex: 5,
@@ -165,10 +165,10 @@ export const goodDocsCompleted = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.originalVersionId,
       schemaName: 'deviceInfo',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
-      createdBy: cachedValues.createdBy,
       links: [],
       name: 'my device name',
       deviceType: 'desktop',
@@ -180,10 +180,10 @@ export const goodDocsCompleted = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.originalVersionId,
       schemaName: 'deviceInfo',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
-      createdBy: cachedValues.createdBy,
       links: [],
       name: 'my device name',
       // @ts-expect-error
@@ -198,10 +198,10 @@ export const goodDocsCompleted = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.originalVersionId,
       schemaName: 'coreOwnership',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
-      createdBy: cachedValues.createdBy,
       links: [],
       authCoreId: Buffer.from('authCoreId').toString('hex'),
       configCoreId: Buffer.from('configCoreId').toString('hex'),
@@ -224,11 +224,11 @@ export const goodDocsCompleted = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.originalVersionId,
       schemaName: 'icon',
       name: 'tree',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
-      createdBy: cachedValues.createdBy,
       links: [],
       deleted: false,
       variants: [
@@ -251,10 +251,10 @@ export const goodDocsCompleted = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.originalVersionId,
       schemaName: 'translation',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
-      createdBy: cachedValues.createdBy,
       links: [],
       deleted: false,
       schemaNameRef: 'preset',
@@ -270,10 +270,10 @@ export const goodDocsCompleted = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.originalVersionId,
       schemaName: 'track',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
-      createdBy: cachedValues.createdBy,
       links: [],
       deleted: false,
       locations: [

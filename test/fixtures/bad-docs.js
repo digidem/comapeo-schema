@@ -13,11 +13,33 @@ export const badDocs = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.versionId,
       schemaName: 'observOtion',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
-      createdBy: cachedValues.createdBy,
       links: [],
+      refs: [],
+      attachments: [],
+      tags: {},
+      metadata: {},
+      deleted: false,
+    },
+  },
+  {
+    text: 'missing expected originalVersionId',
+    /** @type Omit<import('../../dist/index.js').Observation, 'originalVersionId'> */
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      schemaName: 'observation',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      links: [
+        JSON.stringify({
+          coreDiscoveryKey: Buffer.from('abc123'),
+          index: 123,
+        }),
+      ],
       refs: [],
       attachments: [],
       tags: {},
@@ -31,10 +53,10 @@ export const badDocs = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.versionId,
       schemaName: 'role',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
-      createdBy: cachedValues.createdBy,
       links: [],
       roleId: '',
       fromIndex: 4,
@@ -46,10 +68,10 @@ export const badDocs = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.versionId,
       schemaName: 'icon',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
-      createdBy: cachedValues.createdBy,
       links: [],
       deleted: false,
       variants: [
@@ -67,10 +89,10 @@ export const badDocs = [
     doc: {
       docId: cachedValues.docId,
       versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.versionId,
       schemaName: 'preset',
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
-      createdBy: cachedValues.createdBy,
       links: [],
       name: 'myPreset',
       geometry: ['point'],
