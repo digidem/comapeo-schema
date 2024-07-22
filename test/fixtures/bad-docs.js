@@ -18,7 +18,6 @@ export const badDocs = [
       updatedAt: cachedValues.updatedAt,
       createdBy: cachedValues.createdBy,
       links: [],
-      refs: [],
       attachments: [],
       tags: {},
       metadata: {},

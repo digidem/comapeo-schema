@@ -21,7 +21,6 @@ export const goodDocsCompleted = [
       links: [],
       lat: 24.0424,
       lon: 21.0214,
-      refs: [],
       attachments: [
         {
           name: 'myFile',
