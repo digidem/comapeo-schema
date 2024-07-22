@@ -23,4 +23,6 @@ message ProjectSettings_1 {
   optional DefaultPresets defaultPresets = 2;
 
   optional string name = 5;
+  string configName = 6;
+  string configVersion = 7;
 }

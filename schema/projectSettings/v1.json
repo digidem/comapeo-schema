@@ -24,8 +24,16 @@
       },
       "required": ["point", "area", "vertex", "line", "relation"],
       "additionalProperties": false
+    },
+    "configName": {
+      "description": "name of the config of the project",
+      "type": "string"
+    },
+    "configVersion": {
+      "description": "version of the config of the project",
+      "type": "string"
     }
   },
-  "required": ["schemaName"],
+  "required": ["schemaName", "configName", "configVersion"],
   "additionalProperties": false
 }
