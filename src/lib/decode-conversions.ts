@@ -63,7 +63,6 @@ export const convertObservation: ConvertFunction<'observation'> = (
   const obs: Observation = {
     ...jsonSchemaCommon,
     ...rest,
-    refs: message.refs?.map(({ id }) => ({ id: id.toString('hex') })),
     attachments: message.attachments.map(convertAttachment),
     tags: convertTags(message.tags),
     metadata: message.metadata || {},

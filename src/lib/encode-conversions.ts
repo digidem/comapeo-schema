@@ -89,9 +89,6 @@ export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
 export const convertObservation: ConvertFunction<'observation'> = (
   mapeoDoc
 ) => {
-  const refs = mapeoDoc.refs.map((ref) => {
-    return { id: Buffer.from(ref.id, 'hex') }
-  })
   const attachments = mapeoDoc.attachments.map(convertAttachment)
   const metadata: Observation_1_Metadata = mapeoDoc.metadata && {
     ...Observation_1_Metadata.fromPartial(mapeoDoc.metadata),
@@ -100,7 +97,6 @@ export const convertObservation: ConvertFunction<'observation'> = (
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
-    refs,
     attachments,
     tags: convertTags(mapeoDoc.tags),
     metadata,

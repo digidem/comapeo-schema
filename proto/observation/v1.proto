@@ -17,11 +17,6 @@ message Observation_1 {
   optional double lat = 5;
   optional double lon = 6;
 
-  message Ref {
-    bytes id = 1;
-  }
-  repeated Ref refs = 7;
-
   // ATTACHMENT
   enum AttachmentType {
     photo = 0;
@@ -34,10 +29,10 @@ message Observation_1 {
     AttachmentType type = 3;
     bytes hash = 4;
   }
-  repeated Attachment attachments = 8;
+  repeated Attachment attachments = 7;
 
   // TAGS
-  map<string, TagValue_1> tags = 9;
+  map<string, TagValue_1> tags = 8;
 
   // METADATA
   message Metadata {
@@ -69,5 +64,5 @@ message Observation_1 {
     optional Position lastSavedPosition = 4;
     optional PositionProvider positionProvider = 5;
   }
-  optional Metadata metadata = 10;
+  optional Metadata metadata = 9;
 }
