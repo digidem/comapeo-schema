@@ -21,13 +21,14 @@
           "type": "string"
         },
         "type": {
-          "description": "type of the element that this observation references",
+          "description": "type of the element that this translation references",
           "type": "string",
           "enum": [
             "type_unspecified",
             "observation",
             "field",
             "preset",
+            "icon",
             "UNRECOGNIZED"
           ],
           "meta:enum": {

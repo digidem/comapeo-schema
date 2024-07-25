@@ -144,7 +144,6 @@ export const goodDocsCompleted = [
           type: 'field',
         },
       ],
-      iconId: cachedValues.iconId,
       color: '#ff00ff',
       terms: ['imastring'],
       deleted: false,

@@ -28,7 +28,6 @@ message Preset_1 {
   map<string, TagValue_1> addTags = 8;
   map<string, TagValue_1> removeTags = 9;
   repeated Ref_1 refs = 10;
-  optional bytes iconId = 11;
-  repeated string terms = 12;
-  string color = 13;
+  repeated string terms = 11;
+  string color = 12;
 }

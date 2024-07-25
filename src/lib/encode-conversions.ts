@@ -75,6 +75,13 @@ export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
   if (!mapeoDoc.color.match(colorRegex)) {
     throw new Error(`invalid color string ${mapeoDoc.color}`)
   }
+  for (const { type } of mapeoDoc.refs) {
+    if (type !== 'field' && type !== 'icon') {
+      throw new Error(
+        `can't reference ${type} from a preset, you can only reference fields or icons`
+      )
+    }
+  }
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
@@ -86,7 +93,6 @@ export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
       versionId: Buffer.from(versionId, 'hex'),
       type,
     })),
-    iconId: mapeoDoc.iconId ? Buffer.from(mapeoDoc.iconId, 'hex') : undefined,
   }
 }
 
@@ -205,6 +211,13 @@ export const convertTranslation: ConvertFunction<'translation'> = (
 }
 
 export const convertTrack: ConvertFunction<'track'> = (mapeoDoc) => {
+  for (const { type } of mapeoDoc.refs) {
+    if (type !== 'observation') {
+      throw new Error(
+        `can't reference ${type} from a track, you can only reference observations`
+      )
+    }
+  }
   const refs = mapeoDoc.refs.map((ref) => {
     return {
       docId: Buffer.from(ref.docId, 'hex'),
