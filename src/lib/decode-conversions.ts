@@ -85,8 +85,6 @@ export const convertField: ConvertFunction<'field'> = (message, versionObj) => {
       ...rest,
       tagKey: message.tagKey,
       label: message.label || message.tagKey,
-      appearance:
-        message.appearance === 'UNRECOGNIZED' ? undefined : message.appearance,
       options:
         message.options.length > 0
           ? message.options.reduce<Exclude<FieldOptions, undefined>>(

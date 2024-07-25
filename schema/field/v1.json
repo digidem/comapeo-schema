@@ -18,12 +18,20 @@
       "description": "Type of field - defines how the field is displayed to the user.",
       "type": "string",
       "meta:enum": {
+        "type_unspecified": "for backwards compatibility, unspecified type of appearance",
         "text": "Freeform text field",
         "number": "Allows only numbers",
         "selectOne": "Select one item from a list of pre-defined options",
         "selectMultiple": "Select any number of items from a list of pre-defined options"
       },
-      "enum": ["text", "number", "selectOne", "selectMultiple", "UNRECOGNIZED"]
+      "enum": [
+        "type_unspecified",
+        "text",
+        "number",
+        "selectOne",
+        "selectMultiple",
+        "UNRECOGNIZED"
+      ]
     },
     "label": {
       "description": "Default language label for the form field label",
@@ -33,10 +41,17 @@
       "description": "For text fields, display as a single-line or multi-line field",
       "type": "string",
       "meta:enum": {
+        "appearance_unspecified": "for backwards compatibility, unspecified type of appearance",
         "singleline": "Text will be cut-off if more than one line",
         "multiline": "Text will wrap to multiple lines within text field"
       },
-      "enum": ["singleline", "multiline"],
+      "enum": [
+        "appearance_unspecified",
+        "singleline",
+        "multiline",
+        "UNRECOGNIZED"
+      ],
+
       "default": "multiline"
     },
     "snakeCase": {

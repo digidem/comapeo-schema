@@ -24,9 +24,10 @@ message Observation_1 {
 
   // ATTACHMENT
   enum AttachmentType {
-    photo = 0;
-    video = 1;
-    audio = 2;
+    attachment_type_unspecified = 0;
+    photo = 1;
+    video = 2;
+    audio = 3;
   }
   message Attachment {
     bytes driveDiscoveryId = 1;
