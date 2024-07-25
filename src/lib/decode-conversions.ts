@@ -63,7 +63,11 @@ export const convertObservation: ConvertFunction<'observation'> = (
   const obs: Observation = {
     ...jsonSchemaCommon,
     ...rest,
-    refs: message.refs?.map(({ id }) => ({ id: id.toString('hex') })),
+    refs: message.refs?.map(({ docId, versionId, type }) => ({
+      docId: docId.toString('hex'),
+      versionId: versionId.toString('hex'),
+      type,
+    })),
     attachments: message.attachments.map(convertAttachment),
     tags: convertTags(message.tags),
     metadata: message.metadata || {},
@@ -129,7 +133,11 @@ export const convertPreset: ConvertFunction<'preset'> = (
     tags: convertTags(rest.tags),
     addTags: convertTags(rest.addTags),
     removeTags: convertTags(rest.removeTags),
-    fieldIds: rest.fieldIds.map((id) => id.toString('hex')),
+    refs: rest.refs.map(({ docId, versionId, type }) => ({
+      docId: docId.toString('hex'),
+      versionId: versionId.toString('hex'),
+      type,
+    })),
   }
 }
 
@@ -204,10 +212,15 @@ export const convertTranslation: ConvertFunction<'translation'> = (
 ) => {
   const { common, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
+  if (!message.ref) throw new Error('missing ref for translation')
   return {
     ...jsonSchemaCommon,
     ...rest,
-    docIdRef: message.docIdRef.toString('hex'),
+    ref: {
+      docId: message.ref.docId.toString('hex'),
+      versionId: message.ref.versionId.toString('hex'),
+      type: message.ref.type,
+    },
   }
 }
 
@@ -215,8 +228,9 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
   const { common, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   const locations = message.locations.map(convertTrackPosition)
-  const refs = message.refs.map(({ id, type }) => ({
-    id: id.toString('hex'),
+  const refs = message.refs.map(({ docId, versionId, type }) => ({
+    docId: docId.toString('hex'),
+    versionId: versionId.toString('hex'),
     type,
   }))
   return {

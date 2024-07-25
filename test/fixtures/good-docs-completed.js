@@ -138,7 +138,13 @@ export const goodDocsCompleted = [
       removeTags: {
         deleteInmeditaly: ['this list', 'of things'],
       },
-      fieldIds: cachedValues.fieldIds,
+      refs: [
+        {
+          docId: cachedValues.refs.docId,
+          versionId: cachedValues.refs.versionId,
+          type: 'field',
+        },
+      ],
       iconId: cachedValues.iconId,
       color: '#ff00ff',
       terms: ['imastring'],
@@ -257,8 +263,11 @@ export const goodDocsCompleted = [
       createdBy: cachedValues.createdBy,
       links: [],
       deleted: false,
-      schemaNameRef: 'preset',
-      docIdRef: cachedValues.docIdRef,
+      ref: {
+        docId: cachedValues.refs.docId,
+        versionId: cachedValues.refs.versionId,
+        type: 'preset',
+      },
       fieldRef: 'terms[0]',
       languageCode: 'es',
       regionCode: 'AR',
@@ -297,11 +306,13 @@ export const goodDocsCompleted = [
       ],
       refs: [
         {
-          id: randomBytes(32).toString('hex'),
+          docId: randomBytes(32).toString('hex'),
+          versionId: randomBytes(32).toString('hex'),
           type: 'observation',
         },
         {
-          id: randomBytes(32).toString('hex'),
+          docId: randomBytes(32).toString('hex'),
+          versionId: randomBytes(32).toString('hex'),
           type: 'observation',
         },
       ],

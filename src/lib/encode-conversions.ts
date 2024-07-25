@@ -81,7 +81,11 @@ export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
     tags: convertTags(mapeoDoc.tags),
     addTags: convertTags(mapeoDoc.addTags),
     removeTags: convertTags(mapeoDoc.removeTags),
-    fieldIds: mapeoDoc.fieldIds.map((field) => Buffer.from(field, 'hex')),
+    refs: mapeoDoc.refs.map(({ docId, versionId, type }) => ({
+      docId: Buffer.from(docId, 'hex'),
+      versionId: Buffer.from(versionId, 'hex'),
+      type,
+    })),
     iconId: mapeoDoc.iconId ? Buffer.from(mapeoDoc.iconId, 'hex') : undefined,
   }
 }
@@ -89,8 +93,12 @@ export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
 export const convertObservation: ConvertFunction<'observation'> = (
   mapeoDoc
 ) => {
-  const refs = mapeoDoc.refs.map((ref) => {
-    return { id: Buffer.from(ref.id, 'hex') }
+  const refs = mapeoDoc.refs.map(({ docId, versionId, type }) => {
+    return {
+      docId: Buffer.from(docId, 'hex'),
+      versionId: Buffer.from(versionId, 'hex'),
+      type,
+    }
   })
   const attachments = mapeoDoc.attachments.map(convertAttachment)
   const metadata: Observation_1_Metadata = mapeoDoc.metadata && {
@@ -196,13 +204,21 @@ export const convertTranslation: ConvertFunction<'translation'> = (
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
-    docIdRef: Buffer.from(mapeoDoc.docIdRef, 'hex'),
+    ref: {
+      docId: Buffer.from(mapeoDoc.ref.docId, 'hex'),
+      versionId: Buffer.from(mapeoDoc.ref.versionId, 'hex'),
+      type: mapeoDoc.ref.type,
+    },
   }
 }
 
 export const convertTrack: ConvertFunction<'track'> = (mapeoDoc) => {
   const refs = mapeoDoc.refs.map((ref) => {
-    return { id: Buffer.from(ref.id, 'hex'), type: ref.type }
+    return {
+      docId: Buffer.from(ref.docId, 'hex'),
+      type: ref.type,
+      versionId: Buffer.from(ref.versionId, 'hex'),
+    }
   })
   const attachments = mapeoDoc.attachments.map(convertAttachment)
 

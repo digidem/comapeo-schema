@@ -71,12 +71,30 @@
       "items": {
         "type": "object",
         "properties": {
-          "id": {
+          "docId": {
             "description": "hex-encoded id of the element that this observation references",
             "type": "string"
+          },
+          "versionId": {
+            "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
+            "type": "string"
+          },
+          "type": {
+            "description": "type of the element that this observation references",
+            "type": "string",
+            "enum": [
+              "type_unspecified",
+              "observation",
+              "field",
+              "preset",
+              "UNRECOGNIZED"
+            ],
+            "meta:enum": {
+              "UNRECOGNIZED": "future reference type"
+            }
           }
         },
-        "required": ["id"]
+        "required": ["docId", "versionId", "type"]
       }
     },
     "attachments": {

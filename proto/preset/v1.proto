@@ -4,6 +4,7 @@ package mapeo;
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "tags/v1.proto";
+import "ref/v1.proto";
 import "common/v1.proto";
 import "options.proto";
 
@@ -26,7 +27,7 @@ message Preset_1 {
   map<string, TagValue_1> tags = 7;
   map<string, TagValue_1> addTags = 8;
   map<string, TagValue_1> removeTags = 9;
-  repeated bytes fieldIds = 10;
+  repeated Ref_1 refs = 10;
   optional bytes iconId = 11;
   repeated string terms = 12;
   string color = 13;
