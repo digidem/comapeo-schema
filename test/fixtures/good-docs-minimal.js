@@ -21,7 +21,6 @@ export const goodDocsMinimal = [
       updatedAt: cachedValues.updatedAt,
       createdBy: cachedValues.createdBy,
       links: [],
-      refs: [],
       attachments: [],
       tags: {},
       metadata: {},

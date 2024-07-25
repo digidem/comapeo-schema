@@ -5,7 +5,6 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/struct.proto";
 import "tags/v1.proto";
 import "common/v1.proto";
-import "ref/v1.proto";
 import "options.proto";
 
 message Observation_1 {
@@ -17,8 +16,6 @@ message Observation_1 {
 
   optional double lat = 5;
   optional double lon = 6;
-
-  repeated Ref_1 refs = 7;
 
   // ATTACHMENT
   enum AttachmentType {
@@ -32,10 +29,10 @@ message Observation_1 {
     AttachmentType type = 3;
     bytes hash = 4;
   }
-  repeated Attachment attachments = 8;
+  repeated Attachment attachments = 7;
 
   // TAGS
-  map<string, TagValue_1> tags = 9;
+  map<string, TagValue_1> tags = 8;
 
   // METADATA
   message Metadata {
@@ -67,5 +64,5 @@ message Observation_1 {
     optional Position lastSavedPosition = 4;
     optional PositionProvider positionProvider = 5;
   }
-  optional Metadata metadata = 10;
+  optional Metadata metadata = 9;
 }
