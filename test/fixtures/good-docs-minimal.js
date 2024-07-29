@@ -37,8 +37,11 @@ export const goodDocsMinimal = [
       createdAt: cachedValues.createdAt,
       updatedAt: cachedValues.updatedAt,
       createdBy: cachedValues.createdBy,
-      configName: 'mapeo-config',
-      configVersion: '1.0.0',
+      configMetadata: {
+        name: 'mapeo-config',
+        buildDate: cachedValues.configMetadata.buildDate,
+        importDate: cachedValues.configMetadata.importDate,
+      },
       links: [],
       deleted: false,
     },

@@ -37,6 +37,11 @@
           "format": "date-time",
           "description": "RFC3339-formatted datetime of when the configuration was built"
         },
+        "importDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "RFC3339-formatted datetime of when the configuration was imported to the project"
+        },
         "fileVersion": {
           "type": "number",
           "minimum": 0,

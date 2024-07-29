@@ -23,7 +23,8 @@ message ProjectSettings_1 {
   message ConfigMetadata {
     optional string name = 1;
     optional google.protobuf.Timestamp buildDate = 2;
-    optional int32 fileVersion = 3;
+    optional google.protobuf.Timestamp importDate = 3;
+    optional int32 fileVersion = 4;
   }
 
   optional DefaultPresets defaultPresets = 2;
