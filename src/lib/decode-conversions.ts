@@ -50,6 +50,7 @@ export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
           relation: defaultPresets.relation.map((r) => r.toString('hex')),
         }
       : undefined,
+    configMetadata: message.configMetadata || {},
   }
 }
 

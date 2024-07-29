@@ -25,15 +25,27 @@
       "required": ["point", "area", "vertex", "line", "relation"],
       "additionalProperties": false
     },
-    "configName": {
-      "description": "name of the config of the project",
-      "type": "string"
-    },
-    "configVersion": {
-      "description": "version of the config of the project",
-      "type": "string"
+    "configMetadata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the configuration"
+        },
+        "buildDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "RFC3339-formatted datetime of when the configuration was built"
+        },
+        "fileVersion": {
+          "type": "number",
+          "minimum": 0,
+          "description": "version of the configuration file format"
+        }
+      },
+      "additionalProperties": false
     }
   },
-  "required": ["schemaName", "configName", "configVersion"],
+  "required": ["schemaName", "configMetadata"],
   "additionalProperties": false
 }

@@ -20,9 +20,13 @@ message ProjectSettings_1 {
     repeated bytes relation = 5;
   };
 
-  optional DefaultPresets defaultPresets = 2;
+  message ConfigMetadata {
+    optional string name = 1;
+    optional google.protobuf.Timestamp buildDate = 2;
+    optional int32 fileVersion = 3;
+  }
 
-  optional string name = 5;
-  string configName = 6;
-  string configVersion = 7;
+  optional DefaultPresets defaultPresets = 2;
+  optional ConfigMetadata configMetadata = 3;
+  optional string name = 4;
 }
