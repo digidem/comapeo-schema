@@ -9,7 +9,7 @@
       "type": "string",
       "const": "translation"
     },
-    "ref": {
+    "docRef": {
       "type": "object",
       "properties": {
         "docId": {
@@ -22,23 +22,12 @@
         },
         "type": {
           "description": "type of the element that this translation references",
-          "type": "string",
-          "enum": [
-            "type_unspecified",
-            "observation",
-            "field",
-            "preset",
-            "icon",
-            "UNRECOGNIZED"
-          ],
-          "meta:enum": {
-            "UNRECOGNIZED": "future reference type"
-          }
+          "type": "string"
         }
       },
       "required": ["docId", "versionId", "type"]
     },
-    "fieldRef": {
+    "propertyRef": {
       "type": "string",
       "description": "identifier for translated field/property in dot-prop notation"
     },
@@ -57,8 +46,8 @@
   },
   "required": [
     "schemaName",
-    "ref",
-    "fieldRef",
+    "docRef",
+    "propertyRef",
     "languageCode",
     "regionCode",
     "message"

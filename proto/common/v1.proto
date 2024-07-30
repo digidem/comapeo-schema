@@ -3,15 +3,12 @@ package mapeo;
 
 import "google/protobuf/timestamp.proto";
 import "options.proto";
+import "versionId/v1.proto";
 
 message Common_1 {
   // 32-byte random generated number
   optional bytes docId = 1 [(required) = true];
-  message Link {
-    bytes coreDiscoveryKey = 1;
-    int32 index = 2;
-  }
-  repeated Link links = 2;
+  repeated VersionId_1 links = 2;
   google.protobuf.Timestamp createdAt = 3 [(required) = true];
   google.protobuf.Timestamp updatedAt = 4 [(required) = true];
   // 32-byte hash of the discovery key of a core

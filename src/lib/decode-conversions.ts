@@ -127,11 +127,13 @@ export const convertPreset: ConvertFunction<'preset'> = (
     tags: convertTags(rest.tags),
     addTags: convertTags(rest.addTags),
     removeTags: convertTags(rest.removeTags),
-    refs: rest.refs.map(({ docId, versionId, type }) => ({
-      docId: docId.toString('hex'),
-      versionId: versionId.toString('hex'),
-      type,
-    })),
+    fieldRefs: rest.fieldRefs.map(({ docId, versionId }) => {
+      if (!versionId) throw new Error('missing versionId for fieldRef')
+      return {
+        docId: docId.toString('hex'),
+        versionId: getVersionId(versionId),
+      }
+    }),
   }
 }
 
@@ -206,14 +208,16 @@ export const convertTranslation: ConvertFunction<'translation'> = (
 ) => {
   const { common, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
-  if (!message.ref) throw new Error('missing ref for translation')
+  if (!message.docRef) throw new Error('missing docRef for translation')
+  if (!message.docRef.versionId)
+    throw new Error('missing docRef.versionId for translation')
   return {
     ...jsonSchemaCommon,
     ...rest,
-    ref: {
-      docId: message.ref.docId.toString('hex'),
-      versionId: message.ref.versionId.toString('hex'),
-      type: message.ref.type,
+    docRef: {
+      docId: message.docRef.docId.toString('hex'),
+      versionId: getVersionId(message.docRef.versionId),
+      type: message.docRef.type,
     },
   }
 }
@@ -222,15 +226,19 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
   const { common, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   const locations = message.locations.map(convertTrackPosition)
-  const refs = message.refs.map(({ docId, versionId, type }) => ({
-    docId: docId.toString('hex'),
-    versionId: versionId.toString('hex'),
-    type,
-  }))
+  const observationRefs = message.observationRefs.map(
+    ({ docId, versionId }) => {
+      if (!versionId) throw new Error('missing versionId from observationRef')
+      return {
+        docId: docId.toString('hex'),
+        versionId: getVersionId(versionId),
+      }
+    }
+  )
   return {
     ...jsonSchemaCommon,
     ...rest,
-    refs,
+    observationRefs,
     locations,
     attachments: message.attachments.map(convertAttachment),
     tags: convertTags(message.tags),

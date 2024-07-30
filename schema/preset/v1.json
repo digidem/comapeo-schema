@@ -76,7 +76,7 @@
       "description": "Tags that are removed when changing to another preset (default is the same value as 'addTags' which in turn defaults to 'tags')",
       "$ref": "#/definitions/tags"
     },
-    "refs": {
+    "fieldRefs": {
       "type": "array",
       "description": "References to any fields that this preset is related to.",
       "items": {
@@ -89,24 +89,9 @@
           "versionId": {
             "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
             "type": "string"
-          },
-          "type": {
-            "description": "type of the element that this preset references",
-            "type": "string",
-            "enum": [
-              "type_unspecified",
-              "observation",
-              "field",
-              "preset",
-              "icon",
-              "UNRECOGNIZED"
-            ],
-            "meta:enum": {
-              "UNRECOGNIZED": "future reference type"
-            }
           }
         },
-        "required": ["docId", "versionId", "type"]
+        "required": ["docId", "versionId"]
       }
     },
     "terms": {
@@ -128,7 +113,7 @@
     "tags",
     "addTags",
     "removeTags",
-    "refs",
+    "fieldRefs",
     "schemaName",
     "terms",
     "color"
