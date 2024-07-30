@@ -90,6 +90,7 @@ export const goodDocsCompleted = [
       name: 'myProject',
       configMetadata: {
         name: 'mapeo-config-1',
+        fileVersion: '1.0',
         buildDate: cachedValues.configMetadata.buildDate,
         importDate: cachedValues.configMetadata.importDate,
       },

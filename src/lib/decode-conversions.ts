@@ -40,7 +40,10 @@ export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
 ) => {
   const { common, schemaVersion, defaultPresets, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
-  const configMetadata = convertConfigMetadata(message.configMetadata)
+  let configMetadata
+  if (rest.configMetadata) {
+    configMetadata = convertConfigMetadata(rest.configMetadata)
+  }
   return {
     ...jsonSchemaCommon,
     ...rest,
@@ -58,15 +61,12 @@ export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
 }
 
 function convertConfigMetadata(
-  configMetadata: ProjectSettings_1_ConfigMetadata | undefined
+  configMetadata: ProjectSettings_1_ConfigMetadata
 ): ProjectSettings['configMetadata'] {
-  if (!configMetadata) {
-    throw new Error('Missing required property configMetadata')
-  }
-  if (!configMetadata.importDate) {
+  if (!configMetadata?.importDate) {
     throw new Error('Missing required property configMetadata.importDate')
   }
-  if (!configMetadata.buildDate) {
+  if (!configMetadata?.buildDate) {
     throw new Error('Missing required property configMetadata.buildDate')
   }
   return configMetadata as ProjectSettings['configMetadata']

@@ -44,8 +44,7 @@
         },
         "fileVersion": {
           "type": "string",
-          "description": "version of the configuration file format as comver (MAYOR.MINOR)",
-          "pattern": "^(d+).(d+)$"
+          "description": "version of the configuration file format as comver (MAYOR.MINOR)"
         }
       },
       "additionalProperties": false,
