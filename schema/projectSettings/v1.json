@@ -48,9 +48,10 @@
           "description": "version of the configuration file format"
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": ["name", "buildDate", "importDate", "fileVersion"]
     }
   },
-  "required": ["schemaName", "configMetadata"],
+  "required": ["schemaName"],
   "additionalProperties": false
 }
