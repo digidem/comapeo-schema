@@ -43,9 +43,9 @@
           "description": "RFC3339-formatted datetime of when the configuration was imported to the project"
         },
         "fileVersion": {
-          "type": "number",
-          "minimum": 0,
-          "description": "version of the configuration file format"
+          "type": "string",
+          "description": "version of the configuration file format as comver (MAYOR.MINOR)",
+          "pattern": "^(d+).(d+)$"
         }
       },
       "additionalProperties": false,

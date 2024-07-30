@@ -24,7 +24,7 @@ message ProjectSettings_1 {
     string name = 1;
     google.protobuf.Timestamp buildDate = 2;
     google.protobuf.Timestamp importDate = 3;
-    uint32 fileVersion = 4;
+    string fileVersion = 4;
   }
 
   optional DefaultPresets defaultPresets = 2;
