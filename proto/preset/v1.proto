@@ -26,11 +26,12 @@ message Preset_1 {
   string color = 13;
 
   enum Geometry {
-    point = 0;
-    vertex = 1;
-    line = 2;
-    area = 3;
-    relation = 4;
+    geometry_unspecified = 0;
+    point = 1;
+    vertex = 2;
+    line = 3;
+    area = 4;
+    relation = 5;
   }
 
 

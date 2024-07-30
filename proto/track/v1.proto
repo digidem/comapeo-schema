@@ -20,14 +20,17 @@ message Track_1 {
   map<string, TagValue_1> tags = 5;
 
   enum AttachmentType {
-    photo = 0;
-    video = 1;
-    audio = 2;
+    attachment_type_unspecified = 0;
+    photo = 1;
+    video = 2;
+    audio = 3;
   }
+
   message ObservationRef {
     bytes docId = 1;
     VersionId_1 versionId = 2;
   }
+
   message Attachment {
     bytes driveDiscoveryId = 1;
     string name = 2;

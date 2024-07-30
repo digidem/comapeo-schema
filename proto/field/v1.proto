@@ -16,16 +16,18 @@ message Field_1 {
 
   optional string tagKey = 5 [(required) = true];
   enum Type {
-    text = 0;
-    number = 1;
-    selectOne = 2;
-    selectMultiple = 3;
+    type_unspecified = 0;
+    text = 1;
+    number = 2;
+    selectOne = 3;
+    selectMultiple = 4;
   }
   Type type = 6 [(required) = true];
   optional string label = 7 [(required) = true];
   enum Appearance {
-    multiline = 0;
-    singleline = 1;
+    appearance_unspecified = 0;
+    multiline = 1;
+    singleline = 2;
   }
   optional Appearance appearance = 8;
   optional bool snakeCase = 9;
