@@ -16,9 +16,10 @@ message Icon_1 {
 
   message IconVariantPng {
     enum PixelDensity {
-      x1 = 0;
-      x2 = 1;
-      x3 = 2;
+      pixel_density_unspecified = 0;
+      x1 = 1;
+      x2 = 2;
+      x3 = 3;
     }
 
     PixelDensity pixelDensity = 1 [(required) = true];
@@ -32,9 +33,10 @@ message Icon_1 {
     }
 
     enum Size {
-      small = 0;
-      medium = 1;
-      large = 2;
+      size_unspecified = 0;
+      small = 1;
+      medium = 2;
+      large = 3;
     }
 
     message BlobVersionId {

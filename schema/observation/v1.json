@@ -85,7 +85,13 @@
             "meta:enum": {
               "UNRECOGNIZED": "future attachment type"
             },
-            "enum": ["photo", "video", "audio", "UNRECOGNIZED"]
+            "enum": [
+              "attachment_type_unspecified",
+              "photo",
+              "video",
+              "audio",
+              "UNRECOGNIZED"
+            ]
           },
           "hash": {
             "type": "string",

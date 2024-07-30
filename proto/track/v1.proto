@@ -19,7 +19,8 @@ message Track_1 {
   map<string, TagValue_1> tags = 5;
 
   enum RefType {
-    observation = 0;
+    ref_type_unspecified = 0;
+    observation = 1;
   }
   message Ref {
     bytes id = 1;
@@ -27,9 +28,10 @@ message Track_1 {
   }
 
   enum AttachmentType {
-    photo = 0;
-    video = 1;
-    audio = 2;
+    attachment_type_unspecified = 0;
+    photo = 1;
+    video = 2;
+    audio = 3;
   }
   message Attachment {
     bytes driveDiscoveryId = 1;

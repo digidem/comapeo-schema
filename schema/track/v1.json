@@ -74,7 +74,7 @@
           "type": {
             "description": "type of the element that this track references",
             "type": "string",
-            "enum": ["observation", "UNRECOGNIZED"],
+            "enum": ["ref_type_unspecified", "observation", "UNRECOGNIZED"],
             "meta:enum": {
               "UNRECOGNIZED": "future reference type"
             }
@@ -103,7 +103,13 @@
             "meta:enum": {
               "UNRECOGNIZED": "future attachment type"
             },
-            "enum": ["photo", "video", "audio", "UNRECOGNIZED"]
+            "enum": [
+              "attachment_type_unspecified",
+              "photo",
+              "video",
+              "audio",
+              "UNRECOGNIZED"
+            ]
           },
           "hash": {
             "type": "string",
