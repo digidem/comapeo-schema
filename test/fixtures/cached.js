@@ -29,7 +29,7 @@ export const cachedValues = {
   },
   refs: {
     docId: randomBytes(32).toString('hex'),
-    versionId: randomBytes(32).toString('hex'),
+    versionId: `${randomBytes(32).toString('hex')}/0`,
   },
   iconId: randomBytes(32).toString('hex'),
   docIdRef: randomBytes(32).toString('hex'),

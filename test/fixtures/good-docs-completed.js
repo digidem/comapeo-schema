@@ -137,11 +137,10 @@ export const goodDocsCompleted = [
       removeTags: {
         deleteInmeditaly: ['this list', 'of things'],
       },
-      refs: [
+      fieldRefs: [
         {
           docId: cachedValues.refs.docId,
           versionId: cachedValues.refs.versionId,
-          type: 'field',
         },
       ],
       color: '#ff00ff',
@@ -261,12 +260,12 @@ export const goodDocsCompleted = [
       createdBy: cachedValues.createdBy,
       links: [],
       deleted: false,
-      ref: {
+      docRef: {
         docId: cachedValues.refs.docId,
         versionId: cachedValues.refs.versionId,
         type: 'preset',
       },
-      fieldRef: 'terms[0]',
+      propertyRef: 'terms[0]',
       languageCode: 'es',
       regionCode: 'AR',
       message: 'agroforestación',
@@ -302,16 +301,14 @@ export const goodDocsCompleted = [
           },
         },
       ],
-      refs: [
+      observationRefs: [
         {
           docId: randomBytes(32).toString('hex'),
-          versionId: randomBytes(32).toString('hex'),
-          type: 'observation',
+          versionId: cachedValues.refs.versionId,
         },
         {
           docId: randomBytes(32).toString('hex'),
-          versionId: randomBytes(32).toString('hex'),
-          type: 'observation',
+          versionId: cachedValues.refs.versionId,
         },
       ],
       attachments: [
