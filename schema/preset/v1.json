@@ -76,16 +76,23 @@
       "description": "Tags that are removed when changing to another preset (default is the same value as 'addTags' which in turn defaults to 'tags')",
       "$ref": "#/definitions/tags"
     },
-    "fieldIds": {
-      "description": "hex-encoded string. IDs of fields to displayed to the user when the preset is created or edited",
+    "fieldRefs": {
       "type": "array",
+      "description": "References to any fields that this preset is related to.",
       "items": {
-        "type": "string"
+        "type": "object",
+        "properties": {
+          "docId": {
+            "description": "hex-encoded id of the element that this observation references",
+            "type": "string"
+          },
+          "versionId": {
+            "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
+            "type": "string"
+          }
+        },
+        "required": ["docId", "versionId"]
       }
-    },
-    "iconId": {
-      "description": "hex-encoded string. ID of preset icon which represents this preset",
-      "type": "string"
     },
     "terms": {
       "description": "Synonyms or related terms (used for search)",
@@ -99,17 +106,17 @@
       "type": "string",
       "pattern": "^#[a-fA-F0-9]{6}$"
     }
-},
-"required": [
-  "name",
-  "geometry",
-  "tags",
-  "addTags",
-  "removeTags",
-  "fieldIds",
-  "schemaName",
-  "terms",
-  "color"
-],
-"additionalProperties": false
+  },
+  "required": [
+    "name",
+    "geometry",
+    "tags",
+    "addTags",
+    "removeTags",
+    "fieldRefs",
+    "schemaName",
+    "terms",
+    "color"
+  ],
+  "additionalProperties": false
 }

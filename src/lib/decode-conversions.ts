@@ -122,11 +122,16 @@ export const convertPreset: ConvertFunction<'preset'> = (
     ...jsonSchemaCommon,
     ...rest,
     geometry,
-    iconId: rest.iconId ? rest.iconId.toString('hex') : undefined,
     tags: convertTags(rest.tags),
     addTags: convertTags(rest.addTags),
     removeTags: convertTags(rest.removeTags),
-    fieldIds: rest.fieldIds.map((id) => id.toString('hex')),
+    fieldRefs: rest.fieldRefs.map(({ docId, versionId }) => {
+      if (!versionId) throw new Error('missing fieldRef.versionId for preset')
+      return {
+        docId: docId.toString('hex'),
+        versionId: getVersionId(versionId),
+      }
+    }),
   }
 }
 
@@ -201,10 +206,17 @@ export const convertTranslation: ConvertFunction<'translation'> = (
 ) => {
   const { common, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
+  if (!message.docRef) throw new Error('missing docRef for translation')
+  if (!message.docRef.versionId)
+    throw new Error('missing docRef.versionId for translation')
   return {
     ...jsonSchemaCommon,
     ...rest,
-    docIdRef: message.docIdRef.toString('hex'),
+    docRef: {
+      docId: message.docRef.docId.toString('hex'),
+      versionId: getVersionId(message.docRef.versionId),
+      type: message.docRef.type,
+    },
   }
 }
 
@@ -212,14 +224,20 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
   const { common, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   const locations = message.locations.map(convertTrackPosition)
-  const refs = message.refs.map(({ id, type }) => ({
-    id: id.toString('hex'),
-    type,
-  }))
+  const observationRefs = message.observationRefs.map(
+    ({ docId, versionId }) => {
+      if (!versionId)
+        throw new Error('missing observationRef.versionId from track')
+      return {
+        docId: docId.toString('hex'),
+        versionId: getVersionId(versionId),
+      }
+    }
+  )
   return {
     ...jsonSchemaCommon,
     ...rest,
-    refs,
+    observationRefs,
     locations,
     attachments: message.attachments.map(convertAttachment),
     tags: convertTags(message.tags),

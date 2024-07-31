@@ -5,6 +5,7 @@ import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "tags/v1.proto";
 import "common/v1.proto";
+import "versionId/v1.proto";
 import "options.proto";
 
 message Preset_1 {
@@ -15,6 +16,15 @@ message Preset_1 {
   Common_1 common = 1;
 
   string name = 5;
+  repeated Geometry geometry = 6;
+  map<string, TagValue_1> tags = 7;
+  map<string, TagValue_1> addTags = 8;
+  map<string, TagValue_1> removeTags = 9;
+  repeated FieldRef fieldRefs = 10;
+  optional IconRef iconRef = 11;
+  repeated string terms = 12;
+  string color = 13;
+
   enum Geometry {
     geometry_unspecified = 0;
     point = 1;
@@ -23,12 +33,15 @@ message Preset_1 {
     area = 4;
     relation = 5;
   }
-  repeated Geometry geometry = 6;
-  map<string, TagValue_1> tags = 7;
-  map<string, TagValue_1> addTags = 8;
-  map<string, TagValue_1> removeTags = 9;
-  repeated bytes fieldIds = 10;
-  optional bytes iconId = 11;
-  repeated string terms = 12;
-  string color = 13;
+
+
+  message FieldRef {
+    bytes docId = 1;
+    VersionId_1 versionId = 2;
+  }
+
+  message IconRef {
+    bytes docId = 1;
+    VersionId_1 versionId = 2;
+  }
 }

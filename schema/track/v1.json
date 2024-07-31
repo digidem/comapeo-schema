@@ -61,26 +61,22 @@
         "$ref": "#/definitions/position"
       }
     },
-    "refs": {
+    "observationRefs": {
       "type": "array",
       "description": "References to any observations that this track is related to.",
       "items": {
         "type": "object",
         "properties": {
-          "id": {
+          "docId": {
             "description": "hex-encoded id of the element that this track references",
             "type": "string"
           },
-          "type": {
-            "description": "type of the element that this track references",
-            "type": "string",
-            "enum": ["ref_type_unspecified", "observation", "UNRECOGNIZED"],
-            "meta:enum": {
-              "UNRECOGNIZED": "future reference type"
-            }
+          "versionId": {
+            "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
+            "type": "string"
           }
         },
-        "required": ["id", "type"]
+        "required": ["docId", "versionId"]
       }
     },
     "attachments": {
@@ -160,6 +156,12 @@
       }
     }
   },
-  "required": ["schemaName", "locations", "tags", "refs", "attachments"],
+  "required": [
+    "schemaName",
+    "locations",
+    "tags",
+    "observationRefs",
+    "attachments"
+  ],
   "additionalProperties": false
 }

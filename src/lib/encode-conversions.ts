@@ -81,8 +81,10 @@ export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
     tags: convertTags(mapeoDoc.tags),
     addTags: convertTags(mapeoDoc.addTags),
     removeTags: convertTags(mapeoDoc.removeTags),
-    fieldIds: mapeoDoc.fieldIds.map((field) => Buffer.from(field, 'hex')),
-    iconId: mapeoDoc.iconId ? Buffer.from(mapeoDoc.iconId, 'hex') : undefined,
+    fieldRefs: mapeoDoc.fieldRefs.map(({ docId, versionId }) => ({
+      docId: Buffer.from(docId, 'hex'),
+      versionId: parseVersionId(versionId),
+    })),
   }
 }
 
@@ -192,20 +194,29 @@ export const convertTranslation: ConvertFunction<'translation'> = (
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
-    docIdRef: Buffer.from(mapeoDoc.docIdRef, 'hex'),
+    docRef: {
+      docId: Buffer.from(mapeoDoc.docRef.docId, 'hex'),
+      versionId: parseVersionId(mapeoDoc.docRef.versionId),
+      type: mapeoDoc.docRef.type,
+    },
   }
 }
 
 export const convertTrack: ConvertFunction<'track'> = (mapeoDoc) => {
-  const refs = mapeoDoc.refs.map((ref) => {
-    return { id: Buffer.from(ref.id, 'hex'), type: ref.type }
-  })
+  const observationRefs = mapeoDoc.observationRefs.map(
+    ({ docId, versionId }) => {
+      return {
+        docId: Buffer.from(docId, 'hex'),
+        versionId: parseVersionId(versionId),
+      }
+    }
+  )
   const attachments = mapeoDoc.attachments.map(convertAttachment)
 
   const track: CurrentProtoTypes['track'] = {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
-    refs,
+    observationRefs,
     attachments,
     tags: convertTags(mapeoDoc.tags),
     locations: mapeoDoc.locations,

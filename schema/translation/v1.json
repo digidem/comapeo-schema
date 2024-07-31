@@ -4,20 +4,30 @@
   "description": "A translation is a translated message in a single language for a string property/field of any Mapeo record type",
   "title": "translation",
   "type": "object",
-  "properties":{
-    "schemaName":{
-      "type":"string",
+  "properties": {
+    "schemaName": {
+      "type": "string",
       "const": "translation"
     },
-    "schemaNameRef": {
-      "type": "string",
-      "description": "schema name of record related to the field being translated"
+    "docRef": {
+      "type": "object",
+      "properties": {
+        "docId": {
+          "description": "hex-encoded id of the element that this observation references",
+          "type": "string"
+        },
+        "versionId": {
+          "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
+          "type": "string"
+        },
+        "type": {
+          "description": "type of the element that this translation references",
+          "type": "string"
+        }
+      },
+      "required": ["docId", "versionId", "type"]
     },
-    "docIdRef": {
-      "type": "string",
-      "description": "the docId of the record that this field is translated for"
-    },
-    "fieldRef": {
+    "propertyRef": {
       "type": "string",
       "description": "identifier for translated field/property in dot-prop notation"
     },
@@ -26,14 +36,21 @@
       "description": "three-letter ISO 169-3 language code"
     },
     "regionCode": {
-        "type": "string",
-        "description": "two-letter country code from ISO 3166-1 alpha-2 or a three-digit code from UN M.49 for geographical regions"
-},
+      "type": "string",
+      "description": "two-letter country code from ISO 3166-1 alpha-2 or a three-digit code from UN M.49 for geographical regions"
+    },
     "message": {
       "type": "string",
       "description": "the translated string"
     }
   },
-  "required": ["schemaName", "schemaNameRef", "docIdRef", "fieldRef", "languageCode", "regionCode", "message"],
+  "required": [
+    "schemaName",
+    "docRef",
+    "propertyRef",
+    "languageCode",
+    "regionCode",
+    "message"
+  ],
   "additionalProperties": false
 }
