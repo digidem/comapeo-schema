@@ -126,7 +126,7 @@ export const convertPreset: ConvertFunction<'preset'> = (
     addTags: convertTags(rest.addTags),
     removeTags: convertTags(rest.removeTags),
     fieldRefs: rest.fieldRefs.map(({ docId, versionId }) => {
-      if (!versionId) throw new Error('missing versionId for fieldRef')
+      if (!versionId) throw new Error('missing fieldRef.versionId for preset')
       return {
         docId: docId.toString('hex'),
         versionId: getVersionId(versionId),
@@ -226,7 +226,8 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
   const locations = message.locations.map(convertTrackPosition)
   const observationRefs = message.observationRefs.map(
     ({ docId, versionId }) => {
-      if (!versionId) throw new Error('missing versionId from observationRef')
+      if (!versionId)
+        throw new Error('missing observationRef.versionId from track')
       return {
         docId: docId.toString('hex'),
         versionId: getVersionId(versionId),
