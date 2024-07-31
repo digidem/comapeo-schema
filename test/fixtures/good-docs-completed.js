@@ -87,6 +87,12 @@ export const goodDocsCompleted = [
         relation: cachedValues.defaultPresets.point,
       },
       name: 'myProject',
+      configMetadata: {
+        name: 'mapeo-config-1',
+        fileVersion: '1.0',
+        buildDate: cachedValues.configMetadata.buildDate,
+        importDate: cachedValues.configMetadata.importDate,
+      },
       deleted: false,
     },
     expected: {},

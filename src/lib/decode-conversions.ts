@@ -24,6 +24,8 @@ import { ExhaustivenessError, VersionIdObject, getVersionId } from './utils.js'
 import type { Observation, Track } from '../index.js'
 import type { Observation_1_Attachment } from '../proto/observation/v1.js'
 import type { Track_1_Position } from '../proto/track/v1.js'
+import { ProjectSettings_1_ConfigMetadata } from '../proto/projectSettings/v1.js'
+import { ProjectSettings } from '../schema/projectSettings.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
@@ -38,6 +40,10 @@ export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
 ) => {
   const { common, schemaVersion, defaultPresets, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
+  let configMetadata
+  if (rest.configMetadata) {
+    configMetadata = convertConfigMetadata(rest.configMetadata)
+  }
   return {
     ...jsonSchemaCommon,
     ...rest,
@@ -50,7 +56,20 @@ export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
           relation: defaultPresets.relation.map((r) => r.toString('hex')),
         }
       : undefined,
+    configMetadata,
   }
+}
+
+function convertConfigMetadata(
+  configMetadata: ProjectSettings_1_ConfigMetadata
+): ProjectSettings['configMetadata'] {
+  if (!configMetadata?.importDate) {
+    throw new Error('Missing required property configMetadata.importDate')
+  }
+  if (!configMetadata?.buildDate) {
+    throw new Error('Missing required property configMetadata.buildDate')
+  }
+  return configMetadata as ProjectSettings['configMetadata']
 }
 
 export const convertObservation: ConvertFunction<'observation'> = (

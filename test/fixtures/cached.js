@@ -33,4 +33,8 @@ export const cachedValues = {
   },
   iconId: randomBytes(32).toString('hex'),
   docIdRef: randomBytes(32).toString('hex'),
+  configMetadata: {
+    buildDate: date,
+    importDate: date,
+  },
 }
