@@ -75,6 +75,15 @@ export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
   if (!mapeoDoc.color.match(colorRegex)) {
     throw new Error(`invalid color string ${mapeoDoc.color}`)
   }
+
+  let iconRef
+  if (mapeoDoc.iconRef) {
+    iconRef = {
+      docId: Buffer.from(mapeoDoc.iconRef.docId, 'hex'),
+      versionId: parseVersionId(mapeoDoc.iconRef.versionId),
+    }
+  }
+
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
@@ -85,6 +94,7 @@ export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
       docId: Buffer.from(docId, 'hex'),
       versionId: parseVersionId(versionId),
     })),
+    iconRef,
   }
 }
 
