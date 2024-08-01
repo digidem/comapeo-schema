@@ -94,6 +94,21 @@
         "required": ["docId", "versionId"]
       }
     },
+    "iconRef": {
+      "type": "object",
+      "description": "References to the icon that this preset is related to.",
+      "properties": {
+        "docId": {
+          "description": "hex-encoded id of the element that this observation references",
+          "type": "string"
+        },
+        "versionId": {
+          "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
+          "type": "string"
+        }
+      },
+      "required": ["docId", "versionId"]
+    },
     "terms": {
       "description": "Synonyms or related terms (used for search)",
       "type": "array",

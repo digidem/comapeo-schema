@@ -137,6 +137,16 @@ export const convertPreset: ConvertFunction<'preset'> = (
       geomType !== 'UNRECOGNIZED'
   )
 
+  let iconRef
+  if (rest.iconRef) {
+    // iconRef is not required property on the schema, but if it does exist, then a versionId must be present
+    if (!rest.iconRef.versionId)
+      throw new Error('found iconRef on preset but is missing versionId')
+    iconRef = {
+      docId: rest.iconRef.docId.toString('hex'),
+      versionId: getVersionId(rest.iconRef.versionId),
+    }
+  }
   return {
     ...jsonSchemaCommon,
     ...rest,
@@ -151,6 +161,7 @@ export const convertPreset: ConvertFunction<'preset'> = (
         versionId: getVersionId(versionId),
       }
     }),
+    iconRef,
   }
 }
 
