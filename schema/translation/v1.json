@@ -23,9 +23,20 @@
       },
       "required": ["docId", "versionId"]
     },
-    "refType": {
+    "docRefType": {
       "description": "type of the element that this translation references",
-      "type": "string"
+      "type": "string",
+      "enum": [
+        "type_unspecified",
+        "deviceInfo",
+        "preset",
+        "field",
+        "observation",
+        "projectSettings",
+        "role",
+        "track",
+        "UNRECOGNIZED"
+      ]
     },
     "propertyRef": {
       "type": "string",
@@ -47,7 +58,7 @@
   "required": [
     "schemaName",
     "docRef",
-    "refType",
+    "docRefType",
     "propertyRef",
     "languageCode",
     "regionCode",

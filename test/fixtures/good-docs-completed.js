@@ -270,7 +270,7 @@ export const goodDocsCompleted = [
         docId: cachedValues.refs.docId,
         versionId: cachedValues.refs.versionId,
       },
-      refType: 'preset',
+      docRefType: 'preset',
       propertyRef: 'terms[0]',
       languageCode: 'es',
       regionCode: 'AR',

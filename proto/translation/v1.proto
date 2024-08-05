@@ -22,6 +22,16 @@ message Translation_1 {
     bytes docId = 1;
     VersionId_1 versionId = 2;
   }
-  string refType = 7;
+  enum DocRefType {
+    type_unspecified = 0;
+    deviceInfo = 1;
+    preset = 2;
+    field = 3;
+    observation = 4;
+    projectSettings = 5;
+    role = 6;
+    track = 7;
+  }
+  DocRefType docRefType = 7;
 
 }
