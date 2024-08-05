@@ -180,6 +180,21 @@
         }
       },
       "additionalProperties": false
+    },
+    "presetRef": {
+      "type": "object",
+      "description": "References to the preset that this observation is related to.",
+      "properties": {
+        "docId": {
+          "description": "hex-encoded id of the element that this observation references",
+          "type": "string"
+        },
+        "versionId": {
+          "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
+          "type": "string"
+        }
+      },
+      "required": ["docId", "versionId"]
     }
   },
   "required": ["schemaName", "tags", "attachments", "metadata"],
