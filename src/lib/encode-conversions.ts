@@ -207,7 +207,6 @@ export const convertTranslation: ConvertFunction<'translation'> = (
     docRef: {
       docId: Buffer.from(mapeoDoc.docRef.docId, 'hex'),
       versionId: parseVersionId(mapeoDoc.docRef.versionId),
-      type: mapeoDoc.docRef.type,
     },
   }
 }
