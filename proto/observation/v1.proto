@@ -68,7 +68,7 @@ message Observation_1 {
   }
   optional Metadata metadata = 9;
 
-  PresetRef presetRef = 10;
+  optional PresetRef presetRef = 10;
 
   message PresetRef {
     bytes docId = 1;

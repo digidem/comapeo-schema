@@ -197,6 +197,6 @@
       "required": ["docId", "versionId"]
     }
   },
-  "required": ["schemaName", "tags", "attachments", "metadata", "presetRef"],
+  "required": ["schemaName", "tags", "attachments", "metadata"],
   "additionalProperties": false
 }

@@ -24,10 +24,6 @@ export const goodDocsMinimal = [
       attachments: [],
       tags: {},
       metadata: {},
-      presetRef: {
-        docId: cachedValues.refs.docId,
-        versionId: cachedValues.refs.versionId,
-      },
       deleted: false,
     },
     expected: {},
