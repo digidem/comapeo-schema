@@ -245,7 +245,6 @@ export const convertTranslation: ConvertFunction<'translation'> = (
     docRef: {
       docId: message.docRef.docId.toString('hex'),
       versionId: getVersionId(message.docRef.versionId),
-      type: message.docRef.type,
     },
   }
 }

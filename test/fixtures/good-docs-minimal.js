@@ -174,8 +174,8 @@ export const goodDocsMinimal = [
       docRef: {
         docId: cachedValues.refs.docId,
         versionId: cachedValues.refs.versionId,
-        type: 'field',
       },
+      refType: 'field',
       propertyRef: 'label',
       languageCode: 'qu',
       regionCode: 'PE',

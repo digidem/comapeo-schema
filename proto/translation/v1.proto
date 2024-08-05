@@ -21,7 +21,7 @@ message Translation_1 {
   message DocRef {
     bytes docId = 1;
     VersionId_1 versionId = 2;
-    string type = 3;
   }
+  string refType = 7;
 
 }

@@ -19,13 +19,13 @@
         "versionId": {
           "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
           "type": "string"
-        },
-        "type": {
-          "description": "type of the element that this translation references",
-          "type": "string"
         }
       },
-      "required": ["docId", "versionId", "type"]
+      "required": ["docId", "versionId"]
+    },
+    "refType": {
+      "description": "type of the element that this translation references",
+      "type": "string"
     },
     "propertyRef": {
       "type": "string",
@@ -47,6 +47,7 @@
   "required": [
     "schemaName",
     "docRef",
+    "refType",
     "propertyRef",
     "languageCode",
     "regionCode",
