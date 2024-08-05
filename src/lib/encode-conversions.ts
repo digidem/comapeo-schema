@@ -112,6 +112,10 @@ export const convertObservation: ConvertFunction<'observation'> = (
     attachments,
     tags: convertTags(mapeoDoc.tags),
     metadata,
+    presetRef: {
+      docId: Buffer.from(mapeoDoc.presetRef?.docId, 'hex'),
+      versionId: parseVersionId(mapeoDoc.presetRef?.versionId),
+    },
   }
 }
 

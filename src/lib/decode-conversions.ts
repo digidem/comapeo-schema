@@ -78,6 +78,18 @@ export const convertObservation: ConvertFunction<'observation'> = (
 ) => {
   const { common, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
+  let presetRef
+
+  if (!rest.presetRef) {
+    throw new Error('missing presetRef on observation')
+  }
+  if (!rest.presetRef.versionId) {
+    throw new Error('found presetRef on observation but is missing versionId')
+  }
+  presetRef = {
+    docId: rest.presetRef.docId.toString('hex'),
+    versionId: getVersionId(rest.presetRef.versionId),
+  }
 
   const obs: Observation = {
     ...jsonSchemaCommon,
@@ -85,6 +97,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
     attachments: message.attachments.map(convertAttachment),
     tags: convertTags(message.tags),
     metadata: message.metadata || {},
+    presetRef,
   }
   return obs
 }
