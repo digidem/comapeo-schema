@@ -108,8 +108,8 @@ export const convertObservation: ConvertFunction<'observation'> = (
   let presetRef
   if (mapeoDoc.presetRef) {
     presetRef = {
-      docId: Buffer.from(mapeoDoc.presetRef?.docId, 'hex'),
-      versionId: parseVersionId(mapeoDoc.presetRef?.versionId),
+      docId: Buffer.from(mapeoDoc.presetRef.docId, 'hex'),
+      versionId: parseVersionId(mapeoDoc.presetRef.versionId),
     }
   }
 
