@@ -132,6 +132,31 @@ test(`testing decoding of header that should match the dataTypeId and version`, 
   }
 })
 
+test('decoding a block prefix with a far-future schema version', () => {
+  const schemaName = 'observation'
+  const schemaVersion = 9999
+
+  const buf = encodeBlockPrefix({ schemaName, schemaVersion })
+
+  assert.deepEqual(decodeBlockPrefix(buf), { schemaName, schemaVersion })
+})
+
+test('decoding a doc with a far-future schema version', () => {
+  const [{ doc, expected }] = goodDocsCompleted
+  const { schemaName } = doc
+  const schemaVersion = 9999
+
+  const buf = Buffer.concat([
+    encodeBlockPrefix({ schemaName, schemaVersion }),
+    removeBlockPrefix(encode(doc)),
+  ])
+
+  assert.deepEqual(decodeBlockPrefix(buf), { schemaName, schemaVersion })
+
+  const decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
+  assert.deepEqual(decodedDoc, { ...doc, ...expected })
+})
+
 test(`test encoding and decoding of block prefix, ignoring data that comes after`, async () => {
   for (let [schemaName, schemaVersion] of Object.entries(
     currentSchemaVersions
@@ -214,4 +239,13 @@ function stripUndef(obj) {
     }
     return value
   })
+}
+
+/**
+ * @param {Readonly<Buffer>} buf
+ * @returns {Buffer}
+ */
+function removeBlockPrefix(buf) {
+  const blockPrefix = encodeBlockPrefix(decodeBlockPrefix(buf))
+  return buf.slice(blockPrefix.byteLength)
 }
