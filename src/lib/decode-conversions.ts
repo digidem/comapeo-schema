@@ -406,7 +406,7 @@ function convertCommon(
 
   /** @type {string} */ let originalVersionId
   if (common.originalVersionId) {
-    originalVersionId = common.originalVersionId
+    originalVersionId = getVersionId(common.originalVersionId)
   } else if (common.links.length === 0) {
     originalVersionId = versionId
   } else {

@@ -248,7 +248,9 @@ function convertCommon(
 ): ProtoTypesWithSchemaInfo['common'] {
   return {
     docId: Buffer.from(common.docId, 'hex'),
-    originalVersionId: common.originalVersionId,
+    originalVersionId: common.originalVersionId
+      ? parseVersionId(common.originalVersionId)
+      : undefined,
     createdAt: common.createdAt,
     updatedAt: common.updatedAt,
     links: common.links.map((link) => parseVersionId(link)),
