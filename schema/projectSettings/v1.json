@@ -24,6 +24,31 @@
       },
       "required": ["point", "area", "vertex", "line", "relation"],
       "additionalProperties": false
+    },
+    "configMetadata": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the configuration"
+        },
+        "buildDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "RFC3339-formatted datetime of when the configuration was built"
+        },
+        "importDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "RFC3339-formatted datetime of when the configuration was imported to the project"
+        },
+        "fileVersion": {
+          "type": "string",
+          "description": "version of the configuration file format as comver (MAJOR.MINOR)"
+        }
+      },
+      "additionalProperties": false,
+      "required": ["name", "buildDate", "importDate", "fileVersion"]
     }
   },
   "required": ["schemaName"],

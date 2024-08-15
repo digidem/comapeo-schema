@@ -65,20 +65,6 @@
       "minimum": -180,
       "maximum": 180
     },
-    "refs": {
-      "type": "array",
-      "description": "References to any nodes or ways that this observation is related to.",
-      "items": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "description": "hex-encoded id of the element that this observation references",
-            "type": "string"
-          }
-        },
-        "required": ["id"]
-      }
-    },
     "attachments": {
       "type": "array",
       "description": "media or other data that are attached to this observation",
@@ -99,7 +85,13 @@
             "meta:enum": {
               "UNRECOGNIZED": "future attachment type"
             },
-            "enum": ["photo", "video", "audio", "UNRECOGNIZED"]
+            "enum": [
+              "attachment_type_unspecified",
+              "photo",
+              "video",
+              "audio",
+              "UNRECOGNIZED"
+            ]
           },
           "hash": {
             "type": "string",
@@ -188,8 +180,23 @@
         }
       },
       "additionalProperties": false
+    },
+    "presetRef": {
+      "type": "object",
+      "description": "References to the preset that this observation is related to.",
+      "properties": {
+        "docId": {
+          "description": "hex-encoded id of the element that this observation references",
+          "type": "string"
+        },
+        "versionId": {
+          "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
+          "type": "string"
+        }
+      },
+      "required": ["docId", "versionId"]
     }
   },
-  "required": ["schemaName", "tags", "refs", "attachments", "metadata"],
+  "required": ["schemaName", "tags", "attachments", "metadata"],
   "additionalProperties": false
 }

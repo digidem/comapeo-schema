@@ -21,7 +21,6 @@ export const goodDocsCompleted = [
       links: [],
       lat: 24.0424,
       lon: 21.0214,
-      refs: [],
       attachments: [
         {
           name: 'myFile',
@@ -67,6 +66,10 @@ export const goodDocsCompleted = [
           networkAvailable: false,
         },
       },
+      presetRef: {
+        docId: cachedValues.refs.docId,
+        versionId: cachedValues.refs.versionId,
+      },
       deleted: false,
     },
     expected: {},
@@ -88,6 +91,12 @@ export const goodDocsCompleted = [
         relation: cachedValues.defaultPresets.point,
       },
       name: 'myProject',
+      configMetadata: {
+        name: 'mapeo-config-1',
+        fileVersion: '1.0',
+        buildDate: cachedValues.configMetadata.buildDate,
+        importDate: cachedValues.configMetadata.importDate,
+      },
       deleted: false,
     },
     expected: {},
@@ -138,8 +147,16 @@ export const goodDocsCompleted = [
       removeTags: {
         deleteInmeditaly: ['this list', 'of things'],
       },
-      fieldIds: cachedValues.fieldIds,
-      iconId: cachedValues.iconId,
+      fieldRefs: [
+        {
+          docId: cachedValues.refs.docId,
+          versionId: cachedValues.refs.versionId,
+        },
+      ],
+      iconRef: {
+        docId: cachedValues.refs.docId,
+        versionId: cachedValues.refs.versionId,
+      },
       color: '#ff00ff',
       terms: ['imastring'],
       deleted: false,
@@ -257,9 +274,12 @@ export const goodDocsCompleted = [
       updatedAt: cachedValues.updatedAt,
       links: [],
       deleted: false,
-      schemaNameRef: 'preset',
-      docIdRef: cachedValues.docIdRef,
-      fieldRef: 'terms[0]',
+      docRef: {
+        docId: cachedValues.refs.docId,
+        versionId: cachedValues.refs.versionId,
+      },
+      docRefType: 'preset',
+      propertyRef: 'terms[0]',
       languageCode: 'es',
       regionCode: 'AR',
       message: 'agroforestación',
@@ -295,14 +315,14 @@ export const goodDocsCompleted = [
           },
         },
       ],
-      refs: [
+      observationRefs: [
         {
-          id: randomBytes(32).toString('hex'),
-          type: 'observation',
+          docId: randomBytes(32).toString('hex'),
+          versionId: cachedValues.refs.versionId,
         },
         {
-          id: randomBytes(32).toString('hex'),
-          type: 'observation',
+          docId: randomBytes(32).toString('hex'),
+          versionId: cachedValues.refs.versionId,
         },
       ],
       attachments: [

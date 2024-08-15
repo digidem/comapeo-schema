@@ -6,7 +6,7 @@ import schema from 'protocol-buffers-schema'
 import { capitalize, PROJECT_ROOT } from './utils.js'
 
 // These messages are embedded in others and do not define Mapeo data types
-const EMBEDDED_MESSAGES = ['tags', 'common']
+const EMBEDDED_MESSAGES = ['tags', 'common', 'versionId']
 
 // We avoid creating data type IDs that match these, since blobs (e.g. icons)
 // can be stored in Mapeo hypercores, and we want to avoid trying to parse a

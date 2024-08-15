@@ -14,7 +14,13 @@
     },
     "deviceType": {
       "type": "string",
-      "enum": ["mobile", "tablet", "desktop", "UNRECOGNIZED"],
+      "enum": [
+        "device_type_unspecified",
+        "mobile",
+        "tablet",
+        "desktop",
+        "UNRECOGNIZED"
+      ],
       "description": "Type of device"
     }
   },

@@ -6,6 +6,7 @@ import "google/protobuf/struct.proto";
 import "tags/v1.proto";
 import "common/v1.proto";
 import "options.proto";
+import "versionId/v1.proto";
 
 message Track_1 {
   // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
@@ -14,23 +15,22 @@ message Track_1 {
 
   Common_1 common = 1;
   repeated Position locations = 2;
-  repeated Ref refs = 3;
+  repeated ObservationRef observationRefs = 3;
   repeated Attachment attachments = 4;
   map<string, TagValue_1> tags = 5;
 
-  enum RefType {
-    observation = 0;
-  }
-  message Ref {
-    bytes id = 1;
-    RefType type = 2;
+  enum AttachmentType {
+    attachment_type_unspecified = 0;
+    photo = 1;
+    video = 2;
+    audio = 3;
   }
 
-  enum AttachmentType {
-    photo = 0;
-    video = 1;
-    audio = 2;
+  message ObservationRef {
+    bytes docId = 1;
+    VersionId_1 versionId = 2;
   }
+
   message Attachment {
     bytes driveDiscoveryId = 1;
     string name = 2;

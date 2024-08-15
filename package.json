@@ -1,6 +1,6 @@
 {
   "name": "@mapeo/schema",
-  "version": "3.0.0-next.16",
+  "version": "3.0.0-next.19",
   "description": "JSON schema and flow types for Mapeo",
   "main": "dist/index.js",
   "type": "module",
@@ -13,7 +13,9 @@
     "build:tsc": "tsc",
     "build:copy": "cpy 'intermediate/generated/**' 'intermediate/src/**' dist/",
     "build:doc": "typedoc src/index.ts --tsconfig tsconfig.typedoc.json --plugin typedoc-plugin-markdown",
+    "lint": "prettier --check .",
     "prepack": "npm run build",
+    "pretest": "npm run lint",
     "test": "node --test test"
   },
   "repository": {
@@ -32,10 +34,13 @@
   "homepage": "https://github.com/digidem/mapeo-schema#readme",
   "devDependencies": {
     "@bufbuild/buf": "^1.26.1",
+    "@json-schema-tools/dereferencer": "^1.6.3",
     "@types/json-schema": "^7.0.12",
+    "ajv": "^8.12.0",
     "c8": "^8.0.1",
     "cpy-cli": "^5.0.0",
     "eslint": "^8.46.0",
+    "glob": "^10.3.3",
     "hypercore": "^10.4.1",
     "json-schema-to-typescript": "^13.0.2",
     "mkdirp": "^3.0.1",
@@ -45,18 +50,14 @@
     "random-access-memory": "^6.0.0",
     "rimraf": "^5.0.1",
     "ts-proto": "^1.156.2",
+    "typedoc": "^0.24.8",
+    "typedoc-plugin-markdown": "^3.15.4",
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "@json-schema-tools/dereferencer": "^1.6.1",
-    "ajv": "^8.12.0",
-    "ajv-formats": "^2.1.1",
     "compact-encoding": "^2.12.0",
-    "glob": "^10.3.3",
     "protobufjs": "^7.2.5",
-    "type-fest": "^4.1.0",
-    "typedoc": "^0.24.8",
-    "typedoc-plugin-markdown": "^3.15.4"
+    "type-fest": "^4.1.0"
   },
   "eslintConfig": {
     "env": {

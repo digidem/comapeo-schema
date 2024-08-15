@@ -24,6 +24,8 @@ import { ExhaustivenessError, VersionIdObject, getVersionId } from './utils.js'
 import type { Observation, Track } from '../index.js'
 import type { Observation_1_Attachment } from '../proto/observation/v1.js'
 import type { Track_1_Position } from '../proto/track/v1.js'
+import { ProjectSettings_1_ConfigMetadata } from '../proto/projectSettings/v1.js'
+import { ProjectSettings } from '../schema/projectSettings.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
@@ -38,6 +40,10 @@ export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
 ) => {
   const { common, schemaVersion, defaultPresets, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
+  let configMetadata
+  if (rest.configMetadata) {
+    configMetadata = convertConfigMetadata(rest.configMetadata)
+  }
   return {
     ...jsonSchemaCommon,
     ...rest,
@@ -50,7 +56,20 @@ export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
           relation: defaultPresets.relation.map((r) => r.toString('hex')),
         }
       : undefined,
+    configMetadata,
   }
+}
+
+function convertConfigMetadata(
+  configMetadata: ProjectSettings_1_ConfigMetadata
+): ProjectSettings['configMetadata'] {
+  if (!configMetadata?.importDate) {
+    throw new Error('Missing required property configMetadata.importDate')
+  }
+  if (!configMetadata?.buildDate) {
+    throw new Error('Missing required property configMetadata.buildDate')
+  }
+  return configMetadata as ProjectSettings['configMetadata']
 }
 
 export const convertObservation: ConvertFunction<'observation'> = (
@@ -59,14 +78,25 @@ export const convertObservation: ConvertFunction<'observation'> = (
 ) => {
   const { common, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
+  let presetRef
+
+  if (rest.presetRef) {
+    if (!rest.presetRef.versionId)
+      throw new Error('found presetRef on observation but is missing versionId')
+
+    presetRef = {
+      docId: rest.presetRef.docId.toString('hex'),
+      versionId: getVersionId(rest.presetRef.versionId),
+    }
+  }
 
   const obs: Observation = {
     ...jsonSchemaCommon,
     ...rest,
-    refs: message.refs?.map(({ id }) => ({ id: id.toString('hex') })),
     attachments: message.attachments.map(convertAttachment),
     tags: convertTags(message.tags),
     metadata: message.metadata || {},
+    presetRef,
   }
   return obs
 }
@@ -85,8 +115,6 @@ export const convertField: ConvertFunction<'field'> = (message, versionObj) => {
       ...rest,
       tagKey: message.tagKey,
       label: message.label || message.tagKey,
-      appearance:
-        message.appearance === 'UNRECOGNIZED' ? undefined : message.appearance,
       options:
         message.options.length > 0
           ? message.options.reduce<Exclude<FieldOptions, undefined>>(
@@ -121,15 +149,31 @@ export const convertPreset: ConvertFunction<'preset'> = (
       geomType !== 'UNRECOGNIZED'
   )
 
+  let iconRef
+  if (rest.iconRef) {
+    // iconRef is not required property on the schema, but if it does exist, then a versionId must be present
+    if (!rest.iconRef.versionId)
+      throw new Error('found iconRef on preset but is missing versionId')
+    iconRef = {
+      docId: rest.iconRef.docId.toString('hex'),
+      versionId: getVersionId(rest.iconRef.versionId),
+    }
+  }
   return {
     ...jsonSchemaCommon,
     ...rest,
     geometry,
-    iconId: rest.iconId ? rest.iconId.toString('hex') : undefined,
     tags: convertTags(rest.tags),
     addTags: convertTags(rest.addTags),
     removeTags: convertTags(rest.removeTags),
-    fieldIds: rest.fieldIds.map((id) => id.toString('hex')),
+    fieldRefs: rest.fieldRefs.map(({ docId, versionId }) => {
+      if (!versionId) throw new Error('missing fieldRef.versionId for preset')
+      return {
+        docId: docId.toString('hex'),
+        versionId: getVersionId(versionId),
+      }
+    }),
+    iconRef,
   }
 }
 
@@ -204,10 +248,16 @@ export const convertTranslation: ConvertFunction<'translation'> = (
 ) => {
   const { common, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
+  if (!message.docRef) throw new Error('missing docRef for translation')
+  if (!message.docRef.versionId)
+    throw new Error('missing docRef.versionId for translation')
   return {
     ...jsonSchemaCommon,
     ...rest,
-    docIdRef: message.docIdRef.toString('hex'),
+    docRef: {
+      docId: message.docRef.docId.toString('hex'),
+      versionId: getVersionId(message.docRef.versionId),
+    },
   }
 }
 
@@ -215,14 +265,20 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
   const { common, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   const locations = message.locations.map(convertTrackPosition)
-  const refs = message.refs.map(({ id, type }) => ({
-    id: id.toString('hex'),
-    type,
-  }))
+  const observationRefs = message.observationRefs.map(
+    ({ docId, versionId }) => {
+      if (!versionId)
+        throw new Error('missing observationRef.versionId from track')
+      return {
+        docId: docId.toString('hex'),
+        versionId: getVersionId(versionId),
+      }
+    }
+  )
   return {
     ...jsonSchemaCommon,
     ...rest,
-    refs,
+    observationRefs,
     locations,
     attachments: message.attachments.map(convertAttachment),
     tags: convertTags(message.tags),
