@@ -29,7 +29,7 @@ import {
  * schema name, and returning the most recent JSONSchema type */
 type ConvertFunction<TSchemaName extends SchemaName> = (
   mapeoDoc: Extract<
-    OmitUnion<MapeoDocInternal, 'versionId' | 'originalVersionId'>,
+    SetOptional<MapeoDocInternal, 'versionId' | 'originalVersionId'>,
     { schemaName: TSchemaName }
   >
 ) => CurrentProtoTypes[TSchemaName]

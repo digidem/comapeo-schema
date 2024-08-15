@@ -1,3 +1,4 @@
+import type { SetOptional } from 'type-fest'
 import {
   type MapeoDocInternal,
   type OmitUnion,
@@ -29,7 +30,7 @@ import { ExhaustivenessError } from './lib/utils.js'
  * with the encoded data type ID and schema version, to send to an hypercore.
  */
 export function encode(
-  mapeoDoc: OmitUnion<MapeoDocInternal, 'versionId' | 'originalVersionId'>
+  mapeoDoc: SetOptional<MapeoDocInternal, 'versionId' | 'originalVersionId'>
 ): Buffer {
   const { schemaName } = mapeoDoc
   const schemaVersion = currentSchemaVersions[schemaName]
