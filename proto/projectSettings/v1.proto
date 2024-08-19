@@ -30,4 +30,5 @@ message ProjectSettings_1 {
   optional DefaultPresets defaultPresets = 2;
   optional ConfigMetadata configMetadata = 3;
   optional string name = 4;
+  bool isInitialProject = 5;
 }

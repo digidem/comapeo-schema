@@ -49,8 +49,12 @@
       },
       "additionalProperties": false,
       "required": ["name", "buildDate", "importDate", "fileVersion"]
+    },
+    "isInitialProject": {
+      "type": "boolean",
+      "description": "this allows for checking if the user has already joined a project or if its on the initial 'default' project"
     }
   },
-  "required": ["schemaName"],
+  "required": ["schemaName", "isInitialProject"],
   "additionalProperties": false
 }
