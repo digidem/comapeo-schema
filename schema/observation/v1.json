@@ -7,7 +7,7 @@
     "position": {
       "description": "Position details",
       "type": "object",
-      "required": ["mocked"],
+      "required": ["mocked", "coords"],
       "properties": {
         "timestamp": {
           "description": "Timestamp of when the current position was obtained",
@@ -179,9 +179,10 @@
           }
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": ["manualLocation"]
     }
   },
-  "required": ["schemaName", "tags", "attachments", "metadata"],
+  "required": ["schemaName", "tags", "attachments", "lat", "lon"],
   "additionalProperties": false
 }

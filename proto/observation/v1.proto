@@ -14,8 +14,8 @@ message Observation_1 {
 
   Common_1 common = 1;
 
-  optional double lat = 5;
-  optional double lon = 6;
+  double lat = 5;
+  double lon = 6;
 
   // ATTACHMENT
   enum AttachmentType {
@@ -37,7 +37,7 @@ message Observation_1 {
 
   // METADATA
   message Metadata {
-    optional bool manualLocation = 1;
+    bool manualLocation = 1;
 
     message Position {
       google.protobuf.Timestamp timestamp = 1;
@@ -51,7 +51,7 @@ message Observation_1 {
         double speed = 5;
         double accuracy = 6;
       }
-      optional Coords coords = 3;
+      Coords coords = 3;
     }
 
     message PositionProvider {
