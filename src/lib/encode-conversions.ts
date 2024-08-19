@@ -105,6 +105,13 @@ export const convertObservation: ConvertFunction<'observation'> = (
   const metadata: Observation_1_Metadata = mapeoDoc.metadata && {
     ...Observation_1_Metadata.fromPartial(mapeoDoc.metadata),
   }
+  let presetRef
+  if (mapeoDoc.presetRef) {
+    presetRef = {
+      docId: Buffer.from(mapeoDoc.presetRef.docId, 'hex'),
+      versionId: parseVersionId(mapeoDoc.presetRef.versionId),
+    }
+  }
 
   return {
     common: convertCommon(mapeoDoc),
@@ -112,6 +119,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
     attachments,
     tags: convertTags(mapeoDoc.tags),
     metadata,
+    presetRef,
   }
 }
 
@@ -207,7 +215,6 @@ export const convertTranslation: ConvertFunction<'translation'> = (
     docRef: {
       docId: Buffer.from(mapeoDoc.docRef.docId, 'hex'),
       versionId: parseVersionId(mapeoDoc.docRef.versionId),
-      type: mapeoDoc.docRef.type,
     },
   }
 }

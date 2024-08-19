@@ -66,6 +66,10 @@ export const goodDocsCompleted = [
           networkAvailable: false,
         },
       },
+      presetRef: {
+        docId: cachedValues.refs.docId,
+        versionId: cachedValues.refs.versionId,
+      },
       deleted: false,
     },
     expected: {},
@@ -149,6 +153,10 @@ export const goodDocsCompleted = [
           versionId: cachedValues.refs.versionId,
         },
       ],
+      iconRef: {
+        docId: cachedValues.refs.docId,
+        versionId: cachedValues.refs.versionId,
+      },
       color: '#ff00ff',
       terms: ['imastring'],
       deleted: false,
@@ -269,8 +277,8 @@ export const goodDocsCompleted = [
       docRef: {
         docId: cachedValues.refs.docId,
         versionId: cachedValues.refs.versionId,
-        type: 'preset',
       },
+      docRefType: 'preset',
       propertyRef: 'terms[0]',
       languageCode: 'es',
       regionCode: 'AR',

@@ -19,13 +19,24 @@
         "versionId": {
           "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
           "type": "string"
-        },
-        "type": {
-          "description": "type of the element that this translation references",
-          "type": "string"
         }
       },
-      "required": ["docId", "versionId", "type"]
+      "required": ["docId", "versionId"]
+    },
+    "docRefType": {
+      "description": "type of the element that this translation references",
+      "type": "string",
+      "enum": [
+        "type_unspecified",
+        "deviceInfo",
+        "preset",
+        "field",
+        "observation",
+        "projectSettings",
+        "role",
+        "track",
+        "UNRECOGNIZED"
+      ]
     },
     "propertyRef": {
       "type": "string",
@@ -47,6 +58,7 @@
   "required": [
     "schemaName",
     "docRef",
+    "docRefType",
     "propertyRef",
     "languageCode",
     "regionCode",
