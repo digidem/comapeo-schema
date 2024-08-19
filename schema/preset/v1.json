@@ -131,7 +131,8 @@
     "fieldRefs",
     "schemaName",
     "terms",
-    "color"
+    "color",
+    "iconRef"
   ],
   "additionalProperties": false
 }

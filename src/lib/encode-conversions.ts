@@ -102,7 +102,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
   mapeoDoc
 ) => {
   const attachments = mapeoDoc.attachments.map(convertAttachment)
-  const metadata: Observation_1_Metadata = mapeoDoc.metadata && {
+  const metadata: Observation_1_Metadata | undefined = mapeoDoc.metadata && {
     ...Observation_1_Metadata.fromPartial(mapeoDoc.metadata),
   }
   let presetRef
