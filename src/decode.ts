@@ -8,7 +8,7 @@ import {
 } from './types.js'
 
 import { Decode } from './proto/index.js'
-import { dataTypeIds, knownSchemaVersions } from './config.js'
+import { dataTypeIds, currentSchemaVersions } from './config.js'
 import {
   convertProjectSettings,
   convertField,
@@ -27,6 +27,7 @@ import { DATA_TYPE_ID_BYTES, SCHEMA_VERSION_BYTES } from './constants.js'
 import {
   ExhaustivenessError,
   VersionIdObject,
+  getOwn,
   getProtoTypeName,
 } from './lib/utils.js'
 
@@ -55,8 +56,7 @@ export function decode(
     buf.length
   )
 
-  const messageWithoutSchemaInfo =
-    Decode[getProtoTypeName(schemaDef)](encodedMsg)
+  const messageWithoutSchemaInfo = decodeDoc(encodedMsg, schemaDef.schemaName)
 
   const message = mutatingSetSchemaDef(messageWithoutSchemaInfo, schemaDef)
 
@@ -88,7 +88,7 @@ export function decode(
 
 /**
  * Given a buffer, return a (valid) schemaVersion and schemaName
- * Will throw if dataTypeId and schema version is unknown
+ * Will throw if dataTypeId is unknown
  */
 export function decodeBlockPrefix(buf: Buffer): ValidSchemaDef {
   if (buf.length < DATA_TYPE_ID_BYTES + SCHEMA_VERSION_BYTES) {
@@ -118,9 +118,16 @@ export function decodeBlockPrefix(buf: Buffer): ValidSchemaDef {
     throw new Error(`Unknown dataTypeId '${dataTypeId}'`)
   }
 
-  const schemaDef = { schemaName, schemaVersion }
-  assertKnownSchemaDef(schemaDef)
-  return schemaDef
+  return { schemaName, schemaVersion }
+}
+
+function decodeDoc(encodedMsg: Readonly<Buffer>, schemaName: SchemaName) {
+  const currentSchemaVersion = getOwn(currentSchemaVersions, schemaName)
+  if (!currentSchemaVersion) {
+    throw new Error(`Unknown schema name '${schemaName}'`)
+  }
+  const protoTypeName = getProtoTypeName(schemaName, currentSchemaVersion)
+  return Decode[protoTypeName](encodedMsg)
 }
 
 /**
@@ -137,22 +144,6 @@ function mutatingSetSchemaDef<T extends ProtoTypes, K extends ValidSchemaDef>(
     ;(obj as any)[prop] = (props as any)[prop]
   }
   return obj as any
-}
-
-/**
- * Assert that a given schemaName and schemaVersion is "known", e.g. do we know how to process it?
- * TODO: Accept "future" schema versions, because protobuf decoding should be forward-compatible
- */
-function assertKnownSchemaDef(schemaDef: {
-  schemaName: SchemaName
-  schemaVersion: number
-}): asserts schemaDef is ValidSchemaDef {
-  const { schemaName, schemaVersion } = schemaDef
-  if (!knownSchemaVersions[schemaName].includes(schemaDef.schemaVersion)) {
-    throw new Error(
-      `Unknown schema version '${schemaVersion}' for schema '${schemaName}'`
-    )
-  }
 }
 
 // function mutatingOmit<T, K extends keyof any>(obj: T, key: K): OmitUnion<T, K> {

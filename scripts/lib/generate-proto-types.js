@@ -20,11 +20,11 @@ export function generateProtoTypes({ currentSchemaVersions, protoTypeDefs }) {
       .join('\n  | ')
 
   const protoTypesWithSchemaInfo =
-    '/** Union of all Proto Types (including non-current versions) with schemaName and schemaVersion */\n' +
+    '/** Union of all Proto Types with schemaName and schemaVersion */\n' +
     'export type ProtoTypesWithSchemaInfo =\n  | ' +
     protoTypeDefs
-      .map(({ schemaName, schemaVersion, typeName }) => {
-        return `(${typeName} & { schemaName: '${schemaName}', schemaVersion: ${schemaVersion} })`
+      .map(({ schemaName, typeName }) => {
+        return `(${typeName} & { schemaName: '${schemaName}', schemaVersion: number })`
       })
       .join('\n  | ')
 

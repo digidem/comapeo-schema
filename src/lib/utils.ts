@@ -1,10 +1,16 @@
 import { type ProtoTypeNames } from '../proto/types.js'
 import {
-  type ValidSchemaDef,
   type MapeoDoc,
   type MapeoValue,
   type FilterBySchemaName,
 } from '../types.js'
+
+export function getOwn<T extends object, K extends keyof T>(
+  obj: T,
+  key: K
+): undefined | T[K] {
+  return Object.hasOwn(obj, key) ? obj[key] : undefined
+}
 
 export class ExhaustivenessError extends Error {
   constructor(value: never) {
@@ -14,12 +20,13 @@ export class ExhaustivenessError extends Error {
 
 /**
  * Get the name of the type, e.g. `Observation_5` for schemaName `observation`
- * and schemaVersion `1`
+ * and schemaVersion `5`
  */
-export function getProtoTypeName(schemaDef: ValidSchemaDef): ProtoTypeNames {
-  return (capitalize(schemaDef.schemaName) +
-    '_' +
-    schemaDef.schemaVersion) as ProtoTypeNames
+export function getProtoTypeName(
+  schemaName: string,
+  schemaVersion: number
+): ProtoTypeNames {
+  return (capitalize(schemaName) + '_' + schemaVersion) as ProtoTypeNames
 }
 
 function capitalize<T extends string>(str: T): Capitalize<T> {
