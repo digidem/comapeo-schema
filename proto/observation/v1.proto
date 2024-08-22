@@ -52,7 +52,7 @@ message Observation_1 {
         double speed = 5;
         double accuracy = 6;
       }
-      optional Coords coords = 3 [(required) = true];
+      optional Coords coords = 3;
     }
 
     message PositionProvider {
