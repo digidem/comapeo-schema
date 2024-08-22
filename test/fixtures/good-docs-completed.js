@@ -123,6 +123,7 @@ export const goodDocsCompleted = [
           value: 'somePrimitiveTagValue',
         },
       ],
+      helperText: '',
       deleted: false,
     },
     expected: {},

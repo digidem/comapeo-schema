@@ -22,6 +22,14 @@
         "coords": {
           "description": "Position details, should be self explanatory. Units in meters",
           "type": "object",
+          "required": [
+            "latitude",
+            "longitude",
+            "altitude",
+            "heading",
+            "speed",
+            "accuracy"
+          ],
           "properties": {
             "latitude": {
               "type": "number"
@@ -179,7 +187,8 @@
           }
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "required": ["manualLocation"]
     },
     "presetRef": {
       "type": "object",
@@ -197,6 +206,6 @@
       "required": ["docId", "versionId"]
     }
   },
-  "required": ["schemaName", "tags", "attachments", "metadata"],
+  "required": ["schemaName", "tags", "attachments", "lat", "lon"],
   "additionalProperties": false
 }

@@ -95,7 +95,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
     ...rest,
     attachments: message.attachments.map(convertAttachment),
     tags: convertTags(message.tags),
-    metadata: message.metadata || {},
+    metadata: message.metadata,
     presetRef,
   }
   return obs
@@ -158,6 +158,8 @@ export const convertPreset: ConvertFunction<'preset'> = (
       docId: rest.iconRef.docId.toString('hex'),
       versionId: getVersionId(rest.iconRef.versionId),
     }
+  } else {
+    throw new Error('missing iconRef for preset')
   }
   return {
     ...jsonSchemaCommon,
