@@ -95,8 +95,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
     ...rest,
     attachments: message.attachments.map(convertAttachment),
     tags: convertTags(message.tags),
-    // @ts-ignore
-    metadata: message.metadata || { manualLocation: true },
+    metadata: message.metadata,
     presetRef,
   }
   return obs

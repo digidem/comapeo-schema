@@ -7,7 +7,7 @@
     "position": {
       "description": "Position details",
       "type": "object",
-      "required": ["mocked", "coords"],
+      "required": ["mocked"],
       "properties": {
         "timestamp": {
           "description": "Timestamp of when the current position was obtained",
@@ -22,6 +22,14 @@
         "coords": {
           "description": "Position details, should be self explanatory. Units in meters",
           "type": "object",
+          "required": [
+            "latitude",
+            "longitude",
+            "altitude",
+            "heading",
+            "speed",
+            "accuracy"
+          ],
           "properties": {
             "latitude": {
               "type": "number"
