@@ -1,7 +1,6 @@
 import type { SetOptional } from 'type-fest'
 import {
-  type MapeoDocInternal,
-  type OmitUnion,
+  type MapeoDocEncode,
   type SchemaName,
   type ValidSchemaDef,
 } from './types.js'
@@ -29,9 +28,7 @@ import { ExhaustivenessError } from './lib/utils.js'
  * Encode a an object validated against a schema as a binary protobuf prefixed
  * with the encoded data type ID and schema version, to send to an hypercore.
  */
-export function encode(
-  mapeoDoc: SetOptional<MapeoDocInternal, 'versionId' | 'originalVersionId'>
-): Buffer {
+export function encode(mapeoDoc: MapeoDocEncode): Buffer {
   const { schemaName } = mapeoDoc
   const schemaVersion = currentSchemaVersions[schemaName]
   const schemaDef = { schemaName, schemaVersion }

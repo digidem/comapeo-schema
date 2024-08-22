@@ -18,7 +18,7 @@ import {
   type MapeoCommon,
   type TagValuePrimitive,
   type JsonTagValue,
-  type MapeoDocInternal,
+  type MapeoDocDecode,
 } from '../types.js'
 import { ExhaustivenessError, VersionIdObject, getVersionId } from './utils.js'
 import type { Observation, Track } from '../index.js'
@@ -32,7 +32,7 @@ import { ProjectSettings } from '../schema/projectSettings.js'
 type ConvertFunction<TSchemaName extends SchemaName> = (
   message: Extract<ProtoTypesWithSchemaInfo, { schemaName: TSchemaName }>,
   versionObj: VersionIdObject
-) => FilterBySchemaName<MapeoDocInternal, TSchemaName>
+) => FilterBySchemaName<MapeoDocDecode, TSchemaName>
 
 export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
   message,
