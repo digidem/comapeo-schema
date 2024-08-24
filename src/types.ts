@@ -59,9 +59,19 @@ export type MapeoValue = FilterBySchemaName<
 /** The decode and encode functions expect core ownership signatures as buffers,
  * but these are not included in the JSON schema definitions because they are
  * stripped before they are indexed */
-export type MapeoDocInternal =
+export type MapeoDocDecode =
   | Exclude<MapeoDoc, CoreOwnership>
   | (CoreOwnership & CoreOwnershipSignatures)
+
+/**
+ * MapeoDoc for encoding does not need a versionId, and if links is an empty
+ * array, it does not need a originalVersionId either.
+ */
+export type MapeoDocEncode =
+  | (OmitUnion<MapeoDocDecode, 'versionId' | 'originalVersionId' | 'links'> & {
+      links: []
+    })
+  | OmitUnion<MapeoDocDecode, 'versionId'>
 
 /** Union of all valid data type ids */
 export type DataTypeId = Values<typeof dataTypeIds>

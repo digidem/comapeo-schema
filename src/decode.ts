@@ -4,7 +4,7 @@ import {
   type SchemaName,
   type DataTypeId,
   type ValidSchemaDef,
-  type MapeoDocInternal,
+  type MapeoDocDecode,
 } from './types.js'
 
 import { Decode } from './proto/index.js'
@@ -48,7 +48,7 @@ for (const [schemaName, dataTypeId] of Object.entries(dataTypeIds) as Array<
 export function decode(
   buf: Buffer,
   versionObj: VersionIdObject
-): MapeoDocInternal {
+): MapeoDocDecode {
   const schemaDef = decodeBlockPrefix(buf)
 
   const encodedMsg = buf.subarray(

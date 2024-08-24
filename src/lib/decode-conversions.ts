@@ -18,7 +18,7 @@ import {
   type MapeoCommon,
   type TagValuePrimitive,
   type JsonTagValue,
-  type MapeoDocInternal,
+  type MapeoDocDecode,
 } from '../types.js'
 import { ExhaustivenessError, VersionIdObject, getVersionId } from './utils.js'
 import type { Observation, Track } from '../index.js'
@@ -32,7 +32,7 @@ import { ProjectSettings } from '../schema/projectSettings.js'
 type ConvertFunction<TSchemaName extends SchemaName> = (
   message: Extract<ProtoTypesWithSchemaInfo, { schemaName: TSchemaName }>,
   versionObj: VersionIdObject
-) => FilterBySchemaName<MapeoDocInternal, TSchemaName>
+) => FilterBySchemaName<MapeoDocDecode, TSchemaName>
 
 export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
   message,
@@ -404,13 +404,24 @@ function convertCommon(
     throw new Error('Missing required common properties')
   }
 
+  const versionId = getVersionId(versionObj)
+
+  /** @type {string} */ let originalVersionId
+  if (common.originalVersionId) {
+    originalVersionId = getVersionId(common.originalVersionId)
+  } else if (common.links.length === 0) {
+    originalVersionId = versionId
+  } else {
+    throw new Error('Cannot determine original version ID; data is malformed')
+  }
+
   return {
     docId: common.docId.toString('hex'),
-    versionId: getVersionId(versionObj),
+    versionId,
+    originalVersionId,
     links: common.links.map((link) => getVersionId(link)),
     createdAt: common.createdAt,
     updatedAt: common.updatedAt,
-    createdBy: common.createdBy.toString('hex'),
     deleted: common.deleted,
   }
 }

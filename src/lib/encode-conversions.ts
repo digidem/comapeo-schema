@@ -1,3 +1,4 @@
+import type { SetOptional } from 'type-fest'
 import { CurrentProtoTypes } from '../proto/types.js'
 import {
   ProtoTypesWithSchemaInfo,
@@ -5,9 +6,8 @@ import {
   MapeoCommon,
   TagValuePrimitive,
   JsonTagValue,
-  OmitUnion,
   CoreOwnershipSignatures,
-  MapeoDocInternal,
+  MapeoDocEncode,
 } from '../types.js'
 import { TagValue_1, type TagValue_1_PrimitiveValue } from '../proto/tags/v1.js'
 import { Icon } from '../schema/icon.js'
@@ -27,10 +27,7 @@ import {
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
 type ConvertFunction<TSchemaName extends SchemaName> = (
-  mapeoDoc: Extract<
-    OmitUnion<MapeoDocInternal, 'versionId'>,
-    { schemaName: TSchemaName }
-  >
+  mapeoDoc: Extract<MapeoDocEncode, { schemaName: TSchemaName }>
 ) => CurrentProtoTypes[TSchemaName]
 
 export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
@@ -143,7 +140,8 @@ export const convertDeviceInfo: ConvertFunction<'deviceInfo'> = (mapeoDoc) => {
 }
 
 export const convertCoreOwnership = (
-  mapeoDoc: Omit<CoreOwnership, 'versionId'> & CoreOwnershipSignatures
+  mapeoDoc: Omit<CoreOwnership, 'versionId' | 'originalVersionId'> &
+    CoreOwnershipSignatures
 ): CurrentProtoTypes['coreOwnership'] => {
   return {
     common: convertCommon(mapeoDoc),
@@ -242,13 +240,15 @@ export const convertTrack: ConvertFunction<'track'> = (mapeoDoc) => {
 }
 
 function convertCommon(
-  common: Omit<MapeoCommon, 'versionId'>
+  common: SetOptional<MapeoCommon, 'versionId' | 'originalVersionId'>
 ): ProtoTypesWithSchemaInfo['common'] {
   return {
     docId: Buffer.from(common.docId, 'hex'),
+    originalVersionId: common.originalVersionId
+      ? parseVersionId(common.originalVersionId)
+      : undefined,
     createdAt: common.createdAt,
     updatedAt: common.updatedAt,
-    createdBy: Buffer.from(common.createdBy, 'hex'),
     links: common.links.map((link) => parseVersionId(link)),
     deleted: common.deleted,
   }
