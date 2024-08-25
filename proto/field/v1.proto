@@ -38,5 +38,5 @@ message Field_1 {
   repeated Option options = 10;
   bool universal = 11;
   optional string placeholder = 12;
-  string helperText = 13;
+  optional string helperText = 13;
 }
