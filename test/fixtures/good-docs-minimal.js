@@ -64,7 +64,6 @@ export const goodDocsMinimal = [
       type: 'text',
       deleted: false,
       universal: false,
-      helperText: '',
     },
     expected: {},
   },
