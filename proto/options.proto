@@ -1,6 +1,7 @@
 syntax = "proto3";
-import "google/protobuf/descriptor.proto";
 package mapeo;
+
+import "google/protobuf/descriptor.proto";
 
 extend google.protobuf.MessageOptions {
   // This should be a hex-encoded 48-bit random number, and should never change

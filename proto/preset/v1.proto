@@ -1,12 +1,12 @@
 syntax = "proto3";
 package mapeo;
 
+import "common/v1.proto";
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
-import "tags/v1.proto";
-import "common/v1.proto";
-import "versionId/v1.proto";
 import "options.proto";
+import "tags/v1.proto";
+import "versionId/v1.proto";
 
 message Preset_1 {
   // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
@@ -33,7 +33,6 @@ message Preset_1 {
     area = 4;
     relation = 5;
   }
-
 
   message FieldRef {
     bytes docId = 1;
