@@ -16,27 +16,13 @@ message Track_1 {
   Common_1 common = 1;
   repeated Position locations = 2;
   repeated ObservationRef observationRefs = 3;
-  repeated Attachment attachments = 4;
   map<string, TagValue_1> tags = 5;
-
-  enum AttachmentType {
-    attachment_type_unspecified = 0;
-    photo = 1;
-    video = 2;
-    audio = 3;
-  }
 
   message ObservationRef {
     bytes docId = 1;
     VersionId_1 versionId = 2;
   }
 
-  message Attachment {
-    bytes driveDiscoveryId = 1;
-    string name = 2;
-    AttachmentType type = 3;
-    bytes hash = 4;
-  }
 
   message Position {
     google.protobuf.Timestamp timestamp = 1;

@@ -226,13 +226,11 @@ export const convertTrack: ConvertFunction<'track'> = (mapeoDoc) => {
       }
     }
   )
-  const attachments = mapeoDoc.attachments.map(convertAttachment)
 
   const track: CurrentProtoTypes['track'] = {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
     observationRefs,
-    attachments,
     tags: convertTags(mapeoDoc.tags),
     locations: mapeoDoc.locations,
   }
