@@ -23,7 +23,6 @@ message Track_1 {
     VersionId_1 versionId = 2;
   }
 
-
   message Position {
     google.protobuf.Timestamp timestamp = 1;
     bool mocked = 2;
