@@ -327,14 +327,6 @@ export const goodDocsCompleted = [
           versionId: cachedValues.refs.versionId,
         },
       ],
-      attachments: [
-        {
-          name: 'myFile',
-          type: 'photo',
-          driveDiscoveryId: cachedValues.attachments.driveDiscoveryId,
-          hash: cachedValues.attachments.hash,
-        },
-      ],
       tags: {
         someKeyForArrVal: ['arr', 'of', 'strings'],
       },
