@@ -16,7 +16,7 @@ message Track_1 {
   Common_1 common = 1;
   repeated Position locations = 2;
   repeated ObservationRef observationRefs = 3;
-  map<string, TagValue_1> tags = 5;
+  map<string, TagValue_1> tags = 4;
 
   message ObservationRef {
     bytes docId = 1;
