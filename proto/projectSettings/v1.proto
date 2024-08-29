@@ -1,8 +1,8 @@
 syntax = "proto3";
 package mapeo;
 
-import "google/protobuf/timestamp.proto";
 import "common/v1.proto";
+import "google/protobuf/timestamp.proto";
 import "options.proto";
 
 message ProjectSettings_1 {
@@ -18,7 +18,7 @@ message ProjectSettings_1 {
     repeated bytes vertex = 3;
     repeated bytes line = 4;
     repeated bytes relation = 5;
-  };
+  }
 
   message ConfigMetadata {
     string name = 1;

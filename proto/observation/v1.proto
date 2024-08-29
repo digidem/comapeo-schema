@@ -1,11 +1,11 @@
 syntax = "proto3";
 package mapeo;
 
-import "google/protobuf/timestamp.proto";
-import "google/protobuf/struct.proto";
-import "tags/v1.proto";
 import "common/v1.proto";
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
 import "options.proto";
+import "tags/v1.proto";
 import "versionId/v1.proto";
 
 message Observation_1 {
@@ -74,5 +74,4 @@ message Observation_1 {
     bytes docId = 1;
     VersionId_1 versionId = 2;
   }
-
 }
