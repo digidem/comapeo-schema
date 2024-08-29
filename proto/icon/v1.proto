@@ -25,7 +25,6 @@ message Icon_1 {
     PixelDensity pixelDensity = 1 [(required) = true];
   }
 
-
   message IconVariant {
     oneof variant {
       IconVariantSvg svgIcon = 1;
@@ -48,5 +47,4 @@ message Icon_1 {
     BlobVersionId blobVersionId = 4 [(required) = true];
   }
   repeated IconVariant variants = 3;
-
 }

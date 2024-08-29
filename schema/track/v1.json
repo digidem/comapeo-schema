@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "http://mapeo.world/schemas/track/v1.json",
   "title": "Track",
-  "description": "A track is a recording of positions over time, with associated tags and attachments, similar to an observation",
+  "description": "A track is a recording of positions over time, with associated tags, similar to an observation",
   "definitions": {
     "position": {
       "description": "Position details",
@@ -79,42 +79,6 @@
         "required": ["docId", "versionId"]
       }
     },
-    "attachments": {
-      "type": "array",
-      "description": "media or other data that are attached to this track",
-      "items": {
-        "type": "object",
-        "properties": {
-          "driveDiscoveryId": {
-            "type": "string",
-            "description": "core discovery id for the drive that the attachment belongs to"
-          },
-          "name": {
-            "type": "string",
-            "description": "name of the attachment"
-          },
-          "type": {
-            "type": "string",
-            "description": "string that describes the type of the attachment",
-            "meta:enum": {
-              "UNRECOGNIZED": "future attachment type"
-            },
-            "enum": [
-              "attachment_type_unspecified",
-              "photo",
-              "video",
-              "audio",
-              "UNRECOGNIZED"
-            ]
-          },
-          "hash": {
-            "type": "string",
-            "description": "SHA256 hash of the attachment"
-          }
-        },
-        "required": ["driveDiscoveryId", "name", "type", "hash"]
-      }
-    },
     "tags": {
       "type": "object",
       "description": "User-defined key-value pairs relevant to this track",
@@ -156,12 +120,6 @@
       }
     }
   },
-  "required": [
-    "schemaName",
-    "locations",
-    "tags",
-    "observationRefs",
-    "attachments"
-  ],
+  "required": ["schemaName", "locations", "tags", "observationRefs"],
   "additionalProperties": false
 }

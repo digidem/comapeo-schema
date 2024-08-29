@@ -203,7 +203,6 @@ export const goodDocsMinimal = [
       deleted: false,
       locations: [],
       observationRefs: [],
-      attachments: [],
       tags: {},
     },
     expected: {},

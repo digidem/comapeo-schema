@@ -2,8 +2,8 @@ syntax = "proto3";
 package mapeo;
 
 import "common/v1.proto";
-import "versionId/v1.proto";
 import "options.proto";
+import "versionId/v1.proto";
 
 message Translation_1 {
   // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
@@ -33,5 +33,4 @@ message Translation_1 {
     track = 7;
   }
   DocRefType docRefType = 7;
-
 }

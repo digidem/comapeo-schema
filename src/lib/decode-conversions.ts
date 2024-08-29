@@ -282,7 +282,6 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
     ...rest,
     observationRefs,
     locations,
-    attachments: message.attachments.map(convertAttachment),
     tags: convertTags(message.tags),
   }
 }
