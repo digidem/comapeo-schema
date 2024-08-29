@@ -206,6 +206,6 @@
       "required": ["docId", "versionId"]
     }
   },
-  "required": ["schemaName", "tags", "attachments", "lat", "lon"],
+  "required": ["schemaName", "tags", "attachments"],
   "additionalProperties": false
 }
