@@ -22,14 +22,7 @@
         "coords": {
           "description": "Position details, should be self explanatory. Units in meters",
           "type": "object",
-          "required": [
-            "latitude",
-            "longitude",
-            "altitude",
-            "heading",
-            "speed",
-            "accuracy"
-          ],
+          "required": ["latitude", "longitude"],
           "properties": {
             "latitude": {
               "type": "number"
