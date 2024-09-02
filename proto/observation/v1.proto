@@ -47,10 +47,10 @@ message Observation_1 {
       message Coords {
         double latitude = 1;
         double longitude = 2;
-        double altitude = 3;
-        double heading = 4;
-        double speed = 5;
-        double accuracy = 6;
+        optional double altitude = 3;
+        optional double heading = 4;
+        optional double speed = 5;
+        optional double accuracy = 6;
       }
       optional Coords coords = 3;
     }
