@@ -20,6 +20,7 @@ import {
   convertIcon,
   convertTranslation,
   convertTrack,
+  convertRemoteDetectionAlert,
 } from './lib/decode-conversions.js'
 // @ts-ignore
 import * as cenc from 'compact-encoding'
@@ -81,6 +82,8 @@ export function decode(
       return convertTranslation(message, versionObj)
     case 'track':
       return convertTrack(message, versionObj)
+    case 'remoteDetectionAlert':
+      return convertRemoteDetectionAlert(message, versionObj)
     default:
       throw new ExhaustivenessError(message)
   }

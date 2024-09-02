@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://mapeo.world/schemas/remoteDetectionAlert/v1.json",
+  "title": "RemoteDetectionAlert",
+  "description": "A remote detection alert is a type of element in the map that relates to an alert (regarding an urgent event that happened on the territory)",
+  "type": "object",
+  "properties": {
+    "schemaName": {
+      "description": "Must be `remoteDetectionAlert`",
+      "type": "string",
+      "const": "remoteDetectionAlert"
+    },
+    "detectionDateStart": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of when the detected alert started"
+    },
+    "detectionDateEnd": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of when the detected alert ended"
+    },
+    "sourceId": {
+      "type": "string",
+      "description": "unique string identifiying this alert, different from the `docId`"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional metadata related to this alert. It is a map from a string to any element (including lists)",
+      "properties": {},
+      "additionalProperties": {
+        "anyOf": [
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          },
+          {
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "geometry": {
+      "type": "object",
+      "properties": {}
+    }
+  },
+  "required": [
+    "schemaName",
+    "detectionDateStart",
+    "detectionDateEnd",
+    "sourceId",
+    "metadata",
+    "geometry"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,22 @@
+syntax = "proto3";
+package mapeo;
+
+import "common/v1.proto";
+import "geometry/v1.proto";
+import "google/protobuf/timestamp.proto";
+import "options.proto";
+import "tags/v1.proto";
+
+message RemoteDetectionAlert_1 {
+  // **DO NOT CHANGE dataTypeId** generated with `openssl rand -hex 6`
+  option (dataTypeId) = "33a966ee6c90";
+  option (schemaName) = "remoteDetectionAlert";
+
+  Common_1 common = 1;
+
+  google.protobuf.Timestamp detectionDateStart = 2;
+  google.protobuf.Timestamp detectionDateEnd = 3;
+  string sourceId = 4;
+  Geometry_1 geometry = 5;
+  map<string, TagValue_1> metadata = 6;
+}

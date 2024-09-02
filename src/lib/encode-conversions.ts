@@ -237,6 +237,17 @@ export const convertTrack: ConvertFunction<'track'> = (mapeoDoc) => {
   return track
 }
 
+export const convertRemoteDetectionAlert: ConvertFunction<
+  'remoteDetectionAlert'
+> = (mapeoDoc) => {
+  // TODO: should we add a check for sourceId? (so that it complies with the id format we expect?)
+  return {
+    common: convertCommon(mapeoDoc),
+    ...mapeoDoc,
+    metadata: convertTags(mapeoDoc.metadata),
+  }
+}
+
 function convertCommon(
   common: SetOptional<MapeoCommon, 'versionId' | 'originalVersionId'>
 ): ProtoTypesWithSchemaInfo['common'] {

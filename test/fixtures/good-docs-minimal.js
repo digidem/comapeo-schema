@@ -207,4 +207,22 @@ export const goodDocsMinimal = [
     },
     expected: {},
   },
+  {
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.originalVersionId,
+      schemaName: 'remoteDetectionAlert',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      links: [],
+      deleted: false,
+      sourceId: '',
+      detectionDateStart: cachedValues.createdAt,
+      detectionDateEnd: cachedValues.updatedAt,
+      geometry: {},
+      metadata: {},
+    },
+    expected: {},
+  },
 ]

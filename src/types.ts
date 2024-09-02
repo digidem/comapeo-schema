@@ -20,6 +20,7 @@ type SupportedSchemaNames =
   | 'coreOwnership'
   | 'translation'
   | 'track'
+  | 'remoteDetectionAlert'
 
 export type SchemaName = Extract<keyof typeof dataTypeIds, SupportedSchemaNames>
 export type SchemaNameAll = keyof typeof dataTypeIds
