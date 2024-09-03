@@ -32,6 +32,9 @@
             "altitude": {
               "type": "number"
             },
+            "altitudeAccuracy": {
+              "type": "number"
+            },
             "heading": {
               "type": "number"
             },

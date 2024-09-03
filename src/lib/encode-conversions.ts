@@ -64,6 +64,7 @@ export const convertField: ConvertFunction<'field'> = (mapeoDoc) => {
           }
         })
       : [],
+    universal: Boolean(mapeoDoc.universal),
   }
 }
 
