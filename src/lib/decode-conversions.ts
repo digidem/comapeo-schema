@@ -158,9 +158,8 @@ export const convertPreset: ConvertFunction<'preset'> = (
       docId: rest.iconRef.docId.toString('hex'),
       versionId: getVersionId(rest.iconRef.versionId),
     }
-  } else {
-    throw new Error('missing iconRef for preset')
   }
+
   return {
     ...jsonSchemaCommon,
     ...rest,
