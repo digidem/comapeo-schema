@@ -38,7 +38,12 @@ export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion, defaultPresets, ...rest } = message
+  const {
+    common,
+    schemaVersion: _schemaVersion,
+    defaultPresets,
+    ...rest
+  } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   let configMetadata
   if (rest.configMetadata) {
@@ -76,7 +81,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion, ...rest } = message
+  const { common, schemaVersion: _schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   let presetRef
 
@@ -104,7 +109,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
 type FieldOptions = FilterBySchemaName<MapeoDoc, 'field'>['options']
 
 export const convertField: ConvertFunction<'field'> = (message, versionObj) => {
-  const { common, schemaVersion, ...rest } = message
+  const { common, schemaVersion: _schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   if (!message.tagKey) {
     // We can't do anything with a field without a tag key, so we ignore these
@@ -142,7 +147,7 @@ export const convertPreset: ConvertFunction<'preset'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion, ...rest } = message
+  const { common, schemaVersion: _schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   const geometry = rest.geometry.filter(
     (geomType): geomType is JsonSchemaPresetGeomItem =>
@@ -182,7 +187,7 @@ export const convertRole: ConvertFunction<'role'> = (message, versionObj) => {
   if (message.roleId.length === 0) {
     throw new Error('Invalid roleId')
   }
-  const { common, schemaVersion, ...rest } = message
+  const { common, schemaVersion: _schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
@@ -195,7 +200,7 @@ export const convertDeviceInfo: ConvertFunction<'deviceInfo'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion, ...rest } = message
+  const { common, schemaVersion: _schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
@@ -212,7 +217,7 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
   }
   const {
     common,
-    schemaVersion,
+    schemaVersion: _schemaVersion,
     authCoreId,
     configCoreId,
     dataCoreId,
@@ -234,7 +239,7 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
 }
 
 export const convertIcon: ConvertFunction<'icon'> = (message, versionObj) => {
-  const { common, schemaVersion, ...rest } = message
+  const { common, schemaVersion: _schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
@@ -247,7 +252,7 @@ export const convertTranslation: ConvertFunction<'translation'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion, ...rest } = message
+  const { common, schemaVersion: _schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   if (!message.docRef) throw new Error('missing docRef for translation')
   if (!message.docRef.versionId)
@@ -263,7 +268,7 @@ export const convertTranslation: ConvertFunction<'translation'> = (
 }
 
 export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
-  const { common, schemaVersion, ...rest } = message
+  const { common, schemaVersion: _schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   const locations = message.locations.map(convertTrackPosition)
   const observationRefs = message.observationRefs.map(

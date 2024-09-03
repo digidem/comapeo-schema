@@ -41,8 +41,10 @@ test(`Bad docs won't validate`, () => {
 test('validate bad docs', () => {
   for (const schemaName of Object.keys(currentSchemaVersions)) {
     assert(
-      // @ts-ignore
-      !validate(schemaName, {}),
+      !validate(
+        /** @type {keyof (typeof currentSchemaVersions)} */ (schemaName),
+        {}
+      ),
       `${schemaName} with missing properties should not validate`
     )
     assert(
@@ -62,7 +64,6 @@ test('validate good docs', () => {
     // skip docs with UNRECOGNIZED values - these are used for testing encoding/decoding and will not validate (the decoded versions should validate)
     if (Object.values(expected).includes('UNRECOGNIZED')) continue
     assert(
-      // @ts-ignore
       validate(doc.schemaName, valueOf(doc)),
       `${doc.schemaName} with all required properties should validate`
     )
