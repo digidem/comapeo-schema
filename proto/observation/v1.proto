@@ -42,7 +42,7 @@ message Observation_1 {
 
     message Position {
       google.protobuf.Timestamp timestamp = 1;
-      bool mocked = 2;
+      optional bool mocked = 2;
 
       message Coords {
         double latitude = 1;
