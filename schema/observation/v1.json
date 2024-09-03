@@ -7,7 +7,6 @@
     "position": {
       "description": "Position details",
       "type": "object",
-      "required": ["mocked"],
       "properties": {
         "timestamp": {
           "description": "Timestamp of when the current position was obtained",
@@ -180,8 +179,7 @@
           }
         }
       },
-      "additionalProperties": false,
-      "required": ["manualLocation"]
+      "additionalProperties": false
     },
     "presetRef": {
       "type": "object",
