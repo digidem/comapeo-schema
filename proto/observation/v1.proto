@@ -51,6 +51,7 @@ message Observation_1 {
         optional double heading = 4;
         optional double speed = 5;
         optional double accuracy = 6;
+        optional double altitudeAccuracy = 7;
       }
       optional Coords coords = 3;
     }
