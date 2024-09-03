@@ -21,7 +21,6 @@ import {
   convertTranslation,
   convertTrack,
 } from './lib/decode-conversions.js'
-// @ts-ignore
 import * as cenc from 'compact-encoding'
 import { DATA_TYPE_ID_BYTES, SCHEMA_VERSION_BYTES } from './constants.js'
 import {

@@ -2,10 +2,7 @@
 import { default as _ } from '@json-schema-tools/dereferencer'
 
 // Dereferencer's exports are all wrong for ESM imports
-/** @type {any} */
-const JsonSchemaDereferencer =
-  // @ts-ignore
-  _.default
+const JsonSchemaDereferencer = /** @type {any} */ (_).default
 
 /** @typedef {import('../../src/types.js').SchemaName} SchemaName */
 /** @typedef {import('json-schema').JSONSchema7} JSONSchema */
