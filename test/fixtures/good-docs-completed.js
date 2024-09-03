@@ -6,7 +6,7 @@ import { randomBytes } from 'node:crypto'
 /**
  * @type {Array<{
  *   expected: Partial<import('../../dist/types').MapeoDoc>,
- *   doc: import('../../dist/types').MapeoDocInternal
+ *   doc: import('../../dist/types').MapeoDocDecode
  * }>}
  */
 export const goodDocsCompleted = [
