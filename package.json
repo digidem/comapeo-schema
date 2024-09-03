@@ -17,6 +17,7 @@
     "format:prettier": "prettier --write .",
     "format": "npm-run-all --parallel format:*",
     "lint:buf-format": "buf format --diff --exit-code ./proto",
+    "lint:eslint": "eslint --cache .",
     "lint:prettier": "prettier --check .",
     "lint": "npm-run-all --parallel lint:*",
     "prepack": "npm run build",
@@ -39,13 +40,15 @@
   "homepage": "https://github.com/digidem/mapeo-schema#readme",
   "devDependencies": {
     "@bufbuild/buf": "^1.26.1",
+    "@eslint/js": "^9.9.1",
     "@json-schema-tools/dereferencer": "^1.6.3",
     "@types/json-schema": "^7.0.12",
     "ajv": "^8.12.0",
     "c8": "^8.0.1",
     "cpy-cli": "^5.0.0",
-    "eslint": "^8.46.0",
+    "eslint": "^9.9.1",
     "glob": "^10.3.3",
+    "globals": "^15.9.0",
     "hypercore": "^10.4.1",
     "json-schema-to-typescript": "^13.0.2",
     "mkdirp": "^3.0.1",
@@ -57,25 +60,13 @@
     "ts-proto": "^1.156.2",
     "typedoc": "^0.26.6",
     "typedoc-plugin-markdown": "^4.2.6",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.4.0"
   },
   "dependencies": {
     "compact-encoding": "^2.12.0",
     "protobufjs": "^7.2.5",
     "type-fest": "^4.26.0"
-  },
-  "eslintConfig": {
-    "env": {
-      "commonjs": true,
-      "es2021": true,
-      "node": true
-    },
-    "extends": "eslint:recommended",
-    "parserOptions": {
-      "ecmaVersion": "latest",
-      "sourceType": "module"
-    },
-    "rules": {}
   },
   "prettier": {
     "semi": false,

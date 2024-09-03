@@ -74,18 +74,16 @@ export function parseVersionId(versionId: string): VersionIdObject {
 export function valueOf<TDoc extends MapeoDoc>(
   doc: TDoc & { forks?: string[] }
 ): FilterBySchemaName<MapeoValue, TDoc['schemaName']> {
-  /* eslint-disable no-unused-vars */
   const {
-    docId,
-    versionId,
-    originalVersionId,
-    links,
-    forks,
-    createdAt,
-    updatedAt,
-    deleted,
+    docId: _docId,
+    versionId: _versionId,
+    originalVersionId: _originalVersionId,
+    links: _links,
+    forks: _forks,
+    createdAt: _createdAt,
+    updatedAt: _updatedAt,
+    deleted: _deleted,
     ...rest
   } = doc
-  /* eslint-enable no-unused-vars */
   return rest as any
 }

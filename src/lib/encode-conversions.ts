@@ -12,10 +12,7 @@ import {
 import { TagValue_1, type TagValue_1_PrimitiveValue } from '../proto/tags/v1.js'
 import { Icon } from '../schema/icon.js'
 import { type Icon_1_IconVariant } from '../proto/icon/v1.js'
-import {
-  Observation_1_Metadata,
-  type Observation_1_Attachment,
-} from '../proto/observation/v1.js'
+import { type Observation_1_Attachment } from '../proto/observation/v1.js'
 import { ExhaustivenessError, parseVersionId } from './utils.js'
 import { CoreOwnership, valueSchemas, type Observation } from '../index.js'
 

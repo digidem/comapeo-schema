@@ -4,7 +4,7 @@ import { default as _ } from '@json-schema-tools/dereferencer'
 // Dereferencer's exports are all wrong for ESM imports
 /** @type {any} */
 const JsonSchemaDereferencer =
-  // @ts-ignore
+  // @ts-expect-error
   _.default
 
 /** @typedef {import('../../src/types.js').SchemaName} SchemaName */
