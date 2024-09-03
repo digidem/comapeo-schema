@@ -1,5 +1,6 @@
 import { MapeoValue, FilterBySchemaName, SchemaName } from './types.js'
 import * as validations from './validations.js'
+import { getOwn } from './lib/utils.js'
 import {
   type ValidateFunction as AjvValidateFunction,
   type DefinedError,
@@ -19,7 +20,15 @@ const validate: ValidateFunction = <
   schemaName: TSchemaName,
   obj: unknown
 ): obj is FilterBySchemaName<MapeoValue, TSchemaName> => {
-  const validateSchema = validations[schemaName] as AjvValidateFunction
+  validate.errors = null
+
+  const validateSchema = getOwn(validations, schemaName) as
+    | undefined
+    | AjvValidateFunction
+  if (!validateSchema) {
+    return false
+  }
+
   const result = validateSchema(obj)
   validate.errors = validateSchema.errors as DefinedError[]
   return result
