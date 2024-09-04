@@ -1,6 +1,10 @@
 // @ts-check
 import Ajv from 'ajv'
 import standaloneCode from 'ajv/dist/standalone/index.js'
+import { createRequire } from 'module'
+
+const require = createRequire(import.meta.url)
+const GeometryJSONSchema = require('@comapeo/geometry/json/geometry.json')
 
 /**
  * Returns generated code for validation functions
@@ -23,7 +27,7 @@ export function generateValidations(config, jsonSchemas) {
     code: { source: true, esm: true },
     formats: { 'date-time': true },
   })
-  ajv.addKeyword('meta:enum')
+  ajv.addKeyword('meta:enum').addSchema(GeometryJSONSchema)
 
   // generate validation code
   return '// @ts-nocheck\n' + standaloneCode(ajv, schemaExports)

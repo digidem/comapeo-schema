@@ -17,6 +17,6 @@ message RemoteDetectionAlert_1 {
   google.protobuf.Timestamp detectionDateStart = 2;
   google.protobuf.Timestamp detectionDateEnd = 3;
   string sourceId = 4;
-  Geometry_1 geometry = 5;
+  Geometry geometry = 5;
   map<string, TagValue_1> metadata = 6;
 }
