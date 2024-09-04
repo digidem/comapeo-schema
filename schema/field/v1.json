@@ -102,6 +102,6 @@
       "type": "string"
     }
   },
-  "required": ["tagKey", "type", "label", "schemaName", "universal"],
+  "required": ["tagKey", "type", "label", "schemaName"],
   "additionalProperties": false
 }

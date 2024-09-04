@@ -1,4 +1,3 @@
-import type { SetOptional } from 'type-fest'
 import {
   type MapeoDocEncode,
   type SchemaName,
@@ -22,7 +21,6 @@ import {
   convertTrack,
   convertRemoteDetectionAlert,
 } from './lib/encode-conversions.js'
-import { CoreOwnership } from './index.js'
 import { ExhaustivenessError } from './lib/utils.js'
 
 /**
