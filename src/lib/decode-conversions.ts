@@ -22,10 +22,15 @@ import {
 } from '../types.js'
 import { ExhaustivenessError, VersionIdObject, getVersionId } from './utils.js'
 import type { Observation, Track } from '../index.js'
-import type { Observation_1_Attachment } from '../proto/observation/v1.js'
+import type {
+  Observation_1_Attachment,
+  Observation_1_Metadata,
+  Observation_1_Metadata_Position,
+} from '../proto/observation/v1.js'
 import type { Track_1_Position } from '../proto/track/v1.js'
 import { ProjectSettings_1_ConfigMetadata } from '../proto/projectSettings/v1.js'
 import { ProjectSettings } from '../schema/projectSettings.js'
+import type { Position } from '../schema/observation.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
@@ -76,7 +81,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion, ...rest } = message
+  const { common, metadata, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   let presetRef
 
@@ -95,7 +100,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
     ...rest,
     attachments: message.attachments.map(convertAttachment),
     tags: convertTags(message.tags),
-    metadata: message.metadata,
+    metadata: metadata ? removeInvalidPositionMetadata(metadata) : {},
     presetRef,
   }
   return obs
@@ -452,4 +457,33 @@ function convertTrackPosition(
     coords: position.coords,
     timestamp: position.timestamp,
   }
+}
+
+/**
+ * Because of the way protobuf works, it's possible that a protobuf message is
+ * missing required fields. In this case `timestamp` and the `latitude` and
+ * `longitude` fields on `coords`. We shouldn't have any observations with these
+ * fields missing, but if we do, rather than throwing (and not indexing the
+ * observation at all), we remove the position metadata, since it is not useful
+ * without this metadata.
+ */
+function removeInvalidPositionMetadata(
+  metadata: Observation_1_Metadata
+): Observation['metadata'] {
+  const { position, lastSavedPosition, ...rest } = metadata
+  return {
+    ...rest,
+    position: position && removeInvalidPosition(position),
+    lastSavedPosition:
+      lastSavedPosition && removeInvalidPosition(lastSavedPosition),
+  }
+}
+
+function removeInvalidPosition(
+  position: Observation_1_Metadata_Position
+): Position | undefined {
+  if (position.coords === undefined || position.timestamp === undefined) {
+    return undefined
+  }
+  return position as Position
 }

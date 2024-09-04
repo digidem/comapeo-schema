@@ -7,6 +7,8 @@ plugins:
     opt:
       - esModuleInterop=true
       - importSuffix=.js
+      - outputJsonMethods=false
+      - outputPartialMethods=false
       - env=node
       - snakeToCamel=false
       - useDate=string
