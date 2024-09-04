@@ -38,7 +38,7 @@ message Observation_1 {
 
   // METADATA
   message Metadata {
-    bool manualLocation = 1;
+    optional bool manualLocation = 1;
 
     message Position {
       google.protobuf.Timestamp timestamp = 1;
@@ -57,10 +57,10 @@ message Observation_1 {
     }
 
     message PositionProvider {
-      bool gpsAvailable = 1;
-      bool passiveAvailable = 2;
+      optional bool gpsAvailable = 1;
+      optional bool passiveAvailable = 2;
       bool locationServicesEnabled = 3;
-      bool networkAvailable = 4;
+      optional bool networkAvailable = 4;
     }
 
     optional Position position = 3;
