@@ -482,10 +482,7 @@ function removeInvalidPositionMetadata(
 function removeInvalidPosition(
   position: Observation_1_Metadata_Position
 ): Position | undefined {
-  if (
-    typeof position.coords === 'undefined' ||
-    typeof position.timestamp === 'undefined'
-  ) {
+  if (position.coords === undefined || position.timestamp === undefined) {
     return undefined
   }
   return position as Position
