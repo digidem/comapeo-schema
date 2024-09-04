@@ -20,6 +20,10 @@ import {
   badDocs,
 } from './fixtures/index.js'
 
+/** @import { SchemaName } from '../dist/types.js' */
+
+const schemaNames = /** @type {SchemaName[]} */ (Object.keys(dataTypeIds))
+
 test('Bad docs throw when encoding', () => {
   for (const { text, doc } of badDocs) {
     assert.throws(() => {
@@ -29,19 +33,29 @@ test('Bad docs throw when encoding', () => {
   }
 })
 
-test(`Bad docs won't validate`, () => {
+test('Bad docs throw when validating if bad schema name', () => {
   for (const { text, doc } of badDocs) {
+    const { schemaName } = doc
+    if (isSchemaName(schemaName)) continue
+
     assert.throws(() => {
-      // @ts-expect-error
-      validate(doc)
+      validate(/** @type {any} */ (schemaName), doc)
     }, text)
   }
 })
 
-test('validate bad docs', () => {
-  for (const schemaName of Object.keys(currentSchemaVersions)) {
+test(`Bad docs won't validate`, () => {
+  for (const { text, doc } of badDocs) {
+    const { schemaName } = doc
+    if (!isSchemaName(schemaName)) continue
+
+    assert(!validate(schemaName, doc), text)
+  }
+})
+
+test('validate empty docs', () => {
+  for (const schemaName of schemaNames) {
     assert(
-      // @ts-ignore
       !validate(schemaName, {}),
       `${schemaName} with missing properties should not validate`
     )
@@ -224,6 +238,14 @@ test(`test encoding of wrongly formatted header`, async () => {
     decodeBlockPrefix(buf)
   })
 })
+
+/**
+ * @param {unknown} value
+ * @returns {value is SchemaName}
+ */
+function isSchemaName(value) {
+  return schemaNames.includes(/** @type {any} */ (value))
+}
 
 /**
  * Remove undefined properties (deeply) from an object, by round-tripping to
