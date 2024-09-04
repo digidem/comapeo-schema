@@ -25,10 +25,6 @@ import { cachedValues } from './fixtures/cached.js'
 
 const schemaNames = /** @type {SchemaName[]} */ (Object.keys(dataTypeIds))
 
-/** @import { SchemaName } from '../dist/types.js' */
-
-const schemaNames = /** @type {SchemaName[]} */ (Object.keys(dataTypeIds))
-
 test('Bad docs throw when encoding', () => {
   for (const { text, doc } of badDocs) {
     assert.throws(() => {
@@ -312,14 +308,6 @@ test(`decoding observation with missing position provider props`, async () => {
     'optional passiveAvailable prop should be undefined'
   )
 })
-
-/**
- * @param {unknown} value
- * @returns {value is SchemaName}
- */
-function isSchemaName(value) {
-  return schemaNames.includes(/** @type {any} */ (value))
-}
 
 /**
  * @param {unknown} value
