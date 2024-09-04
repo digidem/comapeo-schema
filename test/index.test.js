@@ -19,6 +19,11 @@ import {
   goodDocsCompleted,
   badDocs,
 } from './fixtures/index.js'
+import { cachedValues } from './fixtures/cached.js'
+
+/** @import { SchemaName } from '../dist/types.js' */
+
+const schemaNames = /** @type {SchemaName[]} */ (Object.keys(dataTypeIds))
 
 /** @import { SchemaName } from '../dist/types.js' */
 
@@ -238,6 +243,83 @@ test(`test encoding of wrongly formatted header`, async () => {
     decodeBlockPrefix(buf)
   })
 })
+
+/** @type {import('../dist/index.js').Observation} */
+const minimalObservation = {
+  docId: cachedValues.docId,
+  versionId: cachedValues.versionId,
+  originalVersionId: cachedValues.originalVersionId,
+  schemaName: 'observation',
+  createdAt: cachedValues.createdAt,
+  updatedAt: cachedValues.updatedAt,
+  links: [],
+  lat: 24.0424,
+  lon: 21.0214,
+  attachments: [],
+  tags: {},
+  metadata: {},
+  deleted: false,
+}
+
+test(`encoding observation with missing position metadata`, async () => {
+  /** @type {import('../dist/index.js').Observation} */
+  const doc = {
+    ...minimalObservation,
+    metadata: {
+      position: /** @type {any} */ ({ coords: {} }),
+    },
+  }
+  const buf = encode(doc)
+  const decodedDoc = decode(buf, parseVersionId(doc.versionId))
+  assert.equal(decodedDoc.schemaName, 'observation')
+  // a previous bug meant that protobuf defaults of 0 were being set for lat/lon
+  assert.equal(
+    typeof decodedDoc.metadata?.position?.coords?.longitude,
+    'undefined'
+  )
+  assert.equal(
+    typeof decodedDoc.metadata?.position?.coords?.latitude,
+    'undefined'
+  )
+})
+
+test(`decoding observation with missing position provider props`, async () => {
+  /** @type {import('../dist/index.js').Observation} */
+  const doc = {
+    ...minimalObservation,
+    metadata: {
+      positionProvider: {
+        locationServicesEnabled: true,
+      },
+    },
+  }
+  const buf = encode(doc)
+  const decodedDoc = decode(buf, parseVersionId(doc.versionId))
+  assert.equal(decodedDoc.schemaName, 'observation')
+  assert.equal(
+    typeof decodedDoc.metadata?.positionProvider?.gpsAvailable,
+    'undefined',
+    'optional gpsAvailable prop should be undefined'
+  )
+  assert.equal(
+    typeof decodedDoc.metadata?.positionProvider?.networkAvailable,
+    'undefined',
+    'optional networkAvailable prop should be undefined'
+  )
+  assert.equal(
+    typeof decodedDoc.metadata?.positionProvider?.passiveAvailable,
+    'undefined',
+    'optional passiveAvailable prop should be undefined'
+  )
+})
+
+/**
+ * @param {unknown} value
+ * @returns {value is SchemaName}
+ */
+function isSchemaName(value) {
+  return schemaNames.includes(/** @type {any} */ (value))
+}
 
 /**
  * @param {unknown} value

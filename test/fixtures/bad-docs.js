@@ -56,7 +56,6 @@ export const badDocs = [
           index: 123,
         }),
       ],
-      refs: [],
       attachments: [],
       tags: {},
       metadata: {},

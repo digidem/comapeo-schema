@@ -7,6 +7,7 @@
     "position": {
       "description": "Position details",
       "type": "object",
+      "required": ["timestamp", "coords"],
       "properties": {
         "timestamp": {
           "description": "Timestamp of when the current position was obtained",
@@ -162,6 +163,7 @@
         "positionProvider": {
           "description": "Details of the location providers that were available on the device when the observation was recorded",
           "type": "object",
+          "required": ["locationServicesEnabled"],
           "properties": {
             "gpsAvailable": {
               "description": "Whether the user has enabled GPS for device location (this is not the same as whether location is turned on or off, this is a device setting whether to use just wifi and bluetooth or use GPS for location)",
