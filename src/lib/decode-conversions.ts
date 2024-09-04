@@ -100,7 +100,6 @@ export const convertObservation: ConvertFunction<'observation'> = (
     ...rest,
     attachments: message.attachments.map(convertAttachment),
     tags: convertTags(message.tags),
-    // Remove invalid position metadata if it's missing required fields
     metadata: metadata ? removeInvalidPositionMetadata(metadata) : {},
     presetRef,
   }
