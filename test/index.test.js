@@ -23,8 +23,7 @@ import {
 test('Bad docs throw when encoding', () => {
   for (const { text, doc } of badDocs) {
     assert.throws(() => {
-      // @ts-expect-error
-      encode(doc)
+      encode(/** @type {any} */ (doc))
     }, text)
   }
 })
@@ -38,8 +37,10 @@ test(`Bad docs won't validate`, () => {
 test('validate bad docs', () => {
   for (const schemaName of Object.keys(currentSchemaVersions)) {
     assert(
-      // @ts-ignore
-      !validate(schemaName, {}),
+      !validate(
+        /** @type {keyof (typeof currentSchemaVersions)} */ (schemaName),
+        {}
+      ),
       `${schemaName} with missing properties should not validate`
     )
     assert(
@@ -59,7 +60,6 @@ test('validate good docs', () => {
     // skip docs with UNRECOGNIZED values - these are used for testing encoding/decoding and will not validate (the decoded versions should validate)
     if (Object.values(expected).includes('UNRECOGNIZED')) continue
     assert(
-      // @ts-ignore
       validate(doc.schemaName, valueOf(doc)),
       `${doc.schemaName} with all required properties should validate`
     )
@@ -95,11 +95,12 @@ test(`testing encoding of doc with additional optional values,
 test(`testing encoding of doc with additional extra values,
 then decoding and comparing the two objects - extra values shouldn't be present`, async () => {
   for (const { doc, expected } of goodDocsCompleted) {
-    const buf = encode({
-      ...doc,
-      // @ts-expect-error
-      extraFieldNotInSchema: 'whatever',
-    })
+    const buf = encode(
+      /** @type {any} */ ({
+        ...doc,
+        extraFieldNotInSchema: 'whatever',
+      })
+    )
     const decodedDoc = stripUndef(decode(buf, parseVersionId(doc.versionId)))
     assert.deepEqual(
       decodedDoc,
