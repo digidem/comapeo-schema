@@ -100,7 +100,6 @@ export const convertObservation: ConvertFunction<'observation'> = (
     ...rest,
     attachments: message.attachments.map(convertAttachment),
     tags: convertTags(message.tags),
-    // Remove invalid position metadata if it's missing required fields
     metadata: metadata ? removeInvalidPositionMetadata(metadata) : {},
     presetRef,
   }
@@ -507,10 +506,7 @@ function removeInvalidPositionMetadata(
 function removeInvalidPosition(
   position: Observation_1_Metadata_Position
 ): Position | undefined {
-  if (
-    typeof position.coords === 'undefined' ||
-    typeof position.timestamp === 'undefined'
-  ) {
+  if (position.coords === undefined || position.timestamp === undefined) {
     return undefined
   }
   return position as Position

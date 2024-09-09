@@ -25,6 +25,23 @@ export const badDocs = [
     },
   },
   {
+    text: 'test schema name that could "trick" JavaScript',
+    /** @type Omit<import('../../dist/index.js').Observation, 'schemaName'> & { schemaName: 'hasOwnProperty' }} */
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.versionId,
+      schemaName: 'hasOwnProperty',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      links: [],
+      attachments: [],
+      tags: {},
+      metadata: {},
+      deleted: false,
+    },
+  },
+  {
     text: 'missing expected originalVersionId',
     /** @type Omit<import('../../dist/index.js').Observation, 'originalVersionId'> */
     doc: {
