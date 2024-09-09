@@ -2,7 +2,7 @@ syntax = "proto3";
 package mapeo;
 
 import "common/v1.proto";
-import "geometry/v1.proto";
+import "geometry/stub.proto";
 import "google/protobuf/timestamp.proto";
 import "options.proto";
 import "tags/v1.proto";
