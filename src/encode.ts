@@ -4,8 +4,7 @@ import {
   type ValidSchemaDef,
 } from './types.js'
 import { currentSchemaVersions, dataTypeIds } from './config.js'
-// @ts-ignore
-import * as cenc from 'compact-encoding'
+import cenc from 'compact-encoding'
 import { DATA_TYPE_ID_BYTES } from './constants.js'
 import { Encode } from './proto/index.js'
 import {
