@@ -13,12 +13,12 @@ message CoreOwnership_1 {
 
   Common_1 common = 1;
 
-  bytes authCoreId = 5;
-  bytes configCoreId = 6;
-  bytes dataCoreId = 7;
-  bytes blobCoreId = 8;
-  bytes blobIndexCoreId = 9;
-  CoreSignatures coreSignatures = 10;
+  optional bytes authCoreId = 5 [(required) = true];
+  optional bytes configCoreId = 6 [(required) = true];
+  optional bytes dataCoreId = 7 [(required) = true];
+  optional bytes blobCoreId = 8 [(required) = true];
+  optional bytes blobIndexCoreId = 9 [(required) = true];
+  CoreSignatures coreSignatures = 10 [(required) = true];
   bytes identitySignature = 11;
 
   message CoreSignatures {

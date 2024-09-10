@@ -21,7 +21,7 @@ import {
   type MapeoDocDecode,
 } from '../types.js'
 import { ExhaustivenessError, VersionIdObject, getVersionId } from './utils.js'
-import type { Observation, Track } from '../index.js'
+import type { Observation, Track, Icon } from '../index.js'
 import type {
   Observation_1_Attachment,
   Observation_1_Metadata,
@@ -39,16 +39,28 @@ type ConvertFunction<TSchemaName extends SchemaName> = (
   versionObj: VersionIdObject
 ) => FilterBySchemaName<MapeoDocDecode, TSchemaName>
 
+function ensure(
+  condition: unknown,
+  objectName: string,
+  propertyName: string
+): asserts condition {
+  if (!condition) {
+    throw new Error(`${objectName} missing required property ${propertyName}`)
+  }
+}
+
 export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
   message,
   versionObj
 ) => {
   const { common, schemaVersion, defaultPresets, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
-  let configMetadata
+
+  let configMetadata: undefined | ProjectSettings['configMetadata']
   if (rest.configMetadata) {
     configMetadata = convertConfigMetadata(rest.configMetadata)
   }
+
   return {
     ...jsonSchemaCommon,
     ...rest,
@@ -68,13 +80,12 @@ export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
 function convertConfigMetadata(
   configMetadata: ProjectSettings_1_ConfigMetadata
 ): ProjectSettings['configMetadata'] {
-  if (!configMetadata?.importDate) {
-    throw new Error('Missing required property configMetadata.importDate')
-  }
-  if (!configMetadata?.buildDate) {
-    throw new Error('Missing required property configMetadata.buildDate')
-  }
-  return configMetadata as ProjectSettings['configMetadata']
+  const { name, importDate, buildDate, fileVersion } = configMetadata
+  ensure(name, 'configMetadata', 'name')
+  ensure(importDate, 'configMetadata', 'importDate')
+  ensure(buildDate, 'configMetadata', 'buildDate')
+  ensure(fileVersion, 'configMetadata', 'fileVersion')
+  return { name, importDate, buildDate, fileVersion }
 }
 
 export const convertObservation: ConvertFunction<'observation'> = (
@@ -86,9 +97,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
   let presetRef
 
   if (rest.presetRef) {
-    if (!rest.presetRef.versionId)
-      throw new Error('found presetRef on observation but is missing versionId')
-
+    ensure(rest.presetRef.versionId, 'observation.presetRef', 'versionId')
     presetRef = {
       docId: rest.presetRef.docId.toString('hex'),
       versionId: getVersionId(rest.presetRef.versionId),
@@ -109,32 +118,30 @@ export const convertObservation: ConvertFunction<'observation'> = (
 type FieldOptions = FilterBySchemaName<MapeoDoc, 'field'>['options']
 
 export const convertField: ConvertFunction<'field'> = (message, versionObj) => {
-  const { common, schemaVersion, ...rest } = message
+  const { common, schemaVersion, tagKey, type, label, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
-  if (!message.tagKey) {
-    // We can't do anything with a field without a tag key, so we ignore these
-    throw new Error('Missing tagKey on field')
-  } else {
-    return {
-      ...jsonSchemaCommon,
-      ...rest,
-      tagKey: message.tagKey,
-      label: message.label || message.tagKey,
-      options:
-        message.options.length > 0
-          ? message.options.reduce<Exclude<FieldOptions, undefined>>(
-              (acc, { label, value }) => {
-                // Filter out any options where value is undefined (this would still be valid protobuf, but not valid for our code)
-                if (!value) return acc
-                const convertedValue = convertTagPrimitive(value)
-                if (typeof convertedValue === 'undefined') return acc
-                acc.push({ label, value: convertedValue })
-                return acc
-              },
-              []
-            )
-          : undefined,
-    }
+  ensure(tagKey, 'field', 'tagKey')
+  ensure(type, 'field', 'type')
+  return {
+    ...jsonSchemaCommon,
+    ...rest,
+    tagKey: tagKey,
+    label: label || tagKey,
+    type,
+    options:
+      message.options.length > 0
+        ? message.options.reduce<Exclude<FieldOptions, undefined>>(
+            (acc, { label, value }) => {
+              // Filter out any options where value is undefined (this would still be valid protobuf, but not valid for our code)
+              if (!value) return acc
+              const convertedValue = convertTagPrimitive(value)
+              if (typeof convertedValue === 'undefined') return acc
+              acc.push({ label, value: convertedValue })
+              return acc
+            },
+            []
+          )
+        : undefined,
   }
 }
 
@@ -147,8 +154,12 @@ export const convertPreset: ConvertFunction<'preset'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion, ...rest } = message
+  const { common, schemaVersion, name, color, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
+
+  ensure(name, 'preset', 'name')
+  ensure(color, 'preset', 'color')
+
   const geometry = rest.geometry.filter(
     (geomType): geomType is JsonSchemaPresetGeomItem =>
       geomType !== 'UNRECOGNIZED'
@@ -156,9 +167,7 @@ export const convertPreset: ConvertFunction<'preset'> = (
 
   let iconRef
   if (rest.iconRef) {
-    // iconRef is not required property on the schema, but if it does exist, then a versionId must be present
-    if (!rest.iconRef.versionId)
-      throw new Error('found iconRef on preset but is missing versionId')
+    ensure(rest.iconRef.versionId, 'preset.iconRef', 'versionId')
     iconRef = {
       docId: rest.iconRef.docId.toString('hex'),
       versionId: getVersionId(rest.iconRef.versionId),
@@ -168,6 +177,7 @@ export const convertPreset: ConvertFunction<'preset'> = (
   return {
     ...jsonSchemaCommon,
     ...rest,
+    name,
     geometry,
     tags: convertTags(rest.tags),
     addTags: convertTags(rest.addTags),
@@ -180,19 +190,20 @@ export const convertPreset: ConvertFunction<'preset'> = (
       }
     }),
     iconRef,
+    color,
   }
 }
 
 export const convertRole: ConvertFunction<'role'> = (message, versionObj) => {
-  if (message.roleId.length === 0) {
-    throw new Error('Invalid roleId')
-  }
-  const { common, schemaVersion, ...rest } = message
+  const { common, schemaVersion, fromIndex, roleId, ...rest } = message
+  ensure(roleId?.length, 'role', 'roleId')
+  ensure(typeof fromIndex === 'number', 'role', 'fromIndex')
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
     ...rest,
-    roleId: message.roleId.toString('hex'),
+    roleId: roleId.toString('hex'),
+    fromIndex,
   }
 }
 
@@ -200,11 +211,13 @@ export const convertDeviceInfo: ConvertFunction<'deviceInfo'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion, ...rest } = message
+  const { common, schemaVersion, name, ...rest } = message
+  ensure(name, 'deviceInfo', 'name')
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
     ...rest,
+    name,
   }
 }
 
@@ -212,9 +225,6 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
   message,
   versionObj
 ) => {
-  if (!message.coreSignatures) {
-    throw new Error('Invalid message: missing core signatures')
-  }
   const {
     common,
     schemaVersion,
@@ -223,8 +233,15 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
     dataCoreId,
     blobCoreId,
     blobIndexCoreId,
+    coreSignatures,
     ...rest
   } = message
+  ensure(coreSignatures, 'coreOwnership', 'coreSignatures')
+  ensure(authCoreId?.byteLength, 'coreOwnership', 'authCoreId')
+  ensure(configCoreId?.byteLength, 'coreOwnership', 'configCoreId')
+  ensure(dataCoreId?.byteLength, 'coreOwnership', 'dataCoreId')
+  ensure(blobCoreId?.byteLength, 'coreOwnership', 'blobCoreId')
+  ensure(blobIndexCoreId?.byteLength, 'coreOwnership', 'blobIndexCoreId')
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
@@ -234,16 +251,18 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
     dataCoreId: dataCoreId.toString('hex'),
     blobCoreId: blobCoreId.toString('hex'),
     blobIndexCoreId: blobIndexCoreId.toString('hex'),
-    coreSignatures: message.coreSignatures,
+    coreSignatures,
   }
 }
 
 export const convertIcon: ConvertFunction<'icon'> = (message, versionObj) => {
-  const { common, schemaVersion, ...rest } = message
+  const { common, schemaVersion, name, variants, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
+  ensure(name, 'icon', 'name')
   return {
     ...jsonSchemaCommon,
     ...rest,
+    name,
     variants: message.variants.map((variant) => convertIconVariant(variant)),
   }
 }
@@ -252,14 +271,29 @@ export const convertTranslation: ConvertFunction<'translation'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion, ...rest } = message
+  const {
+    common,
+    schemaVersion,
+    propertyRef,
+    languageCode,
+    regionCode,
+    message: translationMessage,
+    ...rest
+  } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
-  if (!message.docRef) throw new Error('missing docRef for translation')
-  if (!message.docRef.versionId)
-    throw new Error('missing docRef.versionId for translation')
+  ensure(message.docRef, 'translation', 'docRef')
+  ensure(message.docRef.versionId, 'translation.docRef', 'versionId')
+  ensure(propertyRef, 'translation', 'propertyRef')
+  ensure(languageCode, 'translation', 'languageCode')
+  ensure(regionCode, 'translation', 'regionCode')
+  ensure(translationMessage, 'translation', 'translationMessage')
   return {
     ...jsonSchemaCommon,
     ...rest,
+    propertyRef,
+    languageCode,
+    regionCode,
+    message: translationMessage,
     docRef: {
       docId: message.docRef.docId.toString('hex'),
       versionId: getVersionId(message.docRef.versionId),
@@ -273,8 +307,7 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
   const locations = message.locations.map(convertTrackPosition)
   const observationRefs = message.observationRefs.map(
     ({ docId, versionId }) => {
-      if (!versionId)
-        throw new Error('missing observationRef.versionId from track')
+      ensure(versionId, 'track.observationRefs[]', 'versionId')
       return {
         docId: docId.toString('hex'),
         versionId: getVersionId(versionId),
@@ -290,9 +323,12 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
   }
 }
 
-function convertIconVariant(variant: Icon_1_IconVariant) {
+function convertIconVariant(
+  variant: Icon_1_IconVariant
+): Icon['variants'][number] {
   if (variant.variant?.$case === 'pngIcon') {
     const { pixelDensity } = variant.variant.pngIcon
+    ensure(pixelDensity, 'icon.variants[].pngIcon', 'pixelDensity')
     return convertIconVariantPng({ ...variant, pixelDensity })
   } else if (variant.variant?.$case === 'svgIcon') {
     return convertIconVariantSvg(variant)
@@ -305,11 +341,10 @@ function convertIconVariantPng(
   variant: Icon_1_IconVariant & {
     pixelDensity: Icon_1_IconVariantPng_PixelDensity
   }
-) {
+): Icon['variants'][number] {
   const { blobVersionId, size, pixelDensity } = variant
-  if (!blobVersionId) {
-    throw new Error('Missing required property `blobVersionId`')
-  }
+  ensure(blobVersionId, 'icon.variants[]', 'blobVersionId')
+  ensure(size, 'icon.variants[]', 'size')
   return {
     blobVersionId: getVersionId(blobVersionId),
     mimeType: 'image/png' as const,
@@ -318,11 +353,12 @@ function convertIconVariantPng(
   }
 }
 
-function convertIconVariantSvg(variant: Icon_1_IconVariant) {
+function convertIconVariantSvg(
+  variant: Icon_1_IconVariant
+): Icon['variants'][number] {
   const { blobVersionId, size } = variant
-  if (!blobVersionId) {
-    throw new Error('Missing required property `blobVersionId`')
-  }
+  ensure(blobVersionId, 'icon.variants[]', 'blobVersionId')
+  ensure(size, 'icon.variants[]', 'size')
   return {
     blobVersionId: getVersionId(blobVersionId),
     mimeType: 'image/svg+xml' as const,
@@ -446,17 +482,10 @@ function convertAttachment({
 function convertTrackPosition(
   position: Track_1_Position
 ): Track['locations'][number] {
-  if (!position.timestamp) {
-    throw new Error('Missing required property `timestamp`')
-  }
-  if (!position.coords) {
-    throw new Error('Missing required property `coords`')
-  }
-  return {
-    ...position,
-    coords: position.coords,
-    timestamp: position.timestamp,
-  }
+  const { timestamp, coords, ...rest } = position
+  ensure(timestamp, 'track.locations.position[]', 'timestamp')
+  ensure(coords, 'track.locations.position[]', 'coords')
+  return { coords, timestamp, ...rest }
 }
 
 /**
@@ -482,8 +511,6 @@ function removeInvalidPositionMetadata(
 function removeInvalidPosition(
   position: Observation_1_Metadata_Position
 ): Position | undefined {
-  if (position.coords === undefined || position.timestamp === undefined) {
-    return undefined
-  }
-  return position as Position
+  const { timestamp, coords, ...rest } = position
+  return coords && timestamp ? { timestamp, coords, ...rest } : undefined
 }

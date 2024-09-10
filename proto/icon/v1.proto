@@ -10,7 +10,7 @@ message Icon_1 {
   option (schemaName) = "icon";
 
   Common_1 common = 1;
-  string name = 2 [(required) = true];
+  optional string name = 2 [(required) = true];
 
   message IconVariantSvg {}
 
@@ -22,7 +22,7 @@ message Icon_1 {
       x3 = 3;
     }
 
-    PixelDensity pixelDensity = 1 [(required) = true];
+    optional PixelDensity pixelDensity = 1 [(required) = true];
   }
 
   message IconVariant {
@@ -43,8 +43,8 @@ message Icon_1 {
       int32 index = 2;
     }
 
-    Size size = 3 [(required) = true];
-    BlobVersionId blobVersionId = 4 [(required) = true];
+    optional Size size = 3 [(required) = true];
+    optional BlobVersionId blobVersionId = 4 [(required) = true];
   }
   repeated IconVariant variants = 3;
 }
