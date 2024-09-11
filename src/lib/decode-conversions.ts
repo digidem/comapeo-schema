@@ -285,7 +285,6 @@ export const convertTranslation: ConvertFunction<'translation'> = (
   ensure(message.docRef.versionId, 'translation.docRef', 'versionId')
   ensure(propertyRef, 'translation', 'propertyRef')
   ensure(languageCode, 'translation', 'languageCode')
-  ensure(regionCode, 'translation', 'regionCode')
   ensure(translationMessage, 'translation', 'translationMessage')
   return {
     ...jsonSchemaCommon,

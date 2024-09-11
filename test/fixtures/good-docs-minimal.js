@@ -185,7 +185,6 @@ export const goodDocsMinimal = [
       docRefType: 'field',
       propertyRef: 'label',
       languageCode: 'qu',
-      regionCode: 'PE',
       message: `sach'a`,
     },
     expected: {},

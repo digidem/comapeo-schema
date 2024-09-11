@@ -15,7 +15,7 @@ message Translation_1 {
 
   string propertyRef = 3 [(required) = true];
   string languageCode = 4 [(required) = true];
-  string regionCode = 5 [(required) = true];
+  optional string regionCode = 5;
   string message = 6 [(required) = true];
 
   message DocRef {
