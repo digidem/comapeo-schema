@@ -128,6 +128,7 @@ export const convertDeviceInfo: ConvertFunction<'deviceInfo'> = (mapeoDoc) => {
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
+    deviceType: mapeoDoc.deviceType ?? 'device_type_unspecified',
   }
 }
 

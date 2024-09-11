@@ -118,7 +118,7 @@ export const goodDocsMinimal = [
       name: 'my device name',
       deleted: false,
     },
-    expected: {},
+    expected: { deviceType: 'device_type_unspecified' },
   },
   {
     doc: {
