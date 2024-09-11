@@ -30,7 +30,8 @@
       "properties": {
         "name": {
           "type": "string",
-          "description": "Name of the configuration"
+          "description": "Name of the configuration",
+          "minLength": 1
         },
         "buildDate": {
           "type": "string",
@@ -44,7 +45,8 @@
         },
         "fileVersion": {
           "type": "string",
-          "description": "version of the configuration file format as comver (MAJOR.MINOR)"
+          "description": "version of the configuration file format as comver (MAJOR.MINOR)",
+          "minLength": 1
         }
       },
       "additionalProperties": false,

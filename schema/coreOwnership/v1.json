@@ -11,23 +11,28 @@
     },
     "authCoreId": {
       "type": "string",
-      "description": "Hex-encoded key of auth store writer core"
+      "description": "Hex-encoded key of auth store writer core",
+      "minLength": 1
     },
     "configCoreId": {
       "type": "string",
-      "description": "Hex-encoded key of config store writer core"
+      "description": "Hex-encoded key of config store writer core",
+      "minLength": 1
     },
     "dataCoreId": {
       "type": "string",
-      "description": "Hex-encoded key of data store writer core"
+      "description": "Hex-encoded key of data store writer core",
+      "minLength": 1
     },
     "blobCoreId": {
       "type": "string",
-      "description": "Hex-encoded key of blob store writer core"
+      "description": "Hex-encoded key of blob store writer core",
+      "minLength": 1
     },
     "blobIndexCoreId": {
       "type": "string",
-      "description": "Hex-encoded key of blobIndex store writer core"
+      "description": "Hex-encoded key of blobIndex store writer core",
+      "minLength": 1
     }
   },
   "required": [

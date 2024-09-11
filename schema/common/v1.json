@@ -7,19 +7,23 @@
   "properties": {
     "docId": {
       "description": "Hex-encoded 32-byte buffer",
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "versionId": {
       "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "originalVersionId": {
       "description": "Version ID of the original version of this document. For the original version, matches `versionId`.",
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "schemaName": {
       "description": "Name of Mapeo data type / schema",
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "createdAt": {
       "description": "RFC3339-formatted datetime of when the first version of the element was created",

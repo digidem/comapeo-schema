@@ -14,11 +14,13 @@
       "properties": {
         "docId": {
           "description": "hex-encoded id of the element that this observation references",
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "versionId": {
           "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         }
       },
       "required": ["docId", "versionId"]
@@ -40,19 +42,25 @@
     },
     "propertyRef": {
       "type": "string",
-      "description": "identifier for translated field/property in dot-prop notation"
+      "description": "identifier for translated field/property in dot-prop notation",
+      "minLength": 1
     },
     "languageCode": {
       "type": "string",
-      "description": "three-letter ISO 169-3 language code"
+      "description": "three-letter ISO 169-3 language code",
+      "minLength": 1,
+      "maxLength": 3
     },
     "regionCode": {
       "type": "string",
-      "description": "two-letter country code from ISO 3166-1 alpha-2 or a three-digit code from UN M.49 for geographical regions"
+      "description": "two-letter country code from ISO 3166-1 alpha-2 or a three-digit code from UN M.49 for geographical regions",
+      "minLength": 2,
+      "maxLength": 3
     },
     "message": {
       "type": "string",
-      "description": "the translated string"
+      "description": "the translated string",
+      "minLength": 1
     }
   },
   "required": [

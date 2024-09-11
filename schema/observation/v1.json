@@ -77,11 +77,13 @@
         "properties": {
           "driveDiscoveryId": {
             "type": "string",
-            "description": "core discovery id for the drive that the attachment belongs to"
+            "description": "core discovery id for the drive that the attachment belongs to",
+            "minLength": 1
           },
           "name": {
             "type": "string",
-            "description": "name of the attachment"
+            "description": "name of the attachment",
+            "minLength": 1
           },
           "type": {
             "type": "string",
@@ -99,7 +101,8 @@
           },
           "hash": {
             "type": "string",
-            "description": "SHA256 hash of the attachment"
+            "description": "SHA256 hash of the attachment",
+            "minLength": 1
           }
         },
         "required": ["driveDiscoveryId", "name", "type", "hash"]
@@ -192,11 +195,13 @@
       "properties": {
         "docId": {
           "description": "hex-encoded id of the element that this observation references",
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "versionId": {
           "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         }
       },
       "required": ["docId", "versionId"]
