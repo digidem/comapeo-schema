@@ -121,7 +121,7 @@ export const convertField: ConvertFunction<'field'> = (message, versionObj) => {
   const { common, schemaVersion, tagKey, type, label, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   ensure(tagKey, 'field', 'tagKey')
-  ensure(type, 'field', 'type')
+  ensure(type !== 'type_unspecified', 'field', 'type')
   return {
     ...jsonSchemaCommon,
     ...rest,
@@ -196,7 +196,7 @@ export const convertPreset: ConvertFunction<'preset'> = (
 
 export const convertRole: ConvertFunction<'role'> = (message, versionObj) => {
   const { common, schemaVersion, fromIndex, roleId, ...rest } = message
-  ensure(roleId?.length, 'role', 'roleId')
+  ensure(roleId.length, 'role', 'roleId')
   ensure(typeof fromIndex === 'number', 'role', 'fromIndex')
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
@@ -237,11 +237,11 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
     ...rest
   } = message
   ensure(coreSignatures, 'coreOwnership', 'coreSignatures')
-  ensure(authCoreId?.byteLength, 'coreOwnership', 'authCoreId')
-  ensure(configCoreId?.byteLength, 'coreOwnership', 'configCoreId')
-  ensure(dataCoreId?.byteLength, 'coreOwnership', 'dataCoreId')
-  ensure(blobCoreId?.byteLength, 'coreOwnership', 'blobCoreId')
-  ensure(blobIndexCoreId?.byteLength, 'coreOwnership', 'blobIndexCoreId')
+  ensure(authCoreId.byteLength, 'coreOwnership', 'authCoreId')
+  ensure(configCoreId.byteLength, 'coreOwnership', 'configCoreId')
+  ensure(dataCoreId.byteLength, 'coreOwnership', 'dataCoreId')
+  ensure(blobCoreId.byteLength, 'coreOwnership', 'blobCoreId')
+  ensure(blobIndexCoreId.byteLength, 'coreOwnership', 'blobIndexCoreId')
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
@@ -328,7 +328,11 @@ function convertIconVariant(
 ): Icon['variants'][number] {
   if (variant.variant?.$case === 'pngIcon') {
     const { pixelDensity } = variant.variant.pngIcon
-    ensure(pixelDensity, 'icon.variants[].pngIcon', 'pixelDensity')
+    ensure(
+      pixelDensity !== 'pixel_density_unspecified',
+      'icon.variants[].pngIcon',
+      'pixelDensity'
+    )
     return convertIconVariantPng({ ...variant, pixelDensity })
   } else if (variant.variant?.$case === 'svgIcon') {
     return convertIconVariantSvg(variant)
@@ -439,7 +443,12 @@ function convertCommon(
   common: ProtoTypesWithSchemaInfo['common'],
   versionObj: VersionIdObject
 ): Omit<MapeoCommon, 'schemaName'> {
-  if (!common || !common.docId || !common.createdAt || !common.updatedAt) {
+  if (
+    !common ||
+    !common.docId.byteLength ||
+    !common.createdAt ||
+    !common.updatedAt
+  ) {
     throw new Error('Missing required common properties')
   }
 

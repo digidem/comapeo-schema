@@ -13,6 +13,6 @@ message Role_1 {
 
   Common_1 common = 1;
 
-  optional bytes roleId = 5 [(required) = true];
+  bytes roleId = 5 [(required) = true];
   optional uint32 fromIndex = 6 [(required) = true];
 }

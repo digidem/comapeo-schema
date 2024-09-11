@@ -15,7 +15,7 @@ message Preset_1 {
 
   Common_1 common = 1;
 
-  optional string name = 5 [(required) = true];
+  string name = 5 [(required) = true];
   repeated Geometry geometry = 6;
   map<string, TagValue_1> tags = 7;
   map<string, TagValue_1> addTags = 8;
@@ -23,7 +23,7 @@ message Preset_1 {
   repeated FieldRef fieldRefs = 10;
   optional IconRef iconRef = 11;
   repeated string terms = 12;
-  optional string color = 13 [(required) = true];
+  string color = 13 [(required) = true];
 
   enum Geometry {
     geometry_unspecified = 0;

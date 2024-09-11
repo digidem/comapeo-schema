@@ -14,7 +14,7 @@ message Field_1 {
 
   Common_1 common = 1;
 
-  optional string tagKey = 5 [(required) = true];
+  string tagKey = 5 [(required) = true];
   enum Type {
     type_unspecified = 0;
     text = 1;
@@ -22,8 +22,8 @@ message Field_1 {
     selectOne = 3;
     selectMultiple = 4;
   }
-  optional Type type = 6 [(required) = true];
-  optional string label = 7 [(required) = true];
+  Type type = 6 [(required) = true];
+  string label = 7 [(required) = true];
   enum Appearance {
     appearance_unspecified = 0;
     multiline = 1;
