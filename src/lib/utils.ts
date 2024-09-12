@@ -5,6 +5,16 @@ import {
   type FilterBySchemaName,
 } from '../types.js'
 
+export function ensure(
+  condition: unknown,
+  objectName: string,
+  propertyName: string
+): asserts condition {
+  if (!condition) {
+    throw new Error(`${objectName} missing required property ${propertyName}`)
+  }
+}
+
 export function getOwn<T extends object, K extends keyof T>(
   obj: T,
   key: K
@@ -46,6 +56,8 @@ export type VersionIdObject = {
  * @returns versionId string
  */
 export function getVersionId({ coreDiscoveryKey, index }: VersionIdObject) {
+  ensure(coreDiscoveryKey.byteLength >= 32, 'versionId', 'coreDiscoveryKey')
+  ensure(Number.isSafeInteger(index) && index >= 0, 'versionId', 'index')
   return coreDiscoveryKey.toString('hex') + '/' + index
 }
 
