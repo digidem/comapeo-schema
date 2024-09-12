@@ -21,7 +21,7 @@ import {
   type MapeoDocDecode,
 } from '../types.js'
 import { ExhaustivenessError, VersionIdObject, getVersionId } from './utils.js'
-import type { Observation, Track, Icon } from '../index.js'
+import type { Icon, Observation, Track } from '../index.js'
 import type {
   Observation_1_Attachment,
   Observation_1_Metadata,
@@ -256,15 +256,18 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
 }
 
 export const convertIcon: ConvertFunction<'icon'> = (message, versionObj) => {
-  const { common, schemaVersion, name, variants, ...rest } = message
+  const { common, schemaVersion, name, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
+
   ensure(name, 'icon', 'name')
-  return {
-    ...jsonSchemaCommon,
-    ...rest,
-    name,
-    variants: message.variants.map((variant) => convertIconVariant(variant)),
+
+  const variants: Icon['variants'] = []
+  for (const variant of message.variants) {
+    const converted = convertIconVariant(variant)
+    if (converted) variants.push(converted)
   }
+
+  return { ...jsonSchemaCommon, ...rest, name, variants }
 }
 
 export const convertTranslation: ConvertFunction<'translation'> = (
@@ -324,19 +327,23 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
 
 function convertIconVariant(
   variant: Icon_1_IconVariant
-): Icon['variants'][number] {
-  if (variant.variant?.$case === 'pngIcon') {
-    const { pixelDensity } = variant.variant.pngIcon
-    ensure(
-      pixelDensity !== 'pixel_density_unspecified',
-      'icon.variants[].pngIcon',
-      'pixelDensity'
-    )
-    return convertIconVariantPng({ ...variant, pixelDensity })
-  } else if (variant.variant?.$case === 'svgIcon') {
-    return convertIconVariantSvg(variant)
-  } else {
-    throw new Error('invalid icon variant type')
+): null | Icon['variants'][number] {
+  switch (variant.variant?.$case) {
+    case 'pngIcon': {
+      const { pixelDensity } = variant.variant.pngIcon
+      ensure(
+        pixelDensity !== 'pixel_density_unspecified',
+        'icon.variants[].pngIcon',
+        'pixelDensity'
+      )
+      return convertIconVariantPng({ ...variant, pixelDensity })
+    }
+    case 'svgIcon':
+      return convertIconVariantSvg(variant)
+    case undefined:
+      return null
+    default:
+      throw new ExhaustivenessError(variant.variant)
   }
 }
 
@@ -401,8 +408,7 @@ function convertTags(tags: { [key: string]: TagValue_1 } | undefined): {
 }
 
 function convertTagValue({ kind }: TagValue_1): JsonTagValue {
-  if (!kind) return undefined
-  switch (kind.$case) {
+  switch (kind?.$case) {
     case 'list_value':
       return kind.list_value.list_value.reduce<
         Exclude<TagValuePrimitive, undefined>[]
@@ -415,6 +421,8 @@ function convertTagValue({ kind }: TagValue_1): JsonTagValue {
       }, [])
     case 'primitive_value':
       return convertTagPrimitive(kind.primitive_value)
+    case undefined:
+      return undefined
     default:
       throw new ExhaustivenessError(kind)
   }
@@ -423,8 +431,7 @@ function convertTagValue({ kind }: TagValue_1): JsonTagValue {
 function convertTagPrimitive({
   kind,
 }: TagValue_1_PrimitiveValue): TagValuePrimitive {
-  if (!kind) return undefined
-  switch (kind.$case) {
+  switch (kind?.$case) {
     case 'null_value':
       return null
     case 'boolean_value':
@@ -433,6 +440,8 @@ function convertTagPrimitive({
       return kind.number_value
     case 'string_value':
       return kind.string_value
+    case undefined:
+      return undefined
     default:
       throw new ExhaustivenessError(kind)
   }
