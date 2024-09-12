@@ -26,5 +26,13 @@ export function generateValidations(config, jsonSchemas) {
   ajv.addKeyword('meta:enum')
 
   // generate validation code
-  return '// @ts-nocheck\n' + standaloneCode(ajv, schemaExports)
+  return [
+    '// @ts-nocheck',
+    // AJV has [a bug when generating ESM code][0]: it includes `require` in the
+    // output. We should be able to remove this once the bug is fixed.
+    // [0]: https://github.com/ajv-validator/ajv/issues/2209
+    "import { createRequire } from 'node:module';",
+    'const require = createRequire(import.meta.url);',
+    standaloneCode(ajv, schemaExports),
+  ].join('\n')
 }

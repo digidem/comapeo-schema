@@ -97,7 +97,6 @@ export const goodDocsCompleted = [
         buildDate: cachedValues.configMetadata.buildDate,
         importDate: cachedValues.configMetadata.importDate,
       },
-      isInitialProject: true,
       deleted: false,
     },
     expected: {},

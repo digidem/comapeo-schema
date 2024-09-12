@@ -21,11 +21,16 @@ import {
   type MapeoDocDecode,
 } from '../types.js'
 import { ExhaustivenessError, VersionIdObject, getVersionId } from './utils.js'
-import type { Observation, Track } from '../index.js'
-import type { Observation_1_Attachment } from '../proto/observation/v1.js'
+import type { Icon, Observation, Track } from '../index.js'
+import type {
+  Observation_1_Attachment,
+  Observation_1_Metadata,
+  Observation_1_Metadata_Position,
+} from '../proto/observation/v1.js'
 import type { Track_1_Position } from '../proto/track/v1.js'
 import { ProjectSettings_1_ConfigMetadata } from '../proto/projectSettings/v1.js'
 import { ProjectSettings } from '../schema/projectSettings.js'
+import type { Position } from '../schema/observation.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
@@ -81,7 +86,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion: _schemaVersion, ...rest } = message
+  const { common, metadata, schemaVersion: _schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   let presetRef
 
@@ -100,7 +105,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
     ...rest,
     attachments: message.attachments.map(convertAttachment),
     tags: convertTags(message.tags),
-    metadata: message.metadata,
+    metadata: metadata ? removeInvalidPositionMetadata(metadata) : {},
     presetRef,
   }
   return obs
@@ -240,12 +245,16 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
 
 export const convertIcon: ConvertFunction<'icon'> = (message, versionObj) => {
   const { common, schemaVersion: _schemaVersion, ...rest } = message
+
   const jsonSchemaCommon = convertCommon(common, versionObj)
-  return {
-    ...jsonSchemaCommon,
-    ...rest,
-    variants: message.variants.map((variant) => convertIconVariant(variant)),
+
+  const variants: Icon['variants'] = []
+  for (const variant of message.variants) {
+    const converted = convertIconVariant(variant)
+    if (converted) variants.push(converted)
   }
+
+  return { ...jsonSchemaCommon, ...rest, variants }
 }
 
 export const convertTranslation: ConvertFunction<'translation'> = (
@@ -290,14 +299,20 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
   }
 }
 
-function convertIconVariant(variant: Icon_1_IconVariant) {
-  if (variant.variant?.$case === 'pngIcon') {
-    const { pixelDensity } = variant.variant.pngIcon
-    return convertIconVariantPng({ ...variant, pixelDensity })
-  } else if (variant.variant?.$case === 'svgIcon') {
-    return convertIconVariantSvg(variant)
-  } else {
-    throw new Error('invalid icon variant type')
+function convertIconVariant(
+  variant: Icon_1_IconVariant
+): null | Icon['variants'][number] {
+  switch (variant.variant?.$case) {
+    case 'pngIcon': {
+      const { pixelDensity } = variant.variant.pngIcon
+      return convertIconVariantPng({ ...variant, pixelDensity })
+    }
+    case 'svgIcon':
+      return convertIconVariantSvg(variant)
+    case undefined:
+      return null
+    default:
+      throw new ExhaustivenessError(variant.variant)
   }
 }
 
@@ -362,8 +377,7 @@ function convertTags(tags: { [key: string]: TagValue_1 } | undefined): {
 }
 
 function convertTagValue({ kind }: TagValue_1): JsonTagValue {
-  if (!kind) return undefined
-  switch (kind.$case) {
+  switch (kind?.$case) {
     case 'list_value':
       return kind.list_value.list_value.reduce<
         Exclude<TagValuePrimitive, undefined>[]
@@ -376,6 +390,8 @@ function convertTagValue({ kind }: TagValue_1): JsonTagValue {
       }, [])
     case 'primitive_value':
       return convertTagPrimitive(kind.primitive_value)
+    case undefined:
+      return undefined
     default:
       throw new ExhaustivenessError(kind)
   }
@@ -384,8 +400,7 @@ function convertTagValue({ kind }: TagValue_1): JsonTagValue {
 function convertTagPrimitive({
   kind,
 }: TagValue_1_PrimitiveValue): TagValuePrimitive {
-  if (!kind) return undefined
-  switch (kind.$case) {
+  switch (kind?.$case) {
     case 'null_value':
       return null
     case 'boolean_value':
@@ -394,6 +409,8 @@ function convertTagPrimitive({
       return kind.number_value
     case 'string_value':
       return kind.string_value
+    case undefined:
+      return undefined
     default:
       throw new ExhaustivenessError(kind)
   }
@@ -457,4 +474,33 @@ function convertTrackPosition(
     coords: position.coords,
     timestamp: position.timestamp,
   }
+}
+
+/**
+ * Because of the way protobuf works, it's possible that a protobuf message is
+ * missing required fields. In this case `timestamp` and the `latitude` and
+ * `longitude` fields on `coords`. We shouldn't have any observations with these
+ * fields missing, but if we do, rather than throwing (and not indexing the
+ * observation at all), we remove the position metadata, since it is not useful
+ * without this metadata.
+ */
+function removeInvalidPositionMetadata(
+  metadata: Observation_1_Metadata
+): Observation['metadata'] {
+  const { position, lastSavedPosition, ...rest } = metadata
+  return {
+    ...rest,
+    position: position && removeInvalidPosition(position),
+    lastSavedPosition:
+      lastSavedPosition && removeInvalidPosition(lastSavedPosition),
+  }
+}
+
+function removeInvalidPosition(
+  position: Observation_1_Metadata_Position
+): Position | undefined {
+  if (position.coords === undefined || position.timestamp === undefined) {
+    return undefined
+  }
+  return position as Position
 }

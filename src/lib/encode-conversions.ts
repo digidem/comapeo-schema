@@ -12,10 +12,7 @@ import {
 import { TagValue_1, type TagValue_1_PrimitiveValue } from '../proto/tags/v1.js'
 import { Icon } from '../schema/icon.js'
 import { type Icon_1_IconVariant } from '../proto/icon/v1.js'
-import {
-  Observation_1_Metadata,
-  type Observation_1_Attachment,
-} from '../proto/observation/v1.js'
+import { type Observation_1_Attachment } from '../proto/observation/v1.js'
 import { ExhaustivenessError, parseVersionId } from './utils.js'
 import { CoreOwnership, valueSchemas, type Observation } from '../index.js'
 
@@ -95,9 +92,6 @@ export const convertObservation: ConvertFunction<'observation'> = (
   mapeoDoc
 ) => {
   const attachments = mapeoDoc.attachments.map(convertAttachment)
-  const metadata: Observation_1_Metadata | undefined = mapeoDoc.metadata && {
-    ...Observation_1_Metadata.fromPartial(mapeoDoc.metadata),
-  }
   let presetRef
   if (mapeoDoc.presetRef) {
     presetRef = {
@@ -111,7 +105,6 @@ export const convertObservation: ConvertFunction<'observation'> = (
     ...mapeoDoc,
     attachments,
     tags: convertTags(mapeoDoc.tags),
-    metadata,
     presetRef,
   }
 }
