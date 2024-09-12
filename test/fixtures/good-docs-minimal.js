@@ -116,9 +116,10 @@ export const goodDocsMinimal = [
       updatedAt: cachedValues.updatedAt,
       links: [],
       name: 'my device name',
+      deviceType: 'mobile',
       deleted: false,
     },
-    expected: { deviceType: 'device_type_unspecified' },
+    expected: {},
   },
   {
     doc: {
