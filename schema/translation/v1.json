@@ -59,8 +59,7 @@
     },
     "message": {
       "type": "string",
-      "description": "the translated string",
-      "minLength": 1
+      "description": "the translated string"
     }
   },
   "required": [
