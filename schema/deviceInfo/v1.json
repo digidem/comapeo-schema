@@ -10,8 +10,7 @@
     },
     "name": {
       "type": "string",
-      "description": "Name of the device",
-      "minLength": 1
+      "description": "Name of the device"
     },
     "deviceType": {
       "type": "string",
@@ -26,6 +25,6 @@
       "description": "Type of device"
     }
   },
-  "required": ["schemaName", "name"],
+  "required": ["schemaName"],
   "additionalProperties": false
 }

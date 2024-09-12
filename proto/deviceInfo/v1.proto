@@ -21,6 +21,6 @@ message DeviceInfo_1 {
     selfHostedServer = 4;
   }
 
-  string name = 5 [(required) = true];
+  string name = 5;
   DeviceType deviceType = 6;
 }
