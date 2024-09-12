@@ -23,7 +23,7 @@ message Preset_1 {
   repeated FieldRef fieldRefs = 10;
   optional IconRef iconRef = 11;
   repeated string terms = 12;
-  string color = 13 [(required) = true];
+  optional string color = 13;
 
   enum Geometry {
     geometry_unspecified = 0;

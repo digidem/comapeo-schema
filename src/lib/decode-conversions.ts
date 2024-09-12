@@ -20,7 +20,12 @@ import {
   type JsonTagValue,
   type MapeoDocDecode,
 } from '../types.js'
-import type { Icon, Observation, Track } from '../index.js'
+import {
+  type Icon,
+  type Observation,
+  type Track,
+  valueSchemas,
+} from '../index.js'
 import type {
   Observation_1_Attachment,
   Observation_1_Metadata,
@@ -153,7 +158,11 @@ export const convertPreset: ConvertFunction<'preset'> = (
   const jsonSchemaCommon = convertCommon(common, versionObj)
 
   ensure(name, 'preset', 'name')
-  ensure(color, 'preset', 'color')
+
+  const colorRegex = RegExp(valueSchemas.preset.properties.color.pattern)
+  if (color && !colorRegex.test(color)) {
+    throw new Error(`Invalid color string ${color}`)
+  }
 
   const geometry = rest.geometry.filter(
     (geomType): geomType is JsonSchemaPresetGeomItem =>

@@ -134,8 +134,7 @@
     "removeTags",
     "fieldRefs",
     "schemaName",
-    "terms",
-    "color"
+    "terms"
   ],
   "additionalProperties": false
 }

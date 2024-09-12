@@ -87,7 +87,6 @@ export const goodDocsMinimal = [
       },
       terms: [],
       deleted: false,
-      color: '#ff00ff',
     },
     expected: {},
   },
