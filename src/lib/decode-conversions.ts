@@ -528,6 +528,8 @@ function removeInvalidPositionMetadata(
 function removeInvalidPosition(
   position: Observation_1_Metadata_Position
 ): Position | undefined {
-  const { timestamp, coords, ...rest } = position
-  return coords && timestamp ? { timestamp, coords, ...rest } : undefined
+  if (position.coords === undefined || position.timestamp === undefined) {
+    return undefined
+  }
+  return position as Position
 }
