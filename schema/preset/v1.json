@@ -53,8 +53,7 @@
     },
     "name": {
       "description": "Name for the feature in default language.",
-      "type": "string",
-      "minLength": 1
+      "type": "string"
     },
     "geometry": {
       "description": "Valid geometry types for the feature - this preset will only match features of this geometry type `\"point\", \"vertex\", \"line\", \"area\", \"relation\"`",
