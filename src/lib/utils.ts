@@ -5,6 +5,11 @@ import {
   type FilterBySchemaName,
 } from '../types.js'
 
+/**
+ * Assert that a condition is met.
+ *
+ * If it's not, throw an error with the object and property names.
+ */
 export function ensure(
   condition: unknown,
   objectName: string,
