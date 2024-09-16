@@ -266,7 +266,7 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
 }
 
 export const convertIcon: ConvertFunction<'icon'> = (message, versionObj) => {
-  const { common, schemaVersion, name, ...rest } = message
+  const { common, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
 
   const variants: Icon['variants'] = []
@@ -275,7 +275,7 @@ export const convertIcon: ConvertFunction<'icon'> = (message, versionObj) => {
     if (converted) variants.push(converted)
   }
 
-  return { ...jsonSchemaCommon, ...rest, name, variants }
+  return { ...jsonSchemaCommon, ...rest, variants }
 }
 
 export const convertTranslation: ConvertFunction<'translation'> = (
