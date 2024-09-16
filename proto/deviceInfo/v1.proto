@@ -22,5 +22,5 @@ message DeviceInfo_1 {
   }
 
   string name = 5;
-  optional DeviceType deviceType = 6;
+  DeviceType deviceType = 6;
 }

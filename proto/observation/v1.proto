@@ -26,8 +26,8 @@ message Observation_1 {
     audio = 3;
   }
   message Attachment {
-    bytes driveDiscoveryId = 1;
-    string name = 2;
+    bytes driveDiscoveryId = 1 [(required) = true];
+    string name = 2 [(required) = true];
     AttachmentType type = 3;
     bytes hash = 4;
   }

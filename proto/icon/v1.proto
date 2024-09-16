@@ -10,7 +10,7 @@ message Icon_1 {
   option (schemaName) = "icon";
 
   Common_1 common = 1;
-  string name = 2 [(required) = true];
+  string name = 2;
 
   message IconVariantSvg {}
 

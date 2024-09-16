@@ -69,11 +69,13 @@
         "properties": {
           "docId": {
             "description": "hex-encoded id of the element that this track references",
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "versionId": {
             "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           }
         },
         "required": ["docId", "versionId"]

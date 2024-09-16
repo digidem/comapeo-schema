@@ -11,7 +11,8 @@
     },
     "blobVersionId": {
       "description": "Version id of the icon blob. Each id is id (hex-encoded 32 byte buffer) and index number, separated by '/'",
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     }
   },
   "properties": {
@@ -21,7 +22,8 @@
       "const": "icon"
     },
     "name": {
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "variants": {
       "type": "array",

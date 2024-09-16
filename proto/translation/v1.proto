@@ -13,9 +13,9 @@ message Translation_1 {
   Common_1 common = 1;
   DocRef docRef = 2;
 
-  string propertyRef = 3;
-  string languageCode = 4;
-  string regionCode = 5;
+  string propertyRef = 3 [(required) = true];
+  string languageCode = 4 [(required) = true];
+  optional string regionCode = 5;
   string message = 6;
 
   message DocRef {
