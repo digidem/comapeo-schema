@@ -5,21 +5,6 @@ import {
   type FilterBySchemaName,
 } from '../types.js'
 
-/**
- * Assert that a condition is met.
- *
- * If it's not, throw an error with the object and property names.
- */
-export function ensure(
-  condition: unknown,
-  objectName: string,
-  propertyName: string
-): asserts condition {
-  if (!condition) {
-    throw new Error(`${objectName} missing required property ${propertyName}`)
-  }
-}
-
 export function getOwn<T extends object, K extends keyof T>(
   obj: T,
   key: K
