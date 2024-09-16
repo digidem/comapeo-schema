@@ -288,7 +288,6 @@ export const convertTranslation: ConvertFunction<'translation'> = (
     propertyRef,
     languageCode,
     regionCode,
-    message: translationMessage,
     ...rest
   } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
@@ -296,14 +295,12 @@ export const convertTranslation: ConvertFunction<'translation'> = (
   ensure(message.docRef.versionId, 'translation.docRef', 'versionId')
   ensure(propertyRef, 'translation', 'propertyRef')
   ensure(languageCode, 'translation', 'languageCode')
-  ensure(translationMessage, 'translation', 'translationMessage')
   return {
     ...jsonSchemaCommon,
     ...rest,
     propertyRef,
     languageCode,
     regionCode,
-    message: translationMessage,
     docRef: {
       docId: message.docRef.docId.toString('hex'),
       versionId: getVersionId(message.docRef.versionId),
