@@ -223,7 +223,6 @@ export const convertDeviceInfo: ConvertFunction<'deviceInfo'> = (
   versionObj
 ) => {
   const { common, schemaVersion, name, ...rest } = message
-  ensure(name, 'deviceInfo', 'name')
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
