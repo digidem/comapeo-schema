@@ -368,7 +368,6 @@ function convertIconVariantPng(
 ): Icon['variants'][number] {
   const { blobVersionId, size, pixelDensity } = variant
   ensure(blobVersionId, 'icon.variants[]', 'blobVersionId')
-  ensure(size, 'icon.variants[]', 'size')
   return {
     blobVersionId: getVersionId(blobVersionId),
     mimeType: 'image/png' as const,
@@ -382,7 +381,6 @@ function convertIconVariantSvg(
 ): Icon['variants'][number] {
   const { blobVersionId, size } = variant
   ensure(blobVersionId, 'icon.variants[]', 'blobVersionId')
-  ensure(size, 'icon.variants[]', 'size')
   return {
     blobVersionId: getVersionId(blobVersionId),
     mimeType: 'image/svg+xml' as const,
