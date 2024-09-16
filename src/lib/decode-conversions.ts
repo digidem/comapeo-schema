@@ -36,7 +36,7 @@ import { ProjectSettings_1_ConfigMetadata } from '../proto/projectSettings/v1.js
 import { ProjectSettings } from '../schema/projectSettings.js'
 import type { Position } from '../schema/observation.js'
 import {
-  ensure,
+  assert,
   ExhaustivenessError,
   getVersionId,
   VersionIdObject,
@@ -48,6 +48,14 @@ type ConvertFunction<TSchemaName extends SchemaName> = (
   message: Extract<ProtoTypesWithSchemaInfo, { schemaName: TSchemaName }>,
   versionObj: VersionIdObject
 ) => FilterBySchemaName<MapeoDocDecode, TSchemaName>
+
+function ensure(
+  condition: unknown,
+  objectName: string,
+  propertyName: string
+): asserts condition {
+  assert(condition, `${objectName} missing required property ${propertyName}`)
+}
 
 export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
   message,

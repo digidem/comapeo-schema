@@ -2,36 +2,10 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import {
-  ensure,
   ExhaustivenessError,
   getOwn,
   getVersionId,
 } from '../../dist/lib/utils.js'
-
-test('ensure', () => {
-  // These should not throw.
-  ensure(true, 'ignored', 'ignored')
-  ensure(123, 'ignored', 'ignored')
-
-  assert.throws(
-    () => ensure(false, 'ABC', 'XYZ'),
-    (err) => {
-      assert(err instanceof Error)
-      assert(err.message.includes('ABC'))
-      assert(err.message.includes('XYZ'))
-      return true
-    }
-  )
-  assert.throws(
-    () => ensure(null, 'ABC', 'XYZ'),
-    (err) => {
-      assert(err instanceof Error)
-      assert(err.message.includes('ABC'))
-      assert(err.message.includes('XYZ'))
-      return true
-    }
-  )
-})
 
 test('getOwn', () => {
   class Foo {
@@ -77,18 +51,39 @@ test('getVersionId', () => {
     index: 123,
   }
 
-  assert.equal(getVersionId(valid), coreDiscoveryKeyHex + '/' + 123)
-
-  assert.throws(() => getVersionId({ ...valid, index: -1 }))
-  assert.throws(() => getVersionId({ ...valid, index: 1.2 }))
-
-  assert.throws(() =>
-    getVersionId({ ...valid, coreDiscoveryKey: Buffer.alloc(0) })
+  assert.equal(
+    getVersionId(valid),
+    coreDiscoveryKeyHex + '/' + 123,
+    'serializing version ID'
   )
-  assert.throws(() =>
-    getVersionId({
-      ...valid,
-      coreDiscoveryKey: valid.coreDiscoveryKey.subarray(0, 31),
-    })
+
+  assert.throws(
+    () => getVersionId({ ...valid, index: -1 }),
+    'throws when index is negative'
+  )
+  assert.throws(
+    () => getVersionId({ ...valid, index: 1.2 }),
+    'throws when index is not an integer'
+  )
+  assert.throws(
+    () => getVersionId({ ...valid, index: NaN }),
+    'throws when index is NaN'
+  )
+  assert.throws(
+    () => getVersionId({ ...valid, index: Infinity }),
+    'throws when index is Infinity'
+  )
+
+  assert.throws(
+    () => getVersionId({ ...valid, coreDiscoveryKey: Buffer.alloc(0) }),
+    'throws when core discovery key is empty'
+  )
+  assert.throws(
+    () =>
+      getVersionId({
+        ...valid,
+        coreDiscoveryKey: valid.coreDiscoveryKey.subarray(0, 31),
+      }),
+    'throws when core discovery key is too short'
   )
 })
