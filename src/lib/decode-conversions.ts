@@ -20,7 +20,6 @@ import {
   type JsonTagValue,
   type MapeoDocDecode,
 } from '../types.js'
-import { ExhaustivenessError, VersionIdObject, getVersionId } from './utils.js'
 import type { Icon, Observation, Track } from '../index.js'
 import type {
   Observation_1_Attachment,
@@ -31,6 +30,12 @@ import type { Track_1_Position } from '../proto/track/v1.js'
 import { ProjectSettings_1_ConfigMetadata } from '../proto/projectSettings/v1.js'
 import { ProjectSettings } from '../schema/projectSettings.js'
 import type { Position } from '../schema/observation.js'
+import {
+  assert,
+  ExhaustivenessError,
+  getVersionId,
+  VersionIdObject,
+} from './utils.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
@@ -38,6 +43,14 @@ type ConvertFunction<TSchemaName extends SchemaName> = (
   message: Extract<ProtoTypesWithSchemaInfo, { schemaName: TSchemaName }>,
   versionObj: VersionIdObject
 ) => FilterBySchemaName<MapeoDocDecode, TSchemaName>
+
+function ensure(
+  condition: unknown,
+  objectName: string,
+  propertyName: string
+): asserts condition {
+  assert(condition, `${objectName} missing required property ${propertyName}`)
+}
 
 export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
   message,
@@ -223,8 +236,15 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
     dataCoreId,
     blobCoreId,
     blobIndexCoreId,
+    coreSignatures,
     ...rest
   } = message
+  ensure(coreSignatures, 'coreOwnership', 'coreSignatures')
+  ensure(authCoreId.byteLength, 'coreOwnership', 'authCoreId')
+  ensure(configCoreId.byteLength, 'coreOwnership', 'configCoreId')
+  ensure(dataCoreId.byteLength, 'coreOwnership', 'dataCoreId')
+  ensure(blobCoreId.byteLength, 'coreOwnership', 'blobCoreId')
+  ensure(blobIndexCoreId.byteLength, 'coreOwnership', 'blobIndexCoreId')
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
@@ -234,7 +254,7 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
     dataCoreId: dataCoreId.toString('hex'),
     blobCoreId: blobCoreId.toString('hex'),
     blobIndexCoreId: blobIndexCoreId.toString('hex'),
-    coreSignatures: message.coreSignatures,
+    coreSignatures,
   }
 }
 

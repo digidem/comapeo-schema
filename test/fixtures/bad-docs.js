@@ -63,6 +63,25 @@ export const badDocs = [
     },
   },
   {
+    text: 'core ownership with empty core ID',
+    /** @type {import('../../dist/index.js').CoreOwnership} */
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.versionId,
+      schemaName: 'coreOwnership',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      links: [],
+      deleted: false,
+      authCoreId: cachedValues.coreId,
+      configCoreId: '',
+      dataCoreId: cachedValues.coreId,
+      blobCoreId: cachedValues.coreId,
+      blobIndexCoreId: cachedValues.coreId,
+    },
+  },
+  {
     text: 'role doc with empty roleId',
     /** @type {import('../../dist/index.js').Role} */
     doc: {
