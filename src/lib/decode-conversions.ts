@@ -271,8 +271,12 @@ export const convertIcon: ConvertFunction<'icon'> = (message, versionObj) => {
 
   const variants: Icon['variants'] = []
   for (const variant of message.variants) {
-    const converted = convertIconVariant(variant)
-    if (converted) variants.push(converted)
+    try {
+      const converted = convertIconVariant(variant)
+      variants.push(converted)
+    } catch (_err) {
+      // TODO: Log something here.
+    }
   }
 
   return { ...jsonSchemaCommon, ...rest, variants }
@@ -337,7 +341,7 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
 
 function convertIconVariant(
   variant: Icon_1_IconVariant
-): null | Icon['variants'][number] {
+): Icon['variants'][number] {
   switch (variant.variant?.$case) {
     case 'pngIcon': {
       const { pixelDensity } = variant.variant.pngIcon
@@ -351,7 +355,7 @@ function convertIconVariant(
     case 'svgIcon':
       return convertIconVariantSvg(variant)
     case undefined:
-      return null
+      throw new Error('Cannot decode this icon variant')
     default:
       throw new ExhaustivenessError(variant.variant)
   }
