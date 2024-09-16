@@ -170,15 +170,8 @@ export const convertPreset: ConvertFunction<'preset'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion, name, color, ...rest } = message
+  const { common, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
-
-  ensure(name, 'preset', 'name')
-
-  const colorRegex = RegExp(valueSchemas.preset.properties.color.pattern)
-  if (color && !colorRegex.test(color)) {
-    throw new Error(`Invalid color string ${color}`)
-  }
 
   const geometry = rest.geometry.filter(
     (geomType): geomType is JsonSchemaPresetGeomItem =>
@@ -197,7 +190,6 @@ export const convertPreset: ConvertFunction<'preset'> = (
   return {
     ...jsonSchemaCommon,
     ...rest,
-    name,
     geometry,
     tags: convertTags(rest.tags),
     addTags: convertTags(rest.addTags),
@@ -210,7 +202,6 @@ export const convertPreset: ConvertFunction<'preset'> = (
       }
     }),
     iconRef,
-    color,
   }
 }
 
