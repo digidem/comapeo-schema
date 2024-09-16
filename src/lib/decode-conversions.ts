@@ -112,10 +112,16 @@ export const convertObservation: ConvertFunction<'observation'> = (
     }
   }
 
+  const attachments: Observation['attachments'] = []
+  for (const attachment of message.attachments) {
+    const converted = convertAttachment(attachment)
+    if (converted) attachments.push(converted)
+  }
+
   const obs: Observation = {
     ...jsonSchemaCommon,
     ...rest,
-    attachments: message.attachments.map(convertAttachment),
+    attachments,
     tags: convertTags(message.tags),
     metadata: metadata ? removeInvalidPositionMetadata(metadata) : {},
     presetRef,
@@ -497,7 +503,9 @@ function convertAttachment({
   name,
   type,
   hash,
-}: Observation_1_Attachment): Observation['attachments'][number] {
+}: Observation_1_Attachment): null | Observation['attachments'][number] {
+  if (driveDiscoveryId.byteLength === 0) return null
+  if (!name.length) return null
   return {
     driveDiscoveryId: driveDiscoveryId.toString('hex'),
     name,
