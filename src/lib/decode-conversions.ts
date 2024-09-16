@@ -138,7 +138,6 @@ export const convertField: ConvertFunction<'field'> = (message, versionObj) => {
   const { common, schemaVersion, tagKey, type, label, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   ensure(tagKey, 'field', 'tagKey')
-  ensure(type !== 'type_unspecified', 'field', 'type')
   return {
     ...jsonSchemaCommon,
     ...rest,
