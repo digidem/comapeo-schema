@@ -88,11 +88,14 @@ export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
 function convertConfigMetadata(
   configMetadata: ProjectSettings_1_ConfigMetadata
 ): ProjectSettings['configMetadata'] {
-  const { name, importDate, buildDate, fileVersion } = configMetadata
-  ensure(name, 'configMetadata', 'name')
-  ensure(importDate, 'configMetadata', 'importDate')
-  ensure(buildDate, 'configMetadata', 'buildDate')
-  ensure(fileVersion, 'configMetadata', 'fileVersion')
+  // TODO: Consider moving this default to the frontend.
+  const defaultDate = new Date(0).toISOString()
+  const {
+    name,
+    importDate = defaultDate,
+    buildDate = defaultDate,
+    fileVersion,
+  } = configMetadata
   return { name, importDate, buildDate, fileVersion }
 }
 
