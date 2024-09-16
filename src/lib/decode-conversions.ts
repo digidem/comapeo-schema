@@ -312,15 +312,20 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
   const { common, schemaVersion, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   const locations = message.locations.map(convertTrackPosition)
-  const observationRefs = message.observationRefs.map(
-    ({ docId, versionId }) => {
+
+  const observationRefs: Track['observationRefs'] = []
+  for (const { docId, versionId } of message.observationRefs) {
+    try {
       ensure(versionId, 'track.observationRefs[]', 'versionId')
-      return {
+      observationRefs.push({
         docId: docId.toString('hex'),
         versionId: getVersionId(versionId),
-      }
+      })
+    } catch (_err) {
+      // TODO: Log something here.
     }
-  )
+  }
+
   return {
     ...jsonSchemaCommon,
     ...rest,
