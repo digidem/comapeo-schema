@@ -117,8 +117,12 @@ export const convertObservation: ConvertFunction<'observation'> = (
 
   const attachments: Observation['attachments'] = []
   for (const attachment of message.attachments) {
-    const converted = convertAttachment(attachment)
-    if (converted) attachments.push(converted)
+    try {
+      const converted = convertAttachment(attachment)
+      attachments.push(converted)
+    } catch (_err) {
+      // TODO: Log something here.
+    }
   }
 
   const obs: Observation = {
@@ -499,9 +503,13 @@ function convertAttachment({
   name,
   type,
   hash,
-}: Observation_1_Attachment): null | Observation['attachments'][number] {
-  if (driveDiscoveryId.byteLength === 0) return null
-  if (!name.length) return null
+}: Observation_1_Attachment): Observation['attachments'][number] {
+  ensure(
+    driveDiscoveryId.byteLength,
+    'observation.attachments[]',
+    'driveDiscoveryId'
+  )
+  ensure(name, 'observation.attachments[]', 'name')
   return {
     driveDiscoveryId: driveDiscoveryId.toString('hex'),
     name,
