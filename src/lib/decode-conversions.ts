@@ -271,8 +271,6 @@ export const convertIcon: ConvertFunction<'icon'> = (message, versionObj) => {
   const { common, schemaVersion, name, ...rest } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
 
-  ensure(name, 'icon', 'name')
-
   const variants: Icon['variants'] = []
   for (const variant of message.variants) {
     const converted = convertIconVariant(variant)
