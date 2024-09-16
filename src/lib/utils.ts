@@ -12,6 +12,10 @@ export function getOwn<T extends object, K extends keyof T>(
   return Object.hasOwn(obj, key) ? obj[key] : undefined
 }
 
+export function assert(condition: unknown, message: string): asserts condition {
+  if (!condition) throw new Error(message)
+}
+
 export class ExhaustivenessError extends Error {
   constructor(value: never) {
     super(`Exhaustiveness check failed. ${value} should be impossible`)
@@ -46,6 +50,14 @@ export type VersionIdObject = {
  * @returns versionId string
  */
 export function getVersionId({ coreDiscoveryKey, index }: VersionIdObject) {
+  assert(
+    coreDiscoveryKey.byteLength >= 32,
+    'version ID core discovery key must be have at least 32 bytes'
+  )
+  assert(
+    Number.isSafeInteger(index) && index >= 0,
+    'version ID index must be a non-negative integer'
+  )
   return coreDiscoveryKey.toString('hex') + '/' + index
 }
 
