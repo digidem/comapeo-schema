@@ -1,6 +1,6 @@
 {
   "name": "@comapeo/schema",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "JSON Schema and TypeScript types for CoMapeo",
   "main": "dist/index.js",
   "type": "module",
