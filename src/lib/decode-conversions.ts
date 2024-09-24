@@ -39,14 +39,14 @@ import {
   assert,
   ExhaustivenessError,
   getVersionId,
-  VersionIdObject,
+  VersionObject,
 } from './utils.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
 type ConvertFunction<TSchemaName extends SchemaName> = (
   message: Extract<ProtoTypesWithSchemaInfo, { schemaName: TSchemaName }>,
-  versionObj: VersionIdObject
+  versionObj: VersionObject
 ) => FilterBySchemaName<MapeoDocDecode, TSchemaName>
 
 function ensure(
@@ -465,7 +465,7 @@ function convertTagPrimitive({
 
 function convertCommon(
   common: ProtoTypesWithSchemaInfo['common'],
-  versionObj: VersionIdObject
+  versionObj: VersionObject
 ): Omit<MapeoCommon, 'schemaName'> {
   if (
     !common ||
