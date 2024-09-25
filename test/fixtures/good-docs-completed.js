@@ -204,7 +204,8 @@ export const goodDocsCompleted = [
       updatedAt: cachedValues.updatedAt,
       links: [],
       name: 'my device name',
-      deviceType: /** @type {any} */ ('motorbike'),
+      // @ts-expect-error
+      deviceType: 'motorbike',
       deleted: true,
     },
     expected: {
