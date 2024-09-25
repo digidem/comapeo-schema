@@ -19,12 +19,7 @@ export default [
         },
       ],
       '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-unused-vars': [
-        'error',
-        {
-          caughtErrors: 'none',
-        },
-      ],
+      '@typescript-eslint/no-unused-vars': ['error', { caughtErrors: 'none' }],
     },
   },
 ]
