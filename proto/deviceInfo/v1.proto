@@ -21,6 +21,11 @@ message DeviceInfo_1 {
     selfHostedServer = 4;
   }
 
+  message SelfHostedServerDetails {
+    string hostname = 1 [(required) = true];
+  }
+
   string name = 5;
   DeviceType deviceType = 6;
+  optional SelfHostedServerDetails selfHostedServerDetails = 7;
 }
