@@ -58,7 +58,8 @@ export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
 ) => {
   const {
     common,
-    schemaVersion: _schemaVersion,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    schemaVersion,
     defaultPresets,
     ...rest
   } = message
@@ -103,7 +104,13 @@ export const convertObservation: ConvertFunction<'observation'> = (
   message,
   versionObj
 ) => {
-  const { common, metadata, schemaVersion: _schemaVersion, ...rest } = message
+  const {
+    common,
+    metadata,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    schemaVersion,
+    ...rest
+  } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   let presetRef
 
@@ -141,7 +148,8 @@ type FieldOptions = FilterBySchemaName<MapeoDoc, 'field'>['options']
 export const convertField: ConvertFunction<'field'> = (message, versionObj) => {
   const {
     common,
-    schemaVersion: _schemaVersion,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    schemaVersion,
     tagKey,
     type,
     label,
@@ -181,7 +189,12 @@ export const convertPreset: ConvertFunction<'preset'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion: _schemaVersion, ...rest } = message
+  const {
+    common,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    schemaVersion,
+    ...rest
+  } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
 
   const geometry = rest.geometry.filter(
@@ -219,7 +232,8 @@ export const convertPreset: ConvertFunction<'preset'> = (
 export const convertRole: ConvertFunction<'role'> = (message, versionObj) => {
   const {
     common,
-    schemaVersion: _schemaVersion,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    schemaVersion,
     fromIndex,
     roleId,
     ...rest
@@ -239,12 +253,16 @@ export const convertDeviceInfo: ConvertFunction<'deviceInfo'> = (
   message,
   versionObj
 ) => {
-  const { common, schemaVersion: _schemaVersion, name, ...rest } = message
+  const {
+    common,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    schemaVersion,
+    ...rest
+  } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   return {
     ...jsonSchemaCommon,
     ...rest,
-    name,
   }
 }
 
@@ -254,7 +272,8 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
 ) => {
   const {
     common,
-    schemaVersion: _schemaVersion,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    schemaVersion,
     authCoreId,
     configCoreId,
     dataCoreId,
@@ -283,7 +302,12 @@ export const convertCoreOwnership: ConvertFunction<'coreOwnership'> = (
 }
 
 export const convertIcon: ConvertFunction<'icon'> = (message, versionObj) => {
-  const { common, schemaVersion: _schemaVersion, ...rest } = message
+  const {
+    common,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    schemaVersion,
+    ...rest
+  } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
 
   const variants: Icon['variants'] = []
@@ -305,7 +329,8 @@ export const convertTranslation: ConvertFunction<'translation'> = (
 ) => {
   const {
     common,
-    schemaVersion: _schemaVersion,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    schemaVersion,
     propertyRef,
     languageCode,
     regionCode,
@@ -330,7 +355,12 @@ export const convertTranslation: ConvertFunction<'translation'> = (
 }
 
 export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
-  const { common, schemaVersion: _schemaVersion, ...rest } = message
+  const {
+    common,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    schemaVersion: _schemaVersion,
+    ...rest
+  } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
   const locations = message.locations.map(convertTrackPosition)
 

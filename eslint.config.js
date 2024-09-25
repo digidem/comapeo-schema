@@ -22,11 +22,7 @@ export default [
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
-          varsIgnorePattern: '^_',
-          argsIgnorePattern: '^_',
-          caughtErrors: 'all',
-          caughtErrorsIgnorePattern: '^_',
-          destructuredArrayIgnorePattern: '^_',
+          caughtErrors: 'none',
         },
       ],
     },

@@ -4,6 +4,7 @@ import {
   type MapeoValue,
   type FilterBySchemaName,
 } from '../types.js'
+import { omit } from './omit.js'
 
 export function getOwn<T extends object, K extends keyof T>(
   obj: T,
@@ -81,16 +82,14 @@ export function parseVersionId(versionId: string): VersionIdObject {
 export function valueOf<TDoc extends MapeoDoc>(
   doc: TDoc & { forks?: string[] }
 ): FilterBySchemaName<MapeoValue, TDoc['schemaName']> {
-  const {
-    docId: _docId,
-    versionId: _versionId,
-    originalVersionId: _originalVersionId,
-    links: _links,
-    forks: _forks,
-    createdAt: _createdAt,
-    updatedAt: _updatedAt,
-    deleted: _deleted,
-    ...rest
-  } = doc
-  return rest as any
+  return omit(doc, [
+    'docId',
+    'versionId',
+    'originalVersionId',
+    'links',
+    'forks',
+    'createdAt',
+    'updatedAt',
+    'deleted',
+  ]) as any
 }
