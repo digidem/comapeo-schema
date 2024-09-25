@@ -1,7 +1,11 @@
 // @ts-check
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { ExhaustivenessError, getOwn } from '../../dist/lib/utils.js'
+import {
+  ExhaustivenessError,
+  getOwn,
+  getVersionId,
+} from '../../dist/lib/utils.js'
 
 test('getOwn', () => {
   class Foo {
@@ -37,4 +41,49 @@ test('ExhaustivenessError', () => {
         throw new ExhaustivenessError(bool)
     }
   })
+})
+
+test('getVersionId', () => {
+  const coreDiscoveryKeyHex =
+    '1f1c774ac1041092c5d8334316919f43fc9e4db48b2074a2d9d7ecf6df7a1181'
+  const valid = {
+    coreDiscoveryKey: Buffer.from(coreDiscoveryKeyHex, 'hex'),
+    index: 123,
+  }
+
+  assert.equal(
+    getVersionId(valid),
+    coreDiscoveryKeyHex + '/' + 123,
+    'serializing version ID'
+  )
+
+  assert.throws(
+    () => getVersionId({ ...valid, index: -1 }),
+    'throws when index is negative'
+  )
+  assert.throws(
+    () => getVersionId({ ...valid, index: 1.2 }),
+    'throws when index is not an integer'
+  )
+  assert.throws(
+    () => getVersionId({ ...valid, index: NaN }),
+    'throws when index is NaN'
+  )
+  assert.throws(
+    () => getVersionId({ ...valid, index: Infinity }),
+    'throws when index is Infinity'
+  )
+
+  assert.throws(
+    () => getVersionId({ ...valid, coreDiscoveryKey: Buffer.alloc(0) }),
+    'throws when core discovery key is empty'
+  )
+  assert.throws(
+    () =>
+      getVersionId({
+        ...valid,
+        coreDiscoveryKey: valid.coreDiscoveryKey.subarray(0, 31),
+      }),
+    'throws when core discovery key is too short'
+  )
 })

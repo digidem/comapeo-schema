@@ -24,6 +24,9 @@ export default [
         {
           varsIgnorePattern: '^_',
           argsIgnorePattern: '^_',
+          caughtErrors: 'all',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
         },
       ],
     },

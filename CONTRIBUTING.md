@@ -1,6 +1,6 @@
 ## Build steps
 
-1. `npm run generate` will generate type definitions and encode/decode functions from `.proto` files, and generate type definitions from json schema files, and place them in `generated`. It will also generate validation functions from json schema files and place that in `dist`.
+1. `npm run build:generate` will generate type definitions and encode/decode functions from `.proto` files, and generate type definitions from json schema files, and place them in `generated`. It will also generate validation functions from json schema files and place that in `dist`.
 2. `rootDirs` is set in `tsconfig.json` so that files in `src` can import from `generated` as if the two folders were merged
 3. `tsc` generates `.js` and `.d.ts` from the files in `src` and `generated` and outputs to `intermediate`
 4. A final copy step is needed to merge `intermediate/generated` and `intermediate/src` into `dist`.
@@ -13,7 +13,7 @@ Please publish to npm via Github using the release workflow, rather than publish
 
 ### 1. Prepare a release
 
-- Navigate to the [release action workflow](https://github.com/digidem/mapeo-schema/actions/workflows/release.yml) and click the "Run workflow" dropdown.
+- Navigate to the [release action workflow](https://github.com/digidem/comapeo-schema/actions/workflows/release.yml) and click the "Run workflow" dropdown.
 - Select the semver release, e.g. "patch" for bug fixes, "minor" for new features, and "major" for breaking changes. For pre-release see below
 - Click "Run workflow" button.
 
@@ -30,13 +30,13 @@ This will open a new Pull Request with a draft release
 
 Prereleases are useful for testing new versions of this package without affecting existing dependent packages. Ideally work on a pre-release should be on a separate branch, e.g. create a `next` branch from `master`.
 
-To prepare the release, select "Run workflow" on the [release action workflow](https://github.com/digidem/mapeo-schema/actions/workflows/release.yml) as above, but select the branch `next` (or whatever branch you are using for prerelease development) for "Use workflow from", and for the "`semver` to use" option, select:
+To prepare the release, select "Run workflow" on the [release action workflow](https://github.com/digidem/comapeo-schema/actions/workflows/release.yml) as above, but select the branch `next` (or whatever branch you are using for prerelease development) for "Use workflow from", and for the "`semver` to use" option, select:
 
 - `prepatch` to create a new patch prerelease, e.g. if the current version is `v3.0.0`, then this will generate a new release `v3.0.1-next.0`.
 - `preminor` to create a new minor prerelease, e.g. if the current version is `v3.0.0` then this will generate a new release `v3.1.0-next.0`.
 - `premajor` to create a new major prerelease, e.g. if the current version is `v3.0.0` then this will generate a new release `v4.0.0-next.0`.
 - `prelease` to bump the prerelease version if the current version on the branch that you target is already a prerelease and you want to create a new prerelease, e.g. if the current version on the target branch is `v3.0.1-next.0` then this will generate a new release `v3.0.1-next.1`.
 
-The pre-releases will be published to npm with the `next` [dist-tag](https://docs.npmjs.com/adding-dist-tags-to-packages). Publishing a pre-release will not change the `latest` tag, so that normal installs of `npm install @mapeo/schema` will not get the pre-release. To install the pre-release for testing, use `npm install @mapeo/schema@latest`.
+The pre-releases will be published to npm with the `next` [dist-tag](https://docs.npmjs.com/adding-dist-tags-to-packages). Publishing a pre-release will not change the `latest` tag, so that normal installs of `npm install @comapeo/schema` will not get the pre-release. To install the pre-release for testing, use `npm install @comapeo/schema@latest`.
 
 To publish a `latest` release from a pre-release, first merge the pre-release branch to master, then follow the usual "Prepare a release" steps from above, but select `auto` for the "`semver` to use" option. If you have a prerelease version `v3.0.1-next.3` then this will publish a release called `v3.0.1`.

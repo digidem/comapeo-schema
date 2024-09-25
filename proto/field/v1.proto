@@ -22,7 +22,7 @@ message Field_1 {
     selectOne = 3;
     selectMultiple = 4;
   }
-  Type type = 6 [(required) = true];
+  Type type = 6;
   string label = 7 [(required) = true];
   enum Appearance {
     appearance_unspecified = 0;

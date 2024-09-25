@@ -61,8 +61,8 @@ export const convertField: ConvertFunction<'field'> = (mapeoDoc) => {
 }
 
 export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
-  const colorRegex = valueSchemas.preset.properties.color.pattern
-  if (!mapeoDoc.color.match(colorRegex)) {
+  const colorRegex = RegExp(valueSchemas.preset.properties.color.pattern)
+  if (mapeoDoc.color && !colorRegex.test(mapeoDoc.color)) {
     throw new Error(`invalid color string ${mapeoDoc.color}`)
   }
 
