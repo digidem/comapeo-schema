@@ -17,12 +17,7 @@ import {
   type Observation_1_Attachment,
 } from '../proto/observation/v1.js'
 import { ExhaustivenessError, parseVersionId } from './utils.js'
-import {
-  CoreOwnership,
-  valueSchemas,
-  type Observation,
-  type Track,
-} from '../index.js'
+import { CoreOwnership, valueSchemas, type Observation } from '../index.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
@@ -64,12 +59,13 @@ export const convertField: ConvertFunction<'field'> = (mapeoDoc) => {
           }
         })
       : [],
+    universal: Boolean(mapeoDoc.universal),
   }
 }
 
 export const convertPreset: ConvertFunction<'preset'> = (mapeoDoc) => {
-  const colorRegex = valueSchemas.preset.properties.color.pattern
-  if (!mapeoDoc.color.match(colorRegex)) {
+  const colorRegex = RegExp(valueSchemas.preset.properties.color.pattern)
+  if (mapeoDoc.color && !colorRegex.test(mapeoDoc.color)) {
     throw new Error(`invalid color string ${mapeoDoc.color}`)
   }
 
@@ -99,9 +95,6 @@ export const convertObservation: ConvertFunction<'observation'> = (
   mapeoDoc
 ) => {
   const attachments = mapeoDoc.attachments.map(convertAttachment)
-  const metadata: Observation_1_Metadata | undefined = mapeoDoc.metadata && {
-    ...Observation_1_Metadata.fromPartial(mapeoDoc.metadata),
-  }
   let presetRef
   if (mapeoDoc.presetRef) {
     presetRef = {
@@ -115,7 +108,6 @@ export const convertObservation: ConvertFunction<'observation'> = (
     ...mapeoDoc,
     attachments,
     tags: convertTags(mapeoDoc.tags),
-    metadata,
     presetRef,
   }
 }

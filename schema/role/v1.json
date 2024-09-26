@@ -10,7 +10,8 @@
     },
     "roleId": {
       "type": "string",
-      "description": "Unique identifier for role assigned to device with auth core ID equal to `docId` of this record"
+      "description": "Unique identifier for role assigned to device with auth core ID equal to `docId` of this record",
+      "minLength": 1
     },
     "fromIndex": {
       "type": "integer",

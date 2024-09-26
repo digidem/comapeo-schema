@@ -8,7 +8,7 @@ import { randomBytes } from 'node:crypto'
  *
  * @type {Array<{
  *   expected: Partial<import('../../dist/types').MapeoDoc>,
- *   doc: import('../../dist/types').MapeoDocInternal
+ *   doc: import('../../dist/types').MapeoDocDecode
  * }>}
  */
 export const goodDocsMinimal = [
@@ -46,7 +46,6 @@ export const goodDocsMinimal = [
       },
       links: [],
       deleted: false,
-      isInitialProject: false,
     },
     expected: {},
   },
@@ -88,7 +87,6 @@ export const goodDocsMinimal = [
       },
       terms: [],
       deleted: false,
-      color: '#ff00ff',
     },
     expected: {},
   },
@@ -117,6 +115,7 @@ export const goodDocsMinimal = [
       updatedAt: cachedValues.updatedAt,
       links: [],
       name: 'my device name',
+      deviceType: 'mobile',
       deleted: false,
     },
     expected: {},
@@ -186,7 +185,6 @@ export const goodDocsMinimal = [
       docRefType: 'field',
       propertyRef: 'label',
       languageCode: 'qu',
-      regionCode: 'PE',
       message: `sach'a`,
     },
     expected: {},

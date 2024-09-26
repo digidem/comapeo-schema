@@ -7,7 +7,7 @@
     "position": {
       "description": "Position details",
       "type": "object",
-      "required": ["mocked"],
+      "required": ["timestamp", "coords"],
       "properties": {
         "timestamp": {
           "description": "Timestamp of when the current position was obtained",
@@ -31,6 +31,9 @@
               "type": "number"
             },
             "altitude": {
+              "type": "number"
+            },
+            "altitudeAccuracy": {
               "type": "number"
             },
             "heading": {
@@ -74,11 +77,13 @@
         "properties": {
           "driveDiscoveryId": {
             "type": "string",
-            "description": "core discovery id for the drive that the attachment belongs to"
+            "description": "core discovery id for the drive that the attachment belongs to",
+            "minLength": 1
           },
           "name": {
             "type": "string",
-            "description": "name of the attachment"
+            "description": "name of the attachment",
+            "minLength": 1
           },
           "type": {
             "type": "string",
@@ -96,7 +101,8 @@
           },
           "hash": {
             "type": "string",
-            "description": "SHA256 hash of the attachment"
+            "description": "SHA256 hash of the attachment",
+            "minLength": 1
           }
         },
         "required": ["driveDiscoveryId", "name", "type", "hash"]
@@ -160,6 +166,7 @@
         "positionProvider": {
           "description": "Details of the location providers that were available on the device when the observation was recorded",
           "type": "object",
+          "required": ["locationServicesEnabled"],
           "properties": {
             "gpsAvailable": {
               "description": "Whether the user has enabled GPS for device location (this is not the same as whether location is turned on or off, this is a device setting whether to use just wifi and bluetooth or use GPS for location)",
@@ -180,8 +187,7 @@
           }
         }
       },
-      "additionalProperties": false,
-      "required": ["manualLocation"]
+      "additionalProperties": false
     },
     "presetRef": {
       "type": "object",
@@ -189,11 +195,13 @@
       "properties": {
         "docId": {
           "description": "hex-encoded id of the element that this observation references",
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         },
         "versionId": {
           "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
-          "type": "string"
+          "type": "string",
+          "minLength": 1
         }
       },
       "required": ["docId", "versionId"]

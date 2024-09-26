@@ -12,7 +12,8 @@
     },
     "tagKey": {
       "description": "They key in a tags object that this field applies to",
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "type": {
       "description": "Type of field - defines how the field is displayed to the user.",
@@ -35,7 +36,8 @@
     },
     "label": {
       "description": "Default language label for the form field label",
-      "type": "string"
+      "type": "string",
+      "minLength": 1
     },
     "appearance": {
       "description": "For text fields, display as a single-line or multi-line field",
@@ -66,7 +68,8 @@
         "type": "object",
         "properties": {
           "label": {
-            "type": "string"
+            "type": "string",
+            "minLength": 1
           },
           "value": {
             "anyOf": [
@@ -102,6 +105,6 @@
       "type": "string"
     }
   },
-  "required": ["tagKey", "type", "label", "schemaName", "universal"],
+  "required": ["tagKey", "type", "label", "schemaName"],
   "additionalProperties": false
 }

@@ -26,8 +26,8 @@ message Observation_1 {
     audio = 3;
   }
   message Attachment {
-    bytes driveDiscoveryId = 1;
-    string name = 2;
+    bytes driveDiscoveryId = 1 [(required) = true];
+    string name = 2 [(required) = true];
     AttachmentType type = 3;
     bytes hash = 4;
   }
@@ -38,11 +38,11 @@ message Observation_1 {
 
   // METADATA
   message Metadata {
-    bool manualLocation = 1;
+    optional bool manualLocation = 1;
 
     message Position {
       google.protobuf.Timestamp timestamp = 1;
-      bool mocked = 2;
+      optional bool mocked = 2;
 
       message Coords {
         double latitude = 1;
@@ -51,15 +51,16 @@ message Observation_1 {
         optional double heading = 4;
         optional double speed = 5;
         optional double accuracy = 6;
+        optional double altitudeAccuracy = 7;
       }
       optional Coords coords = 3;
     }
 
     message PositionProvider {
-      bool gpsAvailable = 1;
-      bool passiveAvailable = 2;
+      optional bool gpsAvailable = 1;
+      optional bool passiveAvailable = 2;
       bool locationServicesEnabled = 3;
-      bool networkAvailable = 4;
+      optional bool networkAvailable = 4;
     }
 
     optional Position position = 3;

@@ -22,8 +22,7 @@ import {
   convertTrack,
   convertRemoteDetectionAlert,
 } from './lib/decode-conversions.js'
-// @ts-ignore
-import * as cenc from 'compact-encoding'
+import cenc from 'compact-encoding'
 import { DATA_TYPE_ID_BYTES, SCHEMA_VERSION_BYTES } from './constants.js'
 import {
   ExhaustivenessError,
@@ -143,10 +142,8 @@ function mutatingSetSchemaDef<T extends ProtoTypes, K extends ValidSchemaDef>(
   obj: T,
   props: K
 ): ProtoTypesWithSchemaInfo {
-  for (const prop of Object.keys(props)) {
-    ;(obj as any)[prop] = (props as any)[prop]
-  }
-  return obj as any
+  Object.assign(obj, props)
+  return obj as ProtoTypesWithSchemaInfo
 }
 
 // function mutatingOmit<T, K extends keyof any>(obj: T, key: K): OmitUnion<T, K> {

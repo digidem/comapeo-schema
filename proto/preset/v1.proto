@@ -21,9 +21,9 @@ message Preset_1 {
   map<string, TagValue_1> addTags = 8;
   map<string, TagValue_1> removeTags = 9;
   repeated FieldRef fieldRefs = 10;
-  IconRef iconRef = 11;
+  optional IconRef iconRef = 11;
   repeated string terms = 12;
-  string color = 13;
+  optional string color = 13;
 
   enum Geometry {
     geometry_unspecified = 0;
