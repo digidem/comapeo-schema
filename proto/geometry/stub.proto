@@ -1,0 +1,7 @@
+syntax = "proto3";
+package mapeo;
+
+// stub to keep buf happy. ts-proto replaces this with
+// the decoder/encoder from @comapeo/geometry
+
+message Geometry {}

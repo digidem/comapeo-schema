@@ -65,8 +65,7 @@
       }
     },
     "geometry": {
-      "type": "object",
-      "properties": {}
+      "$ref": "http://comapeo.app/schemas/shared/geometry.json"
     }
   },
   "required": [

@@ -345,7 +345,10 @@ export const goodDocsCompleted = [
       sourceId: cachedValues.docId,
       detectionDateStart: cachedValues.createdAt,
       detectionDateEnd: cachedValues.updatedAt,
-      geometry: {},
+      geometry: {
+        type: 'Point',
+        coordinates: [100, 101],
+      },
       metadata: {},
     },
     expected: {},
