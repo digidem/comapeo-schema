@@ -17,3 +17,4 @@ plugins:
       - enumsAsLiterals=true
       # - outputIndex=true
       - oneof=unions
+      - Mgeometry/stub.proto=@comapeo/geometry

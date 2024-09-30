@@ -343,6 +343,30 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
   }
 }
 
+export const convertRemoteDetectionAlert: ConvertFunction<
+  'remoteDetectionAlert'
+> = (message, versionObj) => {
+  const { common, schemaVersion, ...rest } = message
+  const jsonSchemaCommon = convertCommon(common, versionObj)
+  if (!rest.detectionDateStart) {
+    throw new Error('missing required detectionDateStart')
+  }
+  if (!rest.detectionDateEnd) {
+    throw new Error('missing required detectionDateEnd')
+  }
+  if (!rest.geometry) {
+    throw new Error('missing required geometry')
+  }
+  return {
+    ...jsonSchemaCommon,
+    ...rest,
+    detectionDateStart: rest.detectionDateStart,
+    detectionDateEnd: rest.detectionDateEnd,
+    metadata: convertTags(rest.metadata),
+    geometry: rest.geometry,
+  }
+}
+
 function convertIconVariant(
   variant: Icon_1_IconVariant
 ): Icon['variants'][number] {

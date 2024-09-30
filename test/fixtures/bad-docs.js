@@ -139,4 +139,18 @@ export const badDocs = [
       color: '#ff00g1',
     },
   },
+  {
+    text: 'remoteDetectionAlert with missing elements',
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.versionId,
+      schemaName: 'remoteDetectionAlert',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      links: [],
+      deleted: false,
+      sourceId: '',
+    },
+  },
 ]
