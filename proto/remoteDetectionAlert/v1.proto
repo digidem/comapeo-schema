@@ -14,8 +14,8 @@ message RemoteDetectionAlert_1 {
 
   Common_1 common = 1;
 
-  google.protobuf.Timestamp detectionDateStart = 2;
-  google.protobuf.Timestamp detectionDateEnd = 3;
+  google.protobuf.Timestamp detectionDateStart = 2 [(required) = true];
+  google.protobuf.Timestamp detectionDateEnd = 3 [(required) = true];
   string sourceId = 4;
   Geometry geometry = 5;
   map<string, TagValue_1> metadata = 6;
