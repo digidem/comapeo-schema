@@ -18,17 +18,24 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
   /** @type {Record<string, string>} */
   const typescriptDefs = {}
   for (const [schemaName, jsonSchema] of Object.entries(jsonSchemas.values)) {
-    // @ts-ignore
-    const ts = await compile(jsonSchema, capitalize(schemaName), {
-      additionalProperties: false,
-      unknownAny: false,
-      $refOptions: {
-        resolve: {
-          http: false,
-          geometry: geometryResolver,
+    const ts = await compile(
+      /**
+       * This argument is a v7 JSON Schema but the function expects a v4 schema.
+       * It should be fine, so we cast it to `any`.
+       * @type {any}
+       */ (jsonSchema),
+      capitalize(schemaName),
+      {
+        additionalProperties: false,
+        unknownAny: false,
+        $refOptions: {
+          resolve: {
+            http: false,
+            geometry: geometryResolver,
+          },
         },
-      },
-    })
+      }
+    )
     typescriptDefs[schemaName] = ts
   }
 

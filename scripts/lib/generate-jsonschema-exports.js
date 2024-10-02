@@ -7,7 +7,7 @@ const GeometryJSONSchema = require('@comapeo/geometry/json/geometry.json')
 // Dereferencer's exports are all wrong for ESM imports
 /** @type {any} */
 const JsonSchemaDereferencer =
-  // @ts-ignore
+  // @ts-expect-error
   _.default
 
 /** @typedef {import('../../src/types.js').SchemaName} SchemaName */
