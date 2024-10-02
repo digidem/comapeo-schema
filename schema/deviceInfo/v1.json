@@ -27,13 +27,13 @@
     "selfHostedServerDetails": {
       "type": "object",
       "properties": {
-        "hostname": {
-          "description": "hostname for the server",
+        "baseUrl": {
+          "description": "base URL for the server",
           "type": "string",
           "minLength": 1
         }
       },
-      "required": ["hostname"]
+      "required": ["baseUrl"]
     }
   },
   "required": ["schemaName", "name", "deviceType"],

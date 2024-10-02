@@ -225,7 +225,7 @@ export const goodDocsCompleted = [
       deviceType: 'selfHostedServer',
       deleted: false,
       selfHostedServerDetails: {
-        hostname: 'mapeo.example',
+        baseUrl: 'https://mapeo.example/foo',
       },
     },
     expected: {},

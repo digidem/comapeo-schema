@@ -22,7 +22,7 @@ message DeviceInfo_1 {
   }
 
   message SelfHostedServerDetails {
-    string hostname = 1 [(required) = true];
+    string baseUrl = 1 [(required) = true];
   }
 
   string name = 5;
