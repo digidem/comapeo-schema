@@ -1,6 +1,12 @@
 // @ts-check
 import { compile } from 'json-schema-to-typescript'
 import { capitalize } from './utils.js'
+import { createRequire } from 'module'
+
+const require = createRequire(import.meta.url)
+const GeometryJSONSchema = require('@comapeo/geometry/json/geometry.json')
+
+/** @import { ResolverOptions, JSONSchema } from '@apidevtools/json-schema-ref-parser' */
 
 /**
  * Returns generated typescript definitions for JSONSchemas
@@ -22,6 +28,12 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
       {
         additionalProperties: false,
         unknownAny: false,
+        $refOptions: {
+          resolve: {
+            http: false,
+            geometry: geometryResolver,
+          },
+        },
       }
     )
     typescriptDefs[schemaName] = ts
@@ -90,4 +102,15 @@ function getValueName(schemaName) {
   return schemaName === 'common'
     ? 'MapeoCommon'
     : capitalize(schemaName) + 'Value'
+}
+
+/** @type {ResolverOptions<JSONSchema>} */
+const geometryResolver = {
+  order: 1,
+  canRead(file) {
+    return file.url === GeometryJSONSchema.$id
+  },
+  read() {
+    return GeometryJSONSchema
+  },
 }

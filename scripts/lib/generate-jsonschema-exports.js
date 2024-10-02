@@ -1,5 +1,8 @@
 // @ts-check
 import { default as _ } from '@json-schema-tools/dereferencer'
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+const GeometryJSONSchema = require('@comapeo/geometry/json/geometry.json')
 
 // Dereferencer's exports are all wrong for ESM imports
 /** @type {any} */
@@ -28,7 +31,12 @@ export async function generateJSONSchemaExports(jsonSchemas) {
     const dereferencer = new JsonSchemaDereferencer(
       // Need to create a deep clone to avoid issue described in https://github.com/digidem/mapeo-schema/issues/109
       JSON.parse(JSON.stringify(jsonSchema)),
-      { mutate: false }
+      {
+        mutate: false,
+        refCache: {
+          [GeometryJSONSchema.$id]: GeometryJSONSchema,
+        },
+      }
     )
     dereferencedDocSchemas[schemaName] = await dereferencer.resolve()
   }

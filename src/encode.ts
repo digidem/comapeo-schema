@@ -18,6 +18,7 @@ import {
   convertIcon,
   convertTranslation,
   convertTrack,
+  convertRemoteDetectionAlert,
 } from './lib/encode-conversions.js'
 import { ExhaustivenessError } from './lib/utils.js'
 
@@ -86,6 +87,12 @@ export function encode(mapeoDoc: MapeoDocEncode): Buffer {
       protobuf = Encode[mapeoDoc.schemaName](message).finish()
       break
     }
+    case 'remoteDetectionAlert': {
+      const message = convertRemoteDetectionAlert(mapeoDoc)
+      protobuf = Encode[mapeoDoc.schemaName](message).finish()
+      break
+    }
+
     default:
       throw new ExhaustivenessError(mapeoDoc)
   }
