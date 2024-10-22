@@ -122,6 +122,17 @@ export const convertRole: ConvertFunction<'role'> = (mapeoDoc) => {
 }
 
 export const convertDeviceInfo: ConvertFunction<'deviceInfo'> = (mapeoDoc) => {
+  const { selfHostedServerDetails } = mapeoDoc
+  if (selfHostedServerDetails) {
+    try {
+      new URL(selfHostedServerDetails.baseUrl || '')
+    } catch (_err) {
+      throw new Error(
+        'deviceInfo.selfHostedServerDetails.baseUrl is not a valid URL'
+      )
+    }
+  }
+
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,

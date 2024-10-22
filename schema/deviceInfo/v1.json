@@ -23,6 +23,17 @@
         "UNRECOGNIZED"
       ],
       "description": "Type of device"
+    },
+    "selfHostedServerDetails": {
+      "type": "object",
+      "properties": {
+        "baseUrl": {
+          "description": "base URL for the server",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": ["baseUrl"]
     }
   },
   "required": ["schemaName", "name", "deviceType"],

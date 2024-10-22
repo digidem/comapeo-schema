@@ -98,6 +98,42 @@ export const badDocs = [
     },
   },
   {
+    text: 'server without base URL',
+    /** @type {import('../../dist/index.js').DeviceInfo} */
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.originalVersionId,
+      schemaName: 'deviceInfo',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      links: [],
+      name: 'my server',
+      deviceType: 'selfHostedServer',
+      deleted: false,
+      selfHostedServerDetails: {},
+    },
+  },
+  {
+    text: 'server with bogus base URL',
+    /** @type {import('../../dist/index.js').DeviceInfo} */
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.originalVersionId,
+      schemaName: 'deviceInfo',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      links: [],
+      name: 'my server',
+      deviceType: 'selfHostedServer',
+      deleted: false,
+      selfHostedServerDetails: {
+        baseUrl: 'foo',
+      },
+    },
+  },
+  {
     text: 'icon without name',
     doc: {
       docId: cachedValues.docId,
