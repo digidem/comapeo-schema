@@ -38,28 +38,48 @@ function capitalize<T extends string>(str: T): Capitalize<T> {
   return (str.charAt(0).toUpperCase() + str.slice(1)) as any
 }
 
-export type VersionIdObject = {
+export type VersionObject = VersionDiscoveryKeyObject | VersionDiscoveryIdObject
+
+export type VersionDiscoveryKeyObject = {
   coreDiscoveryKey: Buffer
   index: number
 }
 
+export type VersionDiscoveryIdObject = {
+  coreDiscoveryId: string
+  index: number
+}
+
+export const VERSION_ID_SEPARATOR = '/'
+
 /**
- * Get a string versionId from a core key and index in that core. A versionId
- * uniquely identifies a record in the underlying Hypercore storage used by
- * Mapeo
+ * Get a string versionId from a core discovery key or discovery id and index in
+ * that core. A versionId uniquely identifies a record in the underlying
+ * Hypercore storage used by Mapeo
  * @param versionIdObject
  * @returns versionId string
  */
-export function getVersionId({ coreDiscoveryKey, index }: VersionIdObject) {
-  assert(
-    coreDiscoveryKey.byteLength >= 32,
-    'version ID core discovery key must be have at least 32 bytes'
-  )
+export function getVersionId(versionIdObject: VersionObject) {
+  const { index } = versionIdObject
   assert(
     Number.isSafeInteger(index) && index >= 0,
     'version ID index must be a non-negative integer'
   )
-  return coreDiscoveryKey.toString('hex') + '/' + index
+  let discoveryId
+  if ('coreDiscoveryId' in versionIdObject) {
+    discoveryId = versionIdObject.coreDiscoveryId
+    assert(
+      discoveryId.length > 0,
+      'version ID core discovery id must be non-empty string'
+    )
+  } else {
+    assert(
+      versionIdObject.coreDiscoveryKey.byteLength >= 32,
+      'version ID core discovery key must be have at least 32 bytes'
+    )
+    discoveryId = versionIdObject.coreDiscoveryKey.toString('hex')
+  }
+  return discoveryId + VERSION_ID_SEPARATOR + index
 }
 
 /**
@@ -69,8 +89,8 @@ export function getVersionId({ coreDiscoveryKey, index }: VersionIdObject) {
  * @param versionId hex-encoded 32-byte core key and index in the core, separated with `/`
  * @returns coreKey as a Buffer and index in the core
  */
-export function parseVersionId(versionId: string): VersionIdObject {
-  const items = versionId.split('/')
+export function parseVersionId(versionId: string): VersionDiscoveryKeyObject {
+  const items = versionId.split(VERSION_ID_SEPARATOR)
   if (!items[0] || !items[1]) throw new Error('Invalid versionId')
   const coreDiscoveryKey = Buffer.from(items[0], 'hex')
   if (coreDiscoveryKey.length !== 32) throw new Error('Invalid versionId')
