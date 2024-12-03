@@ -48,6 +48,7 @@ export async function generateJSONSchemaExports(jsonSchemas) {
 
   return `import { type JSONSchema7 } from 'json-schema'
 import { type SchemaNameAll } from './types.js'
+import { type MapeoCommon } from './schema/index.js'
 import { type ReadonlyDeep } from 'type-fest'
 
 declare module 'json-schema' {
@@ -57,6 +58,8 @@ declare module 'json-schema' {
 }
 
 type SchemaRecord = Record<SchemaNameAll, ReadonlyDeep<JSONSchema7>>
+
+export const commonSchema = ${printf(jsonSchemas.values.common)} as const satisfies ReadonlyDeep<JSONSchema7>
 
 export const docSchemas = ${printf(docSchemas)} as const satisfies SchemaRecord
 

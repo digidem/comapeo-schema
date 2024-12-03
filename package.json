@@ -63,6 +63,7 @@
   "dependencies": {
     "@comapeo/geometry": "^1.0.2",
     "compact-encoding": "^2.12.0",
+    "filter-obj": "^6.1.0",
     "protobufjs": "^7.2.5",
     "type-fest": "^4.26.0"
   },
