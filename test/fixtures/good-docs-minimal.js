@@ -220,7 +220,7 @@ export const goodDocsMinimal = [
       detectionDateEnd: cachedValues.updatedAt,
       geometry: {
         type: 'Point',
-        coordinates: [100, 101],
+        coordinates: [123, 45],
       },
       metadata: {},
     },

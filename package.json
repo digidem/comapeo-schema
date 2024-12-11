@@ -61,7 +61,7 @@
     "typescript-eslint": "^8.4.0"
   },
   "dependencies": {
-    "@comapeo/geometry": "^1.0.2",
+    "@comapeo/geometry": "^1.1.0",
     "compact-encoding": "^2.12.0",
     "protobufjs": "^7.2.5",
     "type-fest": "^4.26.0"
