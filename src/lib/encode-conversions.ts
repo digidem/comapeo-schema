@@ -100,12 +100,24 @@ export const convertObservation: ConvertFunction<'observation'> = (
     }
   }
 
+  let migrationMetadata
+  if (mapeoDoc.migrationMetadata) {
+    migrationMetadata = {
+      ...mapeoDoc.migrationMetadata,
+      originalDocument: Buffer.from(
+        mapeoDoc.migrationMetadata.originalDocument || '',
+        'hex'
+      ),
+    }
+  }
+
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
     attachments,
     tags: convertTags(mapeoDoc.tags),
     presetRef,
+    migrationMetadata,
   }
 }
 
