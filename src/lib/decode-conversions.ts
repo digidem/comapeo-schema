@@ -107,7 +107,6 @@ export const convertObservation: ConvertFunction<'observation'> = (
   const {
     common,
     metadata,
-    migrationMetadata,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     schemaVersion,
     ...rest
@@ -140,14 +139,6 @@ export const convertObservation: ConvertFunction<'observation'> = (
     tags: convertTags(message.tags),
     metadata: metadata ? removeInvalidPositionMetadata(metadata) : {},
     presetRef,
-    migrationMetadata: migrationMetadata
-      ? {
-          ...migrationMetadata,
-          originalDocument: migrationMetadata.originalDocument
-            ? JSON.stringify(migrationMetadata.originalDocument)
-            : undefined,
-        }
-      : undefined,
   }
   return obs
 }

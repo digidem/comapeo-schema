@@ -205,40 +205,6 @@
         }
       },
       "required": ["docId", "versionId"]
-    },
-    "migrationMetadata": {
-      "description": "Metadata about the migration of this observation from Mapeo Legacy",
-      "type": "object",
-      "properties": {
-        "originalDocument": {
-          "description": "Hex-encoded raw observation from Mapeo Legacy",
-          "type": "string"
-        },
-        "hypercore": {
-          "type": "object",
-          "properties": {
-            "rootHashChecksum": {
-              "description": "Checksum of the root hash of the old Hypercore",
-              "type": "string",
-              "minLength": 1
-            },
-            "signature": {
-              "description": "Signature of the old Hypercore",
-              "type": "string",
-              "minLength": 1
-            },
-            "coreKey": {
-              "description": "Core key of the old Hypercore",
-              "type": "string",
-              "minLength": 1
-            },
-            "blockIndex": {
-              "description": "Block index of the document",
-              "type": "number"
-            }
-          }
-        }
-      }
     }
   },
   "required": ["schemaName", "tags", "attachments"],
