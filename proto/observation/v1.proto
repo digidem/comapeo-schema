@@ -75,16 +75,4 @@ message Observation_1 {
     bytes docId = 1;
     VersionId_1 versionId = 2;
   }
-
-  message MigrationMetadata {
-    bytes originalDocument = 1;
-    message HypercoreMetadata {
-      optional string rootHashChecksum = 1;
-      optional string signature = 2;
-      optional string coreKey = 3;
-      optional uint32 blockIndex = 4;
-    }
-    optional HypercoreMetadata hypercore = 2;
-  }
-  optional MigrationMetadata migrationMetadata = 11;
 }
