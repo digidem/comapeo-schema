@@ -6,6 +6,7 @@ export {
   getVersionId,
   parseVersionId,
   valueOf,
+  omitServerProps,
   type VersionIdObject,
 } from './lib/utils.js'
 
