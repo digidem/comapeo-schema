@@ -13,6 +13,15 @@
       "description": "name of the project",
       "type": "string"
     },
+    "projectDescription": {
+      "description": "description of the project",
+      "type": "string"
+    },
+    "projectColor": {
+      "description": "color associated with a project represented in 24 bit (#rrggbb)",
+      "type": "string",
+      "pattern": "^#[a-fA-F0-9]{6}$"
+    },
     "defaultPresets": {
       "type": "object",
       "properties": {

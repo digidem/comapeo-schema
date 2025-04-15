@@ -189,4 +189,20 @@ export const badDocs = [
       sourceId: '',
     },
   },
+  {
+    text: 'projectSettings with invalid project color string',
+    /** @type {import('../../dist/index.js').ProjectSettings} */
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.versionId,
+      schemaName: 'projectSettings',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      links: [],
+      deleted: false,
+      // This is an invalid color value (`g` is out of range)
+      projectColor: '#ff00g1',
+    },
+  },
 ]
