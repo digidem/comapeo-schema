@@ -98,6 +98,8 @@ export const goodDocsCompleted = [
         importDate: cachedValues.configMetadata.importDate,
       },
       deleted: false,
+      projectDescription: 'the funnest project',
+      projectColor: '#E5F0FF',
     },
     expected: {},
   },

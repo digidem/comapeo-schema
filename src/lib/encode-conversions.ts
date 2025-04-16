@@ -26,6 +26,14 @@ export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
   mapeoDoc
 ) => {
   const { defaultPresets } = mapeoDoc
+
+  const colorRegex = RegExp(
+    valueSchemas.projectSettings.properties.projectColor.pattern
+  )
+  if (mapeoDoc.projectColor && !colorRegex.test(mapeoDoc.projectColor)) {
+    throw new Error(`invalid color string ${mapeoDoc.projectColor}`)
+  }
+
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
