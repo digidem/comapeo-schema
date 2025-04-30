@@ -103,6 +103,72 @@
             "type": "string",
             "description": "SHA256 hash of the attachment",
             "minLength": 1
+          },
+          "exif": {
+            "type": "object",
+            "description": "EXIF data from an image or video. https://exiftool.org/TagNames/EXIF.html",
+            "properties": {
+              "ApertureValue": {
+                "type": "number"
+              },
+              "DateTime": {
+                "type": "string"
+              },
+              "ExposureTime": {
+                "type": "number"
+              },
+              "Flash": {
+                "type": "number"
+              },
+              "FocalLength": {
+                "type": "number"
+              },
+              "GPSAltitude": {
+                "type": "number"
+              },
+              "GPSAltitudeRef": {
+                "type": "number"
+              },
+              "GPSDateStamp": {
+                "type": "string"
+              },
+              "GPSLatitude": {
+                "type": "number"
+              },
+              "GPSLatitudeRef": {
+                "type": "string"
+              },
+              "GPSLongitude": {
+                "type": "number"
+              },
+              "GPSLongitudeRef": {
+                "type": "string"
+              },
+              "GPSTimeStamp": {
+                "type": "string"
+              },
+              "ISOSpeedRatings": {
+                "type": "number"
+              },
+              "ImageLength": {
+                "type": "number"
+              },
+              "ImageWidth": {
+                "type": "number"
+              },
+              "Make": {
+                "type": "string"
+              },
+              "Model": {
+                "type": "string"
+              },
+              "Orientation": {
+                "type": "number"
+              },
+              "ShutterSpeedValue": {
+                "type": "number"
+              }
+            }
           }
         },
         "required": ["driveDiscoveryId", "name", "type", "hash"]

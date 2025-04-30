@@ -27,6 +27,9 @@ export const goodDocsCompleted = [
           type: 'photo',
           driveDiscoveryId: cachedValues.attachments.driveDiscoveryId,
           hash: cachedValues.attachments.hash,
+          exif: {
+            Model: 'my camera',
+          },
         },
       ],
       tags: {

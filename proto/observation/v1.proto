@@ -25,11 +25,34 @@ message Observation_1 {
     video = 2;
     audio = 3;
   }
+  message Exif {
+    optional double ApertureValue = 1;
+    optional string DateTime = 2;
+    optional double ExposureTime = 3;
+    optional double Flash = 4;
+    optional double FocalLength = 5;
+    optional double GPSAltitude = 6;
+    optional double GPSAltitudeRef = 7;
+    optional string GPSDateStamp = 8;
+    optional double GPSLatitude = 9;
+    optional string GPSLatitudeRef = 10;
+    optional double GPSLongitude = 11;
+    optional string GPSLongitudeRef = 12;
+    optional string GPSTimeStamp = 13;
+    optional double ISOSpeedRatings = 14;
+    optional double ImageLength = 15;
+    optional double ImageWidth = 16;
+    optional string Make = 17;
+    optional string Model = 18;
+    optional double Orientation = 19;
+    optional double ShutterSpeedValue = 20;
+  }
   message Attachment {
     bytes driveDiscoveryId = 1 [(required) = true];
     string name = 2 [(required) = true];
     AttachmentType type = 3;
     bytes hash = 4;
+    optional Exif exif = 5;
   }
   repeated Attachment attachments = 7;
 
