@@ -348,5 +348,6 @@ function convertAttachment(
     name: attachment.name,
     type: attachment.type,
     hash: Buffer.from(attachment.hash, 'hex'),
+    exif: attachment.exif,
   }
 }
