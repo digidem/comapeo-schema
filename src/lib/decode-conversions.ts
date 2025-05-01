@@ -575,7 +575,7 @@ function convertAttachment({
   name,
   type,
   hash,
-  exif,
+  ...otherProps
 }: Observation_1_Attachment): Observation['attachments'][number] {
   ensure(
     driveDiscoveryId.byteLength,
@@ -583,12 +583,20 @@ function convertAttachment({
     'driveDiscoveryId'
   )
   ensure(name, 'observation.attachments[]', 'name')
+  if (type === 'photo') {
+    return {
+      driveDiscoveryId: driveDiscoveryId.toString('hex'),
+      name,
+      type,
+      hash: hash.toString('hex'),
+      photoExif: otherProps.photoExif,
+    }
+  }
   return {
     driveDiscoveryId: driveDiscoveryId.toString('hex'),
     name,
     type,
     hash: hash.toString('hex'),
-    exif,
   }
 }
 

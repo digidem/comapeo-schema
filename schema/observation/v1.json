@@ -4,6 +4,136 @@
   "title": "Observation",
   "description": "An observation is something that has been observed at a particular time and place. It is a subjective statement of 'I saw/heard this, here'",
   "definitions": {
+    "attachment": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "driveDiscoveryId": {
+              "type": "string",
+              "description": "core discovery id for the drive that the attachment belongs to",
+              "minLength": 1
+            },
+            "name": {
+              "type": "string",
+              "description": "name of the attachment",
+              "minLength": 1
+            },
+            "type": {
+              "type": "string",
+              "description": "string that describes the type of the attachment",
+              "const": "photo"
+            },
+            "hash": {
+              "type": "string",
+              "description": "SHA256 hash of the attachment",
+              "minLength": 1
+            },
+            "photoExif": {
+              "type": "object",
+              "description": "EXIF data from an image. https://exiftool.org/TagNames/EXIF.html",
+              "properties": {
+                "ApertureValue": {
+                  "type": "number"
+                },
+                "DateTime": {
+                  "type": "string"
+                },
+                "ExposureTime": {
+                  "type": "number"
+                },
+                "Flash": {
+                  "type": "number"
+                },
+                "FocalLength": {
+                  "type": "number"
+                },
+                "GPSAltitude": {
+                  "type": "number"
+                },
+                "GPSAltitudeRef": {
+                  "type": "number"
+                },
+                "GPSDateStamp": {
+                  "type": "string"
+                },
+                "GPSLatitude": {
+                  "type": "number"
+                },
+                "GPSLatitudeRef": {
+                  "type": "string"
+                },
+                "GPSLongitude": {
+                  "type": "number"
+                },
+                "GPSLongitudeRef": {
+                  "type": "string"
+                },
+                "GPSTimeStamp": {
+                  "type": "string"
+                },
+                "ISOSpeedRatings": {
+                  "type": "number"
+                },
+                "ImageLength": {
+                  "type": "number"
+                },
+                "ImageWidth": {
+                  "type": "number"
+                },
+                "Make": {
+                  "type": "string"
+                },
+                "Model": {
+                  "type": "string"
+                },
+                "Orientation": {
+                  "type": "number"
+                },
+                "ShutterSpeedValue": {
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "required": ["driveDiscoveryId", "name", "type", "hash"]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "driveDiscoveryId": {
+              "type": "string",
+              "description": "core discovery id for the drive that the attachment belongs to",
+              "minLength": 1
+            },
+            "name": {
+              "type": "string",
+              "description": "name of the attachment",
+              "minLength": 1
+            },
+            "type": {
+              "type": "string",
+              "description": "string that describes the type of the attachment",
+              "meta:enum": {
+                "UNRECOGNIZED": "future attachment type"
+              },
+              "enum": [
+                "attachment_type_unspecified",
+                "video",
+                "audio",
+                "UNRECOGNIZED"
+              ]
+            },
+            "hash": {
+              "type": "string",
+              "description": "SHA256 hash of the attachment",
+              "minLength": 1
+            }
+          },
+          "required": ["driveDiscoveryId", "name", "type", "hash"]
+        }
+      ]
+    },
     "position": {
       "description": "Position details",
       "type": "object",
@@ -73,105 +203,7 @@
       "type": "array",
       "description": "media or other data that are attached to this observation",
       "items": {
-        "type": "object",
-        "properties": {
-          "driveDiscoveryId": {
-            "type": "string",
-            "description": "core discovery id for the drive that the attachment belongs to",
-            "minLength": 1
-          },
-          "name": {
-            "type": "string",
-            "description": "name of the attachment",
-            "minLength": 1
-          },
-          "type": {
-            "type": "string",
-            "description": "string that describes the type of the attachment",
-            "meta:enum": {
-              "UNRECOGNIZED": "future attachment type"
-            },
-            "enum": [
-              "attachment_type_unspecified",
-              "photo",
-              "video",
-              "audio",
-              "UNRECOGNIZED"
-            ]
-          },
-          "hash": {
-            "type": "string",
-            "description": "SHA256 hash of the attachment",
-            "minLength": 1
-          },
-          "exif": {
-            "type": "object",
-            "description": "EXIF data from an image or video. https://exiftool.org/TagNames/EXIF.html",
-            "properties": {
-              "ApertureValue": {
-                "type": "number"
-              },
-              "DateTime": {
-                "type": "string"
-              },
-              "ExposureTime": {
-                "type": "number"
-              },
-              "Flash": {
-                "type": "number"
-              },
-              "FocalLength": {
-                "type": "number"
-              },
-              "GPSAltitude": {
-                "type": "number"
-              },
-              "GPSAltitudeRef": {
-                "type": "number"
-              },
-              "GPSDateStamp": {
-                "type": "string"
-              },
-              "GPSLatitude": {
-                "type": "number"
-              },
-              "GPSLatitudeRef": {
-                "type": "string"
-              },
-              "GPSLongitude": {
-                "type": "number"
-              },
-              "GPSLongitudeRef": {
-                "type": "string"
-              },
-              "GPSTimeStamp": {
-                "type": "string"
-              },
-              "ISOSpeedRatings": {
-                "type": "number"
-              },
-              "ImageLength": {
-                "type": "number"
-              },
-              "ImageWidth": {
-                "type": "number"
-              },
-              "Make": {
-                "type": "string"
-              },
-              "Model": {
-                "type": "string"
-              },
-              "Orientation": {
-                "type": "number"
-              },
-              "ShutterSpeedValue": {
-                "type": "number"
-              }
-            }
-          }
-        },
-        "required": ["driveDiscoveryId", "name", "type", "hash"]
+        "$ref": "#/definitions/attachment"
       }
     },
     "tags": {

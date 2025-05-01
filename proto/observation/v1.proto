@@ -25,7 +25,7 @@ message Observation_1 {
     video = 2;
     audio = 3;
   }
-  message Exif {
+  message PhotoExif {
     optional double ApertureValue = 1;
     optional string DateTime = 2;
     optional double ExposureTime = 3;
@@ -52,7 +52,7 @@ message Observation_1 {
     string name = 2 [(required) = true];
     AttachmentType type = 3;
     bytes hash = 4;
-    optional Exif exif = 5;
+    optional PhotoExif photoExif = 5;
   }
   repeated Attachment attachments = 7;
 
