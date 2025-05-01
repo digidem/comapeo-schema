@@ -49,7 +49,7 @@ const myObs: Observation = {
 
 - Find the JSON schema inside `schemas/{name}/v1.json`
 - Add your fields with descriptions
-- Find the corresponding protocol buffer schema inside `proto/{name}/v1.proto`
+- Update the corresponding protocol buffer schema inside `proto/{name}/v1.proto`
 - Add the new field to `src/lib/decode-conversions.js` and `src/lib/encode-conversions.js`
 - Add the field to `test/fixtures/good-docs-completed.js`
 - If there is extra validation happening add a failing doc to `test/fixtures/bad-docs.js`
