@@ -343,10 +343,19 @@ function convertTagPrimitive(
 function convertAttachment(
   attachment: Observation['attachments'][number]
 ): Observation_1_Attachment {
-  return {
-    driveDiscoveryId: Buffer.from(attachment.driveDiscoveryId, 'hex'),
-    name: attachment.name,
-    type: attachment.type,
-    hash: Buffer.from(attachment.hash, 'hex'),
-  }
+  if (attachment.type === 'photo') {
+    return {
+      driveDiscoveryId: Buffer.from(attachment.driveDiscoveryId, 'hex'),
+      name: attachment.name,
+      type: attachment.type,
+      hash: Buffer.from(attachment.hash, 'hex'),
+      photoExif: attachment.photoExif,
+    }
+  } else
+    return {
+      driveDiscoveryId: Buffer.from(attachment.driveDiscoveryId, 'hex'),
+      name: attachment.name,
+      type: attachment.type,
+      hash: Buffer.from(attachment.hash, 'hex'),
+    }
 }

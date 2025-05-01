@@ -27,6 +27,9 @@ export const goodDocsCompleted = [
           type: 'photo',
           driveDiscoveryId: cachedValues.attachments.driveDiscoveryId,
           hash: cachedValues.attachments.hash,
+          photoExif: {
+            Model: 'my camera',
+          },
         },
       ],
       tags: {
@@ -70,6 +73,29 @@ export const goodDocsCompleted = [
         docId: cachedValues.refs.docId,
         versionId: cachedValues.refs.versionId,
       },
+      deleted: false,
+    },
+    expected: {},
+  },
+  {
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.originalVersionId,
+      schemaName: 'observation',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      links: [],
+      attachments: [
+        {
+          name: 'myFile',
+          type: 'video',
+          driveDiscoveryId: cachedValues.attachments.driveDiscoveryId,
+          hash: cachedValues.attachments.hash,
+        },
+      ],
+      tags: {},
+      metadata: {},
       deleted: false,
     },
     expected: {},
