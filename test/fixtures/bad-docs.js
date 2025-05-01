@@ -63,6 +63,32 @@ export const badDocs = [
     },
   },
   {
+    text: 'attachment video with photoExif',
+    /** @type Omit<import('../../dist/index.js').Observation, 'originalVersionId'> */
+    doc: {
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      schemaName: 'observation',
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      links: [
+        {
+          name: 'myFile',
+          type: 'video',
+          driveDiscoveryId: cachedValues.attachments.driveDiscoveryId,
+          hash: cachedValues.attachments.hash,
+          photoExif: {
+            Model: 'my camera',
+          },
+        },
+      ],
+      attachments: [],
+      tags: {},
+      metadata: {},
+      deleted: false,
+    },
+  },
+  {
     text: 'core ownership with empty core ID',
     /** @type {import('../../dist/index.js').CoreOwnership} */
     doc: {
