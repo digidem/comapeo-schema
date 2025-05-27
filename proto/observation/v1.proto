@@ -46,6 +46,7 @@ message Observation_1 {
     optional string Model = 18;
     optional double Orientation = 19;
     optional double ShutterSpeedValue = 20;
+    optional sint32 TimeZoneOffset = 21;
   }
   message Attachment {
     bytes driveDiscoveryId = 1 [(required) = true];
