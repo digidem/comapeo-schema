@@ -45,6 +45,9 @@
                 "Flash": {
                   "type": "number"
                 },
+                "FNumber": {
+                  "type": "number"
+                },
                 "FocalLength": {
                   "type": "number"
                 },
