@@ -26,19 +26,14 @@ message Observation_1 {
     audio = 3;
   }
   message PhotoExif {
+    // Prevent usage of obsolete fields
+    reserved 2, 6 to 13;
+    reserved "DateTime", "GPSAltitude", "GPSAltitudeRef", "GPSDateStamp", "GPSLatitude", "GPSLatitudeRef", "GPSLongitude", "GPSLongitudeRef", "GPSTimestamp";
+
     optional double ApertureValue = 1;
-    optional string DateTime = 2;
     optional double ExposureTime = 3;
     optional double Flash = 4;
     optional double FocalLength = 5;
-    optional double GPSAltitude = 6;
-    optional double GPSAltitudeRef = 7;
-    optional string GPSDateStamp = 8;
-    optional double GPSLatitude = 9;
-    optional string GPSLatitudeRef = 10;
-    optional double GPSLongitude = 11;
-    optional string GPSLongitudeRef = 12;
-    optional string GPSTimeStamp = 13;
     optional double ISOSpeedRatings = 14;
     optional double ImageLength = 15;
     optional double ImageWidth = 16;
@@ -54,6 +49,8 @@ message Observation_1 {
     AttachmentType type = 3;
     bytes hash = 4;
     optional PhotoExif photoExif = 5;
+    optional google.protobuf.Timestamp createdAt = 6;
+    optional Position position = 7;
   }
   repeated Attachment attachments = 7;
 
@@ -63,22 +60,6 @@ message Observation_1 {
   // METADATA
   message Metadata {
     optional bool manualLocation = 1;
-
-    message Position {
-      google.protobuf.Timestamp timestamp = 1;
-      optional bool mocked = 2;
-
-      message Coords {
-        double latitude = 1;
-        double longitude = 2;
-        optional double altitude = 3;
-        optional double heading = 4;
-        optional double speed = 5;
-        optional double accuracy = 6;
-        optional double altitudeAccuracy = 7;
-      }
-      optional Coords coords = 3;
-    }
 
     message PositionProvider {
       optional bool gpsAvailable = 1;
@@ -98,5 +79,21 @@ message Observation_1 {
   message PresetRef {
     bytes docId = 1;
     VersionId_1 versionId = 2;
+  }
+
+  message Position {
+    google.protobuf.Timestamp timestamp = 1;
+    optional bool mocked = 2;
+
+    message Coords {
+      double latitude = 1;
+      double longitude = 2;
+      optional double altitude = 3;
+      optional double heading = 4;
+      optional double speed = 5;
+      optional double accuracy = 6;
+      optional double altitudeAccuracy = 7;
+    }
+    optional Coords coords = 3;
   }
 }
