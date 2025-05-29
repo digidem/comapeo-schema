@@ -36,9 +36,6 @@
                 "ApertureValue": {
                   "type": "number"
                 },
-                "DateTime": {
-                  "type": "string"
-                },
                 "ExposureTime": {
                   "type": "number"
                 },
@@ -50,30 +47,6 @@
                 },
                 "FocalLength": {
                   "type": "number"
-                },
-                "GPSAltitude": {
-                  "type": "number"
-                },
-                "GPSAltitudeRef": {
-                  "type": "number"
-                },
-                "GPSDateStamp": {
-                  "type": "string"
-                },
-                "GPSLatitude": {
-                  "type": "number"
-                },
-                "GPSLatitudeRef": {
-                  "type": "string"
-                },
-                "GPSLongitude": {
-                  "type": "number"
-                },
-                "GPSLongitudeRef": {
-                  "type": "string"
-                },
-                "GPSTimeStamp": {
-                  "type": "string"
                 },
                 "ISOSpeedRatings": {
                   "type": "number"
@@ -97,6 +70,14 @@
                   "type": "number"
                 }
               }
+            },
+            "createdAt": {
+              "description": "RFC3339-formatted datetime of when the first version of the attachment was created",
+              "type": "string",
+              "format": "date-time"
+            },
+            "position": {
+              "$ref": "#/definitions/position"
             }
           },
           "required": ["driveDiscoveryId", "name", "type", "hash"]
@@ -131,6 +112,14 @@
               "type": "string",
               "description": "SHA256 hash of the attachment",
               "minLength": 1
+            },
+            "createdAt": {
+              "description": "RFC3339-formatted datetime of when the first version of the attachment was created",
+              "type": "string",
+              "format": "date-time"
+            },
+            "position": {
+              "$ref": "#/definitions/position"
             }
           },
           "required": ["driveDiscoveryId", "name", "type", "hash"]

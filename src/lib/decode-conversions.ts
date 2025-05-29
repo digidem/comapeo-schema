@@ -24,7 +24,7 @@ import { type Icon, type Observation, type Track } from '../index.js'
 import type {
   Observation_1_Attachment,
   Observation_1_Metadata,
-  Observation_1_Metadata_Position,
+  Observation_1_Position,
 } from '../proto/observation/v1.js'
 import type { Track_1_Position } from '../proto/track/v1.js'
 import { ProjectSettings_1_ConfigMetadata } from '../proto/projectSettings/v1.js'
@@ -590,6 +590,10 @@ function convertAttachment({
       type,
       hash: hash.toString('hex'),
       photoExif: otherProps.photoExif,
+      createdAt: otherProps.createdAt,
+      position: otherProps.position
+        ? removeInvalidPosition(otherProps.position)
+        : undefined,
     }
   }
   return {
@@ -597,6 +601,10 @@ function convertAttachment({
     name,
     type,
     hash: hash.toString('hex'),
+    createdAt: otherProps.createdAt,
+    position: otherProps.position
+      ? removeInvalidPosition(otherProps.position)
+      : undefined,
   }
 }
 
@@ -630,7 +638,7 @@ function removeInvalidPositionMetadata(
 }
 
 function removeInvalidPosition(
-  position: Observation_1_Metadata_Position
+  position: Observation_1_Position
 ): Position | undefined {
   if (position.coords === undefined || position.timestamp === undefined) {
     return undefined
