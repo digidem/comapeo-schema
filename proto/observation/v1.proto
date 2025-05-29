@@ -28,7 +28,7 @@ message Observation_1 {
   message PhotoExif {
     // Prevent usage of obsolete fields
     reserved 2, 6 to 13;
-    reserved "DateTime", "GPSAltitude", "GPSAltitudeRef", "GPSDateStamp", "GPSLatitude", "GPSLatitudeRef", "GPSLongitude", "GPSLongitudeRef", "GPSTimestamp";
+    reserved "DateTime", "GPSAltitude", "GPSAltitudeRef", "GPSDateStamp", "GPSLatitude", "GPSLatitudeRef", "GPSLongitude", "GPSLongitudeRef", "GPSTimeStamp";
 
     optional double ApertureValue = 1;
     optional double ExposureTime = 3;
