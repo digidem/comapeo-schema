@@ -6,7 +6,9 @@ export {
   getVersionId,
   parseVersionId,
   valueOf,
-  type VersionIdObject,
+  /** Deprecated: rename VersionIdObject to VersionObject */
+  type VersionObject as VersionIdObject,
+  type VersionObject,
 } from './lib/utils.js'
 
 export * from './schema/index.js'
