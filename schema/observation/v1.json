@@ -84,7 +84,7 @@
               "type": "boolean"
             }
           },
-          "required": ["driveDiscoveryId", "name", "type", "hash"]
+          "required": ["driveDiscoveryId", "name", "type", "hash", "external"]
         },
         {
           "type": "object",
@@ -130,7 +130,7 @@
               "type": "boolean"
             }
           },
-          "required": ["driveDiscoveryId", "name", "type", "hash"]
+          "required": ["driveDiscoveryId", "name", "type", "hash", "external"]
         }
       ]
     },
