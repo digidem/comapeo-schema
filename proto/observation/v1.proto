@@ -51,6 +51,7 @@ message Observation_1 {
     optional PhotoExif photoExif = 5;
     optional google.protobuf.Timestamp createdAt = 6;
     optional Position position = 7;
+    bool external = 8;
   }
   repeated Attachment attachments = 7;
 

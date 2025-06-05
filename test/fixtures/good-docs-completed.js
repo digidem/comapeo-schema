@@ -53,6 +53,7 @@ export const goodDocsCompleted = [
             },
             mocked: false,
           },
+          external: true,
         },
         {
           name: 'myFile',
@@ -73,6 +74,7 @@ export const goodDocsCompleted = [
               accuracy: 2.1,
             },
           },
+          external: false,
         },
       ],
       tags: {
@@ -149,6 +151,7 @@ export const goodDocsCompleted = [
               accuracy: 2.1,
             },
           },
+          external: false,
         },
       ],
       tags: {},

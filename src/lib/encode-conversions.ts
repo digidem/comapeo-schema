@@ -352,6 +352,7 @@ function convertAttachment(
       photoExif: attachment.photoExif,
       createdAt: attachment.createdAt,
       position: attachment.position,
+      external: attachment.external,
     }
   } else
     return {
@@ -361,5 +362,6 @@ function convertAttachment(
       hash: Buffer.from(attachment.hash, 'hex'),
       createdAt: attachment.createdAt,
       position: attachment.position,
+      external: attachment.external,
     }
 }
