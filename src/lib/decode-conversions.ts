@@ -380,7 +380,7 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
   let presetRef
 
   if (rest.presetRef) {
-    ensure(rest.presetRef.versionId, 'observation.presetRef', 'versionId')
+    ensure(rest.presetRef.versionId, 'track.presetRef', 'versionId')
     presetRef = {
       docId: rest.presetRef.docId.toString('hex'),
       versionId: getVersionId(rest.presetRef.versionId),
