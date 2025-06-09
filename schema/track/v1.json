@@ -120,6 +120,23 @@
           }
         ]
       }
+    },
+    "presetRef": {
+      "type": "object",
+      "description": "References to the preset that this track is related to.",
+      "properties": {
+        "docId": {
+          "description": "hex-encoded id of the element that this track references",
+          "type": "string",
+          "minLength": 1
+        },
+        "versionId": {
+          "description": "core discovery id (hex-encoded 32-byte buffer) and core index number, separated by '/'",
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": ["docId", "versionId"]
     }
   },
   "required": ["schemaName", "locations", "tags", "observationRefs"],

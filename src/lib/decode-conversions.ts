@@ -377,10 +377,21 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
     }
   }
 
+  let presetRef
+
+  if (rest.presetRef) {
+    ensure(rest.presetRef.versionId, 'observation.presetRef', 'versionId')
+    presetRef = {
+      docId: rest.presetRef.docId.toString('hex'),
+      versionId: getVersionId(rest.presetRef.versionId),
+    }
+  }
+
   return {
     ...jsonSchemaCommon,
     ...rest,
     observationRefs,
+    presetRef,
     locations,
     tags: convertTags(message.tags),
   }

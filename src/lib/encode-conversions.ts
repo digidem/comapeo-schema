@@ -235,10 +235,19 @@ export const convertTrack: ConvertFunction<'track'> = (mapeoDoc) => {
     }
   )
 
+  let presetRef
+  if (mapeoDoc.presetRef) {
+    presetRef = {
+      docId: Buffer.from(mapeoDoc.presetRef.docId, 'hex'),
+      versionId: parseVersionId(mapeoDoc.presetRef.versionId),
+    }
+  }
+
   const track: CurrentProtoTypes['track'] = {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
     observationRefs,
+    presetRef,
     tags: convertTags(mapeoDoc.tags),
     locations: mapeoDoc.locations,
   }
