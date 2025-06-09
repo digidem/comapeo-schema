@@ -78,9 +78,13 @@
             },
             "position": {
               "$ref": "#/definitions/position"
+            },
+            "external": {
+              "description": "Indicates whether the associated media was created from a source outside of CoMapeo",
+              "type": "boolean"
             }
           },
-          "required": ["driveDiscoveryId", "name", "type", "hash"]
+          "required": ["driveDiscoveryId", "name", "type", "hash", "external"]
         },
         {
           "type": "object",
@@ -120,9 +124,13 @@
             },
             "position": {
               "$ref": "#/definitions/position"
+            },
+            "external": {
+              "description": "Indicates whether the associated media was created from a source outside of CoMapeo",
+              "type": "boolean"
             }
           },
-          "required": ["driveDiscoveryId", "name", "type", "hash"]
+          "required": ["driveDiscoveryId", "name", "type", "hash", "external"]
         }
       ]
     },

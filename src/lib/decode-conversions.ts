@@ -594,6 +594,7 @@ function convertAttachment({
       position: otherProps.position
         ? removeInvalidPosition(otherProps.position)
         : undefined,
+      external: otherProps.external,
     }
   }
   return {
@@ -605,6 +606,7 @@ function convertAttachment({
     position: otherProps.position
       ? removeInvalidPosition(otherProps.position)
       : undefined,
+    external: otherProps.external,
   }
 }
 
