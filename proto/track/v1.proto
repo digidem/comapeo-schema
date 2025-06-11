@@ -17,6 +17,12 @@ message Track_1 {
   repeated Position locations = 2;
   repeated ObservationRef observationRefs = 3;
   map<string, TagValue_1> tags = 4;
+  optional PresetRef presetRef = 5;
+
+  message PresetRef {
+    bytes docId = 1;
+    VersionId_1 versionId = 2;
+  }
 
   message ObservationRef {
     bytes docId = 1;

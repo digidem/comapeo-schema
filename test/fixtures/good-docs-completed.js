@@ -432,6 +432,10 @@ export const goodDocsCompleted = [
           versionId: cachedValues.refs.versionId,
         },
       ],
+      presetRef: {
+        docId: cachedValues.refs.docId,
+        versionId: cachedValues.refs.versionId,
+      },
       tags: {
         someKeyForArrVal: ['arr', 'of', 'strings'],
       },
