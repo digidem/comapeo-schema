@@ -22,6 +22,10 @@
       "type": "string",
       "pattern": "^#[a-fA-F0-9]{6}$"
     },
+    "collectStats": {
+      "description": "Flag to toggle project stats collection / reporting",
+      "type": "boolean"
+    },
     "defaultPresets": {
       "type": "object",
       "properties": {

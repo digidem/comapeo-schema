@@ -32,4 +32,5 @@ message ProjectSettings_1 {
   optional string name = 4;
   optional string projectDescription = 5;
   optional string projectColor = 6;
+  optional bool collectStats = 7;
 }
