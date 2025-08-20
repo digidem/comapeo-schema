@@ -22,7 +22,7 @@
       "type": "string",
       "pattern": "^#[a-fA-F0-9]{6}$"
     },
-    "collectStats": {
+    "sendStats": {
       "description": "Flag to toggle project stats collection / reporting",
       "type": "boolean"
     },
