@@ -1,9 +1,12 @@
+import { excludeKeys } from 'filter-obj'
 import { type ProtoTypeNames } from '../proto/types.js'
 import {
+  type FilterBySchemaName,
+  type MapeoCommon,
   type MapeoDoc,
   type MapeoValue,
-  type FilterBySchemaName,
 } from '../types.js'
+import { commonSchema } from '../schemas.js'
 import { omit } from './omit.js'
 
 export function getOwn<T extends object, K extends keyof T>(
@@ -79,6 +82,10 @@ export function parseVersionId(versionId: string): VersionIdObject {
   return { coreDiscoveryKey, index }
 }
 
+/**
+ * Get the value of a document, excluding server-managed properties.
+ * @deprecated Use the more flexible `omitServerProps` instead
+ */
 export function valueOf<TDoc extends MapeoDoc>(
   doc: TDoc & { forks?: string[] }
 ): FilterBySchemaName<MapeoValue, TDoc['schemaName']> {
@@ -92,4 +99,23 @@ export function valueOf<TDoc extends MapeoDoc>(
     'updatedAt',
     'deleted',
   ]) as any
+}
+
+// Casting this type because we _know_ that commonSchema.properties does not
+// have additional keys, unlike situations described in
+// https://stackoverflow.com/a/55012175
+const commonSchemaKeys = Object.keys(commonSchema.properties).filter(
+  (key) => key !== 'schemaName'
+) as Array<keyof Omit<MapeoCommon, 'schemaName'>>
+
+const keysToExclude = [...commonSchemaKeys, 'forks'] as const
+
+/**
+ * Omit server-managed properties from a document, such as `createdBy`,
+ * `createdAt`, etc. These properties cannot be modified by the client.
+ */
+export function omitServerProps<TDoc extends MapeoCommon>(
+  doc: TDoc & { forks?: string[] }
+) {
+  return excludeKeys(doc, keysToExclude)
 }
