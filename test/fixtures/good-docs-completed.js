@@ -186,6 +186,7 @@ export const goodDocsCompleted = [
       deleted: false,
       projectDescription: 'the funnest project',
       projectColor: '#E5F0FF',
+      sendStats: false,
     },
     expected: {},
   },
