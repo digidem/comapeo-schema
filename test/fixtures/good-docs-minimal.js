@@ -46,6 +46,7 @@ export const goodDocsMinimal = [
       },
       links: [],
       deleted: false,
+      sendStats: false,
     },
     expected: {},
   },
