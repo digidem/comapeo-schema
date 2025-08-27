@@ -37,6 +37,7 @@ export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
   return {
     common: convertCommon(mapeoDoc),
     ...mapeoDoc,
+    sendStats: mapeoDoc.sendStats ?? false,
     defaultPresets: defaultPresets
       ? {
           point: defaultPresets.point.map((p) => Buffer.from(p, 'hex')),

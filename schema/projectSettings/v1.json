@@ -61,7 +61,7 @@
         }
       },
       "additionalProperties": false,
-      "required": ["name", "buildDate", "importDate", "fileVersion"]
+      "required": ["name", "buildDate", "importDate", "fileVersion", "sendStats"]
     }
   },
   "required": ["schemaName"],
