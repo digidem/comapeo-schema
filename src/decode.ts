@@ -26,7 +26,7 @@ import cenc from 'compact-encoding'
 import { DATA_TYPE_ID_BYTES, SCHEMA_VERSION_BYTES } from './constants.js'
 import {
   ExhaustivenessError,
-  VersionIdObject,
+  VersionObject,
   getOwn,
   getProtoTypeName,
 } from './lib/utils.js'
@@ -43,12 +43,9 @@ for (const [schemaName, dataTypeId] of Object.entries(dataTypeIds) as Array<
  * Decode a Buffer as an object validated against the corresponding schema
  *
  * @param buf Buffer to be decoded
- * @param versionObj public key (coreKey) of the core where this block is stored, and the index of the block in the core.
+ * @param versionObj discovery key or discovery id of the core where this block is stored, and the index of the block in the core.
  * */
-export function decode(
-  buf: Buffer,
-  versionObj: VersionIdObject
-): MapeoDocDecode {
+export function decode(buf: Buffer, versionObj: VersionObject): MapeoDocDecode {
   const schemaDef = decodeBlockPrefix(buf)
 
   const encodedMsg = buf.subarray(
