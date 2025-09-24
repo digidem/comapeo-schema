@@ -231,4 +231,21 @@ export const badDocs = [
       projectColor: '#ff00g1',
     },
   },
+  {
+    text: 'track with less than 2 locations',
+    /** @type {import('../../dist/index.js').Track} */
+    doc: {
+      schemaName: 'track',
+      docId: cachedValues.docId,
+      versionId: cachedValues.versionId,
+      originalVersionId: cachedValues.versionId,
+      createdAt: cachedValues.createdAt,
+      updatedAt: cachedValues.updatedAt,
+      links: [],
+      observationRefs: [],
+      tags: {},
+      locations: [],
+      deleted: false,
+    },
+  },
 ]
