@@ -362,6 +362,11 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
     ...rest
   } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
+
+  if (message.locations.length < 2) {
+    throw new Error('Track must have at least 2 locations')
+  }
+
   const locations = message.locations.map(convertTrackPosition)
 
   const observationRefs: Track['observationRefs'] = []
