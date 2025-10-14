@@ -200,7 +200,25 @@ export const goodDocsMinimal = [
       updatedAt: cachedValues.updatedAt,
       links: [],
       deleted: false,
-      locations: [],
+      locations: [
+        {
+          timestamp: cachedValues.metadata.position.timestamp,
+          mocked: false,
+          coords: { latitude: 12, longitude: 34 },
+        },
+        {
+          timestamp: cachedValues.metadata.position.timestamp,
+          mocked: true,
+          coords: {
+            latitude: 12,
+            longitude: 34,
+            altitude: 123,
+            heading: 123,
+            speed: 0.123,
+            accuracy: 123,
+          },
+        },
+      ],
       observationRefs: [],
       tags: {},
     },

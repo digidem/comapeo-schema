@@ -226,6 +226,10 @@ export const convertTranslation: ConvertFunction<'translation'> = (
 }
 
 export const convertTrack: ConvertFunction<'track'> = (mapeoDoc) => {
+  if (mapeoDoc.locations.length < 2) {
+    throw new Error('Track must have at least 2 locations')
+  }
+
   const observationRefs = mapeoDoc.observationRefs.map(
     ({ docId, versionId }) => {
       return {

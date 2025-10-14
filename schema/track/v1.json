@@ -59,7 +59,8 @@
       "description": "Array of positions along the track",
       "items": {
         "$ref": "#/definitions/position"
-      }
+      },
+      "minItems": 2
     },
     "observationRefs": {
       "type": "array",
