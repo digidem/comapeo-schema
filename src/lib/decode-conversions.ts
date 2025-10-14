@@ -354,6 +354,14 @@ export const convertTranslation: ConvertFunction<'translation'> = (
   }
 }
 
+function assertTrackLocationsLength<T>(
+  locations: T[]
+): asserts locations is [T, T, ...T[]] {
+  if (locations.length < 2) {
+    throw new Error('Track must have at least 2 items')
+  }
+}
+
 export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
   const {
     common,
@@ -362,7 +370,10 @@ export const convertTrack: ConvertFunction<'track'> = (message, versionObj) => {
     ...rest
   } = message
   const jsonSchemaCommon = convertCommon(common, versionObj)
+
   const locations = message.locations.map(convertTrackPosition)
+
+  assertTrackLocationsLength(locations)
 
   const observationRefs: Track['observationRefs'] = []
   for (const { docId, versionId } of message.observationRefs) {
