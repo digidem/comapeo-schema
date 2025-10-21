@@ -11,16 +11,19 @@ import {
 } from '../proto/icon/v1.js'
 
 import {
-  type MapeoDoc,
   type ProtoTypesWithSchemaInfo,
   type SchemaName,
-  type FilterBySchemaName,
-  type MapeoCommon,
   type TagValuePrimitive,
   type JsonTagValue,
-  type MapeoDocDecode,
+  type ComapeoDocDecode,
 } from '../types.js'
-import { type Icon, type Observation, type Track } from '../index.js'
+import {
+  type Icon,
+  type Observation,
+  type Track,
+  type ComapeoDoc,
+  type ComapeoCommon,
+} from '../index.js'
 import type {
   Observation_1_Attachment,
   Observation_1_Metadata,
@@ -42,7 +45,7 @@ import {
 type ConvertFunction<TSchemaName extends SchemaName> = (
   message: Extract<ProtoTypesWithSchemaInfo, { schemaName: TSchemaName }>,
   versionObj: VersionIdObject
-) => FilterBySchemaName<MapeoDocDecode, TSchemaName>
+) => ComapeoDocDecode<TSchemaName>
 
 function ensure(
   condition: unknown,
@@ -143,7 +146,7 @@ export const convertObservation: ConvertFunction<'observation'> = (
   return obs
 }
 
-type FieldOptions = FilterBySchemaName<MapeoDoc, 'field'>['options']
+type FieldOptions = ComapeoDoc<'field'>['options']
 
 export const convertField: ConvertFunction<'field'> = (message, versionObj) => {
   const {
@@ -180,10 +183,7 @@ export const convertField: ConvertFunction<'field'> = (message, versionObj) => {
   }
 }
 
-type JsonSchemaPresetGeomItem = FilterBySchemaName<
-  MapeoDoc,
-  'preset'
->['geometry'][number]
+type JsonSchemaPresetGeomItem = ComapeoDoc<'preset'>['geometry'][number]
 
 export const convertPreset: ConvertFunction<'preset'> = (
   message,
@@ -560,7 +560,7 @@ function convertTagPrimitive({
 function convertCommon(
   common: ProtoTypesWithSchemaInfo['common'],
   versionObj: VersionIdObject
-): Omit<MapeoCommon, 'schemaName'> {
+): Omit<ComapeoCommon, 'schemaName'> {
   if (
     !common ||
     !common.docId.byteLength ||

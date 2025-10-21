@@ -1,29 +1,9 @@
 // Shared types
 import { type ProtoTypesWithSchemaInfo as AllProtoTypesWithSchemaInfo } from './proto/types.js'
-import {
-  CoreOwnership,
-  type MapeoDoc as AllMapeoDocs,
-  type MapeoValue as AllMapeoValues,
-  type MapeoCommon,
-} from './schema/index.js'
+import { CoreOwnership, ComapeoDoc } from './schema/index.js'
 import { dataTypeIds } from './config.js'
 
-/** Temporary: once we have completed this module everything should be supported */
-type SupportedSchemaNames =
-  | 'projectSettings'
-  | 'observation'
-  | 'field'
-  | 'preset'
-  | 'role'
-  | 'icon'
-  | 'deviceInfo'
-  | 'coreOwnership'
-  | 'translation'
-  | 'track'
-  | 'remoteDetectionAlert'
-
-export type SchemaName = Extract<keyof typeof dataTypeIds, SupportedSchemaNames>
-export type SchemaNameAll = keyof typeof dataTypeIds
+export type SchemaName = keyof typeof dataTypeIds
 
 /** Union of all valid schemaName and schemaVersion combinations (not just current versions) */
 export type ValidSchemaDef = PickUnion<
@@ -37,10 +17,8 @@ export type JsonTagValue =
   | TagValuePrimitive
   | Array<Exclude<TagValuePrimitive, undefined>>
 
-export { MapeoCommon }
-
 /** Filter a union of objects to only include those that have a prop `schemaName` that matches U */
-export type FilterBySchemaName<
+type FilterBySchemaName<
   T extends { schemaName: string },
   U extends string,
 > = Extract<T, { schemaName: U }>
@@ -48,31 +26,40 @@ export type FilterBySchemaName<
 /** Only proto types we currently support (whilst in dev) */
 export type ProtoTypesWithSchemaInfo = FilterBySchemaName<
   AllProtoTypesWithSchemaInfo,
-  SupportedSchemaNames
+  SchemaName
 >
 
-/** Only jsonschema types we currently support (whilst in dev) */
-export type MapeoDoc = FilterBySchemaName<AllMapeoDocs, SupportedSchemaNames>
-export type MapeoValue = FilterBySchemaName<
-  AllMapeoValues,
-  SupportedSchemaNames
->
-/** The decode and encode functions expect core ownership signatures as buffers,
- * but these are not included in the JSON schema definitions because they are
- * stripped before they are indexed */
-export type MapeoDocDecode =
-  | Exclude<MapeoDoc, CoreOwnership>
+// The decode and encode functions expect core ownership signatures as buffers,
+// but these are not included in the JSON schema definitions because they are
+// stripped before they are indexed
+type AllComapeoDocDecode =
+  | Exclude<ComapeoDoc, CoreOwnership>
   | (CoreOwnership & CoreOwnershipSignatures)
 
-/**
- * MapeoDoc for encoding does not need a versionId, and if links is an empty
- * array, it does not need a originalVersionId either.
- */
-export type MapeoDocEncode =
-  | (OmitUnion<MapeoDocDecode, 'versionId' | 'originalVersionId' | 'links'> & {
+/** ComapeoDoc for decoding (with core ownership signatures) */
+export type ComapeoDocDecode<TDocType extends SchemaName = SchemaName> =
+  FilterBySchemaName<AllComapeoDocDecode, TDocType>
+
+// ComapeoDoc for encoding does not need a versionId, and if links is an empty
+// array, it does not need a originalVersionId either.
+type AllComapeoDocEncode =
+  | (OmitUnion<
+      ComapeoDocDecode,
+      'versionId' | 'originalVersionId' | 'links'
+    > & {
       links: []
     })
-  | OmitUnion<MapeoDocDecode, 'versionId'>
+  | OmitUnion<ComapeoDocDecode, 'versionId'>
+
+/** ComapeoDoc for encoding */
+export type ComapeoDocEncode<TDocType extends SchemaName = SchemaName> =
+  FilterBySchemaName<AllComapeoDocEncode, TDocType>
+
+/** @deprecated Use ComapeoDocDecode instead */
+export type MapeoDocDecode = ComapeoDocDecode
+
+/** @deprecated Use ComapeoDocEncode instead */
+export type MapeoDocEncode = ComapeoDocEncode
 
 /** Union of all valid data type ids */
 export type DataTypeId = Values<typeof dataTypeIds>

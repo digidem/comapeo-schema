@@ -1,4 +1,5 @@
-import { MapeoValue, FilterBySchemaName, SchemaName } from './types.js'
+import { SchemaName } from './types.js'
+import { type ComapeoValue } from './schema/index.js'
 import * as validations from './validations.js'
 import {
   type ValidateFunction as AjvValidateFunction,
@@ -9,7 +10,7 @@ interface ValidateFunction {
   <TSchemaName extends Extract<keyof typeof validations, SchemaName>>(
     schemaName: TSchemaName,
     obj: unknown
-  ): obj is FilterBySchemaName<MapeoValue, TSchemaName>
+  ): obj is ComapeoValue<TSchemaName>
   errors: null | DefinedError[]
 }
 
@@ -18,7 +19,7 @@ const validate: ValidateFunction = <
 >(
   schemaName: TSchemaName,
   obj: unknown
-): obj is FilterBySchemaName<MapeoValue, TSchemaName> => {
+): obj is ComapeoValue<TSchemaName> => {
   const validateSchema = validations[schemaName] as AjvValidateFunction
   const result = validateSchema(obj)
   validate.errors = validateSchema.errors as DefinedError[]

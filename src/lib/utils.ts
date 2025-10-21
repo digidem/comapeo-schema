@@ -1,9 +1,5 @@
 import { type ProtoTypeNames } from '../proto/types.js'
-import {
-  type MapeoDoc,
-  type MapeoValue,
-  type FilterBySchemaName,
-} from '../types.js'
+import { type ComapeoDoc, type ComapeoValue } from '../schema/index.js'
 import { omit } from './omit.js'
 
 export function getOwn<T extends object, K extends keyof T>(
@@ -79,9 +75,9 @@ export function parseVersionId(versionId: string): VersionIdObject {
   return { coreDiscoveryKey, index }
 }
 
-export function valueOf<TDoc extends MapeoDoc>(
+export function valueOf<TDoc extends ComapeoDoc>(
   doc: TDoc & { forks?: string[] }
-): FilterBySchemaName<MapeoValue, TDoc['schemaName']> {
+): ComapeoValue<TDoc['schemaName']> {
   return omit(doc, [
     'docId',
     'versionId',
