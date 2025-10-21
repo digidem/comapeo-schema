@@ -3,23 +3,27 @@ import { CurrentProtoTypes } from '../proto/types.js'
 import {
   ProtoTypesWithSchemaInfo,
   SchemaName,
-  MapeoCommon,
   TagValuePrimitive,
   JsonTagValue,
   CoreOwnershipSignatures,
-  MapeoDocEncode,
+  ComapeoDocEncode,
 } from '../types.js'
 import { TagValue_1, type TagValue_1_PrimitiveValue } from '../proto/tags/v1.js'
 import { Icon } from '../schema/icon.js'
 import { type Icon_1_IconVariant } from '../proto/icon/v1.js'
 import { type Observation_1_Attachment } from '../proto/observation/v1.js'
 import { ExhaustivenessError, parseVersionId } from './utils.js'
-import { CoreOwnership, valueSchemas, type Observation } from '../index.js'
+import {
+  CoreOwnership,
+  valueSchemas,
+  type Observation,
+  type ComapeoCommon,
+} from '../index.js'
 
 /** Function type for converting a protobuf type of any version for a particular
  * schema name, and returning the most recent JSONSchema type */
 type ConvertFunction<TSchemaName extends SchemaName> = (
-  mapeoDoc: Extract<MapeoDocEncode, { schemaName: TSchemaName }>
+  mapeoDoc: ComapeoDocEncode<TSchemaName>
 ) => CurrentProtoTypes[TSchemaName]
 
 export const convertProjectSettings: ConvertFunction<'projectSettings'> = (
@@ -270,7 +274,7 @@ export const convertRemoteDetectionAlert: ConvertFunction<
 }
 
 function convertCommon(
-  common: SetOptional<MapeoCommon, 'versionId' | 'originalVersionId'>
+  common: SetOptional<ComapeoCommon, 'versionId' | 'originalVersionId'>
 ): ProtoTypesWithSchemaInfo['common'] {
   return {
     docId: Buffer.from(common.docId, 'hex'),

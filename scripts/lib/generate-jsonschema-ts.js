@@ -52,7 +52,10 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
 
   indexLines.push(
     '',
-    'export type MapeoCommon = Simplify<_Common>',
+    '/** Common properties for all Comapeo docs */',
+    'export type ComapeoCommon = Simplify<_Common>',
+    '/** @deprecated Use ComapeoCommon instead */',
+    'export type MapeoCommon = ComapeoCommon',
     '',
     'type Simplify<T> = {[KeyType in keyof T]: T[KeyType]} & {};',
     ''
@@ -74,7 +77,12 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
     indexLines.push(`export type ${valueName} = Simplify<${interfaceName}>`)
   }
 
-  indexLines.push('', 'export type MapeoDoc = ')
+  indexLines.push(
+    '',
+    '/** @deprecated Use ComapeoDoc instead */',
+    'export type MapeoDoc = ComapeoDoc',
+    'type AllComapeoDocs = '
+  )
 
   for (const schemaName of Object.keys(jsonSchemas.values)) {
     if (schemaName === 'common') continue
@@ -82,7 +90,22 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
     indexLines.push(`  | ${typeName}`)
   }
 
-  indexLines.push('', 'export type MapeoValue = ')
+  indexLines.push(
+    '',
+    '/** All Comapeo doc types (schema names) */',
+    'export type ComapeoDocType = AllComapeoDocs["schemaName"]',
+    '',
+    '/** Output CoMapeo doc types. Union of all types, or pass a TDocType to filter a specific doc type */',
+    'export type ComapeoDoc<TDocType extends ComapeoDocType = ComapeoDocType> = ',
+    '  Extract<AllComapeoDocs, { schemaName: TDocType }>'
+  )
+
+  indexLines.push(
+    '',
+    '/** @deprecated Use ComapeoValue instead */',
+    'export type MapeoValue = ComapeoValue',
+    'type AllComapeoValues = '
+  )
 
   for (const schemaName of Object.keys(jsonSchemas.values)) {
     if (schemaName === 'common') continue
@@ -90,7 +113,13 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
     indexLines.push(`  | ${typeName}`)
   }
 
-  indexLines.push('')
+  indexLines.push(
+    '',
+    '/** Input CoMapeo doc types. Union of all types, or pass a TDocType to filter a specific doc type */',
+    'export type ComapeoValue<TDocType extends ComapeoDocType = ComapeoDocType> = ',
+    '  Extract<AllComapeoValues, { schemaName: TDocType }>',
+    ''
+  )
 
   typescriptDefs.index = indexLines.join('\n') + '\n'
 
@@ -100,7 +129,7 @@ export async function generateJSONSchemaTS(config, jsonSchemas) {
 /** @param {string} schemaName */
 function getValueName(schemaName) {
   return schemaName === 'common'
-    ? 'MapeoCommon'
+    ? 'ComapeoCommon'
     : capitalize(schemaName) + 'Value'
 }
 
