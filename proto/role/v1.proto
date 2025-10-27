@@ -15,4 +15,5 @@ message Role_1 {
 
   bytes roleId = 5 [(required) = true];
   optional uint32 fromIndex = 6 [(required) = true];
+  optional string reason = 7;
 }
