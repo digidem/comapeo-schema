@@ -17,6 +17,10 @@
       "type": "integer",
       "minimum": 0,
       "description": "This is the index of the auth core that this role applies to (identified by the `docId`) to apply this role from. E.g. documents in the auth core assigned this role from this index will be evaluated according to this role."
+    },
+    "reason": {
+      "type": "string",
+      "description": "This is an optional reason for why this role change was made. e.g. for blocking from the project or promoting to coordinator"
     }
   },
   "required": ["schemaName", "roleId", "fromIndex"],
