@@ -21,6 +21,7 @@ message Field_1 {
     number = 2;
     selectOne = 3;
     selectMultiple = 4;
+    date = 5;
   }
   Type type = 6;
   string label = 7 [(required) = true];
