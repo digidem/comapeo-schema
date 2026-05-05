@@ -23,7 +23,8 @@
         "text": "Freeform text field",
         "number": "Allows only numbers",
         "selectOne": "Select one item from a list of pre-defined options",
-        "selectMultiple": "Select any number of items from a list of pre-defined options"
+        "selectMultiple": "Select any number of items from a list of pre-defined options",
+        "date": "Allows Dates encoded as ISO strings"
       },
       "enum": [
         "type_unspecified",
@@ -31,6 +32,7 @@
         "number",
         "selectOne",
         "selectMultiple",
+        "date",
         "UNRECOGNIZED"
       ]
     },
